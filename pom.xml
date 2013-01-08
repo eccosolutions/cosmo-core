@@ -31,6 +31,14 @@
 		<module>core</module>
 	</modules>
 
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<scm>
 		<url>http://github.com/eccosolutions/cosmo-core</url>
 		<connection>scm:git:git@github.com:eccosolutions/cosmo-core.git</connection>
@@ -157,4 +165,69 @@
 			</build>
 		</profile>
 	</profiles>
+
+	<developers>
+		<developer>
+			<id>sprout</id>
+			<name>Ted Leung</name>
+			<email>twleung@osafoundation.org</email>
+			<roles>
+				<role>Project Manager</role>
+			</roles>
+			<organization>OSAF</organization>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>bcm</id>
+			<name>Brian Moseley</name>
+			<roles>
+				<role>Server</role>
+				<role>Architect</role>
+				<role>Components</role>
+			</roles>
+			<organization>OSAF</organization>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>rletness</id>
+			<name>Randy Letness</name>
+			<roles>
+				<role>Server</role>
+				<role>Storage Layer</role>
+			</roles>
+			<organization>OSAF</organization>
+			<timezone>-4</timezone>
+		</developer>
+		<developer>
+			<id>mde</id>
+			<name>Matthew Eernisse</name>
+			<roles>
+				<role>Client</role>
+				<role>Hub Front-end</role>
+			</roles>
+			<organization>OSAF</organization>
+			<timezone>-4</timezone>
+		</developer>
+		<developer>
+			<id>br</id>
+			<name>Bobby Rullo</name>
+			<roles>
+				<role>Server</role>
+				<role>Components</role>
+			</roles>
+			<organization>OSAF</organization>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>tvachon</id>
+			<name>Travis Vachon</name>
+			<roles>
+				<role>Server</role>
+				<role>Admin Front-end</role>
+			</roles>
+			<organization>OSAF</organization>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+
 </project>
