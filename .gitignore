@@ -1,0 +1,12 @@
+*/target/
+*/bin/
+.svn
+.settings/
+.classpath
+.project
+*.log
+META-INF
+*.ipr
+*.iml
+*.iws
+.idea/
