@@ -1,0 +1,61 @@
+## Copyright 2008 Open Source Applications Foundation
+## 
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+## 
+##     http://www.apache.org/licenses/LICENSE-2.0
+## 
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+#set($locale=$report.locale)
+#set($eventLabel = $resource.get("event").locale($locale))
+#set($starLabel = $resource.get("starred").locale($locale))
+#set($alarmLabel = $resource.get("alarm").locale($locale))
+
+**** #if($report.isWeekly())$resource.get("title.weekly").locale($locale)#else$resource.get("title.daily").locale($locale)#end ****
+#foreach($result in $report.upcomingItems)
+  #set($collection = $result.collection)
+  #set($note = $result.note)
+  #set($isEvent = $noteTool.isEvent($note))
+  #set($isTask = $noteTool.isTask($note))
+  #set($hasAlarm = $result.isAlarmResult())
+  #set($location = $noteTool.getLocation($note))
+#if($hasAlarm)
+#set($noteDate = $dateTool.format('EEE MMM d, yyyy hh:mm a', $noteTool.getAlarmDate($note), $report.locale, $report.timezone))
+#else
+#set($noteDate = $dateTool.format('EEE MMM d, yyyy hh:mm a', $noteTool.normalizeDate($noteTool.getStartDate($note), $report.timezone), $report.locale, $report.timezone))
+#end
+#if($isTask)[$starLabel] #end#if($hasAlarm)[$alarmLabel] #else[$eventLabel] #end$noteDate
+[$collection.displayName] #if($note.displayName && $note.displayName!="")$note.displayName#else$resource.get("noTitle").locale($locale)#end #if($location && $location!="")@$location#end
+
+
+#end
+
+**** $resource.get("nowItems.title").locale($locale) ****
+#foreach($result in $report.nowItems)
+  #set($collection = $result.collection)
+  #set($note = $result.note)
+  #set($isEvent = $noteTool.isEvent($note))
+  #set($isTask = $noteTool.isTask($note))
+  #set($hasAlarm = $noteTool.hasCustomAlarm($note))
+  #set($location = $noteTool.getLocation($note))
+#if($isEvent)
+#set($noteDate = $dateTool.format('EEE MMM d, yyyy hh:mm a', $noteTool.normalizeDate($noteTool.getStartDate($note), $report.timezone), $report.locale, $report.timezone))
+#elseif($hasAlarm)
+#set($noteDate = $dateTool.format('EEE MMM d, yyyy hh:mm a', $noteTool.getAlarmDate($note), $report.locale, $report.timezone))
+#end
+#if($hasAlarm || $isEvent) 
+#if($isTask)[$starLabel] #end#if($isEvent)[$eventLabel] #else[$alarmLabel] #end$noteDate
+[$collection.displayName] #if($note.displayName && $note.displayName!="")$note.displayName#else$resource.get("noTitle").locale($locale)#end #if($location && $location!="")@$location#end
+#else
+#if($isTask)[$starLabel] #end[$collection.displayName] $note.displayName## non-events/alarms
+#end
+
+
+#end
+
+$resource.get("footer").locale($locale)

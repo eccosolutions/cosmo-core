@@ -1,0 +1,78 @@
+# -*- rnc -*-
+# RELAX NG Compact Syntax Grammar for the
+# EIMML event record type Version 0
+
+namespace event = "http://osafoundation.org/eim/event/0"
+
+include "eimml-core.rnc"
+
+eimEventRecord =
+   element event:record {
+      (eimDeleted,
+         eventUuid
+       & eventDtStart?
+       & eventDuration?
+       & eventLocation?
+       & eventRRule?
+       & eventExRule?
+       & eventRDate?
+       & eventExDate?
+       & eventStatus?
+       & anyEventField*)
+   }
+
+eventUuid =
+   element event:uuid {
+      eimTextFieldContent
+   }
+
+eventDtStart =
+   element event:dtstart {
+      eimTextFieldContent
+   }
+
+eventDuration =
+   element event:duration {
+      eimTextFieldContent
+   }
+
+eventLocation =
+   element event:location {
+      eimTextFieldContent
+   }
+
+eventRRule =
+   element event:rrule {
+      eimTextFieldContent
+   }
+
+eventExRule =
+   element event:exrule {
+      eimTextFieldContent
+   }
+
+eventRDate =
+   element event:rdate {
+      eimTextFieldContent
+   }
+
+eventExDate =
+   element event:exdate {
+      eimTextFieldContent
+   }
+
+eventStatus =
+   element event:status {
+      eimTextFieldContent
+   }
+
+anyEventField =
+   element event:* {
+      (eimTextFieldContent
+       | eimDecimalFieldContent
+       | eimIntegerFieldContent
+       | eimDateTimeFieldContent
+       | eimBytesFieldContent
+       | eimBlobFieldContent
+       | eimClobFieldContent)*
+   }

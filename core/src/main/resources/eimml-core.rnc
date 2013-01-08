@@ -1,0 +1,104 @@
+# -*- rnc -*-
+# RELAX NG Compact Syntax Grammar for the
+# EIMML core schema Version 0
+
+namespace eim = "http://osafoundation.org/eim/0"
+
+start = eimCollection
+
+eimKey =
+   attribute eim:key { xsd:boolean }
+
+eimDeleted =
+   attribute eim:deleted { xsd:boolean }?
+
+eimEmpty =
+   attribute empty { xsd:boolean }?
+
+# These patterns define the allowable content of the elements
+# representing EIM record fields. Field types not defined in this
+# schema are not permitted in EIMML.
+
+eimTextFieldContent = {
+   eimKey,
+   eimEmpty,
+   attribute eim:type { "text" },
+   xsd:string { maxLength = "1024" }
+}
+
+eimDecimalFieldContent = {
+   eimKey,
+   attribute eim:type { "decimal" },
+   xsd:decimal
+}
+
+eimIntegerFieldContent = {
+   eimKey,
+   attribute eim:type { "integer" },
+   xsd:int
+}
+
+eimDateTimeFieldContent = {
+   eimKey,
+   attribute eim:type { "datetime" },
+   xsd:dateTime
+}
+
+eimBytesFieldContent = {
+   eimKey,
+   attribute eim:type { "bytes" },
+   xsd:base64Binary { maxlength = "1024" }
+}
+
+eimBlobFieldContent = {
+   eimKey,
+   eimEmpty,
+   attribute eim:type { "blob" },
+   xsd:base64Binary
+}
+
+eimClobFieldContent = {
+   eimKey,
+   eimEmpty,
+   attribute eim:type { "clob" },
+   xsd:string
+}
+
+# The root element of an EIMML document.
+
+eimCollection =
+   element eim:collection {
+      (attribute uuid { xsd:string },
+         attribute name { xsd:string }?,
+         eimRecordSet*)
+   }
+
+# A container for records that apply to the same item (identified by
+# the enclosed UUID).
+
+eimRecordSet = 
+   element eim:recordset {
+      attribute uuid { xsd:string },
+      anyRecord*
+   }
+
+# Schema extensions may define new record types by composing the
+# elementary field types into a new record type in the extension's
+# namespace.
+
+anyRecord =
+   element *:record {
+      (eimDeleted,
+         anyField*)
+   }
+
+anyField =
+   element *:* {
+      (eimTextFieldContent
+       | eimDecimalFieldContent
+       | eimIntegerFieldContent
+       | eimDateTimeFieldContent
+       | eimBytesFieldContent
+       | eimBlobFieldContent
+       | eimClobFieldContent)*
+   }

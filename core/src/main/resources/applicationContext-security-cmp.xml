@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright 2005-2006 Open Source Applications Foundation
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<!-- Security configuration for CMP -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+
+  <bean id="cmpAccessDecisionManager"
+        class="org.springframework.security.vote.AffirmativeBased">
+    <property name="allowIfAllAbstainDecisions">
+      <value>false</value>
+    </property>
+    <property name="decisionVoters">
+      <list>
+        <ref bean="roleVoter"/>
+      </list>
+    </property>
+  </bean>
+
+  <!-- interceptor which performs authorization for CMP requests -->
+
+   <bean id="cmpFilterInvocationInterceptor"
+         class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+     <property name="authenticationManager">
+       <ref bean="authenticationManager"/>
+     </property>
+     <property name="accessDecisionManager">
+       <ref bean="cmpAccessDecisionManager"/>
+     </property>
+     <property name="objectDefinitionSource">
+       <value>
+         CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+         PATTERN_TYPE_APACHE_ANT
+         /cmp/users=ROLE_ROOT
+         /cmp/user/*=ROLE_ROOT
+         /cmp/user/**/service=ROLE_ROOT,ROLE_USER
+         /cmp/signup=ROLE_ANONYMOUS
+         /cmp/activate/*=ROLE_ROOT
+         /cmp/account/password/reset/*=ROLE_ANONYMOUS, ROLE_ROOT, ROLE_USER
+         /cmp/account/password/recover=ROLE_ANONYMOUS, ROLE_ROOT, ROLE_USER
+         /cmp/account/activation/send=ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT
+         /cmp/account=ROLE_USER
+         /**=ROLE_ROOT
+       </value>
+     </property>
+   </bean>
+
+  <!-- filter chain that kicks off request-time processing -->
+
+  
+   <bean id="cmpFilterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+      <security:filter-chain-map path-type="ant">
+          <security:filter-chain pattern="/**" filters="protocolHttpRequestContextIntegrationFilter,protocolWsseProcessingFilter,protocolBasicProcessingFilter,defaultAnonymousProcessingFilter,protocolExceptionTranslationFilter,cmpFilterInvocationInterceptor"/>
+      </security:filter-chain-map>
+   </bean>
+
+</beans>

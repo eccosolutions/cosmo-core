@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2005-2006 Open Source Applications Foundation
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <!--  DAO -->
+  <bean id="scheduleDao"
+        class="org.osaf.cosmo.dao.hibernate.UserPreferencesScheduleDao"
+        init-method="init"
+        destroy-method="destroy">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <!--  Service -->
+  <bean id="scheduleService"
+        class="org.osaf.cosmo.service.impl.StandardScheduleService"
+        init-method="init"
+        destroy-method="destroy">
+    <property name="scheduleDao" ref="scheduleDao"/>
+  </bean>
+  
+  <!-- scheduler configuration -->
+  <bean id="logNotifier" class="org.osaf.cosmo.scheduler.LogNotifier"/>
+
+  <bean id="emailNotifier" init-method="init" class="org.osaf.cosmo.scheduler.EmailNotifier">
+    <property name="velocityEngine" ref="velocityEngine"/>
+    <property name="mailSender" ref="mailSender"/>
+    <property name="properties">
+      <map>
+        <entry key="notifier.email.fromAddress" value="${cosmo.scheduler.notifier.email.fromAddress}"/>
+        <entry key="notifier.email.fromHandle" value="${cosmo.scheduler.notifier.email.fromHandle}" />
+      </map>
+    </property>
+  </bean>
+
+  <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    <property name="velocityProperties">
+      <props>
+        <prop key="resource.loader">class</prop>
+        <prop key="class.resource.loader.class">
+          org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+        </prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="jobNotifiers" class="java.util.HashMap">
+    <constructor-arg>
+      <map>
+        <entry key="log" value-ref="logNotifier"/>
+        <entry key="email" value-ref="emailNotifier"/>
+      </map>
+    </constructor-arg>
+  </bean>
+
+  <bean id="hibernateJobFilter" class="org.osaf.cosmo.scheduler.HibernateSessionFilter">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="securityContextJobFilter" class="org.osaf.cosmo.scheduler.SecurityContextFilter">
+    <property name="securityManager" ref="securityManager"/>
+    <property name="userService" ref="userService"/>
+  </bean>
+
+  <bean id="jobFilters" class="java.util.ArrayList">
+    <constructor-arg>
+      <list>
+        <ref bean="hibernateJobFilter"/>
+        <ref bean="securityContextJobFilter"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="scheduler" lazy-init="true" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+      <property name="autoStartup" value="false"/>
+	  <property name="schedulerContextAsMap">
+        <map>
+          <entry key="contentService" value-ref="contentService"/>
+          <entry key="userService" value-ref="userService"/>
+          <entry key="notifiers" value-ref="jobNotifiers"/>
+          <entry key="filters" value-ref="jobFilters"/>
+          <entry key="scheduler" value-ref="cosmoScheduler"/>
+        </map>
+    </property>
+	<property name="quartzProperties">
+		<props>
+			<prop key="org.quartz.threadPool.threadCount">${cosmo.scheduler.threadPoolSize}</prop>
+		</props>
+	</property>
+  </bean>
+
+  <bean id="forwardLookingJobScheduler" class="org.osaf.cosmo.scheduler.ForwardLookingJobTypeScheduler">
+    <property name="securityManager" ref="securityManager"/>
+    <property name="contentService" ref="contentService" />
+    <property name="allowCustomCronExpression" value="true"/>
+    <property name="testMode" value="${cosmo.scheduler.testMode}"/>
+  </bean>
+
+  <bean id="cosmoScheduler" depends-on="dbInitializer"
+                            init-method="init" 
+	                        destroy-method="destroy" 
+	                        class="org.osaf.cosmo.scheduler.SchedulerImpl">
+    <property name="enabled" value="${cosmo.scheduler.enabled}"/>
+	<property name="maxJobsPerUser" value="1"/>
+	<property name="scheduler" ref="scheduler"/>
+    <property name="scheduleService" ref="scheduleService"/>
+    <property name="jobSchedulers">
+      <map>
+        <entry key="forward" value-ref="forwardLookingJobScheduler"/>
+      </map>
+    </property>
+    <property name="refreshInterval" value="90000"/>
+  </bean>
+	
+  <bean id="schedulerManager" class="org.osaf.cosmo.scheduler.SchedulerManager">
+    <property name="scheduler" ref="cosmoScheduler"/>	  
+  </bean>
+
+</beans>

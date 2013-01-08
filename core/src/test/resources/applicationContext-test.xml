@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+          "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+    Copyright 2006 Open Source Applications Foundation
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<beans>
+
+  <bean id="cosmoConfigPath"
+        class="java.lang.String">
+    <constructor-arg>
+      <value>classpath:cosmo.properties</value>
+    </constructor-arg>
+  </bean>
+
+  <!-- we don't need these, but we have to override the bean definition
+       from applicationContext.xml -->
+  <bean id="mailSession"
+        class="java.lang.String"/>  
+  <bean id="exporter"
+        class="java.lang.String"/>
+  <bean id="dbInitializer"
+	  class="java.lang.String"/>
+  <bean id="cosmoScheduler"
+	  class="java.lang.String"/>
+  <bean id="schedulerManager"
+	  class="java.lang.String"/>
+
+  <bean id="mailSender"
+        class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="protocol">
+      <value>smtp</value>
+    </property>
+    <property name="host">
+      <value>localhost</value>
+    </property>
+  </bean>
+
+  <bean id="validatePreUpdateEventListener"
+      class="org.hibernate.validator.event.ValidatePreUpdateEventListener"/>
+
+  <bean id="validatePreInsertEventListener"
+      class="org.hibernate.validator.event.ValidatePreInsertEventListener"/>
+
+  
+  <bean id="auditableObjectInterceptor"
+      class="org.osaf.cosmo.model.hibernate.AuditableObjectInterceptor"/>
+      
+  <bean id="eventStampInterceptor"
+      class="org.osaf.cosmo.model.hibernate.EventStampInterceptor"/>
+      
+  <bean id="cosmoHibernateInterceptor"
+      class="org.osaf.cosmo.hibernate.CompoundInterceptor">
+      <property name="interceptors">
+        <list>
+            <ref local="auditableObjectInterceptor"/>
+            <ref local="eventStampInterceptor"/>
+        </list>
+    </property>
+  </bean>
+
+  <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <property name="lobHandler" ref="defaultLobHandler" />
+    <property name="annotatedPackages">
+        <list>
+            <value>org.osaf.cosmo.model.hibernate</value>
+        </list>
+    </property>
+    <property name="annotatedClasses">
+        <list>
+            <value>org.osaf.cosmo.model.hibernate.HibAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibAttributeTombstone</value>
+            <value>org.osaf.cosmo.model.hibernate.HibAvailabilityItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibBaseEventStamp</value>
+            <value>org.osaf.cosmo.model.hibernate.HibBinaryAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibBooleanAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibCalendarAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibCalendarCollectionStamp</value>            
+            <value>org.osaf.cosmo.model.hibernate.HibCollectionItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibCollectionItemDetails</value>
+            <value>org.osaf.cosmo.model.hibernate.HibCollectionSubscription</value>
+            <value>org.osaf.cosmo.model.hibernate.HibContentData</value>
+            <value>org.osaf.cosmo.model.hibernate.HibContentItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibDecimalAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibDictionaryAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibEventExceptionStamp</value>
+            <value>org.osaf.cosmo.model.hibernate.HibEventLogEntry</value>
+            <value>org.osaf.cosmo.model.hibernate.HibEventStamp</value>
+            <value>org.osaf.cosmo.model.hibernate.HibFileItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibFreeBusyItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibHomeCollectionItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibICalendarAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibICalendarItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibIntegerAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibItemTombstone</value>
+            <value>org.osaf.cosmo.model.hibernate.HibMessageStamp</value>
+            <value>org.osaf.cosmo.model.hibernate.HibMultiValueStringAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibNoteItem</value>
+            <value>org.osaf.cosmo.model.hibernate.HibPasswordRecovery</value>
+            <value>org.osaf.cosmo.model.hibernate.HibPreference</value>
+            <value>org.osaf.cosmo.model.hibernate.HibServerProperty</value>
+            <value>org.osaf.cosmo.model.hibernate.HibStringAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibStamp</value>
+            <value>org.osaf.cosmo.model.hibernate.HibStampTombstone</value>
+            <value>org.osaf.cosmo.model.hibernate.HibTaskStamp</value>
+            <value>org.osaf.cosmo.model.hibernate.HibTextAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibTicket</value>
+            <value>org.osaf.cosmo.model.hibernate.HibTimestampAttribute</value>
+            <value>org.osaf.cosmo.model.hibernate.HibTombstone</value>
+            <value>org.osaf.cosmo.model.hibernate.HibUser</value>
+            <value>org.osaf.cosmo.model.hibernate.HibXmlAttribute</value>
+        </list>
+    </property>
+    <property name="entityInterceptor">
+      <ref bean="cosmoHibernateInterceptor"/>
+    </property>
+    <property name="eventListeners">
+      <map>
+        <entry key="pre-update">
+          <ref local="validatePreUpdateEventListener"/>
+        </entry>
+        <entry key="pre-insert">
+          <ref local="validatePreInsertEventListener"/>
+        </entry>
+      </map>
+    </property>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.generate_statistics">false</prop>
+        <prop key="hibernate.cache.use_query_cache">false</prop>
+        <prop key="hibernate.cache.use_second_level_cache">false</prop>
+        <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+        <prop key="hibernate.show_sql">false</prop>
+
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+
+        <prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
+      </props>
+    </property>
+    <property name="dataSource">
+      <ref bean="jdbcDataSource"/>
+    </property>
+  </bean>
+
+  
+  <bean id="jdbcDataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName">
+      <value>org.apache.derby.jdbc.EmbeddedDriver</value>
+    </property>
+        <property name="url">
+          <value>jdbc:derby:target/test-db;create=true</value>
+        </property>
+  </bean>
+
+  <bean id="accountActivator"
+         class="org.osaf.cosmo.service.account.AutomaticAccountActivator"/>
+
+  <bean id="passwordRecoverer"
+         class="org.osaf.cosmo.service.account.MockPasswordRecoverer"/>
+
+</beans>

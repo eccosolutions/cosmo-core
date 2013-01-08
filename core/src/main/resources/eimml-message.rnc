@@ -1,0 +1,92 @@
+# -*- rnc -*-
+# RELAX NG Compact Syntax Grammar for the
+# EIMML message record type Version 0
+
+namespace message = "http://osafoundation.org/eim/mail/0"
+
+include "eimml-core.rnc"
+
+eimMessageRecord =
+   element message:record {
+      (eimDeleted,
+         messageUuid
+       & messageId?
+       & messageHeaders?
+       & messageFrom?
+       & messageTo?
+       & messageCc?
+       & messageBcc?
+       & messageOriginators?
+       & messageDateSent?
+       & messageInReplyTo?
+       & messageReferences?
+       & anyMessageField*)
+   }
+
+messageUuid =
+   element message:uuid {
+      eimTextFieldContent
+   }
+
+messageId =
+   element message:messageId {
+      eimTextFieldContent # length 256
+   }
+
+messageHeaders =
+   element message:headers {
+      eimClobFieldContent
+   }
+
+messageFrom =
+   element message:fromAddress {
+      eimTextFieldContent # length 1024
+   }
+
+messageTo =
+   element message:toAddress {
+      eimTextFieldContent # length 1024
+   }
+
+messageCc =
+   element message:ccAddress {
+      eimTextFieldContent # length 1024
+   }
+
+messageBcc =
+   element message:bccAddress {
+      eimTextFieldContent # length 1024
+   }
+
+# can contain text or email addresses
+messageOriginators =
+   element message:originators {
+      eimTextFieldContent # length 1024
+   }
+
+messageDateSent =
+   element message:dateSent {
+      eimTextFieldContent # length 256
+   }
+
+messageInReplyTo =
+   element message:inReplyTo {
+      eimTextFieldContent # length 256
+   }
+
+# comma-separated list of message ids that this message references
+messageReferences =
+   element message:references {
+      eimClobFieldContent
+   }
+
+anyMessageField =
+   element message:* {
+      (eimTextFieldContent
+       | eimDecimalFieldContent
+       | eimIntegerFieldContent
+       | eimDateTimeFieldContent
+       | eimBytesFieldContent
+       | eimBlobFieldContent
+       | eimClobFieldContent)*
+   }
