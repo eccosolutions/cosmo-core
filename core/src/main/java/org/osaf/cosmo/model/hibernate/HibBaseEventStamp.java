@@ -72,7 +72,7 @@ import org.osaf.cosmo.model.NoteItem;
  * Hibernate persistent BaseEventStamp.
  */
 @Entity
-@SecondaryTable(name="event_stamp", pkJoinColumns={
+@SecondaryTable(name="cosmo_event_stamp", pkJoinColumns={
         @PrimaryKeyJoinColumn(name="stampid", referencedColumnName="id")})
 @DiscriminatorValue("baseevent")
 public abstract class HibBaseEventStamp extends HibStamp
@@ -85,7 +85,7 @@ public abstract class HibBaseEventStamp extends HibStamp
     
     protected static final String VALUE_MISSING = "MISSING";
     
-    @Column(table="event_stamp", name = "icaldata", length=102400000, nullable = false)
+    @Column(table="cosmo_event_stamp", name = "icaldata", length=102400000, nullable = false)
     @Type(type="calendar_clob")
     @NotNull
     private Calendar eventCalendar = null;
@@ -278,7 +278,7 @@ public abstract class HibBaseEventStamp extends HibStamp
             prop.getParameters().add(value);
         
         // update timezone for now because ical4j DateList doesn't
-        Parameter param = (Parameter) prop.getParameters().getParameter(
+        Parameter param = prop.getParameters().getParameter(
                 Parameter.TZID);
         if (param != null)
             prop.getParameters().remove(param);

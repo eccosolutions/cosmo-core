@@ -13,19 +13,19 @@ import org.hibernate.annotations.Index;
 @Embeddable
 public class HibEventTimeRangeIndex {
     
-    @Column(table="event_stamp", name = "startdate", length=16)
+    @Column(table="cosmo_event_stamp", name = "startdate", length=16)
     @Index(name="idx_startdt")
     private String startDate = null;
     
-    @Column(table="event_stamp", name = "enddate", length=16)
+    @Column(table="cosmo_event_stamp", name = "enddate", length=16)
     @Index(name="idx_enddt")
     private String endDate = null;
     
-    @Column(table="event_stamp", name = "isfloating")
+    @Column(table="cosmo_event_stamp", name = "isfloating")
     @Index(name="idx_floating")
     private Boolean isFloating = null;
     
-    @Column(table="event_stamp", name = "isrecurring")
+    @Column(table="cosmo_event_stamp", name = "isrecurring")
     @Index(name="idx_recurring")
     private Boolean isRecurring = null;
     

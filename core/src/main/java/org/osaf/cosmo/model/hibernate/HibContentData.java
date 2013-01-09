@@ -35,7 +35,7 @@ import org.osaf.cosmo.io.BufferedContent;
  * on disk (large content).
  */
 @Entity
-@Table(name="content_data")
+@Table(name="cosmo_content_data")
 public class HibContentData extends BaseModelObject {
 
     /**

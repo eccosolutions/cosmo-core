@@ -81,7 +81,8 @@ public class HibStringAttribute extends HibAttribute implements
         setValue((String) value);
     }
     
-    public Attribute copy() {
+    @Override
+	public Attribute copy() {
         StringAttribute attr = new HibStringAttribute();
         attr.setQName(getQName().copy());
         attr.setValue(getValue());

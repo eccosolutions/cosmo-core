@@ -67,9 +67,9 @@ import org.osaf.cosmo.model.User;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@Table(name="item")
+@Table(name="cosmo_item")
 @org.hibernate.annotations.Table(
-        appliesTo="item", 
+        appliesTo="cosmo_item", 
         indexes={@Index(name="idx_itemtype", columnNames={"itemtype"})})
 @DiscriminatorColumn(
         name="itemtype",

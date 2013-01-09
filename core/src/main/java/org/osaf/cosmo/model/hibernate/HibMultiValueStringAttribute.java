@@ -46,7 +46,7 @@ public class HibMultiValueStringAttribute extends HibAttribute
     
     @CollectionOfElements
     @JoinTable(
-            name="multistring_values",
+            name="cosmo_multistring_values",
             joinColumns = @JoinColumn(name="attributeid")
     )
     @Column(name="stringvalue", length=2048)
@@ -85,7 +85,8 @@ public class HibMultiValueStringAttribute extends HibAttribute
         setValue((Set<String>) value);
     }
     
-    public Attribute copy() {
+    @Override
+	public Attribute copy() {
         MultiValueStringAttribute attr = new HibMultiValueStringAttribute();
         attr.setQName(getQName().copy());
         Set<String> newValue = new HashSet<String>(value);

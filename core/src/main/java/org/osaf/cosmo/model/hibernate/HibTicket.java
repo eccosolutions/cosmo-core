@@ -44,7 +44,7 @@ import org.osaf.cosmo.model.User;
  * Hibernate persistent Ticket.
  */
 @Entity
-@Table(name="tickets")
+@Table(name="cosmo_tickets")
 public class HibTicket extends HibAuditableObject implements Comparable<Ticket>, Ticket {
 
     /**
@@ -63,7 +63,7 @@ public class HibTicket extends HibAuditableObject implements Comparable<Ticket>,
     
     @CollectionOfElements
     @JoinTable(
-            name="ticket_privilege",
+            name="cosmo_ticket_privilege",
             joinColumns = @JoinColumn(name="ticketid")
     )
     @Fetch(FetchMode.JOIN)
@@ -256,7 +256,8 @@ public class HibTicket extends HibAuditableObject implements Comparable<Ticket>,
 
     /**
      */
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (! (o instanceof HibTicket)) {
             return false;
         }
@@ -270,7 +271,8 @@ public class HibTicket extends HibAuditableObject implements Comparable<Ticket>,
 
     /**
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return new HashCodeBuilder(3, 5).
             append(key).
             append(timeout).
@@ -280,7 +282,8 @@ public class HibTicket extends HibAuditableObject implements Comparable<Ticket>,
 
     /**
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer buf = new StringBuffer(key);
         TicketType type = getType();
         if (type != null)
@@ -309,7 +312,8 @@ public class HibTicket extends HibAuditableObject implements Comparable<Ticket>,
         this.item = item;
     }
     
-    public String calculateEntityTag() {
+    @Override
+	public String calculateEntityTag() {
         // Tickets are globally unique by key and are immutable
         return encodeEntityTag(this.key.getBytes());
     }

@@ -47,10 +47,10 @@ import org.osaf.cosmo.model.Stamp;
                      discriminatorType = DiscriminatorType.STRING, length = 16)
 // Unique constraint for stamptype and itemid to prevent items
 // having more than one of the same stamp
-@Table(name = "stamp", uniqueConstraints = { 
+@Table(name = "cosmo_stamp", uniqueConstraints = { 
         @UniqueConstraint(columnNames = { "itemid", "stamptype" }) })
 // Define index on discriminator
-@org.hibernate.annotations.Table(appliesTo = "stamp", 
+@org.hibernate.annotations.Table(appliesTo = "cosmo_stamp", 
         indexes = { @Index(name = "idx_stamptype", columnNames = { "stamptype" }) })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public abstract class HibStamp extends HibAuditableObject implements
@@ -111,7 +111,8 @@ public abstract class HibStamp extends HibAuditableObject implements
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.hibernate.HibAuditableObject#updateTimestamp()
      */
-    public void updateTimestamp() {
+    @Override
+	public void updateTimestamp() {
         setModifiedDate(new Date());
     }
 }

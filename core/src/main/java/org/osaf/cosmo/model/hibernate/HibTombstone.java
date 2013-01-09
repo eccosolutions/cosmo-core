@@ -39,7 +39,7 @@ import org.osaf.cosmo.model.Tombstone;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@Table(name="tombstones")
+@Table(name="cosmo_tombstones")
 @DiscriminatorColumn(
         name="tombstonetype",
         discriminatorType=DiscriminatorType.STRING,

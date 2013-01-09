@@ -27,7 +27,7 @@ import org.osaf.cosmo.model.ServerProperty;
  * Hibernate persistent ServerProperty.
  */
 @Entity
-@Table(name="server_properties")
+@Table(name="cosmo_server_properties")
 public class HibServerProperty extends BaseModelObject implements
         java.io.Serializable, ServerProperty {
 

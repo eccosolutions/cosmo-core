@@ -38,7 +38,7 @@ import org.osaf.cosmo.model.User;
 //Define a unique constraint on user and name
 //because we don't want two subscriptions with the same name
 //to be associated with the same user
-@Table(name="subscription", uniqueConstraints = {
+@Table(name="cosmo_subscription", uniqueConstraints = {
         @UniqueConstraint(columnNames={"ownerid", "displayname"})})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibCollectionSubscription extends HibAuditableObject implements CollectionSubscription {

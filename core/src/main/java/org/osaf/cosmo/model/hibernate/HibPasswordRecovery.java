@@ -37,7 +37,7 @@ import org.osaf.cosmo.model.User;
  * Hibernate persistent PasswordRecovery.
  */
 @Entity
-@Table(name="pwrecovery")
+@Table(name="cosmo_pwrecovery")
 public class HibPasswordRecovery extends BaseModelObject implements PasswordRecovery {
 
     private static final long serialVersionUID = 854107654491442548L;

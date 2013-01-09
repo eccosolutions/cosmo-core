@@ -41,7 +41,7 @@ import org.osaf.cosmo.model.Item;
  * to the collection.
  */
 @Entity
-@Table(name="collection_item")
+@Table(name="cosmo_collection_item")
 //@AssociationOverrides({
 //@AssociationOverride(name="primaryKey.collection", joinColumns = @JoinColumn(name="collectionid")),
 //@AssociationOverride(name="primaryKey.item", joinColumns = @JoinColumn(name="itemid"))

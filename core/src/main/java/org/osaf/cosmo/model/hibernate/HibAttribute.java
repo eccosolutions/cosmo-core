@@ -44,11 +44,11 @@ import org.osaf.cosmo.model.QName;
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 // Define a unique constraint on item, namespace, and localname
-@Table(name="attribute", uniqueConstraints = {
+@Table(name="cosmo_attribute", uniqueConstraints = {
         @UniqueConstraint(columnNames={"itemid", "namespace", "localname"})})
 // Define indexes on discriminator and key fields
 @org.hibernate.annotations.Table(
-        appliesTo="attribute", 
+        appliesTo="cosmo_attribute", 
         indexes={@Index(name="idx_attrtype", columnNames={"attributetype"}),
                  @Index(name="idx_attrname", columnNames={"localname"}),
                  @Index(name="idx_attrns", columnNames={"namespace"})})
@@ -63,8 +63,9 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
     @Embedded
     @Target(HibQName.class)
     @AttributeOverrides( {
-            @AttributeOverride(name="namespace", column = @Column(name="namespace", nullable = false, length=255) ),
-            @AttributeOverride(name="localName", column = @Column(name="localname", nullable = false, length=255) )
+			// MED LENGTH CHANGED TO FIT PRODUCTION DB - from 255 to 128
+    		@AttributeOverride(name="namespace", column = @Column(name="namespace", nullable = false, length=128) ),
+            @AttributeOverride(name="localName", column = @Column(name="localname", nullable = false, length=128) )
     } )
     private QName qname;
     
@@ -123,7 +124,8 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
     /**
      * Return string representation
      */
-    public String toString() {
+    @Override
+	public String toString() {
         Object value = getValue();
         if(value==null)
             return "null";

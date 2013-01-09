@@ -47,7 +47,7 @@ public class HibDictionaryAttribute extends HibAttribute
     
     @CollectionOfElements
     @JoinTable(
-            name="dictionary_values",
+            name="cosmo_dictionary_values",
             joinColumns = @JoinColumn(name="attributeid")
     )
     @MapKey(columns=@Column(name="keyname", length=255))
@@ -93,7 +93,8 @@ public class HibDictionaryAttribute extends HibAttribute
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.hibernate.HibAttribute#copy()
      */
-    public Attribute copy() {
+    @Override
+	public Attribute copy() {
         DictionaryAttribute attr = new HibDictionaryAttribute();
         attr.setQName(getQName().copy());
         attr.setValue(new HashMap<String, String>(value));

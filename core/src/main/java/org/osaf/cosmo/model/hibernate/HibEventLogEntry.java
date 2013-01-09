@@ -27,7 +27,7 @@ import org.hibernate.annotations.Type;
  * Persistent event log entry.
  */
 @Entity
-@Table(name="event_log")
+@Table(name="cosmo_event_log")
 public class HibEventLogEntry extends BaseModelObject {
 
     @Column(name = "entrydate")

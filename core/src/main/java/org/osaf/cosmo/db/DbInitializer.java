@@ -122,7 +122,7 @@ public class DbInitializer {
         
         try {
             conn = datasource.getConnection();
-            ps = conn.prepareStatement("select count(*) from server_properties");
+            ps = conn.prepareStatement("select count(*) from cosmo_server_properties");
             ps.executeQuery();
             return true;
         } catch (Exception e) {

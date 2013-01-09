@@ -44,7 +44,7 @@ import org.osaf.cosmo.model.User;
  * Hibernate persistent User.
  */
 @Entity
-@Table(name="users")
+@Table(name="cosmo_users")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibUser extends HibAuditableObject implements User {
 
@@ -57,7 +57,8 @@ public class HibUser extends HibAuditableObject implements User {
     public static final int USERNAME_LEN_MIN = 3;
     /**
      */
-    public static final int USERNAME_LEN_MAX = 32;
+    //public static final int USERNAME_LEN_MAX = 32;
+    public static final int USERNAME_LEN_MAX = 50;
    
     /**
      */
@@ -137,12 +138,12 @@ public class HibUser extends HibAuditableObject implements User {
     @OneToMany(targetEntity=HibPreference.class, mappedBy = "user", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Preference> preferences = new HashSet<Preference>(0);
+    private final Set<Preference> preferences = new HashSet<Preference>(0);
     
     @OneToMany(targetEntity=HibCollectionSubscription.class, mappedBy = "owner", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<CollectionSubscription> subscriptions = 
+    private final Set<CollectionSubscription> subscriptions = 
         new HashSet<CollectionSubscription>(0);
 
     /**
@@ -367,7 +368,8 @@ public class HibUser extends HibAuditableObject implements User {
 
     /**
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return new ToStringBuilder(this).
             append("username", username).
             append("password", "xxxxxx").
@@ -388,11 +390,11 @@ public class HibUser extends HibAuditableObject implements User {
         if (password == null) {
             throw new ModelValidationException(this, "Password not specified");
         }
-        if (password.length() < PASSWORD_LEN_MIN ||
-            password.length() > PASSWORD_LEN_MAX) {
+        if (password.length() < PASSWORD_LEN_MIN) {// ||
+            //password.length() > PASSWORD_LEN_MAX) {
             throw new ModelValidationException(this, "Password must be " +
-                                               PASSWORD_LEN_MIN + " to " +
-                                               PASSWORD_LEN_MAX +
+                                               PASSWORD_LEN_MIN + //" to " +
+                                               //PASSWORD_LEN_MAX +
                                                " characters in length");
         }
     }
@@ -513,7 +515,8 @@ public class HibUser extends HibAuditableObject implements User {
         return false;
     }
 
-    public String calculateEntityTag() {
+    @Override
+	public String calculateEntityTag() {
         String username = getUsername() != null ? getUsername() : "-";
         String modTime = getModifiedDate() != null ?
             new Long(getModifiedDate().getTime()).toString() : "-";

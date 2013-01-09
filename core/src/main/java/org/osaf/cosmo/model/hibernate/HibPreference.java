@@ -33,7 +33,7 @@ import org.osaf.cosmo.model.User;
  * Hibernate persistent Preference.
  */
 @Entity
-@Table(name="user_preferences", uniqueConstraints = {
+@Table(name="cosmo_user_preferences", uniqueConstraints = {
     @UniqueConstraint(columnNames={"userid", "preferencename"})})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibPreference extends HibAuditableObject implements Preference {
