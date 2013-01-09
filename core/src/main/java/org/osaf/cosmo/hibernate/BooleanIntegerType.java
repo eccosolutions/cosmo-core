@@ -15,63 +15,26 @@
  */
 package org.osaf.cosmo.hibernate;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-
-import org.hibernate.HibernateException;
-import org.hibernate.dialect.Dialect;
 import org.hibernate.type.BooleanType;
+import org.hibernate.type.descriptor.java.BooleanTypeDescriptor;
+import org.hibernate.type.descriptor.sql.SmallIntTypeDescriptor;
+import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
 
 /**
- * Custom hibernate type that persists a java boolean
- * to an integer field.
- *
+ * A type that maps between {@link java.sql.Types#SMALLINT} and {@link Boolean}
  */
 public class BooleanIntegerType extends BooleanType {
 
-    @Override
-    public Object get(ResultSet rs, String name) throws SQLException {
-        Integer code = rs.getInt(name);
-        if(code==null)
-            return null;
-        
-        return code.intValue()==0 ? Boolean.FALSE : Boolean.TRUE;
-    }
+	public static final BooleanIntegerType INSTANCE = new BooleanIntegerType();
 
-    @Override
-    public String getName() {
-        return "integer_boolean";
-    }
+	public BooleanIntegerType() {
+		this( SmallIntTypeDescriptor.INSTANCE, BooleanTypeDescriptor.INSTANCE );
+	}
+	protected BooleanIntegerType(SqlTypeDescriptor sqlTypeDescriptor, BooleanTypeDescriptor javaTypeDescriptor) {
+		super( sqlTypeDescriptor, javaTypeDescriptor );
+	}
 
-    @Override
-    public String objectToSQLString(Object value, Dialect dialect) throws Exception {
-        return ((Boolean) value).booleanValue() ? "1" : "0";
-    }
-
-    @Override
-    public void set(PreparedStatement st, Object value, int index) throws SQLException {
-        st.setInt(index, toInt(value));
-    }
-
-    @Override
-    public int sqlType() {
-        return Types.SMALLINT;
-    }
-
-    @Override
-    public Object stringToObject(String xml) throws Exception {
-        if("1".equals(xml))
-            return Boolean.TRUE;
-        else if("0".equals(xml))
-            return Boolean.FALSE;
-        else
-            throw new HibernateException("Could not interpret " + xml);
-    }
-    
-    private int toInt(Object value) {
-        return ((Boolean) value).booleanValue() ? 1 : 0;
-    }
-    
+	public String getName() {
+		return "integer_boolean";
+	}
 }
