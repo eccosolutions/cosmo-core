@@ -341,13 +341,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>3.0.0.ga</version>
-		</dependency>
-		<dependency>
-			<groupId>antlr</groupId>
-			<artifactId>antlr</artifactId>
-			<version>2.7.2</version>
+			<artifactId>hibernate-validator-legacy</artifactId>
+			<!-- v4 is only the package version - the remain consistent across packages -->
+			<version>4.0.2.GA</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-collections</groupId>
