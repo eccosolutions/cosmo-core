@@ -86,7 +86,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread1.addRunnable("1", new TxRunnable() {
             public Object run() {
                 User user = getUser(userDao, "testuser");
-                CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+                CollectionItem root = contentDao.getRootItem(user);
 
                 ContentItem item = generateTestContent();
                 item.setUid("test");
@@ -181,7 +181,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread1.addRunnable("1", new TxRunnable() {
             public Object run() {
                 User user = getUser(userDao, "testuser");
-                CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+                CollectionItem root = contentDao.getRootItem(user);
 
                 ContentItem item = generateTestContent();
                 item.setUid("test");
@@ -308,22 +308,22 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         Connection conn = jdbcDataSource.getConnection();
         
         Statement stmt = conn.createStatement();
-        stmt.executeUpdate("delete from event_stamp");
-        stmt.executeUpdate("delete from stamp");
-        stmt.executeUpdate("delete from attribute");
-        stmt.executeUpdate("delete from collection_item");
-        stmt.executeUpdate("delete from tombstones");
-        stmt.executeUpdate("delete from item");
-        stmt.executeUpdate("delete from content_data");
-        stmt.executeUpdate("delete from users");
+        stmt.executeUpdate("delete from cosmo_event_stamp");
+        stmt.executeUpdate("delete from cosmo_stamp");
+        stmt.executeUpdate("delete from cosmo_attribute");
+        stmt.executeUpdate("delete from cosmo_collection_item");
+        stmt.executeUpdate("delete from cosmo_tombstones");
+        stmt.executeUpdate("delete from cosmo_item");
+        stmt.executeUpdate("delete from cosmo_content_data");
+        stmt.executeUpdate("delete from cosmo_users");
         
         conn.commit();
     }
     
     static class TransactionThread extends Thread {
         
-        private List<RunContext> toRun = new ArrayList<RunContext>();
-        private Map<String, Object> doneSet = Collections.synchronizedMap(new HashMap<String, Object>());
+        private final List<RunContext> toRun = new ArrayList<RunContext>();
+        private final Map<String, Object> doneSet = Collections.synchronizedMap(new HashMap<String, Object>());
         private boolean commit = false;
         HibernateTransactionHelper txHelper = null;
         
