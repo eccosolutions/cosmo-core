@@ -15,7 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import junit.framework.Assert;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Date;
@@ -23,6 +24,7 @@ import net.fortuna.ical4j.model.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.InvalidStateException;
+import org.junit.Assert;
 import org.osaf.cosmo.calendar.EntityConverter;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CalendarCollectionStamp;
@@ -57,7 +59,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     public void testStampsCreate() throws Exception {
         EntityConverter entityConverter = new EntityConverter(null);
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem item = generateTestContent();
         
@@ -107,7 +109,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testStampHandlers() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem item = generateTestContent();
         
@@ -147,7 +149,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testStampsUpdate() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         ContentItem item = generateTestContent();
         
@@ -180,7 +182,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         queryItem.setClientModifiedDate(new Date());
         es.setEventCalendar(helper.getCalendar("cal2.ics"));
         Calendar newCal = es.getEventCalendar();
-        Thread.sleep(10);
+        Thread.sleep(1000); // need to sleep 1 sec as getModifiedDate() is Timestamp and SQL db resolution may be only 1 sec
         
         contentDao.updateContent(queryItem);
         
@@ -191,7 +193,11 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         stamp = queryItem.getStamp(EventStamp.class);
         es = (EventStamp) stamp;
        
-        Assert.assertTrue(stamp.getModifiedDate().after(stamp.getCreationDate()));
+        // NOTE: NOTE! this calls Date.after(Date) instead of Timestamp.after(Timestamp), 
+        // so will only see resolution of seconds
+        // Assert.assertTrue(stamp.getModifiedDate().after(stamp.getCreationDate()));
+        // This uses compareTo, which does work
+        Assert.assertThat(stamp.getModifiedDate(),is(greaterThan(stamp.getCreationDate())));
         
         if(!es.getEventCalendar().toString().equals(newCal.toString())) {
             log.error(es.getEventCalendar().toString());
@@ -202,7 +208,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testEventStampValidation() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         ContentItem item = generateTestContent();
         
@@ -220,7 +226,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testRemoveStamp() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem item = generateTestContent();
         
@@ -261,7 +267,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testCalendarCollectionStamp() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
         
         Calendar testCal = helper.getCalendar("timezone.ics");
         
@@ -302,7 +308,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testCalendarCollectionStampValidation() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
         
         Calendar testCal = helper.getCalendar("cal1.ics");
         
@@ -322,7 +328,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testEventExceptionStamp() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem item = generateTestContent();
         
@@ -353,7 +359,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
     
     public void testEventExceptionStampValidation() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem item = generateTestContent();
         
