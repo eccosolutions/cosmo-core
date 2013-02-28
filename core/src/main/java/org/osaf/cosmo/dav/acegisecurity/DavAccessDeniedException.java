@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +15,9 @@
  */
 package org.osaf.cosmo.dav.acegisecurity;
 
+
 import org.osaf.cosmo.dav.acl.DavPrivilege;
-import org.springframework.security.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 
 /**
  * <p>
@@ -25,8 +26,10 @@ import org.springframework.security.AccessDeniedException;
  * </p>
  */
 public class DavAccessDeniedException extends AccessDeniedException {
-    private String href;
-    private DavPrivilege privilege;
+    private static final long serialVersionUID = 1L;
+
+    private final String href;
+    private final DavPrivilege privilege;
 
     public DavAccessDeniedException(String href,
                                     DavPrivilege privilege) {

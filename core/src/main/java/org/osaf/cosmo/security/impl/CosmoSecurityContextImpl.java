@@ -25,9 +25,9 @@ import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.security.BaseSecurityContext;
 import org.osaf.cosmo.security.CosmoSecurityContext;
-import org.springframework.security.Authentication;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 /**
  * Standard implementation of {@link CosmoSecurityContext}. Wraps

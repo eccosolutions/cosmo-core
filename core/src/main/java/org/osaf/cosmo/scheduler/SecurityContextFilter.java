@@ -22,7 +22,7 @@ import org.osaf.cosmo.security.CosmoSecurityManager;
 import org.osaf.cosmo.service.UserService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Job Filter that initializes the current security context with the owner of of

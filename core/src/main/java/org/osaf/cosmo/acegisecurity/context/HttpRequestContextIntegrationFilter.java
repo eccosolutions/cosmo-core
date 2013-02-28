@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,9 +27,9 @@ import javax.servlet.ServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.context.SecurityContext;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.context.SecurityContextImpl;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 
 /**
  * Ensures that the security context for an HTTP request is not
@@ -63,7 +63,7 @@ public class HttpRequestContextIntegrationFilter
     private static final String FILTER_APPLIED =
         "__acegi_request_integration_filter_applied";
 
-    private Class context = SecurityContextImpl.class;
+    private Class<?> context = SecurityContextImpl.class;
 
     /** */
     public void setContext(Class secureContext) {
@@ -77,6 +77,7 @@ public class HttpRequestContextIntegrationFilter
 
     // InitializingBean methods
 
+    @Override
     public void afterPropertiesSet() throws Exception {
         if (context == null ||
             ! SecurityContext.class.isAssignableFrom(context)) {
@@ -86,6 +87,7 @@ public class HttpRequestContextIntegrationFilter
 
     // Filter methods
 
+    @Override
     public void destroy() {
     }
 
@@ -99,6 +101,7 @@ public class HttpRequestContextIntegrationFilter
      * @throws IOException if an I/O error occurs
      * @throws ServletException if any other error occurs
      */
+    @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,
                          FilterChain chain)
@@ -131,6 +134,7 @@ public class HttpRequestContextIntegrationFilter
         }
     }
 
+    @Override
     public void init(FilterConfig filterConfig)
         throws ServletException {
     }

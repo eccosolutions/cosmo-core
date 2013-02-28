@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package org.osaf.cosmo.dav.acegisecurity;
+
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,18 +34,17 @@ import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.service.UserService;
 import org.osaf.cosmo.util.UriTemplate;
-import org.springframework.security.AccessDecisionManager;
-import org.springframework.security.AccessDeniedException;
-import org.springframework.security.Authentication;
-import org.springframework.security.ConfigAttribute;
-import org.springframework.security.ConfigAttributeDefinition;
-import org.springframework.security.InsufficientAuthenticationException;
-import org.springframework.security.intercept.web.FilterInvocation;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.FilterInvocation;
 
 /**
  * <p>
- * Makes access control decisions for users and user 
+ * Makes access control decisions for users and user
  * resources.  Allow service layer to handle authorization
  * for all other resources.
  * </p>
@@ -54,7 +55,7 @@ public class DavAccessDecisionManager
         LogFactory.getLog(DavAccessDecisionManager.class);
 
     private UserService userService;
-  
+
     // DavAccessDecisionManager methods
 
     /**
@@ -66,9 +67,10 @@ public class DavAccessDecisionManager
      * {@link UsernamePasswordAuthenticationToken} or a
      * {@link TicketAuthenticationToken}.
      */
+    @Override
     public void decide(Authentication authentication,
                        Object object,
-                       ConfigAttributeDefinition config)
+                       Collection<ConfigAttribute> config)
         throws AccessDeniedException, InsufficientAuthenticationException {
         AclEvaluator evaluator = null;
         if (authentication instanceof UsernamePasswordAuthenticationToken) {
@@ -104,13 +106,15 @@ public class DavAccessDecisionManager
      * Always returns true, as this manager does not support any
      * config attributes.
      */
+    @Override
     public boolean supports(ConfigAttribute attribute) { return true; }
 
     /**
      * Returns true if the secure object is a
      * {@link FilterInvocation}.
      */
-    public boolean supports(Class clazz) {
+    @Override
+    public boolean supports(Class<?> clazz) {
         return (FilterInvocation.class.isAssignableFrom(clazz));
     }
 
@@ -148,7 +152,7 @@ public class DavAccessDecisionManager
         if (method.equals("PROPFIND")) {
             if (log.isDebugEnabled())
                 log.debug("Allowing method " + method + " so provider can evaluate check access itself");
-            return;            
+            return;
         }
 
         UserAclEvaluator uae = (UserAclEvaluator) evaluator;
@@ -177,12 +181,12 @@ public class DavAccessDecisionManager
             if (log.isDebugEnabled())
                 log.debug("User " + username + " not found; allowing for 404");
             return;
-        }    
+        }
 
         if (method.equals("PROPFIND")) {
             if (log.isDebugEnabled())
                 log.debug("Allowing method " + method + " so provider can evaluate check access itself");
-            return;            
+            return;
         }
 
         UserAclEvaluator uae = (UserAclEvaluator) evaluator;
@@ -201,14 +205,16 @@ public class DavAccessDecisionManager
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
-    
+
     public UserService getUserService() {
         return userService;
     }
 
     public static class AclEvaluationException extends Exception {
-        private Item item;
-        private DavPrivilege privilege;
+        private static final long serialVersionUID = 1L;
+
+        private final Item item;
+        private final DavPrivilege privilege;
 
         public AclEvaluationException(Item item,
                                       DavPrivilege privilege) {

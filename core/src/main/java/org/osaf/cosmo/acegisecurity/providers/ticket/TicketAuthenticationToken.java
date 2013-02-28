@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,12 +16,14 @@
 package org.osaf.cosmo.acegisecurity.providers.ticket;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import org.osaf.cosmo.model.Ticket;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.providers.AbstractAuthenticationToken;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 /**
  * Represents a ticket-based
@@ -34,12 +36,12 @@ import org.springframework.security.providers.AbstractAuthenticationToken;
 public class TicketAuthenticationToken extends AbstractAuthenticationToken
     implements Serializable {
 
-    private static final GrantedAuthority[] AUTHORITIES = { new GrantedAuthorityImpl(
-            "ROLE_TICKET") };
+    private static final Collection<? extends GrantedAuthority> AUTHORITIES = Collections.singletonList(
+            new SimpleGrantedAuthority("ROLE_TICKET") );
 
     private boolean authenticated;
-    private String path;
-    private Set<String> keys;
+    private final String path;
+    private final Set<String> keys;
     private Ticket ticket;
 
     /**
@@ -61,11 +63,13 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken
     // Authentication methods
 
     /** */
+    @Override
     public void setAuthenticated(boolean isAuthenticated) {
         authenticated = isAuthenticated;
     }
 
     /** */
+    @Override
     public boolean isAuthenticated() {
         return authenticated;
     }
@@ -73,6 +77,7 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken
     /**
      * Always returns an empty <code>String</code>.
      */
+    @Override
     public Object getCredentials() {
         return "";
     }
@@ -80,6 +85,7 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken
     /**
      * Returns the ticket.
      */
+    @Override
     public Object getPrincipal() {
         return ticket;
     }
@@ -102,6 +108,7 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken
     }
 
     /** */
+    @Override
     public boolean equals(Object obj) {
         if (! super.equals(obj)) {
             return false;

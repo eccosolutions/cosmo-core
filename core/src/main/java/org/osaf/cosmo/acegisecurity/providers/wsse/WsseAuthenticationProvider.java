@@ -26,10 +26,10 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.util.DateUtil;
 import org.osaf.cosmo.wsse.UsernameToken;
 import org.osaf.cosmo.wsse.WsseUtils;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.BadCredentialsException;
-import org.springframework.security.providers.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * AuthenticationProvider that authenticates WsseAuthenticationTokens

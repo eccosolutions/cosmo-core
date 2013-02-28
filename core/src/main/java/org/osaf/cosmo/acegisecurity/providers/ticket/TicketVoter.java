@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,16 +15,17 @@
  */
 package org.osaf.cosmo.acegisecurity.providers.ticket;
 
+import java.util.Collection;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.http.Methods;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.TicketType;
-import org.springframework.security.Authentication;
-import org.springframework.security.ConfigAttribute;
-import org.springframework.security.ConfigAttributeDefinition;
-import org.springframework.security.intercept.web.FilterInvocation;
-import org.springframework.security.vote.AccessDecisionVoter;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.FilterInvocation;
 
 /**
  * Votes affirmatively if the authenticated principal is a ticket and
@@ -33,21 +34,22 @@ import org.springframework.security.vote.AccessDecisionVoter;
  *
  * This is a temporary approach until a full ACL system is in place.
  */
-public class TicketVoter implements AccessDecisionVoter {
+public class TicketVoter implements AccessDecisionVoter<FilterInvocation> {
     private static final Log log = LogFactory.getLog(TicketVoter.class);
 
     /**
      */
+    @Override
     public int vote(Authentication authentication,
-                    Object object,
-                    ConfigAttributeDefinition config) {
+                    FilterInvocation object,
+                    Collection<ConfigAttribute> config) {
         if (! (authentication instanceof TicketAuthenticationToken)) {
             return ACCESS_ABSTAIN;
         }
 
         Ticket ticket = (Ticket) authentication.getPrincipal();
 
-        FilterInvocation fi = (FilterInvocation) object;
+        FilterInvocation fi = object;
         String method = fi.getHttpRequest().getMethod();
 
         // freebusy reports and certain propfinds have their own rules, and
@@ -82,6 +84,7 @@ public class TicketVoter implements AccessDecisionVoter {
      * Always returns true, since this voter does not examine any
      * config attributes.
      */
+    @Override
     public boolean supports(ConfigAttribute attribute) {
         return true;
     }
@@ -90,6 +93,7 @@ public class TicketVoter implements AccessDecisionVoter {
      * Returns true if the secure object is a
      * {@link org.springframework.security.intercept.web.FilterInvocation}
      */
+    @Override
     public boolean supports(Class clazz) {
         return (FilterInvocation.class.isAssignableFrom(clazz));
     }

@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,17 @@ package org.osaf.cosmo.acegisecurity.ui.webapp;
 
 import java.io.IOException;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.osaf.cosmo.acegisecurity.ui.UIConstants;
 import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
 import org.osaf.cosmo.model.Preference;
-import org.springframework.security.Authentication;
-import org.springframework.security.ui.webapp.AuthenticationProcessingFilter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.Assert;
 
 /**
@@ -32,88 +35,84 @@ import org.springframework.util.Assert;
  * login redirect url and to return the redirect url in the message
  * body instead of issueing an actual redirect to allow for dynamic
  * client side processing of authentication results.
- * 
- * Note: this class overrides the values of 
+ *
+ * Note: this class overrides the values of
  * <code>AbstractProcessingFilter.defaultTargetUrl</code>
  * and
  * <code>AbstractProcessingFilter.alwaysUseDefaultTargetUrl</code>
- * 
+ *
  * @author travis
  *
  */
 public class CosmoAuthenticationProcessingFilter extends
-        AuthenticationProcessingFilter {
-    
-    private static final String MEDIA_TYPE_PLAIN_TEXT = "text/plain";
+        UsernamePasswordAuthenticationFilter {
+
     private Boolean alwaysUseUserPreferredUrl = false;
     private String cosmoDefaultLoginUrl;
-    
-    /* A place to put authentication so it will be available to
-     * sendRedirect 
-     */
-    private Authentication currentAuthentication;
+    private String authenticationFailureUrl;
+
+    public CosmoAuthenticationProcessingFilter() {
+        super();
+    }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        Assert.hasLength(getFilterProcessesUrl(), "filterProcessesUrl must be specified");
-        Assert.hasLength(getAuthenticationFailureUrl(), "authenticationFailureUrl must be specified");
-        Assert.notNull(getAuthenticationManager(), "authenticationManager must be specified");
-        Assert.notNull(getRememberMeServices());
-        
+    public void afterPropertiesSet() {
+        super.afterPropertiesSet();
+        Assert.hasLength(authenticationFailureUrl, "authenticationFailureUrl must be specified");
+
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler(){
+
+            /* A place to put authentication so it will be available to
+             * sendRedirect
+             */
+            private final ThreadLocal<Authentication> currentAuthentication = new ThreadLocal<Authentication>();
+
+            /*
+             * On successful authentication:
+             * 1) First, try to find a url the user was attempting to visit
+             * 2) If that does not exist, try to find the user's preferred login url
+             * 3) If that does not exist, get the default redirect url for this filter
+             *
+             * Finally, return the url in the message body.
+             */
+            @Override
+            protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
+                String targetUrl = super.determineTargetUrl(request, response);
+
+                // TODO: Test/Review: This is best guess migration to Spring Security 3,
+                // but not tested in cosmo-core AFAIK
+                if (targetUrl == null) {
+                    Preference loginUrlPref =
+                        ((CosmoUserDetails) currentAuthentication.get().getPrincipal()).
+                        getUser().getPreference(UIConstants.PREF_KEY_LOGIN_URL);
+                    if (loginUrlPref != null)
+                        targetUrl = getRelativeUrl(request, loginUrlPref.getValue());
+                }
+
+                if (targetUrl == null) {
+                    targetUrl = getRelativeUrl(request, cosmoDefaultLoginUrl);
+                }
+                return targetUrl;
+            }
+
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                    Authentication authentication) throws IOException, ServletException {
+                currentAuthentication.set(authentication);
+                super.onAuthenticationSuccess(request, response, authentication);
+                currentAuthentication.remove();
+            }
+        };
         // Ensure sendRedirect will always be called with url = true on successful auth.
-        setAlwaysUseDefaultTargetUrl(true);
+        successHandler.setAlwaysUseDefaultTargetUrl(true);
+        setAuthenticationSuccessHandler(successHandler);
+
+        SimpleUrlAuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler(authenticationFailureUrl);
+        setAuthenticationFailureHandler(failureHandler);
     }
 
-    /*
-     * This method will be called on success or failure. In the failure case, a url will be
-     * passed. In the success case, null will be passed.
-     * 
-     * On succesful authentication:
-     * 1) First, try to find a url the user was attempting to visit
-     * 2) If that does not exist, try to find the user's preferred login url
-     * 3) If that does not exist, get the default redirect url for this filter
-     * 
-     * Finally, return the url in the message body.
-     */
-    @Override
-    protected void sendRedirect(HttpServletRequest request, 
-                                HttpServletResponse response, 
-                                String targetUrl) throws IOException {
-        
-        // If failure
-        if (getAuthenticationFailureUrl().equals(targetUrl)){
-            this.sendResponse(request, response, 
-                    getRelativeUrl(request, getAuthenticationFailureUrl()));
-            return;
-        } else {
-            targetUrl = alwaysUseUserPreferredUrl ? 
-                    null : obtainFullSavedRequestUrl(request);
-        } 
-        
-        if (targetUrl == null) {
-            Preference loginUrlPref =
-                ((CosmoUserDetails) currentAuthentication.getPrincipal()).
-                getUser().getPreference(UIConstants.PREF_KEY_LOGIN_URL);
-            if (loginUrlPref != null)
-                targetUrl = getRelativeUrl(request, loginUrlPref.getValue());
-        }
 
-        if (targetUrl == null) {
-            targetUrl = getRelativeUrl(request, cosmoDefaultLoginUrl);
-        }
-        
-        this.sendResponse(request, response, targetUrl);
-    }
-
-    private void sendResponse(HttpServletRequest req, 
-            HttpServletResponse resp, String redirectUrl) throws IOException{
-        resp.setContentType(MEDIA_TYPE_PLAIN_TEXT);
-        resp.setCharacterEncoding("UTF-8");
-        resp.setContentLength(redirectUrl.length());
-        resp.getWriter().write(redirectUrl);
-    }
-
-    private String getRelativeUrl(HttpServletRequest request, String path){
+    private static String getRelativeUrl(HttpServletRequest request, String path){
         if (path != null){
             return request.getContextPath() + path;
         }
@@ -136,11 +135,7 @@ public class CosmoAuthenticationProcessingFilter extends
         this.cosmoDefaultLoginUrl = cosmoDefaultTargetUrl;
     }
 
-    @Override
-    protected void onSuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, Authentication authResult) throws IOException {
-        // TODO Auto-generated method stub
-        super.onSuccessfulAuthentication(request, response, authResult);
-        this.currentAuthentication = authResult;
+    public void setAuthenticationFailureUrl(String authenticationFailureUrl) {
+        this.authenticationFailureUrl = authenticationFailureUrl;
     }
-
 }

@@ -22,11 +22,11 @@
     xmlns:tx="http://www.springframework.org/schema/tx"
     xmlns:security="http://www.springframework.org/schema/security"
     xsi:schemaLocation="
-    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
-    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
-    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.0.xsd
-    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
   <bean id="messageSource"
         class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -701,10 +701,10 @@
   </bean>
 
   <bean id="passwordEncoder"
-        class="org.springframework.security.providers.encoding.Md5PasswordEncoder"/>
+        class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>
 
   <bean id="daoAuthenticationProvider"
-        class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+        class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
     <property name="userDetailsService">
       <ref local="userDetailsService"/>
     </property>
@@ -714,7 +714,7 @@
   </bean>
 
   <bean id="anonymousAuthenticationProvider"
-        class="org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider">
+        class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
     <property name="key" value="badgerbadgerbadger"/>
   </bean>
 
@@ -729,7 +729,7 @@
   </bean>
 
   <bean id="authenticationManager"
-        class="org.springframework.security.providers.ProviderManager">
+        class="org.springframework.security.authentication.ProviderManager">
     <property name="providers">
       <list>
         <ref local="daoAuthenticationProvider"/>
@@ -745,10 +745,10 @@
   <bean id="ticketVoter"
         class="org.osaf.cosmo.acegisecurity.providers.ticket.TicketVoter"/>
 
-  <bean id="roleVoter" class="org.springframework.security.vote.RoleVoter"/>
+  <bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter"/>
 
   <bean id="defaultAccessDecisionManager"
-        class="org.springframework.security.vote.AffirmativeBased">
+        class="org.springframework.security.access.vote.AffirmativeBased">
     <property name="allowIfAllAbstainDecisions" value="false"/>
     <property name="decisionVoters">
       <list>
@@ -779,10 +779,10 @@
   
 
   <bean id="defaultFilterInvocationInterceptor"
-         class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+         class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
      <property name="authenticationManager" ref="authenticationManager"/>
      <property name="accessDecisionManager" ref="defaultAccessDecisionManager"/>
-     <property name="objectDefinitionSource">
+     <property name="securityMetadataSource">
        <value>
          CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
          PATTERN_TYPE_APACHE_ANT
@@ -819,13 +819,13 @@
 
    <!-- filter chain that kicks off request-time processing -->
 
-   <bean id="defaultFilterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+   <bean id="defaultFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
       <security:filter-chain-map path-type="ant">
           <security:filter-chain pattern="/**" filters="defaultHttpSessionContextIntegrationFilter,protocolTicketAuthenticationClearingFilter,defaultAnonymousProcessingFilter,defaultExceptionTranslationFilter,defaultFilterInvocationInterceptor"/>
       </security:filter-chain-map>
    </bean>
    
-   <bean id="webuiFilterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+   <bean id="webuiFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
       <security:filter-chain-map path-type="ant">
           <security:filter-chain pattern="/**" filters="defaultHttpSessionContextIntegrationFilter,protocolTicketAuthenticationClearingFilter,webuiFormBasedProcessingFilter,defaultExceptionTranslationFilter,defaultFilterInvocationInterceptor"/>
       </security:filter-chain-map>
@@ -834,12 +834,12 @@
   <!-- filter that integrates SecurityContext into HTTP Session -->
 
   <bean id="defaultHttpSessionContextIntegrationFilter"
-        class="org.springframework.security.context.HttpSessionContextIntegrationFilter"/>
+        class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
 
   <!-- filter that performs form-based authentication -->
 
   <bean id="defaultFormBasedAuthenticationEntryPoint"
-        class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+        class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
     <property name="loginFormUrl" value="/login"/>
     <property name="forceHttps" value="false"/>
   </bean>
@@ -855,7 +855,7 @@
   <!-- filter that performs anonymous authentication -->
 
   <bean id="defaultAnonymousProcessingFilter"
-        class="org.springframework.security.providers.anonymous.AnonymousProcessingFilter">
+        class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
     <property name="key" value="badgerbadgerbadger"/>
     <property name="userAttribute" value="anonymous,ROLE_ANONYMOUS"/>
   </bean>
@@ -863,7 +863,7 @@
   <!-- filter that converts authen/authz exceptions to web pages -->
 
   <bean id="defaultExceptionTranslationFilter"
-        class="org.springframework.security.ui.ExceptionTranslationFilter">
+        class="org.springframework.security.web.access.ExceptionTranslationFilter">
     <property name="authenticationEntryPoint">
       <ref local="defaultFormBasedAuthenticationEntryPoint"/>
     </property>
@@ -893,13 +893,13 @@
   </bean>
 
   <bean id="protocolBasicProcessingFilter"
-        class="org.springframework.security.ui.basicauth.BasicProcessingFilter">
+        class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
     <property name="authenticationManager" ref="authenticationManager"/>
     <property name="authenticationEntryPoint" ref="protocolAuthenticationEntryPoint"/>
   </bean>
 
   <bean id="protocolExceptionTranslationFilter"
-        class="org.springframework.security.ui.ExceptionTranslationFilter">
+        class="org.springframework.security.web.access.ExceptionTranslationFilter">
     <property name="authenticationEntryPoint" ref="protocolAuthenticationEntryPoint"/>
     <property name="createSessionAllowed" value="false"/>
   </bean>

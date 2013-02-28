@@ -1,18 +1,21 @@
 package org.osaf.cosmo.acegisecurity;
 
-import org.springframework.security.AccessDecisionManager;
-import org.springframework.security.AccessDeniedException;
-import org.springframework.security.Authentication;
-import org.springframework.security.ConfigAttribute;
-import org.springframework.security.ConfigAttributeDefinition;
-import org.springframework.security.InsufficientAuthenticationException;
+import java.util.Collection;
+
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.Authentication;
+
 
 
 public class DummyAccessDecisionManager implements AccessDecisionManager {
 
-    public void decide(Authentication arg0, Object arg1,
-            ConfigAttributeDefinition arg2) throws AccessDeniedException,
-            InsufficientAuthenticationException {
+
+    @Override
+    public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
+            throws AccessDeniedException, InsufficientAuthenticationException {
         // do nothing
     }
 
@@ -20,13 +23,14 @@ public class DummyAccessDecisionManager implements AccessDecisionManager {
      * Always returns true, as this manager does not support any
      * config attributes.
      */
+    @Override
     public boolean supports(ConfigAttribute attribute) { return true; }
 
     /**
      * Always return true;
      */
-    public boolean supports(Class clazz) {
+    @Override
+    public boolean supports(Class<?> clazz) {
         return true;
     }
-
 }

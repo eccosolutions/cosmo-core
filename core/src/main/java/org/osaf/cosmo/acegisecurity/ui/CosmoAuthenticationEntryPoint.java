@@ -18,8 +18,7 @@ package org.osaf.cosmo.acegisecurity.ui;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
@@ -27,8 +26,8 @@ import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.CosmoConstants;
 import org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationToken;
 import org.osaf.cosmo.acegisecurity.providers.ticket.TicketedItemNotFoundException;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.ui.AuthenticationEntryPoint;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 /**
  * Implements an <code>AuthenticationEntryPoint</code> that is
@@ -58,11 +57,10 @@ public class CosmoAuthenticationEntryPoint
      * </p>
      */
     @Override
-    public void commence(ServletRequest request,
-                         ServletResponse response,
+    public void commence(HttpServletRequest request,
+                         HttpServletResponse httpResponse,
                          AuthenticationException authException)
         throws IOException, ServletException {
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         // requests with ticket credentials
         if (authException.getAuthentication() != null &&

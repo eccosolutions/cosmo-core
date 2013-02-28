@@ -22,20 +22,20 @@
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
 
   <!-- interceptor which performs authorization for morse code requests -->
   <bean id="mcFilterInvocationInterceptor"
-        class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+        class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
     <property name="authenticationManager">
       <ref bean="authenticationManager"/>
     </property>
     <property name="accessDecisionManager">
       <ref bean="userPathAccessDecisionManager"/>
     </property>
-     <property name="objectDefinitionSource">
+     <property name="securityMetadataSource">
        <value>
 	     CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 	     PATTERN_TYPE_APACHE_ANT
@@ -45,7 +45,7 @@
   </bean>
 
   <!-- filter chain that kicks off request-time processing -->
-  <bean id="mcFilterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+  <bean id="mcFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
       <security:filter-chain-map path-type="ant">
           <security:filter-chain pattern="/**" filters="protocolHttpRequestContextIntegrationFilter,protocolBasicProcessingFilter,protocolTicketProcessingFilter,protocolExceptionTranslationFilter,mcFilterInvocationInterceptor,protocolExtraTicketProcessingFilter"/>
       </security:filter-chain-map>

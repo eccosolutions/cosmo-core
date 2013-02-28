@@ -16,13 +16,12 @@
 package org.osaf.cosmo.acegisecurity.userdetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.model.User;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Wraps a Cosmo <code>User</code> to provide Acegi Security with
@@ -38,11 +37,9 @@ import org.springframework.security.userdetails.UserDetails;
  * @see GrantedAuthority
  */
 public class CosmoUserDetails implements UserDetails {
-    private static final Log log =
-        LogFactory.getLog(CosmoUserDetails.class);
 
-    private User user;
-    private GrantedAuthority[] authorities;
+    private final User user;
+    private final Collection<SimpleGrantedAuthority> authorities;
 
     /**
      * @param user the wrapped <code>User</code>
@@ -51,16 +48,13 @@ public class CosmoUserDetails implements UserDetails {
     public CosmoUserDetails(User user) {
         this.user = user;
 
-        ArrayList authorities = new ArrayList();
+        authorities = new ArrayList<SimpleGrantedAuthority>();
         if (user.getAdmin().booleanValue()) {
-            authorities.add(new GrantedAuthorityImpl("ROLE_ROOT"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ROOT"));
         }
         if (! user.isOverlord()) {
-            authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
-
-        this.authorities = (GrantedAuthority[])
-            authorities.toArray(new GrantedAuthority[0]);
     }
 
     // UserDetails methods
@@ -76,6 +70,7 @@ public class CosmoUserDetails implements UserDetails {
      * non-expired), <code>false</code> if no longer valid (ie
      * expired)
      */
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -87,6 +82,7 @@ public class CosmoUserDetails implements UserDetails {
      * @return <code>true</code> if the user is not locked,
      * <code>false</code> otherwise
      */
+    @Override
     public boolean isAccountNonLocked() {
         if (user.isOverlord())
             return true;
@@ -99,7 +95,8 @@ public class CosmoUserDetails implements UserDetails {
      *
      * @return the authorities (never <code>null</code>)
      */
-    public GrantedAuthority[] getAuthorities() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
 
@@ -114,6 +111,7 @@ public class CosmoUserDetails implements UserDetails {
      * valid (ie non-expired), <code>false</code> if no longer
      * valid (ie expired)
      */
+    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -125,6 +123,7 @@ public class CosmoUserDetails implements UserDetails {
      * @return <code>true</code> if the user is enabled,
      * <code>false</code> otherwise
      */
+    @Override
     public boolean isEnabled() {
         return user.isActivated();
     }
@@ -135,6 +134,7 @@ public class CosmoUserDetails implements UserDetails {
      *
      * @return the password (never <code>null</code>)
      */
+    @Override
     public String getPassword() {
         return user.getPassword();
     }
@@ -145,6 +145,7 @@ public class CosmoUserDetails implements UserDetails {
      *
      * @return the username (never <code>null</code>)
      */
+    @Override
     public String getUsername() {
         return user.getUsername();
     }

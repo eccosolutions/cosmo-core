@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,11 +16,13 @@
 package org.osaf.cosmo.acegisecurity.providers.wsse;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.osaf.cosmo.wsse.UsernameToken;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.providers.AbstractAuthenticationToken;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
    AuthenticationToken that contains a WSSE Username token.
@@ -28,13 +30,13 @@ import org.springframework.security.userdetails.UserDetails;
 public class WsseAuthenticationToken extends AbstractAuthenticationToken
     implements Serializable {
 
-    private static final GrantedAuthority[] NO_AUTHORITIES = new GrantedAuthority[0];
+    private static final Collection<GrantedAuthority> NO_AUTHORITIES = Collections.emptyList();
 
     private boolean authenticated = false;
     private UserDetails userDetails = null;
     private UsernameToken token = null;
 
-  
+
     public WsseAuthenticationToken(UsernameToken token) {
         super(NO_AUTHORITIES);
         if (token == null)
@@ -45,11 +47,13 @@ public class WsseAuthenticationToken extends AbstractAuthenticationToken
     // Authentication methods
 
     /** */
+    @Override
     public void setAuthenticated(boolean isAuthenticated) {
         authenticated = isAuthenticated;
     }
 
     /** */
+    @Override
     public boolean isAuthenticated() {
         return authenticated;
     }
@@ -57,6 +61,7 @@ public class WsseAuthenticationToken extends AbstractAuthenticationToken
     /**
      * return token
      */
+    @Override
     public Object getCredentials() {
         return token;
     }
@@ -64,6 +69,7 @@ public class WsseAuthenticationToken extends AbstractAuthenticationToken
     /**
      * Returns the userDetails.
      */
+    @Override
     public Object getPrincipal() {
         return userDetails;
     }
@@ -76,14 +82,15 @@ public class WsseAuthenticationToken extends AbstractAuthenticationToken
     }
 
     @Override
-    public GrantedAuthority[] getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         if(userDetails==null)
             return NO_AUTHORITIES;
         else
-            return userDetails.getAuthorities();
+            return (Collection<GrantedAuthority>) userDetails.getAuthorities();
     }
 
     /** */
+    @Override
     public boolean equals(Object obj) {
         if (! super.equals(obj)) {
             return false;
