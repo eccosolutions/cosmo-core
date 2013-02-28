@@ -17,7 +17,6 @@ package org.osaf.cosmo.dav.caldav.report;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavResource;
 import org.osaf.cosmo.dav.UnprocessableEntityException;

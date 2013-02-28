@@ -17,15 +17,12 @@ package org.osaf.cosmo.dav.report;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
-
 import org.osaf.cosmo.dav.BaseDavTestCase;
 import org.osaf.cosmo.dav.DavResource;
 import org.osaf.cosmo.dav.DavResourceFactory;
 import org.osaf.cosmo.dav.DavResourceLocator;
 import org.osaf.cosmo.model.EntityFactory;
-
 import org.w3c.dom.Document;
 
 /**

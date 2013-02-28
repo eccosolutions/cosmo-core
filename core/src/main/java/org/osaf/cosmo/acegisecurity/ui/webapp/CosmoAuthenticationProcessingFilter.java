@@ -20,11 +20,11 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.ui.webapp.AuthenticationProcessingFilter;
 import org.osaf.cosmo.acegisecurity.ui.UIConstants;
 import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
 import org.osaf.cosmo.model.Preference;
+import org.springframework.security.Authentication;
+import org.springframework.security.ui.webapp.AuthenticationProcessingFilter;
 import org.springframework.util.Assert;
 
 /**

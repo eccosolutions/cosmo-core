@@ -16,7 +16,6 @@
 package org.osaf.cosmo.eim;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

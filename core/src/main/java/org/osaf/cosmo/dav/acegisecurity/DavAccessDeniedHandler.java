@@ -22,14 +22,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.AccessDeniedException;
-import org.springframework.security.ui.AccessDeniedHandler;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.dav.acl.NeedsPrivilegesException;
 import org.osaf.cosmo.dav.impl.StandardDavResponse;
+import org.springframework.security.AccessDeniedException;
+import org.springframework.security.ui.AccessDeniedHandler;
 
 /**
  * <p>

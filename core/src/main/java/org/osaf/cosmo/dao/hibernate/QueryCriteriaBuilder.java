@@ -17,7 +17,6 @@ package org.osaf.cosmo.dao.hibernate;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-
 import org.osaf.cosmo.util.PageCriteria;
 
 /**

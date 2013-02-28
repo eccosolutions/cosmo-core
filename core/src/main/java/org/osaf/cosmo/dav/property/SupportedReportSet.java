@@ -15,14 +15,12 @@
  */
 package org.osaf.cosmo.dav.property;
 
-import java.util.TreeSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.jackrabbit.webdav.version.report.ReportType;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

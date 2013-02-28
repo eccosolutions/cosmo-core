@@ -17,10 +17,10 @@ package org.osaf.cosmo.util;
 
 import java.io.ByteArrayInputStream;
 
-import org.apache.commons.io.IOUtils;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Test case for <code>BufferedServletOutpoutStream</code>.

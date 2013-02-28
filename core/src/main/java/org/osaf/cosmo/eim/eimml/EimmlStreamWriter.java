@@ -15,21 +15,16 @@
  */
 package org.osaf.cosmo.eim.eimml;
 
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import java.io.Writer;
-import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.eim.BlobField;
 import org.osaf.cosmo.eim.BytesField;
 import org.osaf.cosmo.eim.ClobField;

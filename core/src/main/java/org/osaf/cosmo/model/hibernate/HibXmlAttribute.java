@@ -21,14 +21,12 @@ import javax.persistence.Entity;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.hibernate.annotations.Type;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.ModelValidationException;
 import org.osaf.cosmo.model.QName;
 import org.osaf.cosmo.model.XmlAttribute;
-
 import org.w3c.dom.Element;
 
 /**

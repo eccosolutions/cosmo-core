@@ -18,11 +18,7 @@ package org.osaf.cosmo.dav.caldav;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-
 import org.apache.commons.lang.StringUtils;
-
 import org.osaf.cosmo.dav.PreconditionFailedException;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
 

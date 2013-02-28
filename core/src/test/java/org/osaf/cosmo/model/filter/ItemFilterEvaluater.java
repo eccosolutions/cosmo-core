@@ -28,7 +28,6 @@ import org.osaf.cosmo.calendar.query.TimeRangeFilter;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.BaseEventStamp;
 import org.osaf.cosmo.model.ContentItem;
-import org.osaf.cosmo.model.EventStamp;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.Stamp;

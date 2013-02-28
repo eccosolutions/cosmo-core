@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
-
 import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.property.Trigger;
 

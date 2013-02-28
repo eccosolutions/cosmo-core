@@ -17,7 +17,6 @@ package org.osaf.cosmo.atom.provider;
 
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.TargetType;
-
 import org.osaf.cosmo.model.User;
 
 /**

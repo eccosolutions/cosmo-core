@@ -19,7 +19,6 @@ import java.text.ParseException;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;

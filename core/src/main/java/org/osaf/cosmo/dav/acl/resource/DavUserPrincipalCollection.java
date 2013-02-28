@@ -20,7 +20,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -28,7 +27,6 @@ import javax.xml.namespace.QName;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.server.io.IOUtil;
 import org.apache.jackrabbit.webdav.DavResourceIterator;
 import org.apache.jackrabbit.webdav.DavResourceIteratorImpl;
@@ -38,11 +36,7 @@ import org.apache.jackrabbit.webdav.io.OutputContext;
 import org.apache.jackrabbit.webdav.property.DavPropertyIterator;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
-import org.apache.jackrabbit.webdav.version.DeltaVConstants;
-import org.apache.jackrabbit.webdav.version.report.Report;
-import org.apache.jackrabbit.webdav.version.report.ReportInfo;
 import org.apache.jackrabbit.webdav.version.report.ReportType;
-
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavContent;
 import org.osaf.cosmo.dav.DavException;
@@ -51,7 +45,6 @@ import org.osaf.cosmo.dav.DavResourceFactory;
 import org.osaf.cosmo.dav.DavResourceLocator;
 import org.osaf.cosmo.dav.ForbiddenException;
 import org.osaf.cosmo.dav.ProtectedPropertyModificationException;
-import org.osaf.cosmo.dav.UnprocessableEntityException;
 import org.osaf.cosmo.dav.acl.DavAce;
 import org.osaf.cosmo.dav.acl.DavAcl;
 import org.osaf.cosmo.dav.acl.DavPrivilege;
@@ -65,7 +58,6 @@ import org.osaf.cosmo.dav.property.IsCollection;
 import org.osaf.cosmo.dav.property.ResourceType;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.xml.DomWriter;
-
 import org.w3c.dom.Element;
 
 /**

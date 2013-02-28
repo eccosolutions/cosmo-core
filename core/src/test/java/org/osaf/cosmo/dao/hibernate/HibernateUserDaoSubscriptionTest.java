@@ -27,7 +27,6 @@ import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibCollectionSubscription;
-import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibTicket;
 
 public class HibernateUserDaoSubscriptionTest

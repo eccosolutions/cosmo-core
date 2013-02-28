@@ -7,6 +7,7 @@ import org.springframework.security.ConfigAttribute;
 import org.springframework.security.ConfigAttributeDefinition;
 import org.springframework.security.InsufficientAuthenticationException;
 
+
 public class DummyAccessDecisionManager implements AccessDecisionManager {
 
     public void decide(Authentication arg0, Object arg1,

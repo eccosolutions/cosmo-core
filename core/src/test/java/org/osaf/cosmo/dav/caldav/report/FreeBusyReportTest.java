@@ -17,18 +17,13 @@ package org.osaf.cosmo.dav.caldav.report;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavException;
-import org.apache.jackrabbit.webdav.version.report.ReportInfo;
-
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavResource;
 import org.osaf.cosmo.dav.impl.DavCalendarCollection;
 import org.osaf.cosmo.dav.impl.DavHomeCollection;
 import org.osaf.cosmo.dav.report.BaseReportTestCase;
 import org.osaf.cosmo.model.CollectionItem;
-
-import org.w3c.dom.Document;
 
 /**
  * Test case for <code>FreeBusyReport</code>.

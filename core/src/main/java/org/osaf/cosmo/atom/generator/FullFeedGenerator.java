@@ -17,10 +17,9 @@ package org.osaf.cosmo.atom.generator;
 
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.osaf.cosmo.atom.AtomConstants;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.EventStamp;
 import org.osaf.cosmo.model.Item;

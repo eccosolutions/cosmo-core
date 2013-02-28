@@ -16,13 +16,12 @@
 package org.osaf.cosmo.atom.generator.mock;
 
 import org.apache.abdera.model.Service;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.osaf.cosmo.atom.generator.ServiceGenerator;
 import org.osaf.cosmo.atom.generator.GeneratorException;
+import org.osaf.cosmo.atom.generator.ServiceGenerator;
 import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.mock.MockHomeCollectionItem;
 import org.osaf.cosmo.server.ServiceLocator;
 
 /**

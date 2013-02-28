@@ -16,11 +16,9 @@
 package org.osaf.cosmo.dav.caldav.property;
 
 import org.apache.jackrabbit.webdav.xml.DomUtil;
-
-import org.osaf.cosmo.icalendar.ICalendarConstants;
 import org.osaf.cosmo.dav.caldav.CaldavConstants;
 import org.osaf.cosmo.dav.property.StandardDavProperty;
-
+import org.osaf.cosmo.icalendar.ICalendarConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

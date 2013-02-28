@@ -24,7 +24,6 @@ import org.osaf.cosmo.dav.DavResourceLocator;
 import org.osaf.cosmo.dav.impl.DavCalendarResource;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.EntityFactory;
-import org.osaf.cosmo.model.NoteItem;
 
 /**
  * <p>

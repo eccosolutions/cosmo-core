@@ -17,10 +17,10 @@ package org.osaf.cosmo.acegisecurity.providers.wsse;
 
 import java.io.Serializable;
 
+import org.osaf.cosmo.wsse.UsernameToken;
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.providers.AbstractAuthenticationToken;
 import org.springframework.security.userdetails.UserDetails;
-import org.osaf.cosmo.wsse.UsernameToken;
 
 /**
    AuthenticationToken that contains a WSSE Username token.

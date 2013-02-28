@@ -28,7 +28,6 @@ import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.EimRecordField;
 import org.osaf.cosmo.eim.schema.BaseGeneratorTestCase;
 import org.osaf.cosmo.eim.schema.EimValueConverter;
-import org.osaf.cosmo.model.EventExceptionStamp;
 import org.osaf.cosmo.model.EventStamp;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.mock.MockEventExceptionStamp;

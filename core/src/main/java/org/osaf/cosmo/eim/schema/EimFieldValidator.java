@@ -15,24 +15,20 @@
  */
 package org.osaf.cosmo.eim.schema;
 
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.osaf.cosmo.eim.BlobField;
-import org.osaf.cosmo.eim.BytesField;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.ClobField;
 import org.osaf.cosmo.eim.DateTimeField;
 import org.osaf.cosmo.eim.DecimalField;
-import org.osaf.cosmo.eim.IntegerField;
 import org.osaf.cosmo.eim.EimRecordField;
+import org.osaf.cosmo.eim.IntegerField;
 import org.osaf.cosmo.eim.TextField;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Provides methods for validating EIM field values.

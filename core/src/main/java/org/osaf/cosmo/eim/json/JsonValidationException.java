@@ -15,7 +15,6 @@
  */
 package org.osaf.cosmo.eim.json;
 
-import org.osaf.cosmo.eim.EimException;
 
 /**
  * An exception signifying that a JSON construct was invalid in some

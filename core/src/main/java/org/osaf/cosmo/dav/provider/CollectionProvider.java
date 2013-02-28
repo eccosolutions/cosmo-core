@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.dav.ConflictException;
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavContent;
@@ -27,7 +26,6 @@ import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavRequest;
 import org.osaf.cosmo.dav.DavResourceFactory;
 import org.osaf.cosmo.dav.DavResponse;
-import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.ExistsException;
 import org.osaf.cosmo.dav.MethodNotAllowedException;
 import org.osaf.cosmo.model.EntityFactory;

@@ -24,24 +24,18 @@ import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.XmlSerializable;
-
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
-
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.security.mock.MockSecurityManager;
 import org.osaf.cosmo.security.mock.MockTicketPrincipal;
 import org.osaf.cosmo.security.mock.MockUserPrincipal;
-
-import org.springframework.mock.web.MockServletConfig;
-import org.springframework.mock.web.MockServletContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
+import org.springframework.mock.web.MockServletConfig;
+import org.springframework.mock.web.MockServletContext;
 import org.w3c.dom.Document;
 
 /**

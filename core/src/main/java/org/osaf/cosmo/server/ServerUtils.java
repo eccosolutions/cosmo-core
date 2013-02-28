@@ -21,8 +21,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.osaf.cosmo.model.Item;
-
 /**
  * Utility methods related to the protocols and interfaces presented
  * to clients.

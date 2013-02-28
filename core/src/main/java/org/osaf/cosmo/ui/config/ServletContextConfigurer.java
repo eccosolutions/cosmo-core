@@ -19,10 +19,8 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.CosmoConstants;
 import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.security.CosmoSecurityManager;
 import org.osaf.cosmo.service.UserService;
 
 /**

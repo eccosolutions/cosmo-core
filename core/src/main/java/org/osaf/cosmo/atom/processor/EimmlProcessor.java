@@ -20,12 +20,12 @@ import java.io.Reader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.eim.EimRecordSet;
 import org.osaf.cosmo.eim.eimml.EimmlStreamException;
 import org.osaf.cosmo.eim.eimml.EimmlStreamReader;
 import org.osaf.cosmo.eim.eimml.EimmlValidationException;
 import org.osaf.cosmo.model.EntityFactory;
+import org.osaf.cosmo.model.NoteItem;
 
 /**
  * A class that processes content specified as EIMML-serialized EIM

@@ -15,14 +15,14 @@
  */
 package org.osaf.cosmo.acegisecurity.userdetails;
 
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.User;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 
 /**
  * Implements Acegi Security's <code>UserDetailsService</code>

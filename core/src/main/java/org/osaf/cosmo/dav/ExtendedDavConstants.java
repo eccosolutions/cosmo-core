@@ -19,7 +19,6 @@ import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.Namespace;
-
 import org.osaf.cosmo.util.UriTemplate;
 import org.osaf.cosmo.xml.QName;
 

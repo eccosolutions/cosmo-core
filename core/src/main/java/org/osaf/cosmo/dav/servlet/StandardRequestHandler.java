@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,7 +83,7 @@ public class StandardRequestHandler
     private EntityFactory entityFactory;
 
     // RequestHandler methods
-               
+
     /**
      * <p>
      * Processes the request and returns a response. Calls
@@ -98,13 +98,14 @@ public class StandardRequestHandler
      * an entity describing the error.
      * </p>
      */
+    @Override
     public void handleRequest(HttpServletRequest request,
                               HttpServletResponse response)
         throws ServletException, IOException {
         dumpRequest(request);
         DavRequest wreq = null;
         DavResponse wres = null;
-        
+
         try {
             wreq = createDavRequest(request);
             wres = createDavResponse(response);
@@ -136,7 +137,7 @@ public class StandardRequestHandler
                 // filters can examine it
                 request.setAttribute(ATTR_SERVICE_EXCEPTION, e);
             }
-            
+
             // We need a way to differentiate exceptions that are "expected" so that the
             // logs don't get too polluted with errors.  For example, OptimisticLockingFailureException
             // is expected and should be handled by the retry logic that is one layer above.
@@ -150,7 +151,7 @@ public class StandardRequestHandler
             else if (de.getErrorCode() >= 400 && de.getMessage() != null) {
                 log.info("Client error (" + de.getErrorCode() + "): " + de.getMessage());
             }
-            
+
             wres.sendDavError(de);
         }
     }
@@ -187,7 +188,7 @@ public class StandardRequestHandler
     private void dumpRequest(HttpServletRequest req) {
     	if (!log.isTraceEnabled())
     		return;
-    	
+
         StringBuffer sb = new StringBuffer("\n------------------------ Dump of request -------------------\n");
 		try {
 			Enumeration names = req.getHeaderNames();
@@ -218,13 +219,13 @@ public class StandardRequestHandler
 			while (names.hasMoreElements()) {
 				String key = (String) names.nextElement();
 				String val = req.getParameter(key);
-				sb.append("  ").append(key).append(" = \"").append(val).append("\"").append("\n");;
+				sb.append("  ").append(key).append(" = \"").append(val).append("\"").append("\n");
 			}
 			sb.append("Request attributes:\n");
 			for (Enumeration<String> e = req.getAttributeNames(); e.hasMoreElements();) {
-				String key = (String) e.nextElement();
+				String key = e.nextElement();
 				Object val = req.getAttribute(key);
-				sb.append("  ").append(key).append(" = \"").append(val).append("\"").append("\n");;
+				sb.append("  ").append(key).append(" = \"").append(val).append("\"").append("\n");
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -333,7 +334,7 @@ public class StandardRequestHandler
         if (request.getMethod().equals("PUT"))
             return new StandardDavRequest(request, locatorFactory, entityFactory, true);
         else
-            return new StandardDavRequest(request, locatorFactory, entityFactory);   
+            return new StandardDavRequest(request, locatorFactory, entityFactory);
     }
 
     /**
@@ -379,7 +380,7 @@ public class StandardRequestHandler
     public void setResourceFactory(DavResourceFactory factory) {
         resourceFactory = factory;
     }
-    
+
     public EntityFactory getEntityFactory() {
         return entityFactory;
     }

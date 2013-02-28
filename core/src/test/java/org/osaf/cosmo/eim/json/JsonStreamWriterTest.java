@@ -21,17 +21,14 @@ import java.io.StringWriter;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.TestHelper;
 import org.osaf.cosmo.eim.ClobField;
 import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.EimRecordSet;
 import org.osaf.cosmo.eim.TextField;
 import org.osaf.cosmo.eim.eimml.EimmlConstants;
-import org.osaf.cosmo.eim.eimml.EimmlStreamChecker;
 
 /**
  * Test Case for {@link JsonStreamWriter}.

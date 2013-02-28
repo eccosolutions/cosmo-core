@@ -17,13 +17,13 @@ package org.osaf.cosmo.model.filter;
 
 import java.util.Date;
 
-import org.osaf.cosmo.model.BaseEventStamp;
-
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.util.Dates;
+
+import org.osaf.cosmo.model.BaseEventStamp;
 
 /**
  * Adds EventStamp specific criteria to StampFilter.

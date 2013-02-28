@@ -19,9 +19,8 @@ import java.io.StringReader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.NoteItem;
 
 /**
  * A base class for implementations of {@link ContentProcessor}.

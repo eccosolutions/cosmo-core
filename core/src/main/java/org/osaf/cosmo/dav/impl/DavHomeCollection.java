@@ -21,7 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.webdav.DavResourceIterator;
 import org.apache.jackrabbit.webdav.DavResourceIteratorImpl;
-
+import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavResource;
 import org.osaf.cosmo.dav.DavResourceFactory;

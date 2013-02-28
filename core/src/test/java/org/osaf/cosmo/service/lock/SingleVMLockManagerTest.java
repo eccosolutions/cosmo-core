@@ -15,12 +15,11 @@
  */
 package org.osaf.cosmo.service.lock;
 
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.hibernate.HibCollectionItem;
-import org.osaf.cosmo.service.lock.SingleVMLockManager;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 
 /**
  * Test StandardLockManager

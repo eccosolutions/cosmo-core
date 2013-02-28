@@ -33,16 +33,9 @@ import org.osaf.cosmo.eim.EimRecordField;
 import org.osaf.cosmo.eim.IntegerField;
 import org.osaf.cosmo.eim.TextField;
 import org.osaf.cosmo.model.Attribute;
-import org.osaf.cosmo.model.BinaryAttribute;
-import org.osaf.cosmo.model.CalendarAttribute;
-import org.osaf.cosmo.model.DecimalAttribute;
-import org.osaf.cosmo.model.EntityFactory;
-import org.osaf.cosmo.model.IntegerAttribute;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.StringAttribute;
-import org.osaf.cosmo.model.TextAttribute;
 
 /**
  * Base class for classes that apply EIM records to items and stamps.

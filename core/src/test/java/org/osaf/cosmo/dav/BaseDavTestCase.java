@@ -20,8 +20,6 @@ import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.osaf.cosmo.dav.ExtendedDavConstants;
-
 /**
  * Base class for DAV test cases.
  */

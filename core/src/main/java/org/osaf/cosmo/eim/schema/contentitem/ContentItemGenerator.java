@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.eim.DecimalField;
 import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.IntegerField;

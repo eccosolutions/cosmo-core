@@ -20,19 +20,15 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavResourceIterator;
 import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.version.report.Report;
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
-
 import org.osaf.cosmo.dav.BadRequestException;
-import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavCollection;
+import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavResource;
 import org.osaf.cosmo.dav.ExtendedDavConstants;
-
-import org.w3c.dom.Element;
 
 /**
  * <p>

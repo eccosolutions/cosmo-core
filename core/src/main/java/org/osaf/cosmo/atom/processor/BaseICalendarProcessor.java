@@ -23,11 +23,10 @@ import net.fortuna.ical4j.model.component.VEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.calendar.ICalendarUtils;
 import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.EntityFactory;
 import org.osaf.cosmo.model.ContentItem;
+import org.osaf.cosmo.model.EntityFactory;
 import org.osaf.cosmo.model.EventStamp;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.StampUtils;

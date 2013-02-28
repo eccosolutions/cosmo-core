@@ -16,7 +16,6 @@
 package org.osaf.cosmo.service.account;
 
 import org.apache.commons.id.IdentifierGenerator;
-import org.apache.commons.id.StringIdentifierGenerator;
 import org.osaf.cosmo.model.PasswordRecovery;
 
 public abstract class PasswordRecoverer {

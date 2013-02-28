@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,6 +44,7 @@ import org.osaf.cosmo.model.filter.EventStampFilter;
 import org.osaf.cosmo.model.filter.FilterCriteria;
 import org.osaf.cosmo.model.filter.FilterExpression;
 import org.osaf.cosmo.model.filter.FilterOrder;
+import org.osaf.cosmo.model.filter.FilterOrder.Order;
 import org.osaf.cosmo.model.filter.ILikeExpression;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.LikeExpression;
@@ -51,7 +52,6 @@ import org.osaf.cosmo.model.filter.NoteItemFilter;
 import org.osaf.cosmo.model.filter.NullExpression;
 import org.osaf.cosmo.model.filter.StampFilter;
 import org.osaf.cosmo.model.filter.TextAttributeFilter;
-import org.osaf.cosmo.model.filter.FilterOrder.Order;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 
 /**

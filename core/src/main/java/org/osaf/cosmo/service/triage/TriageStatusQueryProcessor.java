@@ -15,10 +15,7 @@
  */
 package org.osaf.cosmo.service.triage;
 
-import java.util.Date;
 import java.util.SortedSet;
-
-import net.fortuna.ical4j.model.TimeZone;
 
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.NoteItem;

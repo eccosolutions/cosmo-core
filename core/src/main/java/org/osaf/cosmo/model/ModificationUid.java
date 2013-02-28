@@ -17,11 +17,11 @@ package org.osaf.cosmo.model;
 
 import java.text.ParseException;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Represents a uid for a NoteItem modification.

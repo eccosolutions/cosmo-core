@@ -17,15 +17,12 @@ package org.osaf.cosmo.dav.caldav.report;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
-
 import org.osaf.cosmo.dav.BadRequestException;
 import org.osaf.cosmo.dav.BaseDavTestCase;
 import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.impl.DavCalendarCollection;
 import org.osaf.cosmo.dav.impl.DavEvent;
-
 import org.w3c.dom.Document;
 
 /**

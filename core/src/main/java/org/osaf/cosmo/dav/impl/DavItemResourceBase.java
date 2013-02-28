@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.io.InputContext;
 import org.apache.jackrabbit.webdav.property.DavPropertyIterator;
@@ -33,7 +32,6 @@ import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
 import org.apache.jackrabbit.webdav.xml.Namespace;
-
 import org.osaf.cosmo.calendar.query.CalendarQueryProcessor;
 import org.osaf.cosmo.dav.ConflictException;
 import org.osaf.cosmo.dav.DavCollection;

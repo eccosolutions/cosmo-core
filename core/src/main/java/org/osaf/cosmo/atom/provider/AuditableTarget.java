@@ -19,6 +19,7 @@ import java.util.Date;
 
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.util.EntityTag;
+import org.osaf.cosmo.model.mock.MockAuditableObject;
 
 /**
  * A <code>Target</code> that represents an

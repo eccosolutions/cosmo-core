@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.atom.processor.ContentProcessor;
 import org.osaf.cosmo.atom.processor.ProcessorFactory;
 import org.osaf.cosmo.atom.processor.UnsupportedContentTypeException;

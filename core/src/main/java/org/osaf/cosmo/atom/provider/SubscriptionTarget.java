@@ -20,7 +20,6 @@ import java.util.Date;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.util.EntityTag;
-
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.User;
 

@@ -15,15 +15,12 @@
  */
 package org.osaf.cosmo.dav.acl.resource;
 
-import java.util.Set;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
-
 import org.osaf.cosmo.dav.BaseDavTestCase;
 import org.osaf.cosmo.dav.acl.AclConstants;
 import org.osaf.cosmo.dav.acl.property.AlternateUriSet;

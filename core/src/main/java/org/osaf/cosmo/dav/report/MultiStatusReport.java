@@ -17,12 +17,10 @@ package org.osaf.cosmo.dav.report;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
-
 import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavResource;
 

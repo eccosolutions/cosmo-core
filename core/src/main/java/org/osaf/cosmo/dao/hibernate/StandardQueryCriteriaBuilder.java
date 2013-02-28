@@ -17,8 +17,6 @@ package org.osaf.cosmo.dao.hibernate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -26,7 +24,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
 import org.osaf.cosmo.util.PageCriteria;
 
 /**

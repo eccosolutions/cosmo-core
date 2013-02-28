@@ -17,8 +17,8 @@ package org.osaf.cosmo.atom.generator;
 
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.Ticket;
 
 /**
  * An interface for classes that generate a collection's ticket feed.

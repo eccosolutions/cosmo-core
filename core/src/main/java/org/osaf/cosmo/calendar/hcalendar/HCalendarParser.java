@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,20 +15,18 @@
  */
 package org.osaf.cosmo.calendar.hcalendar;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.XMLConstants;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathException;
@@ -49,9 +47,8 @@ import net.fortuna.ical4j.model.property.Version;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.w3c.dom.Document;
 import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -189,12 +186,14 @@ public class HCalendarParser implements CalendarParser {
         }
     }
 
+    @Override
     public void parse(InputStream in,
                       ContentHandler handler)
         throws IOException, ParserException {
          parse(new InputSource(in), handler);
     }
 
+    @Override
     public void parse(Reader in,
                       ContentHandler handler)
         throws IOException, ParserException {
@@ -296,7 +295,7 @@ public class HCalendarParser implements CalendarParser {
         // no PRODID, as the using application should set that itself
 
         handler.startProperty(Property.VERSION);
-        try { handler.propertyValue(Version.VERSION_2_0.getValue()); } catch (Exception e) {};
+        try { handler.propertyValue(Version.VERSION_2_0.getValue()); } catch (Exception e) {}
         handler.endProperty(Property.VERSION);
 
         for (Element vevent : findElements(XPATH_VEVENTS, d))
@@ -446,7 +445,7 @@ public class HCalendarParser implements CalendarParser {
 
     // "The basic format of hCalendar is to use iCalendar object/property
     // names in lower-case for class names ..."
-        
+
     private static String _icalName(Element element) {
         return element.getAttribute("class").toUpperCase();
     }
@@ -501,9 +500,9 @@ public class HCalendarParser implements CalendarParser {
         // Return DateTime if we don't find '-'
         if(original.indexOf('-') == -1)
             return new DateTime(original);
-        
+
         // otherwise try parsing RFC 3339 formats
-        
+
         // the date-time value can represent its time zone in a few different
         // ways. we have to normalize those to match our pattern.
 
@@ -517,7 +516,7 @@ public class HCalendarParser implements CalendarParser {
             normalized = original.replace("Z", "GMT-00:00");
         }
         // 2002-10-10T00:00:00+05:00
-        else if (original.indexOf("GMT") == -1 && 
+        else if (original.indexOf("GMT") == -1 &&
                  (original.charAt(original.length()-6) == '+' ||
                   original.charAt(original.length()-6) == '-')) {
             String tzId = "GMT" + original.substring(original.length()-6);

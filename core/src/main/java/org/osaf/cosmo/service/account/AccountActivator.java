@@ -17,6 +17,7 @@ package org.osaf.cosmo.service.account;
 
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.service.Service;
+import org.springframework.dao.DataRetrievalFailureException;
 
 public interface AccountActivator extends Service {
 

@@ -21,20 +21,17 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.ElementIterator;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.calendar.data.OutputFilter;
-import org.osaf.cosmo.icalendar.ICalendarConstants;
 import org.osaf.cosmo.dav.BadRequestException;
 import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.caldav.CaldavConstants;
 import org.osaf.cosmo.dav.caldav.UnsupportedCalendarDataException;
-
+import org.osaf.cosmo.icalendar.ICalendarConstants;
 import org.w3c.dom.Element;
 
 /**

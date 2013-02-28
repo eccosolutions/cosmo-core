@@ -20,7 +20,6 @@ import java.util.Date;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import org.springframework.security.BadCredentialsException;
 import org.osaf.cosmo.TestHelper;
 import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
 import org.osaf.cosmo.dao.mock.MockDaoStorage;
@@ -29,6 +28,7 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.util.DateUtil;
 import org.osaf.cosmo.wsse.UsernameToken;
 import org.osaf.cosmo.wsse.WsseUtils;
+import org.springframework.security.BadCredentialsException;
 
 /**
  * Test WsseAuthenticationProvider

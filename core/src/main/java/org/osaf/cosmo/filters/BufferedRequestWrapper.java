@@ -16,8 +16,8 @@
 package org.osaf.cosmo.filters;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;

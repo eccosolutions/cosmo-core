@@ -15,12 +15,15 @@
  */
 package org.osaf.cosmo.dao;
 
+import java.util.Set;
+
+import org.osaf.cosmo.model.DuplicateEmailException;
+import org.osaf.cosmo.model.DuplicateUsernameException;
 import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
-
-import java.util.Set;
+import org.springframework.dao.DataRetrievalFailureException;
 
 /**
  * Interface for DAOs that manage user resources.

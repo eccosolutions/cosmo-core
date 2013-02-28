@@ -17,9 +17,7 @@ package org.osaf.cosmo.dav.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.dav.BaseDavTestCase;
-
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**

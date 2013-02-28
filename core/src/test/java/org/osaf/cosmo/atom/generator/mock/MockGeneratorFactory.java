@@ -19,16 +19,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.abdera.Abdera;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.atom.generator.GeneratorFactory;
 import org.osaf.cosmo.atom.generator.ItemFeedGenerator;
 import org.osaf.cosmo.atom.generator.PreferencesFeedGenerator;
-import org.osaf.cosmo.atom.generator.TicketsFeedGenerator;
 import org.osaf.cosmo.atom.generator.ServiceGenerator;
 import org.osaf.cosmo.atom.generator.SubscriptionFeedGenerator;
+import org.osaf.cosmo.atom.generator.TicketsFeedGenerator;
 import org.osaf.cosmo.atom.generator.UnsupportedFormatException;
 import org.osaf.cosmo.atom.generator.UnsupportedProjectionException;
 import org.osaf.cosmo.server.ServiceLocator;

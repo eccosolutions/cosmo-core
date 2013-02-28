@@ -21,7 +21,6 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.protocol.error.Error;
-
 import org.osaf.cosmo.model.IcalUidInUseException;
 
 /**

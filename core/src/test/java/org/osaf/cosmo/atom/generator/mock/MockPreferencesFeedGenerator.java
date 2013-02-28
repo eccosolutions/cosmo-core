@@ -19,10 +19,8 @@ import java.net.URLEncoder;
 
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.atom.generator.GeneratorException;
 import org.osaf.cosmo.atom.generator.PreferencesFeedGenerator;
 import org.osaf.cosmo.model.Preference;

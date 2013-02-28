@@ -15,7 +15,6 @@
  */
 package org.osaf.cosmo.service.impl;
 
-import java.util.Date;
 import java.util.Set;
 
 import junit.framework.TestCase;

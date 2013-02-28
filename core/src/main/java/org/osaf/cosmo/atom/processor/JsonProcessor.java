@@ -20,12 +20,12 @@ import java.io.Reader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.eim.EimRecordSet;
 import org.osaf.cosmo.eim.json.JsonStreamException;
 import org.osaf.cosmo.eim.json.JsonStreamReader;
 import org.osaf.cosmo.eim.json.JsonValidationException;
 import org.osaf.cosmo.model.EntityFactory;
+import org.osaf.cosmo.model.NoteItem;
 
 /**
  * A class that processes content specified as JSON-serialized EIM

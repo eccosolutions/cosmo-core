@@ -23,8 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.EimRecordField;
 import org.osaf.cosmo.eim.schema.BaseGeneratorTestCase;
-import org.osaf.cosmo.model.MessageStamp;
-import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.mock.MockMessageStamp;
 import org.osaf.cosmo.model.mock.MockNoteItem;
 

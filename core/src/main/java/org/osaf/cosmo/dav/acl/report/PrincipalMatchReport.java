@@ -17,14 +17,12 @@ package org.osaf.cosmo.dav.acl.report;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavResourceIterator;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
 import org.apache.jackrabbit.webdav.version.report.ReportType;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.ElementIterator;
-
 import org.osaf.cosmo.dav.BadRequestException;
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavException;
@@ -33,11 +31,9 @@ import org.osaf.cosmo.dav.ForbiddenException;
 import org.osaf.cosmo.dav.UnprocessableEntityException;
 import org.osaf.cosmo.dav.acl.AclConstants;
 import org.osaf.cosmo.dav.acl.resource.DavUserPrincipal;
-import org.osaf.cosmo.dav.impl.DavCalendarCollection;
 import org.osaf.cosmo.dav.property.DavProperty;
 import org.osaf.cosmo.dav.report.MultiStatusReport;
 import org.osaf.cosmo.model.User;
-
 import org.w3c.dom.Element;
 
 /**

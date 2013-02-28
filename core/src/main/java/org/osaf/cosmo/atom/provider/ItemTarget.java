@@ -21,7 +21,6 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.EntityTag;
-
 import org.osaf.cosmo.model.NoteItem;
 
 public class ItemTarget extends BaseItemTarget implements Constants {

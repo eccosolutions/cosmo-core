@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.eim.schema.message;
 
+import org.osaf.cosmo.model.MessageStamp;
+
 /**
  * Constants related to the message schema.
  *

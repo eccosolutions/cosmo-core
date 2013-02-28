@@ -15,9 +15,8 @@
  */
 package org.osaf.cosmo.dav.acegisecurity;
 
-import org.springframework.security.AccessDeniedException;
-
 import org.osaf.cosmo.dav.acl.DavPrivilege;
+import org.springframework.security.AccessDeniedException;
 
 /**
  * <p>

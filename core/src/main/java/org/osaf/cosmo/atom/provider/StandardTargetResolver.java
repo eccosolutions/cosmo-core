@@ -22,7 +22,6 @@ import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.servlet.ServletRequestContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.atom.AtomConstants;
@@ -33,8 +32,8 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.ModificationUid;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.Preference;
-import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.Ticket;
+import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.service.ContentService;
 import org.osaf.cosmo.service.UserService;
 import org.osaf.cosmo.util.UriTemplate;

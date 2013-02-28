@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,11 +15,6 @@
  */
 package org.osaf.cosmo.acegisecurity.providers.ticket;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.AuthenticationServiceException;
-import org.springframework.security.BadCredentialsException;
-import org.springframework.security.providers.AuthenticationProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.ContentDao;
@@ -28,6 +23,11 @@ import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.server.CollectionPath;
 import org.osaf.cosmo.server.ItemPath;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.Authentication;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.AuthenticationServiceException;
+import org.springframework.security.BadCredentialsException;
+import org.springframework.security.providers.AuthenticationProvider;
 
 /**
  */
@@ -41,6 +41,7 @@ public class TicketAuthenticationProvider
     // AuthenticationProvider methods
 
     /** */
+    @Override
     public Authentication authenticate(Authentication authentication)
         throws AuthenticationException {
         if (! supports(authentication.getClass()))
@@ -61,6 +62,7 @@ public class TicketAuthenticationProvider
     }
 
     /** */
+    @Override
     public boolean supports(Class authentication) {
         return TicketAuthenticationToken.class.
             isAssignableFrom(authentication);
@@ -125,7 +127,7 @@ public class TicketAuthenticationProvider
             else
                 log.debug("no item found for uid: " + ip.getUid());
         }
-        
+
         item = contentDao.findItemByPath(path);
         if (item == null)
             // if the item's parent exists, the ticket may be good for

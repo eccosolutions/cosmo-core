@@ -17,12 +17,10 @@ package org.osaf.cosmo.dav;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.dav.impl.StandardDavRequest;
 import org.osaf.cosmo.dav.impl.StandardDavResponse;
 import org.osaf.cosmo.model.EntityFactory;
 import org.osaf.cosmo.model.hibernate.HibEntityFactory;
-
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

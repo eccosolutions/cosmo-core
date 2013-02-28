@@ -15,10 +15,10 @@
  */
 package org.osaf.cosmo.dav;
 
-import org.apache.jackrabbit.webdav.property.DavPropertyName;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+
+import org.apache.jackrabbit.webdav.property.DavPropertyName;
 
 /**
  * An exception indicating that the request attempted to modify a

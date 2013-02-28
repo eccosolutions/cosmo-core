@@ -19,11 +19,9 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
-
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavRequest;

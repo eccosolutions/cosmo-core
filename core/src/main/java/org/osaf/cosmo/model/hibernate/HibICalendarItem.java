@@ -19,11 +19,11 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import net.fortuna.ical4j.model.Calendar;
+
 import org.osaf.cosmo.model.ICalendarItem;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.QName;
-
-import net.fortuna.ical4j.model.Calendar;
 
 /**
  * Hibernate persistent ICalendarItem.

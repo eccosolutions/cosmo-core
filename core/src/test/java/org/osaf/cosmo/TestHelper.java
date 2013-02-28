@@ -22,7 +22,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.security.Principal;
 import java.util.HashSet;
-import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

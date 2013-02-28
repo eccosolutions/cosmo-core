@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.mc;
 
+import org.osaf.cosmo.eim.EimRecordSet;
 import org.osaf.cosmo.eim.EimRecordSetIterator;
 
 /**

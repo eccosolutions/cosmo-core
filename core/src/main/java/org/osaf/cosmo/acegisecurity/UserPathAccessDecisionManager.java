@@ -17,6 +17,13 @@ package org.osaf.cosmo.acegisecurity;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationToken;
+import org.osaf.cosmo.acegisecurity.providers.wsse.WsseAuthenticationToken;
+import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
+import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.server.UserPath;
 import org.springframework.security.AccessDecisionManager;
 import org.springframework.security.AccessDeniedException;
 import org.springframework.security.Authentication;
@@ -25,13 +32,6 @@ import org.springframework.security.ConfigAttributeDefinition;
 import org.springframework.security.InsufficientAuthenticationException;
 import org.springframework.security.intercept.web.FilterInvocation;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationToken;
-import org.osaf.cosmo.acegisecurity.providers.wsse.WsseAuthenticationToken;
-import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
-import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.server.UserPath;
 
 /**
  * <p>

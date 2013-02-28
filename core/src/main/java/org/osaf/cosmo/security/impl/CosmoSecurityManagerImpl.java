@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,16 +18,17 @@ package org.osaf.cosmo.security.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
 import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.Ticket;
+import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.security.CosmoSecurityContext;
 import org.osaf.cosmo.security.CosmoSecurityException;
 import org.osaf.cosmo.security.CosmoSecurityManager;
 import org.osaf.cosmo.security.Permission;
 import org.osaf.cosmo.security.PermissionDeniedException;
-
 import org.springframework.security.Authentication;
 import org.springframework.security.AuthenticationException;
 import org.springframework.security.AuthenticationManager;
@@ -35,9 +36,6 @@ import org.springframework.security.context.SecurityContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.userdetails.UserDetails;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * The default implementation of the {@link CosmoSecurityManager}
@@ -49,9 +47,9 @@ public class CosmoSecurityManagerImpl implements CosmoSecurityManager {
         LogFactory.getLog(CosmoSecurityManagerImpl.class);
 
     private AuthenticationManager authenticationManager;
-    
+
     // store additional tickets for authenticated principal
-    private ThreadLocal<Set<Ticket>> tickets = new ThreadLocal<Set<Ticket>>();
+    private final ThreadLocal<Set<Ticket>> tickets = new ThreadLocal<Set<Ticket>>();
 
     /* ----- CosmoSecurityManager methods ----- */
 
@@ -60,6 +58,7 @@ public class CosmoSecurityManagerImpl implements CosmoSecurityManager {
      * Cosmo user previously authenticated by the Cosmo security
      * system.
      */
+    @Override
     public CosmoSecurityContext getSecurityContext()
         throws CosmoSecurityException {
         SecurityContext context = SecurityContextHolder.getContext();
@@ -79,6 +78,7 @@ public class CosmoSecurityManagerImpl implements CosmoSecurityManager {
      * rather than relying on a security context already being in
      * place.
      */
+    @Override
     public CosmoSecurityContext initiateSecurityContext(String username,
                                                         String password)
         throws CosmoSecurityException {
@@ -95,20 +95,21 @@ public class CosmoSecurityManagerImpl implements CosmoSecurityManager {
                                              e);
         }
     }
-    
+
     /**
      * Initiate the current security context with the current user.
      * This method is used when the server needs to run code as a
      * specific user.
      */
-    public CosmoSecurityContext initiateSecurityContext(User user) 
+    @Override
+    public CosmoSecurityContext initiateSecurityContext(User user)
     	throws CosmoSecurityException {
-    	
+
     	UserDetails details = new CosmoUserDetails(user);
-    	
+
     	UsernamePasswordAuthenticationToken credentials =
             new UsernamePasswordAuthenticationToken(details, "", details.getAuthorities());
-    	
+
     	credentials.setDetails(details);
     	SecurityContext sc = SecurityContextHolder.getContext();
     	sc.setAuthentication(credentials);
@@ -122,6 +123,7 @@ public class CosmoSecurityManagerImpl implements CosmoSecurityManager {
      * @throws PermissionDeniedException if the security context does
      * not have the required permission
      */
+    @Override
     public void checkPermission(Item item,
                                 int permission)
         throws PermissionDeniedException, CosmoSecurityException {
@@ -189,6 +191,7 @@ public class CosmoSecurityManagerImpl implements CosmoSecurityManager {
         this.authenticationManager = authenticationManager;
     }
 
+    @Override
     public void registerTickets(Set<Ticket> tickets) {
         Set<Ticket> currentTickets = this.tickets.get();
         if(currentTickets==null) {
@@ -196,7 +199,8 @@ public class CosmoSecurityManagerImpl implements CosmoSecurityManager {
         }
         this.tickets.get().addAll(tickets);
     }
-    
+
+    @Override
     public void unregisterTickets() {
         this.tickets.remove();
     }

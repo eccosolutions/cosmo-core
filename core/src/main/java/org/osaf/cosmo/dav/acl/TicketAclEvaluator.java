@@ -17,7 +17,6 @@ package org.osaf.cosmo.dav.acl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.Ticket;
 

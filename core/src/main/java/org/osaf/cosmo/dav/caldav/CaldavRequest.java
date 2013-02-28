@@ -16,7 +16,6 @@
 package org.osaf.cosmo.dav.caldav;
 
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
-
 import org.osaf.cosmo.dav.DavException;
 
 /**

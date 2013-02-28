@@ -26,13 +26,12 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.osaf.cosmo.model.HomeCollectionItem;
 import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.HomeCollectionItem;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.server.ServiceLocator;
 import org.osaf.cosmo.security.CosmoSecurityContext;
+import org.osaf.cosmo.server.ServiceLocator;
 
 /**
  * Provides basic information about the collections in a user's home

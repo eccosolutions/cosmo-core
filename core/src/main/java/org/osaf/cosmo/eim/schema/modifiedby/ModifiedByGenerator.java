@@ -16,20 +16,18 @@
 package org.osaf.cosmo.eim.schema.modifiedby;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.osaf.cosmo.eim.EimRecord;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.DecimalField;
+import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.IntegerField;
 import org.osaf.cosmo.eim.TextField;
 import org.osaf.cosmo.eim.schema.BaseItemGenerator;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.Item;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Generates modifidBy records from content items.

@@ -26,10 +26,6 @@ import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 
 import org.osaf.cosmo.eim.schema.EimValueConverter;
-import org.osaf.cosmo.model.hibernate.EventStampInterceptor;
-import org.osaf.cosmo.model.hibernate.HibEventStamp;
-import org.osaf.cosmo.model.hibernate.HibEventTimeRangeIndex;
-import org.osaf.cosmo.model.hibernate.HibNoteItem;
 
 /**
  * Test EventStampHandler

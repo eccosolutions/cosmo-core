@@ -16,8 +16,8 @@
 package org.osaf.cosmo.atom.generator;
 
 import org.apache.abdera.model.Service;
-
 import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.mock.MockCollectionItem;
 
 /**
  * Constructs an Atom introspection document describing the

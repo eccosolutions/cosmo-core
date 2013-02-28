@@ -17,7 +17,6 @@ package org.osaf.cosmo.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.service.ServiceEvent;
 import org.osaf.cosmo.service.ServiceListener;
 

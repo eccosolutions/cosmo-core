@@ -17,7 +17,6 @@ package org.osaf.cosmo.model.mock;
 
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.BooleanAttribute;
-import org.osaf.cosmo.model.IntegerAttribute;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.ModelValidationException;
 import org.osaf.cosmo.model.QName;

@@ -17,13 +17,10 @@ package org.osaf.cosmo.dav;
 
 import java.util.Date;
 
-import org.apache.jackrabbit.webdav.WebdavRequest;
-import org.apache.jackrabbit.webdav.property.DavPropertySet;
-import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
-
 import org.apache.abdera.util.EntityTag;
-
-import org.osaf.cosmo.dav.DavException;
+import org.apache.jackrabbit.webdav.WebdavRequest;
+import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.jackrabbit.webdav.property.DavPropertySet;
 import org.osaf.cosmo.dav.caldav.CaldavRequest;
 import org.osaf.cosmo.dav.report.ReportRequest;
 import org.osaf.cosmo.dav.ticket.TicketDavRequest;

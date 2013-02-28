@@ -18,8 +18,8 @@ package org.osaf.cosmo.scheduler;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.osaf.cosmo.model.EntityFactory;
 import org.osaf.cosmo.model.Preference;

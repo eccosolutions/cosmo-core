@@ -19,14 +19,12 @@ import java.net.URLEncoder;
 
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.atom.generator.GeneratorException;
 import org.osaf.cosmo.atom.generator.TicketsFeedGenerator;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.server.ServiceLocator;
 
 /**

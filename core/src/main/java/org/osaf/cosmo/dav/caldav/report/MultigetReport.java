@@ -25,21 +25,18 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
 import org.apache.jackrabbit.webdav.version.report.ReportType;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
-
 import org.osaf.cosmo.dav.BadRequestException;
-import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavContent;
+import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavResource;
 import org.osaf.cosmo.dav.UnprocessableEntityException;
 import org.osaf.cosmo.dav.impl.DavCalendarResource;
-
 import org.w3c.dom.Element;
 
 /**

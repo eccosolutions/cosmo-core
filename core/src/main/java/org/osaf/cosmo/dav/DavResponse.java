@@ -18,7 +18,6 @@ package org.osaf.cosmo.dav;
 import java.io.IOException;
 
 import org.apache.jackrabbit.webdav.WebdavResponse;
-
 import org.osaf.cosmo.dav.ticket.TicketDavResponse;
 
 /**

@@ -18,11 +18,10 @@ package org.osaf.cosmo.acegisecurity.providers.ticket;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.osaf.cosmo.model.Ticket;
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.providers.AbstractAuthenticationToken;
-
-import org.osaf.cosmo.model.Ticket;
 
 /**
  * Represents a ticket-based

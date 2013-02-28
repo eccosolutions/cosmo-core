@@ -18,14 +18,11 @@ package org.osaf.cosmo.dav.util;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jackrabbit.webdav.xml.XmlSerializable;
-
 import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
-
 import org.w3c.dom.Document;
 
 /**

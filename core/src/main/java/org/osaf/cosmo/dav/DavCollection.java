@@ -15,9 +15,9 @@
  */
 package org.osaf.cosmo.dav;
 
+import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.io.InputContext;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
-import org.apache.jackrabbit.webdav.MultiStatusResponse;
 
 /**
  * An interface for DAV collection resources.

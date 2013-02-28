@@ -21,14 +21,11 @@ import net.fortuna.ical4j.model.component.VTimeZone;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
 import org.apache.jackrabbit.webdav.version.report.ReportType;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
-
 import org.osaf.cosmo.calendar.query.CalendarFilter;
 import org.osaf.cosmo.calendar.query.UnsupportedCollationException;
-import org.osaf.cosmo.dav.BadRequestException;
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavContent;
 import org.osaf.cosmo.dav.DavException;
@@ -39,7 +36,6 @@ import org.osaf.cosmo.dav.caldav.SupportedCollationException;
 import org.osaf.cosmo.dav.caldav.TimeZoneExtractor;
 import org.osaf.cosmo.dav.impl.DavCalendarCollection;
 import org.osaf.cosmo.dav.impl.DavCalendarResource;
-
 import org.w3c.dom.Element;
 
 /**

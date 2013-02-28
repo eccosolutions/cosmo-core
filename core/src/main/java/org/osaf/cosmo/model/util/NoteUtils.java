@@ -15,6 +15,12 @@
  */
 package org.osaf.cosmo.model.util;
 
+import net.fortuna.ical4j.model.Date;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Dur;
+import net.fortuna.ical4j.model.TimeZone;
+import net.fortuna.ical4j.model.property.Trigger;
+
 import org.osaf.cosmo.calendar.ICalendarUtils;
 import org.osaf.cosmo.calendar.util.Dates;
 import org.osaf.cosmo.model.BaseEventStamp;
@@ -23,12 +29,6 @@ import org.osaf.cosmo.model.EventStamp;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.NoteOccurrence;
 import org.osaf.cosmo.model.StampUtils;
-
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.property.Trigger;
 
 /**
  * Utility functions for NoteItems

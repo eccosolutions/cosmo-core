@@ -17,11 +17,10 @@ package org.osaf.cosmo.eim.schema;
 
 import java.util.List;
 
-import org.osaf.cosmo.eim.EimRecord;
-import org.osaf.cosmo.model.Item;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.osaf.cosmo.eim.EimRecord;
+import org.osaf.cosmo.model.Item;
 
 /**
  * Base class for generators that map to <code>Item</code>s.

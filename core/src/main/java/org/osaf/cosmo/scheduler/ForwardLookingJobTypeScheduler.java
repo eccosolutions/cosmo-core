@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,13 +42,13 @@ import org.springframework.security.context.SecurityContextHolder;
  * JobTypeScheduler implementation that schedules forward looking jobs, which
  * performs a time-range query on a set of collections and passes the results on
  * to a Notifier.
- * 
+ *
  * <p>
  * A sample configuration for a schedule that executes at 6:00am every Sunday
  * America/Los_Angeles time and queries all items for the collections A, B, and
- * C in the next week. A, B and C are uids of collection items. 
+ * C in the next week. A, B and C are uids of collection items.
  * </p>
- * 
+ *
  * <ul>
  * <li>timezone = America/Los_Angeles</li>
  * <li>cronexp = 0 0 6 ? * SUN</li>
@@ -57,13 +57,13 @@ import org.springframework.security.context.SecurityContextHolder;
  * <li>collection.B = true</li>
  * <li>collection.C = true</li>
  * </ul>
- * 
+ *
  * <p>
  * A sample configuration for a schedule that executes at 6:00am every day
  * Mon-Fri America/Los_Angeles time and queries all items for the collections A,
  * B, and C in the next day. A, B and C are uids of collection items.
  * </p>
- * 
+ *
  * <ul>
  * <li>timezone = America/Los_Angeles</li>
  * <li>cronexp = 0 0 6 ? * MON-FRI</li>
@@ -72,10 +72,10 @@ import org.springframework.security.context.SecurityContextHolder;
  * <li>collection.B = true</li>
  * <li>collection.C = true</li>
  * </ul>
- * 
+ *
  * <p>
- * This is assuming custom cron expressions are enabled.  If custom cron 
- * expressions are not enabled, the cron expression will be generated 
+ * This is assuming custom cron expressions are enabled.  If custom cron
+ * expressions are not enabled, the cron expression will be generated
  * automatically based on the <code>reportType</code> parameter as follows:
  * <ul>
  * <li>weekly = 0 0 6 ? * MON (6am every Monday)</li>
@@ -99,16 +99,17 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
     private static final String WEEKLY_CRON_EXP = "0 0 6 ? * MON";
     /** every hour **/
     private static final String HOURLY_CRON_EXP = "0 0 * ? * *";
-    
+
+    @Override
     public void scheduleJob(Scheduler scheduler, User user, Schedule schedule)
             throws SchedulerException {
 
         TimeZone tz = null;
- 
+
         String timezone = schedule.getProperties().get("timezone");
         if (timezone != null)
             tz = TimeZoneUtils.getTimeZone(timezone);
-        
+
         String locale = schedule.getProperties().get("locale");
 
         String cronTab = schedule.getProperties().get("cronexp");
@@ -126,7 +127,7 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
         // Tet Mode sets cron expression to HOURLY
         if(cronTab==null && testMode)
             cronTab = HOURLY_CRON_EXP;
-        
+
         // validate cronexp
         if (!allowCustomCronExpression || cronTab==null) {
             if (ForwardLookingNotificationJob.REPORT_TYPE_DAILY
@@ -135,7 +136,7 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
 
             if (ForwardLookingNotificationJob.REPORT_TYPE_WEEKLY
                     .equals(reportType))
-                 cronTab = WEEKLY_CRON_EXP; 
+                 cronTab = WEEKLY_CRON_EXP;
         }
 
         Trigger trigger = null;

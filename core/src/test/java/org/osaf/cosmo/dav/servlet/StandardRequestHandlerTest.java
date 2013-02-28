@@ -18,14 +18,12 @@ package org.osaf.cosmo.dav.servlet;
 import java.util.Date;
 
 import org.apache.abdera.util.EntityTag;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.dav.BaseDavTestCase;
-import org.osaf.cosmo.dav.DavTestContext;
 import org.osaf.cosmo.dav.DavResource;
+import org.osaf.cosmo.dav.DavTestContext;
 import org.osaf.cosmo.dav.NotModifiedException;
 import org.osaf.cosmo.dav.PreconditionFailedException;
 

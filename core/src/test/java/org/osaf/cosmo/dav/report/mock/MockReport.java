@@ -20,11 +20,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
 import org.apache.jackrabbit.webdav.version.report.ReportType;
-
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavResource;

@@ -17,21 +17,18 @@ package org.osaf.cosmo.dav.acl.report;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
 import org.apache.jackrabbit.webdav.version.report.ReportType;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.XmlSerializable;
-
 import org.osaf.cosmo.dav.BadRequestException;
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavException;
 import org.osaf.cosmo.dav.DavResource;
 import org.osaf.cosmo.dav.acl.AclConstants;
 import org.osaf.cosmo.dav.report.ReportBase;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

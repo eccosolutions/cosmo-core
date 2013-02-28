@@ -20,9 +20,7 @@ import java.util.List;
 
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.XmlSerializable;
-
 import org.osaf.cosmo.dav.ExtendedDavConstants;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

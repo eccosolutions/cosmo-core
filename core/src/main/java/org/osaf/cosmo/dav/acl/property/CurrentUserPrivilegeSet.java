@@ -15,19 +15,13 @@
  */
 package org.osaf.cosmo.dav.acl.property;
 
-import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.jackrabbit.webdav.xml.DomUtil;
 
 import org.osaf.cosmo.dav.acl.AclConstants;
 import org.osaf.cosmo.dav.acl.DavPrivilege;
-import org.osaf.cosmo.dav.DavResourceLocator;
 import org.osaf.cosmo.dav.property.StandardDavProperty;
-import org.osaf.cosmo.model.User;
-
-import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * <p>

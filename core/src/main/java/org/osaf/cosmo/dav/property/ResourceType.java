@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.Namespace;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

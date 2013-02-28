@@ -18,13 +18,11 @@ package org.osaf.cosmo.atom.processor;
 import java.io.Reader;
 
 import junit.framework.TestCase;
-
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.TestHelper;
 
 /**

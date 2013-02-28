@@ -16,7 +16,6 @@
 package org.osaf.cosmo.eim.json;
 
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +26,8 @@ import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.TestHelper;
 import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.EimRecordSet;
-import org.osaf.cosmo.eim.eimml.EimmlStreamReader;
 import org.osaf.cosmo.eim.TextField;
+import org.osaf.cosmo.eim.eimml.EimmlStreamReader;
 
 /**
  * Test Case for {@link EimmlStreamReader}.

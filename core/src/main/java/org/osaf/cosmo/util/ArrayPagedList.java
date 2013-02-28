@@ -15,8 +15,8 @@
  */
 package org.osaf.cosmo.util;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A paginated section of a list that knows how many elements are in the total list,

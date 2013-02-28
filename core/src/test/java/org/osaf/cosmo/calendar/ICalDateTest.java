@@ -18,7 +18,6 @@ package org.osaf.cosmo.calendar;
 import java.text.ParseException;
 
 import junit.framework.TestCase;
-
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateList;
 import net.fortuna.ical4j.model.DateTime;
@@ -29,8 +28,6 @@ import net.fortuna.ical4j.model.parameter.Value;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.osaf.cosmo.calendar.UnknownTimeZoneException;
 
 public class ICalDateTest extends TestCase {
     private static final Log log = LogFactory.getLog(ICalDateTest.class);

@@ -17,11 +17,11 @@ package org.osaf.cosmo.eim.schema.unknown;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.EimRecordField;
 import org.osaf.cosmo.eim.schema.BaseApplicator;
 import org.osaf.cosmo.eim.schema.EimSchemaException;
+import org.osaf.cosmo.eim.schema.EimValidationException;
 import org.osaf.cosmo.model.Item;
 
 /**

@@ -19,9 +19,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.osaf.cosmo.eim.EimException;
+import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.EimRecordSet;
 import org.osaf.cosmo.eim.EimRecordSetIterator;
 import org.osaf.cosmo.model.ContentItem;
+import org.osaf.cosmo.model.mock.MockItem;
 
 /**
  * Iterator that translates items to EIM records.

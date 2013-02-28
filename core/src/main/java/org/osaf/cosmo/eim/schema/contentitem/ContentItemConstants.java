@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.eim.schema.contentitem;
 
+import org.osaf.cosmo.model.mock.MockContentItem;
+
 /**
  * Constants related to the content item schema.
  *

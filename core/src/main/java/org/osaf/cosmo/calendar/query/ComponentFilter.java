@@ -24,17 +24,14 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.VTimeZone;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.ElementIterator;
-
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dav.caldav.CaldavConstants;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
-
 import org.w3c.dom.Element;
 
 /**

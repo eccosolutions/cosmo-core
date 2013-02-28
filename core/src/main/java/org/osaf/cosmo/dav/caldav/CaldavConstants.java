@@ -18,7 +18,6 @@ package org.osaf.cosmo.dav.caldav;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.Namespace;
-
 import org.osaf.cosmo.xml.QName;
 
 /**

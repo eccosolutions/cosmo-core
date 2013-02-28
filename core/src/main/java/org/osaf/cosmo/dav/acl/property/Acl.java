@@ -18,9 +18,8 @@ package org.osaf.cosmo.dav.acl.property;
 import org.osaf.cosmo.dav.acl.AclConstants;
 import org.osaf.cosmo.dav.acl.DavAcl;
 import org.osaf.cosmo.dav.property.StandardDavProperty;
-
-import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * <p>

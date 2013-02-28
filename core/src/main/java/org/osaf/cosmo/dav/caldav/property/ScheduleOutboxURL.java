@@ -16,14 +16,12 @@
 package org.osaf.cosmo.dav.caldav.property;
 
 import org.apache.jackrabbit.webdav.xml.DomUtil;
-
 import org.osaf.cosmo.dav.DavResourceLocator;
-import org.osaf.cosmo.dav.property.StandardDavProperty;
 import org.osaf.cosmo.dav.caldav.CaldavConstants;
+import org.osaf.cosmo.dav.property.StandardDavProperty;
 import org.osaf.cosmo.model.User;
-
-import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Represents the CALDAV:schedule-outbox-URL property.

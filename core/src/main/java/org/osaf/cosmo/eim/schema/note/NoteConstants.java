@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.eim.schema.note;
 
+import org.osaf.cosmo.model.NoteItem;
+
 /**
  * Constants related to the note schema.
  *

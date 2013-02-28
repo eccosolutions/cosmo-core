@@ -17,7 +17,6 @@ package org.osaf.cosmo.dav.provider;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.dav.BaseDavTestCase;
 import org.osaf.cosmo.dav.ConflictException;
 import org.osaf.cosmo.dav.DavCollection;

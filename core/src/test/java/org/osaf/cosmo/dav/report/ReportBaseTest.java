@@ -19,17 +19,13 @@ import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
-
 import org.osaf.cosmo.dav.BaseDavTestCase;
 import org.osaf.cosmo.dav.impl.DavHomeCollection;
 import org.osaf.cosmo.dav.report.mock.MockReport;
-import org.osaf.cosmo.model.CalendarCollectionStamp;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.hibernate.HibCalendarCollectionStamp;
-
 import org.w3c.dom.Document;
 
 /**

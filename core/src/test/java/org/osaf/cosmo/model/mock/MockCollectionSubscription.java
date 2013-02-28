@@ -15,17 +15,6 @@
  */
 package org.osaf.cosmo.model.mock;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.Ticket;

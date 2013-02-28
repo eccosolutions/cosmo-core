@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.schema.BaseGenerator;
 import org.osaf.cosmo.model.CalendarCollectionStamp;
@@ -26,9 +28,6 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.MessageStamp;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.QName;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Generates EIM records from item attributes in unknown namespaces.

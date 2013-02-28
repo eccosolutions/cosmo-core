@@ -15,20 +15,15 @@
  */
 package org.osaf.cosmo.dav;
 
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.XmlSerializable;
-
 import org.osaf.cosmo.dav.acl.DavPrivilegeSet;
 import org.osaf.cosmo.dav.ticket.TicketConstants;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.hibernate.HibTicket;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

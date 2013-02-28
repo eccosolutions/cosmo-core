@@ -24,11 +24,9 @@ import java.text.ParsePosition;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.osaf.cosmo.model.EntityFactory;
 import org.osaf.cosmo.model.TriageStatus;
 import org.osaf.cosmo.model.TriageStatusUtil;
-import org.osaf.cosmo.eim.schema.EimValidationException;
 
 /**
  * Parses and formats EIM triage status text values.

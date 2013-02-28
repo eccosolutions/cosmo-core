@@ -21,14 +21,12 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.jackrabbit.webdav.DavResourceIterator;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.version.report.ReportInfo;
 import org.apache.jackrabbit.webdav.version.report.ReportType;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.jackrabbit.webdav.xml.ElementIterator;
-
 import org.osaf.cosmo.dav.BadRequestException;
 import org.osaf.cosmo.dav.DavCollection;
 import org.osaf.cosmo.dav.DavException;
@@ -40,7 +38,6 @@ import org.osaf.cosmo.dav.acl.resource.DavUserPrincipal;
 import org.osaf.cosmo.dav.acl.resource.DavUserPrincipalCollection;
 import org.osaf.cosmo.dav.property.DavProperty;
 import org.osaf.cosmo.dav.report.MultiStatusReport;
-
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

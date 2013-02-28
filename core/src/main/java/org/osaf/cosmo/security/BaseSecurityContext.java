@@ -19,14 +19,13 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.User;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.osaf.cosmo.model.Item;
+import org.osaf.cosmo.model.Ticket;
+import org.osaf.cosmo.model.User;
 
 /**
  * Base class for implementations of {@link CosmoSecurityContext}.
