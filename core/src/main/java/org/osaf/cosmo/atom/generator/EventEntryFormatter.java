@@ -91,7 +91,7 @@ public class EventEntryFormatter {
         if (stamp == null)
             return null;
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
     
         buf.append(toSummary(summary)).
             append(": ").
@@ -126,7 +126,7 @@ public class EventEntryFormatter {
         // XXX: geo location may be represented by a nested geo
         // (http://microformats.org/wiki/geo)
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         buf.append("<div class=\"vevent\">").
             append("<span class=\"summary\">").

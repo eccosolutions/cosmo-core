@@ -182,7 +182,7 @@ public class StandardPreferencesFeedGenerator
      * @param user the user
      */
     protected String preferencesIri(User user) {
-        StringBuffer iri = new StringBuffer(personIri(user));
+        StringBuilder iri = new StringBuilder(personIri(user));
         iri.append("/preferences");
         return iri.toString();
     }
@@ -194,7 +194,7 @@ public class StandardPreferencesFeedGenerator
      */
     protected String preferenceIri(Preference pref) {
         try {
-            StringBuffer iri = new StringBuffer(personIri(pref.getUser()));
+            StringBuilder iri = new StringBuilder(personIri(pref.getUser()));
             iri.append("/preference/").
                 append(URLEncoder.encode(pref.getKey(), "UTF-8"));
             return iri.toString();

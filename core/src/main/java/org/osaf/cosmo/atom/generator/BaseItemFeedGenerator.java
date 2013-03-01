@@ -588,7 +588,7 @@ public abstract class BaseItemFeedGenerator
      */
     protected String ticketIri(CollectionItem collection, Ticket ticket) {
         try {
-            StringBuffer iri = new StringBuffer(selfIri(collection, false));
+            StringBuilder iri = new StringBuilder(selfIri(collection, false));
             iri.append("/ticket/").
                 append(URLEncoder.encode(ticket.getKey(), "UTF-8"));
             return iri.toString();
@@ -603,7 +603,7 @@ public abstract class BaseItemFeedGenerator
      * @param collection the collection
      */
     protected String ticketsIri(CollectionItem collection) {
-        StringBuffer iri = new StringBuffer(selfIri(collection, false));
+        StringBuilder iri = new StringBuilder(selfIri(collection, false));
         iri.append("/tickets");
         return iri.toString();
     }

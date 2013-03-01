@@ -244,7 +244,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the WebDAV user principal collection URL.
      */
     public String getDavUserPrincipalUrl() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(appMountUrl).append(factory.getDavPrefix()).
             append(org.osaf.cosmo.dav.ExtendedDavConstants.
                    TEMPLATE_USERS.bind());
@@ -262,7 +262,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the WebDAV URL of the user.
      */
     public String getDavUrl(User user) {
-         StringBuffer buf = new StringBuffer();
+         StringBuilder buf = new StringBuilder();
          buf.append(appMountUrl).append(factory.getDavPrefix()).
              append(org.osaf.cosmo.dav.ExtendedDavConstants.
                     TEMPLATE_HOME.bind(user.getUsername()));
@@ -273,7 +273,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the WebDAV principal URL of the user.
      */
     public String getDavPrincipalUrl(User user) {
-         StringBuffer buf = new StringBuffer();
+         StringBuilder buf = new StringBuilder();
          buf.append(appMountUrl).append(factory.getDavPrefix()).
             append(org.osaf.cosmo.dav.ExtendedDavConstants.
                     TEMPLATE_USER.bind(user.getUsername()));
@@ -284,7 +284,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the CalDAV calendar home URL of the user.
      */
     public String getDavCalendarHomeUrl(User user) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(appMountUrl).append(factory.getDavPrefix()).
             append(org.osaf.cosmo.dav.ExtendedDavConstants.
                    TEMPLATE_HOME.bind(user.getUsername())).
@@ -379,7 +379,7 @@ public class ServiceLocator implements ServerConstants {
     }
 
     private String calculateBaseUrl(String servicePrefix) {
-        StringBuffer buf = new StringBuffer(appMountUrl);
+        StringBuilder buf = new StringBuilder(appMountUrl);
 
         buf.append(servicePrefix).append("/");
 
@@ -410,7 +410,7 @@ public class ServiceLocator implements ServerConstants {
                                     String pathPrefix,
                                     String servicePrefix,
                                     boolean absolute) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         if (absolute)
             buf.append(appMountUrl).append(servicePrefix).append("/");
@@ -431,7 +431,7 @@ public class ServiceLocator implements ServerConstants {
     private String calculateUserUrl(User user,
                                     String servicePrefix,
                                     boolean absolute) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         if (absolute)
             buf.append(appMountUrl).append(servicePrefix).append("/");
@@ -446,7 +446,7 @@ public class ServiceLocator implements ServerConstants {
                               String servicePrefix,
                               boolean absolute,
                               boolean withTicket) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         if (absolute)
             buf.insert(0, appMountUrl).append(servicePrefix).append("/");

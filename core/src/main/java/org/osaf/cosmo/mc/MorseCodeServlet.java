@@ -639,7 +639,7 @@ public class MorseCodeServlet extends HttpServlet implements EimmlConstants {
     }
 
     private String formatTicket(Ticket ticket) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(ticket.getType()).append("=").append(ticket.getKey());
         return buf.toString();
     }

@@ -200,7 +200,7 @@ public class StandardSubscriptionFeedGenerator
      * @param user the user
      */
     protected String subscriptionsIri(User user) {
-        StringBuffer iri = new StringBuffer(personIri(user));
+        StringBuilder iri = new StringBuilder(personIri(user));
         iri.append("/subscriptions");
         return iri.toString();
     }
@@ -212,7 +212,7 @@ public class StandardSubscriptionFeedGenerator
      */
     protected String subscriptionIri(CollectionSubscription sub) {
         try {
-            StringBuffer iri = new StringBuffer(personIri(sub.getOwner()));
+            StringBuilder iri = new StringBuilder(personIri(sub.getOwner()));
             iri.append("/subscription/");
             iri.append(URLEncoder.encode(sub.getDisplayName(), "UTF-8"));
             return iri.toString();

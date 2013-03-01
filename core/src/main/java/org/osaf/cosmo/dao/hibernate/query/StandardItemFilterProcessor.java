@@ -446,7 +446,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             HashMap<String, Object> params, String propName,
             FilterCriteria fc) {
 
-        StringBuffer expBuf = new StringBuffer();
+        StringBuilder expBuf = new StringBuilder();
         
         FilterExpression exp = (FilterExpression) fc;
         

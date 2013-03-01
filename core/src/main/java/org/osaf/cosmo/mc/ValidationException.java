@@ -41,7 +41,7 @@ public class ValidationException extends MorseCodeException {
     
     protected void writeContent(XMLStreamWriter writer)
             throws XMLStreamException {
-        StringBuffer msgBuffer = new StringBuffer(getMessage());
+        StringBuilder msgBuffer = new StringBuilder(getMessage());
         Throwable cause = getCause();
         if(cause!=null && cause.getMessage()!=null)
             msgBuffer.append(": ").append(cause.getMessage());

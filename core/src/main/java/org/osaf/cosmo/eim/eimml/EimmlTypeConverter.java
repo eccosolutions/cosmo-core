@@ -221,7 +221,7 @@ public class EimmlTypeConverter implements EimmlConstants {
         if (decimalPlaces < 0)
             throw new IllegalArgumentException("Number of decimal places must be positive or 0");
 
-        StringBuffer pattern = new StringBuffer();
+        StringBuilder pattern = new StringBuilder();
         for (int i=1; i<= digits; i++)
             pattern.append("#");
         if (decimalPlaces > 0) {

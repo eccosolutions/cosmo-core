@@ -36,7 +36,7 @@ public class WsseUtils {
      * @return password digest computed from inputs
      */
     public static String calculatePasswordDigest(String password, String nonce, String created) {
-        StringBuffer toDigest = new StringBuffer();
+        StringBuilder toDigest = new StringBuilder();
         toDigest.append(nonce);
         toDigest.append(created);
         toDigest.append(password);
