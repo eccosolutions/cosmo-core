@@ -27,9 +27,7 @@
 
   <bean id="cmpAccessDecisionManager"
         class="org.springframework.security.access.vote.AffirmativeBased">
-    <property name="allowIfAllAbstainDecisions">
-      <value>false</value>
-    </property>
+    <property name="allowIfAllAbstainDecisions" value="false"/>
     <property name="decisionVoters">
       <list>
         <ref bean="roleVoter"/>
@@ -38,36 +36,30 @@
   </bean>
 
   <!-- interceptor which performs authorization for CMP requests -->
-
    <bean id="cmpFilterInvocationInterceptor"
          class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-     <property name="authenticationManager">
-       <ref bean="authenticationManager"/>
-     </property>
-     <property name="accessDecisionManager">
-       <ref bean="cmpAccessDecisionManager"/>
-     </property>
-     <property name="securityMetadataSource">
-       <value>
-         CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-         PATTERN_TYPE_APACHE_ANT
-         /cmp/users=ROLE_ROOT
-         /cmp/user/*=ROLE_ROOT
-         /cmp/user/**/service=ROLE_ROOT,ROLE_USER
-         /cmp/signup=ROLE_ANONYMOUS
-         /cmp/activate/*=ROLE_ROOT
-         /cmp/account/password/reset/*=ROLE_ANONYMOUS, ROLE_ROOT, ROLE_USER
-         /cmp/account/password/recover=ROLE_ANONYMOUS, ROLE_ROOT, ROLE_USER
-         /cmp/account/activation/send=ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT
-         /cmp/account=ROLE_USER
-         /**=ROLE_ROOT
-       </value>
-     </property>
+     <property name="authenticationManager" ref="authenticationManager"/>
+     <property name="accessDecisionManager" ref="cmpAccessDecisionManager"/>
+     <property name="securityMetadataSource" ref="cmpSecurityMetadata"/>
    </bean>
 
-  <!-- filter chain that kicks off request-time processing -->
+	<security:filter-security-metadata-source id="cmpSecurityMetadata">
+		<security:intercept-url pattern="/cmp/users" access="ROLE_ROOT"/>
+		<security:intercept-url pattern="/cmp/user/*" access="ROLE_ROOT"/>
+		<security:intercept-url pattern="/cmp/user/**/service" access="ROLE_ROOT, ROLE_USER"/>
 
-  
+		<security:intercept-url pattern="/cmp/signup" access="ROLE_ANONYMOUS"/>
+
+		<security:intercept-url pattern="/cmp/activate/*" access="ROLE_ROOT"/>
+		<security:intercept-url pattern="/cmp/account/password/reset/*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/cmp/account/password/recover" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/cmp/account/activation/send" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/cmp/account" access="ROLE_USER"/>
+		<security:intercept-url pattern="/**" access="ROLE_ROOT"/>
+	</security:filter-security-metadata-source>
+
+
+  <!-- filter chain that kicks off request-time processing -->
    <bean id="cmpFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
       <security:filter-chain-map path-type="ant">
           <security:filter-chain pattern="/**" filters="protocolHttpRequestContextIntegrationFilter,protocolWsseProcessingFilter,protocolBasicProcessingFilter,defaultAnonymousProcessingFilter,protocolExceptionTranslationFilter,cmpFilterInvocationInterceptor"/>

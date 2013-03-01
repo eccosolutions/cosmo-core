@@ -29,20 +29,14 @@
 
    <bean id="feedFilterInvocationInterceptor"
          class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-     <property name="authenticationManager">
-       <ref bean="authenticationManager"/>
-     </property>
-     <property name="accessDecisionManager">
-       <ref bean="userPathAccessDecisionManager"/>
-     </property>
-     <property name="securityMetadataSource">
-       <value>
-	 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-	 PATTERN_TYPE_APACHE_ANT
-         /**=ROLE_ROOT
-       </value>
-     </property>
+     <property name="authenticationManager" ref="authenticationManager"/>
+     <property name="accessDecisionManager" ref="userPathAccessDecisionManager"/>
+     <property name="securityMetadataSource" ref="feedSecurityMetadata"/>
    </bean>
+
+	<security:filter-security-metadata-source id="feedSecurityMetadata">
+		<security:intercept-url pattern="/**" access="ROLE_ROOT"/>
+	</security:filter-security-metadata-source>
 
   <!-- filter chain that kicks off request-time processing -->
    

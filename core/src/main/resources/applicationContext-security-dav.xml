@@ -37,30 +37,22 @@
 
   <bean id="davFilterInvocationInterceptor"
         class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-    <property name="authenticationManager">
-      <ref bean="authenticationManager"/>
-    </property>
-    <property name="accessDecisionManager">
-      <ref bean="davAccessDecisionManager"/>
-    </property>
-     <property name="securityMetadataSource">
-       <value>
-	     CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-	     PATTERN_TYPE_APACHE_ANT
-	     /**=this is a meaningless value
-       </value>
-     </property>
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="accessDecisionManager" ref="davAccessDecisionManager"/>
+     <property name="securityMetadataSource" ref="davSecurityMetadata"/>
   </bean>
+
+	<security:filter-security-metadata-source id="davSecurityMetadata">
+		<security:intercept-url pattern="/**" access="this is a meaningless value"/>
+	</security:filter-security-metadata-source>
 
   <bean id="davExceptionTranslationFilter"
         class="org.springframework.security.web.access.ExceptionTranslationFilter">
-    <property name="authenticationEntryPoint">
-      <ref bean="protocolAuthenticationEntryPoint"/>
-    </property>
+    <property name="authenticationEntryPoint" ref="protocolAuthenticationEntryPoint"/>
     <property name="accessDeniedHandler">
       <bean class="org.osaf.cosmo.dav.acegisecurity.DavAccessDeniedHandler"/>
     </property>
-    <property name="createSessionAllowed" value="false"/>
+<!--     <property name="createSessionAllowed" value="false"/> -->
   </bean>
 
   <!-- filter chain that kicks off request-time processing -->

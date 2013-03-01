@@ -29,20 +29,14 @@
   <!-- interceptor which performs authorization for morse code requests -->
   <bean id="mcFilterInvocationInterceptor"
         class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-    <property name="authenticationManager">
-      <ref bean="authenticationManager"/>
-    </property>
-    <property name="accessDecisionManager">
-      <ref bean="userPathAccessDecisionManager"/>
-    </property>
-     <property name="securityMetadataSource">
-       <value>
-	     CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-	     PATTERN_TYPE_APACHE_ANT
-	     /**=this is a meaningless value
-       </value>
-     </property>
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="accessDecisionManager" ref="userPathAccessDecisionManager"/>
+     <property name="securityMetadataSource" ref="mcSecurityMetadata"/>
   </bean>
+
+	<security:filter-security-metadata-source id="mcSecurityMetadata">
+		<security:intercept-url pattern="/**" access="this is a meaningless value"/>
+	</security:filter-security-metadata-source>
 
   <!-- filter chain that kicks off request-time processing -->
   <bean id="mcFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">

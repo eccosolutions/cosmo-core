@@ -42,38 +42,31 @@
 
    <bean id="pimFilterInvocationInterceptor"
          class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-     <property name="authenticationManager">
-       <ref bean="authenticationManager"/>
-     </property>
-     <property name="accessDecisionManager">
-       <ref bean="pimAccessDecisionManager"/>
-     </property>
-     <property name="securityMetadataSource">
-       <value>
-	 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-	 PATTERN_TYPE_APACHE_ANT
-	 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-	 PATTERN_TYPE_APACHE_ANT
-         /**/*.css*=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /**/*.js=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /**/*.js?*=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /**/*.html*=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /**/*.prefs*=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /*.ico=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /**/*.gif=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /**/*.jpg=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /**/*.png=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /pim/login.page*=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /pim/lang.page*=ROLE_ROOT,ROLE_USER,ROLE_ANONYMOUS
-         /pim/logout.page*=ROLE_ROOT,ROLE_USER
-         /pim*=ROLE_ROOT,ROLE_USER
-         /pim/keepalive.jsp=ROLE_ROOT,ROLE_USER
-         /pim/collection/**=ROLE_ROOT,ROLE_USER
-         /=ROLE_ROOT, ROLE_USER
-         /**=ROLE_ROOT
-       </value>
-     </property>
+     <property name="authenticationManager" ref="authenticationManager"/>
+     <property name="accessDecisionManager" ref="pimAccessDecisionManager"/>
+     <property name="securityMetadataSource" ref="pimSecurityMetadata"/>
    </bean>
+
+	<security:filter-security-metadata-source id="pimSecurityMetadata">
+		<security:intercept-url pattern="/**/*.css*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**/*.js" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**/*.js?*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**/*.html*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**/*.prefs*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/*.ico" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**/*.gif" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**/*.jpg" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**/*.png" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+
+		<security:intercept-url pattern="/pim/login.page*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/pim/lang.page*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/pim/logout.page*" access="ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/pim*" access="ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/pim/keepalive.jsp" access="ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/pim/collection/**" access="ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/" access="ROLE_USER, ROLE_ROOT"/>
+		<security:intercept-url pattern="/**" access="ROLE_ROOT"/>
+	</security:filter-security-metadata-source>
 
   <!-- filter chain that kicks off request-time processing -->
 
@@ -92,28 +85,16 @@
 
   <bean id="pimFormBasedAuthenticationEntryPoint"
         class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-    <property name="loginFormUrl">
-      <value>/login</value>
-    </property>
-    <property name="forceHttps">
-      <value>false</value>
-    </property>
+    <property name="loginFormUrl" value="/login"/>
+    <property name="forceHttps" value="false"/>
   </bean>
 
   <bean id="pimFormBasedProcessingFilter"
         class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-    <property name="authenticationManager">
-      <ref bean="authenticationManager"/>
-    </property>
-      <property name="authenticationFailureUrl">
-        <value>/login</value>
-      </property>
-      <property name="defaultTargetUrl">
-        <value>/index.jsp</value>
-      </property>
-      <property name="alwaysUseDefaultTargetUrl">
-        <value>false</value>
-      </property>
+    <property name="authenticationManager" ref="authenticationManager"/>
+      <property name="authenticationFailureUrl" value="/login"/>
+      <property name="defaultTargetUrl" value="/index.jsp"/>
+      <property name="alwaysUseDefaultTargetUrl" value="false"/>
   </bean>
 
   <!-- filter that performs anonymous authentication -->
