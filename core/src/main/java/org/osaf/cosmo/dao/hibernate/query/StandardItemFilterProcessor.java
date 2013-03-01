@@ -135,7 +135,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             StringBuffer whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
         
-        if("".equals(selectBuf.toString()))
+        if(selectBuf.toString() != null && selectBuf.toString().isEmpty())
             selectBuf.append("select i from HibItem i");
         
         // filter on uid
@@ -305,7 +305,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             StringBuffer whereBuf, StringBuffer orderBuf, HashMap<String, Object> params,
             ContentItemFilter filter) {
         
-        if("".equals(selectBuf.toString())) {
+        if(selectBuf.toString() != null && selectBuf.toString().isEmpty()) {
             selectBuf.append("select i from HibContentItem i");
             handleItemFilter(selectBuf, whereBuf, params, filter);
         }
@@ -317,14 +317,14 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
     
     
     private void appendWhere(StringBuffer whereBuf, String toAppend) {
-        if("".equals(whereBuf.toString()))
+        if(whereBuf.toString() != null && whereBuf.toString().isEmpty())
             whereBuf.append(" where " + toAppend);
         else
             whereBuf.append(" and " + toAppend);
     }
     
     private void appendOrder(StringBuffer orderBuf, String toAppend) {
-        if("".equals(orderBuf.toString()))
+        if(orderBuf.toString() != null && orderBuf.toString().isEmpty())
             orderBuf.append(" order by " + toAppend);
         else
             orderBuf.append(", " + toAppend);

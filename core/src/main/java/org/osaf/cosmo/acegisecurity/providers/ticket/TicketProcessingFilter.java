@@ -72,7 +72,7 @@ public class TicketProcessingFilter implements Filter {
                 Set<String> keys = ServerUtils.findTicketKeys(httpRequest);
                 if (! keys.isEmpty()) {
                     String path = httpRequest.getPathInfo();
-                    if (path == null || path.equals("")) {
+                    if (path == null || path.isEmpty()) {
                         path = "/";
                     }
                     if (! path.equals("/") && path.endsWith("/")) {

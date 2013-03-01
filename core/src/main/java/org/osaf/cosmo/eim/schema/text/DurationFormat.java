@@ -66,7 +66,7 @@ public class DurationFormat extends Format {
 
     public Dur parse(String source)
         throws ParseException {
-        if(source==null || "".equals(source))
+        if(source==null || source != null && source.isEmpty())
             return null;
         Dur dur = (Dur) super.parseObject(source);
         if (dur != null)

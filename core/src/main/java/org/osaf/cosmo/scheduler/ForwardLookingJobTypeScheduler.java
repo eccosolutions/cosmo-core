@@ -116,7 +116,7 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
         String cronTab = schedule.getProperties().get("cronexp");
         String reportType = schedule.getProperties().get("reportType");
 
-        if (reportType == null || "".equals(reportType))
+        if (reportType == null || reportType != null && reportType.isEmpty())
             throw new SchedulerException("reportType must be present");
 
         // validate reportType

@@ -109,7 +109,7 @@ public class EventGenerator extends BaseStampGenerator
         } else {
             value = DurationFormat.getInstance().format(stamp.getDuration());
             // Empty duration translates to None
-            if("".equals(value))
+            if(value != null && value.isEmpty())
                 value = null;
             record.addField(new TextField(FIELD_DURATION, value));
         }

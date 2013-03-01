@@ -43,7 +43,7 @@ public class StringPropertyUtils {
             parent = parent + ".";
         for(String key: keys) {
             String end = StringUtils.substringAfter(key, parent);
-            if("".equals(end) || end==null)
+            if(end != null && end.isEmpty() || end==null)
                 continue;
             
             children.add(StringUtils.substringBefore(end, "."));
@@ -67,7 +67,7 @@ public class StringPropertyUtils {
         for(Entry<String, String> entry: props.entrySet()) {
             if(entry.getKey().startsWith(parent)) {
                 String end = StringUtils.substringAfter(entry.getKey(), parent);
-                if(end!=null && !"".equals(end) && !end.contains(".")) {
+                if(end!=null && end != null && !end.isEmpty() && !end.contains(".")) {
                     childProps.put(end, entry.getValue());
                 }
                     
@@ -92,7 +92,7 @@ public class StringPropertyUtils {
         for(Entry<String, String> entry: props.entrySet()) {
             if(entry.getKey().startsWith(parent)) {
                 String end = StringUtils.substringAfter(entry.getKey(), parent);
-                if(end!=null && !"".equals(end)) {
+                if(end!=null && end != null && !end.isEmpty()) {
                     childProps.put(end, entry.getValue());
                 }
                     

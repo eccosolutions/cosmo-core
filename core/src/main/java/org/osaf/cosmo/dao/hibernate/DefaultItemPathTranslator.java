@@ -97,7 +97,7 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
 
     protected Item findItemByPath(Session session, String path) {
         
-        if(path==null || "".equals(path))
+        if(path==null || path != null && path.isEmpty())
             return null;
         
         if (path.charAt(0) == '/')
@@ -132,7 +132,7 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
     
     protected Item findItemByPath(Session session, String path, CollectionItem root) {
         
-        if(path==null || "".equals(path))
+        if(path==null || path != null && path.isEmpty())
             return null;
         
         if (path.charAt(0) == '/')

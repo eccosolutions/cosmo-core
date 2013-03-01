@@ -72,7 +72,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
             if (findUserByEmailIgnoreCase(user.getEmail()) != null)
                 throw new DuplicateEmailException(user);
 
-            if (user.getUid() == null || "".equals(user.getUid()))
+            if (user.getUid() == null || user.getUid() != null && user.getUid().isEmpty())
                 user.setUid(getIdGenerator().nextIdentifier().toString());
 
             getSession().save(user);

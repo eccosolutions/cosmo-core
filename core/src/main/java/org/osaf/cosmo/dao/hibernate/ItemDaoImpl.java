@@ -358,7 +358,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         try {
             String copyName = itemPathTranslator.getItemName(destPath);
             
-            if(copyName==null || "".equals(copyName))
+            if(copyName==null || copyName != null && copyName.isEmpty())
                 throw new IllegalArgumentException("path must include name");
             
             if(item instanceof HomeCollectionItem)
@@ -403,7 +403,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             // Name of moved item
             String moveName = itemPathTranslator.getItemName(toPath);
             
-            if(moveName==null || "".equals(moveName))
+            if(moveName==null || moveName != null && moveName.isEmpty())
                 throw new IllegalArgumentException("path must include name");
             
             // Parent of moved item

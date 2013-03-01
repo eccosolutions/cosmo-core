@@ -692,7 +692,7 @@ public abstract class DavItemResourceBase extends DavResourceBase
 
     private DavPropertyName qNameToPropName(QName qname) {
         // no namespace at all
-        if ("".equals(qname.getNamespace()))
+        if (qname.getNamespace() != null && qname.getNamespace().isEmpty())
             return DavPropertyName.create(qname.getLocalName());
 
         Namespace ns = Namespace.getNamespace(qname.getNamespace());

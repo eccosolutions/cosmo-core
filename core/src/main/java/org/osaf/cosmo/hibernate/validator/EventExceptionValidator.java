@@ -74,7 +74,7 @@ public class EventExceptionValidator implements Validator<EventException>, Seria
             RecurrenceId recurrenceId = event.getRecurrenceId();
             
             if(recurrenceId==null || recurrenceId.getValue()==null ||
-                    "".equals(recurrenceId.getValue())) {
+                    recurrenceId.getValue() != null && recurrenceId.getValue().isEmpty()) {
                 log.warn("error validating event exception: " + calendar.toString());
                 return false;
             }

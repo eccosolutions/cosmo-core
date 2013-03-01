@@ -72,7 +72,7 @@ public class ContentItemGenerator extends BaseItemGenerator
             format(contentItem.getTriageStatus());
         
         // missing TriageStatus ends up as empty string instead of null
-        if(isModification() && "".equals(ts)) {
+        if(isModification() && ts != null && ts.isEmpty()) {
             record.addField(generateMissingField(new TextField(FIELD_TRIAGE, null)));
         } else {
             record.addField(new TextField(FIELD_TRIAGE, ts));

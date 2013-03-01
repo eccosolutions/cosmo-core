@@ -316,7 +316,7 @@ public class EimmlStreamReader implements EimmlConstants, XMLStreamConstants {
 //                     if (log.isDebugEnabled())
 //                         log.debug("emptying non-null text for field " + xmlReader.getName());
                 text = "";
-            } else if (text.equals(""))
+            } else if (text.isEmpty())
                 text = null;
 
             EimRecordField field = null;

@@ -51,7 +51,7 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken
     public TicketAuthenticationToken(String path,
                                      Set<String> keys) {
         super(AUTHORITIES);
-        if (path == null || path.equals(""))
+        if (path == null || path.isEmpty())
             throw new IllegalArgumentException("path may not be null or empty");
         if (keys == null || keys.isEmpty())
             throw new IllegalArgumentException("keys may not be null or empty");

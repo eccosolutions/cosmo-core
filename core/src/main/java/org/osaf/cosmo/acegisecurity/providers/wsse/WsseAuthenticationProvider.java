@@ -89,9 +89,9 @@ public class WsseAuthenticationProvider
 
         UsernameToken wsseToken = (UsernameToken) token.getCredentials();
 
-        if(wsseToken.getNonce()==null || "".equals(wsseToken.getNonce())
-                || wsseToken.getCreated()==null || "".equals(wsseToken.getCreated())
-                || wsseToken.getPasswordDigest()==null || "".equals(wsseToken.getPasswordDigest()))
+        if(wsseToken.getNonce()==null || wsseToken.getNonce() != null && wsseToken.getNonce().isEmpty()
+                || wsseToken.getCreated()==null || wsseToken.getCreated() != null && wsseToken.getCreated().isEmpty()
+                || wsseToken.getPasswordDigest()==null || wsseToken.getPasswordDigest() != null && wsseToken.getPasswordDigest().isEmpty())
             throw new BadCredentialsException("WSSE token invalid : missing fields");
 
         Date created = null;
