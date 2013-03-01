@@ -1,4 +1,11 @@
 
+RELEASE 1.4.0.M1
+================
+
+* Migrate to Spring 3.2.1 and Spring Security 3.1.3
+* Update some old dependencies
+* Clean up some source code warnings
+
 RELEASE 1.3.0
 =============
 
