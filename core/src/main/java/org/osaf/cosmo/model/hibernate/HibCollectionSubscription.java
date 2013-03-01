@@ -146,7 +146,7 @@ public class HibCollectionSubscription extends HibAuditableObject implements Col
             getOwner().getUid() : "-";
         String name = getDisplayName() != null ? getDisplayName() : "-";
         String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
+                Long.toString(getModifiedDate().getTime()) : "-";
         String etag = uid + ":" + name + ":" + modTime;
         return encodeEntityTag(etag.getBytes());
     }

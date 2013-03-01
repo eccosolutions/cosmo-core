@@ -577,7 +577,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public String calculateEntityTag() {
         String uid = getUid() != null ? getUid() : "-";
         String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
+                Long.toString(getModifiedDate().getTime()) : "-";
         String etag = uid + ":" + modTime;
         return encodeEntityTag(etag.getBytes());
     }

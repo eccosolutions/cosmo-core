@@ -187,7 +187,7 @@ public class HibNoteItem extends HibICalendarItem implements NoteItem {
     public String calculateEntityTag() {
         String uid = getUid() != null ? getUid() : "-";
         String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
+                Long.toString(getModifiedDate().getTime()) : "-";
          
         StringBuffer etag = new StringBuffer(uid + ":" + modTime);
         
@@ -196,7 +196,7 @@ public class HibNoteItem extends HibICalendarItem implements NoteItem {
             for(NoteItem mod: getModifications()) {
                 uid = mod.getUid() != null ? mod.getUid() : "-";
                 modTime = mod.getModifiedDate() != null ?
-                        new Long(mod.getModifiedDate().getTime()).toString() : "-";
+                        Long.toString(mod.getModifiedDate().getTime()) : "-";
                 etag.append("," + uid + ":" + modTime);
             }
         }

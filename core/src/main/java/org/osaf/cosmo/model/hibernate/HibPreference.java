@@ -110,7 +110,7 @@ public class HibPreference extends HibAuditableObject implements Preference {
             getUser().getUid() : "-";
         String key = getKey() != null ? getKey() : "-";
         String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
+                Long.toString(getModifiedDate().getTime()) : "-";
         String etag = uid + ":" + key + ":" + modTime;
         return encodeEntityTag(etag.getBytes());
     }

@@ -519,7 +519,7 @@ public class HibUser extends HibAuditableObject implements User {
 	public String calculateEntityTag() {
         String username = getUsername() != null ? getUsername() : "-";
         String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
+                Long.toString(getModifiedDate().getTime()) : "-";
         String etag = username + ":" + modTime;
         return encodeEntityTag(etag.getBytes());
     }
