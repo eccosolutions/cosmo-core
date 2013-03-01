@@ -45,8 +45,7 @@ public class TimeZoneUtils {
     // index all timezone ids from icu registry
     static
     {
-        for(String id: TimeZone.getAvailableIDs())
-            ALL_TIMEZONE_IDS.add(id);
+        Collections.addAll(ALL_TIMEZONE_IDS, TimeZone.getAvailableIDs());
         
         ALL_TIMEZONE_IDS = Collections.unmodifiableSet(ALL_TIMEZONE_IDS);
     }

@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.dav.caldav.property;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,9 +54,8 @@ public class SupportedCollationSet extends StandardDavProperty
 
     private static HashSet<String> collations(String[] collations) {
         HashSet<String> collationSet = new HashSet<String>();
-        
-        for (String c : collations)
-            collationSet.add(c);
+
+        Collections.addAll(collationSet, collations);
         return collationSet;
     }
 

@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,8 +54,7 @@ public class TicketType {
 
     public TicketType(String id, String[] privileges) {
         this(id);
-        for (String p : privileges)
-            this.privileges.add(p);
+        Collections.addAll(this.privileges, privileges);
     }
 
     public String getId() {

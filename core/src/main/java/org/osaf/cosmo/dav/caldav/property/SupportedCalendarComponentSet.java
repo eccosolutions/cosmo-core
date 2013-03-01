@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.dav.caldav.property;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,9 +56,8 @@ public class SupportedCalendarComponentSet extends StandardDavProperty
     
     private static HashSet<String> componentTypes(String[] types) {
         HashSet<String> typesSet = new HashSet<String>();
-        
-        for (String t: types)
-            typesSet.add(t);
+
+        Collections.addAll(typesSet, types);
         return typesSet;
     }
 

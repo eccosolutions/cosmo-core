@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.util;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,9 +30,7 @@ public class CollectionUtils {
      */
     public static <T>Set<T> createSetFromArray(T[] array){
         Set<T> set = new HashSet<T>();
-        for (T o : array){
-            set.add(o);
-        }
+        Collections.addAll(set, array);
         return set;
     }
 }

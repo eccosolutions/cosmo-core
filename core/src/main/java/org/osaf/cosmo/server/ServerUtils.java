@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.server;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,17 +41,13 @@ public class ServerUtils implements ServerConstants {
             while (headerValues.hasMoreElements()) {
                 String value = (String) headerValues.nextElement();
                 String[] atoms = value.split(", ");
-                for (int i=0; i<atoms.length; i++) {
-                    keys.add(atoms[i]);
-                }
+                Collections.addAll(keys, atoms);
             }
         }
 
         String[] paramValues = request.getParameterValues(PARAM_TICKET);
         if (paramValues != null) {
-            for (int i=0; i<paramValues.length; i++) {
-                keys.add(paramValues[i]);
-            }
+            Collections.addAll(keys, paramValues);
         }
 
         return keys;

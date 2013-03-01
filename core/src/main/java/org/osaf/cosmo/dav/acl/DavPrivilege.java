@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.dav.acl;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,8 +110,7 @@ public class DavPrivilege
         this.isAbstract = isAbstract;
         this.subPrivileges = new HashSet<DavPrivilege>();
         if (subPrivileges != null) {
-            for (DavPrivilege subPrivilege : subPrivileges)
-                this.subPrivileges.add(subPrivilege);
+            Collections.addAll(this.subPrivileges, subPrivileges);
         }
     }
 
