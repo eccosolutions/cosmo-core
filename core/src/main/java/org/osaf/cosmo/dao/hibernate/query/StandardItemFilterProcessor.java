@@ -108,7 +108,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             else
                 orderBuf.append(", ");
             
-            orderBuf.append("i." + fo.getName());
+            orderBuf.append("i.").append(fo.getName());
             
             if(fo.getOrder().equals(Order.DESC))
                 orderBuf.append(" desc");
@@ -175,7 +175,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             TextAttributeFilter filter) {
         
         String alias = "ta" + params.size();
-        selectBuf.append(", HibTextAttribute " + alias);
+        selectBuf.append(", HibTextAttribute ").append(alias);
         appendWhere(whereBuf, alias + ".item=i and " + alias +".qname=:" + alias + "qname");
         params.put(alias + "qname", filter.getQname());
         formatExpression(whereBuf, params, alias + ".value", filter.getValue());
@@ -237,14 +237,14 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         // handle time range
         if(filter.getPeriod()!=null) {
            whereBuf.append(" and ( ");
-           whereBuf.append("(es.timeRangeIndex.isFloating=true and es.timeRangeIndex.startDate < '" + filter.getFloatEnd() + "'");
-           whereBuf.append(" and es.timeRangeIndex.endDate > '" + filter.getFloatStart() + "')");
+           whereBuf.append("(es.timeRangeIndex.isFloating=true and es.timeRangeIndex.startDate < '").append(filter.getFloatEnd()).append("'");
+           whereBuf.append(" and es.timeRangeIndex.endDate > '").append(filter.getFloatStart()).append("')");
            
-           whereBuf.append(" or (es.timeRangeIndex.isFloating=false and es.timeRangeIndex.startDate < '" + filter.getUTCEnd() + "'");
-           whereBuf.append(" and es.timeRangeIndex.endDate > '" + filter.getUTCStart() + "')");
+           whereBuf.append(" or (es.timeRangeIndex.isFloating=false and es.timeRangeIndex.startDate < '").append(filter.getUTCEnd()).append("'");
+           whereBuf.append(" and es.timeRangeIndex.endDate > '").append(filter.getUTCStart()).append("')");
            
            // edge case where start==end
-           whereBuf.append(" or (es.timeRangeIndex.startDate=es.timeRangeIndex.endDate and (es.timeRangeIndex.startDate='" + filter.getFloatStart() + "' or es.timeRangeIndex.startDate='" + filter.getUTCStart() + "'))");
+           whereBuf.append(" or (es.timeRangeIndex.startDate=es.timeRangeIndex.endDate and (es.timeRangeIndex.startDate='").append(filter.getFloatStart()).append("' or es.timeRangeIndex.startDate='").append(filter.getUTCStart()).append("'))");
                    
            whereBuf.append(")");
         }
@@ -264,7 +264,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         // filter by body
         if(filter.getBody()!=null) {
             String alias = "ta" + params.size();
-            selectBuf.append(", HibTextAttribute " + alias);
+            selectBuf.append(", HibTextAttribute ").append(alias);
             appendWhere(whereBuf, alias + ".item=i and " + alias +".qname=:" + alias + "qname");
             params.put(alias + "qname", HibNoteItem.ATTR_NOTE_BODY);
             formatExpression(whereBuf, params, alias + ".value", filter.getBody());
@@ -273,7 +273,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         // filter by reminderTime
         if(filter.getReminderTime()!=null) {
             String alias = "tsa" + params.size();
-            selectBuf.append(", HibTimestampAttribute " + alias);
+            selectBuf.append(", HibTimestampAttribute ").append(alias);
             appendWhere(whereBuf, alias + ".item=i and " + alias +".qname=:" + alias + "qname");
             params.put(alias + "qname", HibNoteItem.ATTR_REMINDER_TIME);
             formatExpression(whereBuf, params, alias + ".value", filter.getReminderTime());
@@ -318,16 +318,16 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
     
     private void appendWhere(StringBuffer whereBuf, String toAppend) {
         if(whereBuf.toString() != null && whereBuf.toString().isEmpty())
-            whereBuf.append(" where " + toAppend);
+            whereBuf.append(" where ").append(toAppend);
         else
-            whereBuf.append(" and " + toAppend);
+            whereBuf.append(" and ").append(toAppend);
     }
     
     private void appendOrder(StringBuffer orderBuf, String toAppend) {
         if(orderBuf.toString() != null && orderBuf.toString().isEmpty())
-            orderBuf.append(" order by " + toAppend);
+            orderBuf.append(" order by ").append(toAppend);
         else
-            orderBuf.append(", " + toAppend);
+            orderBuf.append(", ").append(toAppend);
     }
     
     private String formatForLike(String toFormat) {
@@ -463,10 +463,10 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                 expBuf.append(" not");
             
             String param = "param" + params.size();
-            expBuf.append(" between :" + param);
+            expBuf.append(" between :").append(param);
             params.put(param, be.getValue1());
             param = "param" + params.size();
-            expBuf.append(" and :" + param);
+            expBuf.append(" and :").append(param);
             params.put(param, be.getValue2());
         } 
         else {
@@ -489,7 +489,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
 
                 params.put(param, formatForLike(exp.getValue().toString()));
             } else if (exp instanceof ILikeExpression) {
-                expBuf.append("lower(" + propName + ")");
+                expBuf.append("lower(").append(propName).append(")");
                 if (exp.isNegated())
                     expBuf.append(" not like ");
                 else
@@ -498,7 +498,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                 params.put(param, formatForLike(exp.getValue().toString().toLowerCase()));
             } 
 
-            expBuf.append(":" + param);
+            expBuf.append(":").append(param);
         }
         
         appendWhere(whereBuf, expBuf.toString());

@@ -197,7 +197,7 @@ public class HibNoteItem extends HibICalendarItem implements NoteItem {
                 uid = mod.getUid() != null ? mod.getUid() : "-";
                 modTime = mod.getModifiedDate() != null ?
                         Long.toString(mod.getModifiedDate().getTime()) : "-";
-                etag.append("," + uid + ":" + modTime);
+                etag.append(",").append(uid).append(":").append(modTime);
             }
         }
       

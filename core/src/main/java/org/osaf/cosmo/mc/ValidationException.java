@@ -44,7 +44,7 @@ public class ValidationException extends MorseCodeException {
         StringBuffer msgBuffer = new StringBuffer(getMessage());
         Throwable cause = getCause();
         if(cause!=null && cause.getMessage()!=null)
-            msgBuffer.append(": " + cause.getMessage());
+            msgBuffer.append(": ").append(cause.getMessage());
             
         writer.writeStartElement(NS_MC, "data-validation-error");
         if(uid!=null) {

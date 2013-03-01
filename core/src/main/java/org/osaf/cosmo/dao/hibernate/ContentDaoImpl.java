@@ -606,9 +606,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                 StringBuffer modParents = new StringBuffer();
                 StringBuffer masterParents = new StringBuffer();
                 for(CollectionItem p: parents)
-                    modParents.append(p.getUid() + ",");
+                    modParents.append(p.getUid()).append(",");
                 for (CollectionItem p : note.getModifies().getParents())
-                    masterParents.append(p.getUid() + ",");
+                    masterParents.append(p.getUid()).append(",");
                 throw new ModelValidationException(note,
                         "cannot create modification " + note.getUid()
                                 + " in collections " + modParents.toString()
