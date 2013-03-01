@@ -1062,7 +1062,7 @@ public class EntityConverter {
             contexts.add(cc);
         }
         
-        return contexts.toArray(new CalendarContext[0]);
+        return contexts.toArray(new CalendarContext[contexts.size()]);
     }
     
 

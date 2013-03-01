@@ -38,7 +38,7 @@ public class SupportedCollationSet extends StandardDavProperty
     }
 
     public SupportedCollationSet(Set<String> collations) {
-        this(collations.toArray(new String[0]));
+        this(collations.toArray(new String[collations.size()]));
     }
 
     public SupportedCollationSet(String[] collations) {

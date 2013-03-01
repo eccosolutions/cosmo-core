@@ -18,6 +18,7 @@ package org.osaf.cosmo.scheduler;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.fortuna.ical4j.model.TimeZone;
 
@@ -150,9 +151,9 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
         }
 
         // collection uids
+        Set<String> var = schedule.getProperties().keySet();
         String[] collectionUids = StringPropertyUtils.getChildKeys(
-                "collection", schedule.getProperties().keySet().toArray(
-                new String[0]));
+                "collection", var.toArray(new String[var.size()]));
 
         // The problem with collection uids is that events in the system can
         // change the validity of a uid. For instance, if a collection is

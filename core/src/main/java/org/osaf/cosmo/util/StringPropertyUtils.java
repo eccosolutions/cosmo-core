@@ -49,7 +49,7 @@ public class StringPropertyUtils {
             children.add(StringUtils.substringBefore(end, "."));
         }
         
-        return children.toArray(new String[0]);
+        return children.toArray(new String[children.size()]);
     }
     
     /**

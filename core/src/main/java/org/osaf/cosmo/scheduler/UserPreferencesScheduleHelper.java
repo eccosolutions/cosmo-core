@@ -113,7 +113,8 @@ public class UserPreferencesScheduleHelper {
     public Set<Schedule> getSchedulesForUser(User user) {
         HashSet<Schedule> schedules = new HashSet<Schedule>();
         HashMap<String, String> userPrefs = getUserPrefs(user);
-        String[] allKeys = userPrefs.keySet().toArray(new String[0]);
+        Set<String> var = userPrefs.keySet();
+        String[] allKeys = var.toArray(new String[var.size()]);
         String[] jobKeys = StringPropertyUtils.getChildKeys(
                 "cosmo.scheduler.job.", allKeys);
 
