@@ -216,7 +216,7 @@ public class ForwardLookingNotificationJob extends MultipleCollectionJob {
      * Compare NoteItems using a rank calculated from the NoteItem startDate (if
      * its an event) or the custom alarm date.
      */
-    public class UpcomingResultComparator implements Comparator<UpcomingResult> {
+    public static class UpcomingResultComparator implements Comparator<UpcomingResult> {
 
         boolean reverse = false;
         TimeZone timezone;

@@ -527,7 +527,7 @@ public class OutputFilter {
         this.limitfb = limitfb;
     }
 
-    public class PropertyMatch {
+    public static class PropertyMatch {
         private boolean match;
         private boolean valueExcluded;
 

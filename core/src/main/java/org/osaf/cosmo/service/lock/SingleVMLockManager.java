@@ -210,7 +210,7 @@ public class SingleVMLockManager implements LockManager {
      * by another thread running cleanup before being acquired 
      * by current thread.  Unlikely, but technically possible.
      */
-    class CollectionLock extends ReentrantLock {
+    static class CollectionLock extends ReentrantLock {
         
         /**
          * Flag denoting that the lock is currently being

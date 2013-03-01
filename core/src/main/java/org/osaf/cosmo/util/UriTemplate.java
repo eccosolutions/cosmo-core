@@ -290,7 +290,7 @@ public class UriTemplate {
         }
     }
 
-    private class Segment {
+    private static class Segment {
         private String data;
         private boolean variable = false;
         private boolean optional = false;
@@ -334,7 +334,7 @@ public class UriTemplate {
         }
     }
 
-    public class Match extends HashMap<String, String> {
+    public static class Match extends HashMap<String, String> {
         private String path;
 
         public Match(String path) {

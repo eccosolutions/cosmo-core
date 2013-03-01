@@ -114,7 +114,7 @@ public class PrincipalSearchPropertySetReport extends ReportBase
 
     // our methods
 
-    public class PrincipalSearchPropertySet implements XmlSerializable {
+    public static class PrincipalSearchPropertySet implements XmlSerializable {
 
         public Element toXml(Document document) {
             Element root = DomUtil.

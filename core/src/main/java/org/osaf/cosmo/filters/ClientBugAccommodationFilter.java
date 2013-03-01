@@ -86,7 +86,7 @@ public class ClientBugAccommodationFilter implements Filter {
      * @author travis
      *
      */
-    class XMLContentTypeWrapper extends HttpServletResponseWrapper {
+    static class XMLContentTypeWrapper extends HttpServletResponseWrapper {
         public XMLContentTypeWrapper(HttpServletResponse response) {
             super(response);
         }
@@ -146,7 +146,7 @@ public class ClientBugAccommodationFilter implements Filter {
         }
     }
 
-    class ReplaceTextStream extends ServletOutputStream {
+    static class ReplaceTextStream extends ServletOutputStream {
         private String findString;
         private String replaceString;
         private OutputStream originalStream;

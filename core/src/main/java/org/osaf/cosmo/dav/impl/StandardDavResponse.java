@@ -87,7 +87,7 @@ public class StandardDavResponse extends WebdavResponseImpl
         sendXmlResponse(info, SC_OK);
     }
 
-    private class MkTicketInfo implements XmlSerializable {
+    private static class MkTicketInfo implements XmlSerializable {
         private TicketDiscovery td;
 
         public MkTicketInfo(TicketDiscovery td) {

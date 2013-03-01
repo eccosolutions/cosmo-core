@@ -1075,7 +1075,7 @@ public class EntityConverter {
      * be multiple components if the component is recurring and has
      * modifications), and the component type.
      */
-    class CalendarContext {
+    static class CalendarContext {
         String type;
         Calendar calendar;
     }

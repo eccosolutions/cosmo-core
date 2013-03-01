@@ -63,7 +63,7 @@ public class SpaceUsageReport {
     /**
      * Represents usage information for a single item.
      */
-    public class UsageLineItem {
+    public static class UsageLineItem {
 
         private Item item;
         private String path;

@@ -78,7 +78,7 @@ public class HttpOverrideFilter implements Filter {
 
     }
 
-    class HttpOverrideRequestWrapper extends HttpServletRequestWrapper {
+    static class HttpOverrideRequestWrapper extends HttpServletRequestWrapper {
 
         private HttpOverrideRequestWrapper(HttpServletRequest request) {
             super(request);
