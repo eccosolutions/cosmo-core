@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,6 @@ import java.util.Date;
 
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.util.EntityTag;
-import org.osaf.cosmo.model.mock.MockAuditableObject;
 
 /**
  * A <code>Target</code> that represents an
@@ -27,7 +26,7 @@ import org.osaf.cosmo.model.mock.MockAuditableObject;
  * and a last modified date.
  *
  * @see Target
- * @see MockAuditableObject
+ * @see org.osaf.cosmo.model.mock.MockAuditableObject
  */
 public interface AuditableTarget extends Target {
 

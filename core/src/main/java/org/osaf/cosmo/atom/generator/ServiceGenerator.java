@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,13 @@ package org.osaf.cosmo.atom.generator;
 
 import org.apache.abdera.model.Service;
 import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.model.mock.MockCollectionItem;
 
 /**
  * Constructs an Atom introspection document describing the
  * collections owned by and subscribed to by a user.
  *
  * @see Service
- * @see MockCollectionItem
+ * @see org.osaf.cosmo.model.mock.MockCollectionItem
  * @see User
  */
 public interface ServiceGenerator {
