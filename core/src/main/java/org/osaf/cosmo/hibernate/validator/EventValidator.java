@@ -59,7 +59,7 @@ public class EventValidator implements Validator<Event>, Serializable {
             }
             
             comps = comps.getComponents(Component.VEVENT);
-            if(comps==null || comps.size()==0) {
+            if(comps==null || comps.isEmpty()) {
                 log.warn("error validating event: " + calendar.toString());
                 return false;
             }

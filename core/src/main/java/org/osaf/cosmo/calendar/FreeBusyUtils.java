@@ -82,11 +82,11 @@ public class FreeBusyUtils {
             InstanceList instances = new InstanceList();
             instances.setTimezone(tz);
             instances.addComponent(freeBusy, period.getStart(),period.getEnd());
-            return instances.size() > 0;
+            return !instances.isEmpty();
         }
         
         PropertyList props = freeBusy.getProperties(Property.FREEBUSY);
-        if(props.size()==0)
+        if(props.isEmpty())
             return false;
         
         Iterator<FreeBusy> it = props.iterator();
@@ -150,16 +150,16 @@ public class FreeBusyUtils {
         vfb.getProperties().add(new Uid(uid));
        
         // Add all periods to the VFREEBUSY
-        if (busyPeriods.size() != 0) {
+        if (!busyPeriods.isEmpty()) {
             FreeBusy fb = new FreeBusy(busyPeriods);
             vfb.getProperties().add(fb);
         }
-        if (busyTentativePeriods.size() != 0) {
+        if (!busyTentativePeriods.isEmpty()) {
             FreeBusy fb = new FreeBusy(busyTentativePeriods);
             fb.getParameters().add(FbType.BUSY_TENTATIVE);
             vfb.getProperties().add(fb);
         }
-        if (busyUnavailablePeriods.size() != 0) {
+        if (!busyUnavailablePeriods.isEmpty()) {
             FreeBusy fb = new FreeBusy(busyUnavailablePeriods);
             fb.getParameters().add(FbType.BUSY_UNAVAILABLE);
             vfb.getProperties().add(fb);

@@ -39,7 +39,7 @@ public class FilterChainImpl implements FilterChain {
 
     public void doFilter(JobExecutionContext context)
             throws JobExecutionException {
-        if (filters != null && filters.size() > 0) {
+        if (filters != null && !filters.isEmpty()) {
             Filter filter = filters.remove(0);
             filter.doFilter(context, this);
         } else {

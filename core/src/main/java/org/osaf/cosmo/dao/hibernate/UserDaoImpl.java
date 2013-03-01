@@ -307,7 +307,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         hibQuery.setCacheable(true);
         hibQuery.setFlushMode(FlushMode.MANUAL);
         List users = hibQuery.list();
-        if (users.size() > 0)
+        if (!users.isEmpty())
             return (User) users.get(0);
         else
             return null;
@@ -323,7 +323,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         hibQuery.setCacheable(true);
         hibQuery.setFlushMode(FlushMode.MANUAL);
         List users = hibQuery.list();
-        if (users.size() > 0)
+        if (!users.isEmpty())
             return (User) users.get(0);
         else
             return null;
@@ -336,7 +336,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         hibQuery.setCacheable(true);
         hibQuery.setFlushMode(FlushMode.MANUAL);
         List users = hibQuery.list();
-        if (users.size() > 0)
+        if (!users.isEmpty())
             return (User) users.get(0);
         else
             return null;
@@ -349,7 +349,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         hibQuery.setCacheable(true);
         hibQuery.setFlushMode(FlushMode.MANUAL);
         List users = hibQuery.list();
-        if (users.size() > 0)
+        if (!users.isEmpty())
             return (User) users.get(0);
         else
             return null;

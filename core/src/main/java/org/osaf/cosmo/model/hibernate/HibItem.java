@@ -498,7 +498,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
      * @see org.osaf.cosmo.model.Item#getParent()
      */
     public CollectionItem getParent() {
-        if(getParents().size()==0)
+        if(getParents().isEmpty())
             return null;
         
         return getParents().iterator().next();

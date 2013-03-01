@@ -660,7 +660,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         hibQuery.setParameter("name", item.getName()).setParameter("parentid",
                 ((HibItem) collection).getId());
         List<Long> results = hibQuery.list();
-        if(results.size()>0) {
+        if(!results.isEmpty()) {
             throw new DuplicateItemNameException(item, "item name " + item.getName() + 
                     " already exists in collection " + collection.getUid());
         } 
@@ -817,7 +817,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         
         // If the item belongs to no collection, then it should
         // be purged.
-        if(item.getParents().size()==0)
+        if(item.getParents().isEmpty())
             removeItemInternal(item);
     }
     

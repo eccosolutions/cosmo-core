@@ -60,7 +60,7 @@ public class UserPreferencesScheduleHelper {
         HashMap<String, String> userPrefs = getUserPrefs(user);
         Map<String, String> jobPrefs = StringPropertyUtils.getSubProperties(prefix, userPrefs);
         
-        if(jobPrefs.size()!=0)
+        if(!jobPrefs.isEmpty())
             throw new IllegalArgumentException("schdedule exists for user");
         
         // add properties
@@ -75,7 +75,7 @@ public class UserPreferencesScheduleHelper {
         HashMap<String, String> userPrefs = getUserPrefs(user);
         Map<String, String> jobPrefs = StringPropertyUtils.getSubProperties(prefix, userPrefs);
         
-        if(jobPrefs.size()==0)
+        if(jobPrefs.isEmpty())
             throw new IllegalArgumentException("schdedule does not exist for user");
         
         // remove prreferences
@@ -88,7 +88,7 @@ public class UserPreferencesScheduleHelper {
         HashMap<String, String> userPrefs = getUserPrefs(user);
         Map<String, String> jobPrefs = StringPropertyUtils.getSubProperties(prefix, userPrefs);
         
-        if(jobPrefs.size()==0)
+        if(jobPrefs.isEmpty())
             throw new IllegalArgumentException("schdedule does not exist for user");
         
         // update/add properties

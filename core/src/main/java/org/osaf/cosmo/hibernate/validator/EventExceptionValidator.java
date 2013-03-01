@@ -60,7 +60,7 @@ public class EventExceptionValidator implements Validator<EventException>, Seria
             }
             
             comps = comps.getComponents(Component.VEVENT);
-            if(comps==null || comps.size()==0) {
+            if(comps==null || comps.isEmpty()) {
                 log.warn("error validating event exception: " + calendar.toString());
                 return false;
             }

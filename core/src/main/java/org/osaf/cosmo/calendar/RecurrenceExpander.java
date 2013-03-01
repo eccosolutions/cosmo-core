@@ -217,7 +217,7 @@ public class RecurrenceExpander {
             
             // Dates are sorted, so get the last occurence, and calculate the end
             // date and update dateRange if necessary
-            if(startDates.size()>0) {
+            if(!startDates.isEmpty()) {
                 Date lastStart = (Date) startDates.get(startDates.size()-1);
                 Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getTime(lastStart), start);
                 

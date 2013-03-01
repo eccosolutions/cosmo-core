@@ -475,7 +475,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                 removeCollectionRecursive((CollectionItem) item);
             } else if(item instanceof ContentItem) {                    
                 ((HibItem) item).removeParent(collection);
-                if(item.getParents().size()==0)
+                if(item.getParents().isEmpty())
                     getSession().delete(item);
             } else {
                 getSession().delete(item);
@@ -502,7 +502,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         
         // If the item belongs to no collection, then it should
         // be purged.
-        if(note.getParents().size()==0)
+        if(note.getParents().isEmpty())
             removeItemInternal(note);
         
     }
@@ -581,7 +581,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             throw new IllegalArgumentException("content must have owner");
         
         
-        if(parents.size()==0)
+        if(parents.isEmpty())
             throw new IllegalArgumentException("content must have at least one parent");
         
         // verify uid not in use

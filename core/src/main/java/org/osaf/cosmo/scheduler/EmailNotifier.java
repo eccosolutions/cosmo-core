@@ -82,7 +82,7 @@ public class EmailNotifier implements Notifier {
         
         // Don't send email if there are no items and notifier is configured to not
         // send an empty email (saying that there are no results)
-        if(!sendEmptyMail && report.getNowItems().size()==0 && report.getUpcomingItems().size()==0)
+        if(!sendEmptyMail && report.getNowItems().isEmpty() && report.getUpcomingItems().isEmpty())
             return;
         
         sendEmail(emailAddresses, getText(report, TEMPLATE_PREFIX

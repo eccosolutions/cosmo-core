@@ -821,12 +821,12 @@ public abstract class HibBaseEventStamp extends HibStamp
      * @see org.osaf.cosmo.model.BaseEventStamp#isRecurring()
      */
     public boolean isRecurring() {
-       if(getRecurrenceRules().size()>0)
+       if(!getRecurrenceRules().isEmpty())
            return true;
        
        DateList rdates = getRecurrenceDates();
        
-       return (rdates!=null && rdates.size()>0);
+       return (rdates!=null && !rdates.isEmpty());
     }
     
     /* (non-Javadoc)

@@ -59,7 +59,7 @@ public class FreeBusyValidator implements Validator<FreeBusy>, Serializable {
             }
             
             comps = comps.getComponents(Component.VFREEBUSY);
-            if(comps==null || comps.size()==0) {
+            if(comps==null || comps.isEmpty()) {
                 log.warn("error validating freebusy: " + calendar.toString());
                 return false;
             }

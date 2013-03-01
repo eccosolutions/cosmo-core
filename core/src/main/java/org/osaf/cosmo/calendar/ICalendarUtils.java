@@ -638,7 +638,7 @@ public class ICalendarUtils {
         else if(component instanceof VToDo)
             alarms = ((VToDo) component).getAlarms();
         
-        if(alarms==null || alarms.size()==0)
+        if(alarms==null || alarms.isEmpty())
             return null;
         
         for(Iterator<VAlarm> it = alarms.iterator();it.hasNext();) {

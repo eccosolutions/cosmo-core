@@ -59,7 +59,7 @@ public class JournalValidator implements Validator<Journal>, Serializable {
             }
             
             comps = comps.getComponents(Component.VJOURNAL);
-            if(comps==null || comps.size()==0) {
+            if(comps==null || comps.isEmpty()) {
                 log.warn("error validating journal: " + calendar.toString());
                 return false;
             }

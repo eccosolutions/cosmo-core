@@ -225,7 +225,7 @@ public class InstanceList extends TreeMap {
         Date adjustedRangeStart = null;
         Date ajustedRangeEnd = null;
         
-        if(rRules.size()>0) {
+        if(!rRules.isEmpty()) {
             adjustedRangeStart = adjustStartRangeIfNecessary(rangeStart, start, duration);
             ajustedRangeEnd = adjustEndRangeIfNecessary(rangeEnd, start);
         }
@@ -260,7 +260,7 @@ public class InstanceList extends TreeMap {
         // exception rules..
         PropertyList exRules = comp.getProperties().getProperties(
                 Property.EXRULE);
-        if(exRules.size()>0 && adjustedRangeStart==null) {
+        if(!exRules.isEmpty() && adjustedRangeStart==null) {
             adjustedRangeStart = adjustStartRangeIfNecessary(rangeStart, start, duration);
             ajustedRangeEnd = adjustEndRangeIfNecessary(rangeEnd, start);
         }

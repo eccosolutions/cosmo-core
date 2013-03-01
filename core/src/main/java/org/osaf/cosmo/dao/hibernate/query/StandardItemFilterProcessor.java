@@ -420,7 +420,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
 
         // If recurring event occurs in range, add master unless the filter
         // is configured to not return the master
-        if (instances.size() > 0 && includeMasterInResults)
+        if (!instances.isEmpty() && includeMasterInResults)
             results.add(note);
         
         // If were aren't expanding, then return
@@ -463,7 +463,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                 expBuf.append(" not");
             
             String param = "param" + params.size();
-            expBuf.append(" between :" + param );
+            expBuf.append(" between :" + param);
             params.put(param, be.getValue1());
             param = "param" + params.size();
             expBuf.append(" and :" + param);

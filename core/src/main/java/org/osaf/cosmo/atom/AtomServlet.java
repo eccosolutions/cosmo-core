@@ -92,7 +92,7 @@ public class AtomServlet extends HttpServlet implements AtomConstants {
             String cc = context.getCacheControl();
             if (cl > -1)
                 response.setHeader("Content-Length", Long.toString(cl));
-            if (cc != null && cc.length() > 0)
+            if (cc != null && !cc.isEmpty())
                 response.setHeader("Cache-Control", cc);
             try {
                 MimeType ct = context.getContentType();

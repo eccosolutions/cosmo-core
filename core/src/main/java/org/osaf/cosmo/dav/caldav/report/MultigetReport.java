@@ -93,7 +93,7 @@ public class MultigetReport extends CaldavMultiStatusReport {
 
         List<Element> hrefElements =
             info.getContentElements(XML_HREF, NAMESPACE);
-        if (hrefElements.size() == 0) 
+        if (hrefElements.isEmpty())
             throw new BadRequestException("Expected at least one " + QN_HREF);
         if (getResource() instanceof DavContent && hrefElements.size() > 1)
             throw new BadRequestException("Expected at most one " + QN_HREF);

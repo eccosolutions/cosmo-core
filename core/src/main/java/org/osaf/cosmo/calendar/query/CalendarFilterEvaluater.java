@@ -123,9 +123,9 @@ public class CalendarFilterEvaluater {
         /*The CALDAV:comp-filter XML element is empty and the
         calendar component type specified by the "name"
         attribute exists in the current scope;*/
-        if(filter.getComponentFilters().size()==0 && filter.getPropFilters().size()==0 && filter.getTimeRangeFilter()==null && filter.getIsNotDefinedFilter()==null) {
+        if(filter.getComponentFilters().isEmpty() && filter.getPropFilters().isEmpty() && filter.getTimeRangeFilter()==null && filter.getIsNotDefinedFilter()==null) {
             ComponentList comps = components.getComponents(filter.getName().toUpperCase());
-            return comps.size()>0;
+            return !comps.isEmpty();
         }
         
         /* The CALDAV:comp-filter XML element contains a CALDAV:is-not-
@@ -134,12 +134,12 @@ public class CalendarFilterEvaluater {
         in the current scope;*/
         if(filter.getIsNotDefinedFilter()!=null) {
             ComponentList comps = components.getComponents(filter.getName().toUpperCase());
-            return comps.size()==0;
+            return comps.isEmpty();
         }
         
         // Match the component
         ComponentList comps = components.getComponents(filter.getName().toUpperCase());
-        if(comps.size()==0)
+        if(comps.isEmpty())
             return false;
         
         /*The CALDAV:comp-filter XML element contains a CALDAV:time-range
@@ -173,9 +173,9 @@ public class CalendarFilterEvaluater {
         /*The CALDAV:prop-filter XML element is empty and a property of
         the type specified by the "name" attribute exists in the
         enclosing calendar component;*/
-        if(filter.getParamFilters().size()==0 && filter.getTimeRangeFilter()==null && filter.getIsNotDefinedFilter()==null && filter.getTextMatchFilter()==null) {
+        if(filter.getParamFilters().isEmpty() && filter.getTimeRangeFilter()==null && filter.getIsNotDefinedFilter()==null && filter.getTextMatchFilter()==null) {
             PropertyList props = component.getProperties(filter.getName());
-            return props.size()>0;
+            return !props.isEmpty();
         }
         
         /*The CALDAV:prop-filter XML element contains a CALDAV:is-not-
@@ -184,12 +184,12 @@ public class CalendarFilterEvaluater {
         component;*/
         if(filter.getIsNotDefinedFilter()!=null) {
             PropertyList props = component.getProperties(filter.getName());
-            return props.size()==0;
+            return props.isEmpty();
         }
         
         // Match the property
         PropertyList props = component.getProperties(filter.getName());
-        if(props.size()==0)
+        if(props.isEmpty())
             return false;
         
         /*The CALDAV:prop-filter XML element contains a CALDAV:time-range
@@ -205,7 +205,7 @@ public class CalendarFilterEvaluater {
         
         if(filter.getTextMatchFilter()!=null) {
             props = evaluate(props, filter.getTextMatchFilter());
-            if(props.size()==0)
+            if(props.isEmpty())
                 return false;
         }
         
@@ -235,7 +235,7 @@ public class CalendarFilterEvaluater {
         calendar property being examined;*/
         if(filter.getIsNotDefinedFilter()==null && filter.getTextMatchFilter()==null) {
             ParameterList params = property.getParameters(filter.getName());
-            return params.size()>0;
+            return !params.isEmpty();
         }
         
        /* The CALDAV:param-filter XML element contains a CALDAV:is-not-
@@ -244,12 +244,12 @@ public class CalendarFilterEvaluater {
         examined;*/
         if(filter.getIsNotDefinedFilter()!=null) {
             ParameterList params = property.getParameters(filter.getName());
-            return params.size()==0;
+            return params.isEmpty();
         }
         
         // Match the parameter
         ParameterList params = property.getParameters(filter.getName());
-        if(params.size()==0)
+        if(params.isEmpty())
             return false;
         
         // Match the TextMatchFilter
@@ -411,7 +411,7 @@ public class CalendarFilterEvaluater {
         for(Component mod : mods)
             instances.addOverride(mod, filter.getPeriod().getStart(), filter.getPeriod().getEnd());
         
-        if(instances.size()>0)
+        if(!instances.isEmpty())
             return true;
         
         return false;
@@ -457,11 +457,11 @@ public class CalendarFilterEvaluater {
                 instances.setTimezone(new TimeZone(filter.getTimezone()));
             instances.addComponent(freeBusy, filter.getPeriod().getStart(),
                     filter.getPeriod().getEnd());
-            return instances.size() > 0;
+            return !instances.isEmpty();
         }
         
         PropertyList props = freeBusy.getProperties(Property.FREEBUSY);
-        if(props.size()==0)
+        if(props.isEmpty())
             return false;
         
         Iterator<FreeBusy> it = props.iterator();
@@ -513,7 +513,7 @@ public class CalendarFilterEvaluater {
             instances.setTimezone(new TimeZone(filter.getTimezone()));
         instances.addComponent(journal, filter.getPeriod().getStart(),
                 filter.getPeriod().getEnd());
-        return instances.size() > 0;
+        return !instances.isEmpty();
     }
     
     /*
@@ -574,7 +574,7 @@ public class CalendarFilterEvaluater {
         
         // If there is no DTSTART, evaluate using special rules as
         // listed in the nice state table above
-        if(mods.size()==0) {        
+        if(mods.isEmpty()) {
             if(master.getStartDate()==null)
                 return isVToDoInRange(master, filter.getPeriod());
         }
@@ -594,7 +594,7 @@ public class CalendarFilterEvaluater {
         for(Component mod : mods)
             instances.addOverride(mod, filter.getPeriod().getStart(), filter.getPeriod().getEnd());
         
-        if(instances.size()>0)
+        if(!instances.isEmpty())
             return true;
         
         return false;

@@ -153,7 +153,7 @@ public class HibNoteItem extends HibICalendarItem implements NoteItem {
      */
     public boolean removeModification(NoteItem mod) {
         boolean removed = modifications.remove(mod);
-        hasModifications = modifications.size()!=0;
+        hasModifications = !modifications.isEmpty();
         return removed;
     }
     

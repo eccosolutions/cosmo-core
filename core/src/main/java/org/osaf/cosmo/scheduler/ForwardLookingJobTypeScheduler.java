@@ -152,7 +152,7 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
         // collection uids
         String[] collectionUids = StringPropertyUtils.getChildKeys(
                 "collection", schedule.getProperties().keySet().toArray(
-                        new String[0]));
+                new String[0]));
 
         // The problem with collection uids is that events in the system can
         // change the validity of a uid. For instance, if a collection is
@@ -183,7 +183,7 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
         }
 
         // if there are no valid collections, skip scheduling
-        if (validCollectionUids.size() == 0) {
+        if (validCollectionUids.isEmpty()) {
             if (log.isDebugEnabled())
                 log.debug("no valid collections found for job "
                         + user.getUsername() + ":" + schedule.getName());

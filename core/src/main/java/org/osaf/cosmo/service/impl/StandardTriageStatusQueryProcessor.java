@@ -193,7 +193,7 @@ public class StandardTriageStatusQueryProcessor implements
                 continue;
             Set<NoteItem> occurrences =
                 getNowFromRecurringNote(note, context);
-            if(occurrences.size()>0) {
+            if(!occurrences.isEmpty()) {
                 qr.getResults().addAll(occurrences);
                 qr.getMasters().add(note);
             }
@@ -500,7 +500,7 @@ public class StandardTriageStatusQueryProcessor implements
                 new DateTime(rangeStart), new DateTime(rangeEnd), timezone);
 
         // Find the latest occurrence that ends before the end of the range
-        while (instances.size() > 0) {
+        while (!instances.isEmpty()) {
             String lastKey = (String) instances.lastKey();
             Instance instance = (Instance) instances.remove(lastKey);
             if (instance.getEnd().before(rangeEnd)) {
@@ -540,7 +540,7 @@ public class StandardTriageStatusQueryProcessor implements
         InstanceList instances = expander.getOcurrences(event.getEvent(), event.getExceptions(), new DateTime(rangeStart), new DateTime(rangeEnd), timezone );
      
         // Find the first occurrence that begins after the start range
-        while(instances.size()>0) {
+        while(!instances.isEmpty()) {
             String firstKey = (String) instances.firstKey();
             Instance instance = (Instance) instances.remove(firstKey);
             if(instance.getStart().after(rangeStart)) {
@@ -616,7 +616,7 @@ public class StandardTriageStatusQueryProcessor implements
         List<Recur> rules = es.getRecurrenceRules();
         
         // No rules, assume RDATEs so expand a year
-        if(rules.size()==0)
+        if(rules.isEmpty())
             return later ? yearLaterDur : yearDoneDur;
         
         // Look at first rule only

@@ -59,7 +59,7 @@ public class AvailabilityValidator implements Validator<Availability>, Serializa
             }
             
             comps = comps.getComponents(ICalendarConstants.COMPONENT_VAVAILABLITY);
-            if(comps==null || comps.size()==0) {
+            if(comps==null || comps.isEmpty()) {
                 log.warn("error validating availability: " + calendar.toString());
                 return false;
             }

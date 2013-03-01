@@ -163,7 +163,7 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
                 username).setParameter("name", name);
 
         List results = hibQuery.list();
-        if (results.size() > 0)
+        if (!results.isEmpty())
             return (Item) results.get(0);
         else
             return null;
@@ -175,7 +175,7 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
                 .setParameter("parent", parent).setParameter("name", name);
 
         List results = hibQuery.list();
-        if (results.size() > 0)
+        if (!results.isEmpty())
             return (Item) results.get(0);
         else
             return null;

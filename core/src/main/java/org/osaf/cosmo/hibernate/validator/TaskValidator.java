@@ -59,7 +59,7 @@ public class TaskValidator implements Validator<Task>, Serializable {
             }
             
             comps = comps.getComponents(Component.VTODO);
-            if(comps==null || comps.size()==0) {
+            if(comps==null || comps.isEmpty()) {
                 log.warn("error validating task: " + calendar.toString());
                 return false;
             }
