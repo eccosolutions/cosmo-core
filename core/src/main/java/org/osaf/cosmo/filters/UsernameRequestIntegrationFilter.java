@@ -72,9 +72,8 @@ public class UsernameRequestIntegrationFilter implements Filter {
                     config.getServletContext()
             );
 
-        this.securityManager = (CosmoSecurityManager)
-            wac.getBean(BEAN_SECURITY_MANAGER,
-                        CosmoSecurityManager.class);
+        this.securityManager = wac.getBean(BEAN_SECURITY_MANAGER,
+                    CosmoSecurityManager.class);
 
         if (this.securityManager == null){
             throw new ServletException("Could not initialize HttpLoggingFilter: " +

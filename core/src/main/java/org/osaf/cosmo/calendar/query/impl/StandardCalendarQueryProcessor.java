@@ -84,7 +84,7 @@ public class StandardCalendarQueryProcessor implements CalendarQueryProcessor {
                     + " by filter " + filter);
         }
 
-        return new HashSet<ICalendarItem>((Set<ICalendarItem>) calendarDao
+        return new HashSet<ICalendarItem>(calendarDao
                 .findCalendarItems(collection, filter));
     }
 

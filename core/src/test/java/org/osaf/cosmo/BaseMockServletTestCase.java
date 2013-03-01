@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,6 +53,7 @@ public abstract class BaseMockServletTestCase extends TestCase {
 
     /**
      */
+    @Override
     protected void setUp() throws Exception {
         securityManager = new MockSecurityManager();
         servletContext = new MockServletContext();
@@ -108,7 +109,7 @@ public abstract class BaseMockServletTestCase extends TestCase {
         request.setContentType("text/xml");
         request.setCharacterEncoding("UTF-8");
         // log.debug("content: " + new String(out.toByteArray()));
-        request.setContent(out.toByteArray());;
+        request.setContent(out.toByteArray());
     }
 
     /**

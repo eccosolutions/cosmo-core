@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,10 +38,10 @@ public class MockItemFeedGenerator implements ItemFeedGenerator {
     private static final Log log =
         LogFactory.getLog(MockItemFeedGenerator.class);
 
-    private MockGeneratorFactory factory;
-    private String projection;
-    private String format;
-    private ServiceLocator locator;
+    private final MockGeneratorFactory factory;
+    private final String projection;
+    private final String format;
+    private final ServiceLocator locator;
     private NoteItemFilter filter;
 
     /** */
@@ -57,10 +57,12 @@ public class MockItemFeedGenerator implements ItemFeedGenerator {
 
     // ItemFeedGenerator methods
 
+    @Override
     public void setFilter(NoteItemFilter filter) {
         this.filter = filter;
     }
 
+    @Override
     public Feed generateFeed(CollectionItem item)
         throws GeneratorException {
         if (factory.isFailureMode())
@@ -68,6 +70,7 @@ public class MockItemFeedGenerator implements ItemFeedGenerator {
         return factory.getAbdera().getFactory().newFeed();
     }
 
+    @Override
     public Feed generateFeed(NoteItem item)
         throws GeneratorException {
         if (factory.isFailureMode())
@@ -75,6 +78,7 @@ public class MockItemFeedGenerator implements ItemFeedGenerator {
         return factory.getAbdera().getFactory().newFeed();
     }
 
+    @Override
     public Entry generateEntry(NoteItem item)
         throws GeneratorException {
         if (factory.isFailureMode())
@@ -85,7 +89,7 @@ public class MockItemFeedGenerator implements ItemFeedGenerator {
 
             // when writing entries, we need self links to generate
             // location response headers
-            String href= "urn:uid:" + item.getUid().replaceAll("\\s", "_");;
+            String href= "urn:uid:" + item.getUid().replaceAll("\\s", "_");
             entry.addLink(href, "self");
 
             return entry;

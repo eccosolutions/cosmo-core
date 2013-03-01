@@ -81,9 +81,9 @@ public class CosmoICUTimeZoneRegistry implements TimeZoneRegistry {
      * @see net.fortuna.ical4j.model.TimeZoneRegistry#getTimeZone(java.lang.String)
      */
     public final TimeZone getTimeZone(final String id) {
-        TimeZone timezone = (TimeZone) timezones.get(id);
+        TimeZone timezone = timezones.get(id);
         if (timezone == null) {
-            timezone = (TimeZone) DEFAULT_TIMEZONES.get(id);
+            timezone = DEFAULT_TIMEZONES.get(id);
             if (timezone == null) {
                 synchronized (DEFAULT_TIMEZONES) {
                     try {

@@ -34,7 +34,7 @@ public class HibernateContentDaoModificationsTest extends AbstractHibernateDaoTe
 
     public void testModificationsCreate() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem itemA = generateTestContent("A", "testuser");
         NoteItem itemB = generateTestContent("BModifesA", "testuser");
@@ -55,7 +55,7 @@ public class HibernateContentDaoModificationsTest extends AbstractHibernateDaoTe
         // add another mod/remove old
         NoteItem itemC = generateTestContent("CModifesA", "testuser");
         itemC.setModifies(itemA);
-        root = (CollectionItem) contentDao.getRootItem(user);
+        root = contentDao.getRootItem(user);
         
         contentDao.removeItem(itemB);
         contentDao.createContent(root, itemC);
@@ -74,7 +74,7 @@ public class HibernateContentDaoModificationsTest extends AbstractHibernateDaoTe
     
     public void testModificationsDelete() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem itemA = generateTestContent("A", "testuser");
         NoteItem itemB = generateTestContent("BModifesA", "testuser");

@@ -223,7 +223,7 @@ public class MockDaoStorage {
 
     /** */
     public Set<Ticket> findItemTickets(Item item) {
-        Set<Ticket> itemTickets = (Set<Ticket>) tickets.get(item.getUid());
+        Set<Ticket> itemTickets = tickets.get(item.getUid());
         if (itemTickets == null) {
             itemTickets = new HashSet<Ticket>();
             tickets.put(item.getUid(), itemTickets);

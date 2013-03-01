@@ -30,10 +30,10 @@ public class StatusSnapshot {
     public StatusSnapshot() {
         Runtime runtime = Runtime.getRuntime();
 
-        totalMemory = (long) (runtime.totalMemory() / 1024);
-        freeMemory = (long) (runtime.freeMemory() / 1024);
-        usedMemory = (long) totalMemory - freeMemory;
-        maxMemory = (long) (runtime.maxMemory() / 1024);
+        totalMemory = runtime.totalMemory() / 1024;
+        freeMemory = runtime.freeMemory() / 1024;
+        usedMemory = totalMemory - freeMemory;
+        maxMemory = runtime.maxMemory() / 1024;
     }
 
     /**

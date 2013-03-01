@@ -49,7 +49,7 @@ public class MockProcessorFactory implements ProcessorFactory {
      * Returns an array of content types supported by this processor.
      */
     public String[] getSupportedContentTypes() {
-        return (String[]) contentTypes.toArray(new String[0]);
+        return contentTypes.toArray(new String[0]);
     }
 
     /**

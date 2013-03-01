@@ -72,7 +72,7 @@ public class MockContentDao extends MockItemDao implements ContentDao {
 
         ((MockItem) collection).addParent(parent);
 
-        getStorage().storeItem((Item) collection);
+        getStorage().storeItem(collection);
 
         return collection;
     }
@@ -145,7 +145,7 @@ public class MockContentDao extends MockItemDao implements ContentDao {
         
         ((MockItem) content).addParent(parent);
         
-        getStorage().storeItem((Item)content);
+        getStorage().storeItem(content);
 
         return content;
     } 
@@ -169,7 +169,7 @@ public class MockContentDao extends MockItemDao implements ContentDao {
         if (stored != null && stored != content)
             throw new UidInUseException(content.getUid(), "Uid " + content.getUid() + " already in use");
         
-        getStorage().updateItem((Item) content);
+        getStorage().updateItem(content);
 
         return content;
     }
@@ -235,7 +235,7 @@ public class MockContentDao extends MockItemDao implements ContentDao {
         for(CollectionItem parent: parents)
             ((MockItem) content).addParent(parent);
           
-        getStorage().storeItem((Item)content);
+        getStorage().storeItem(content);
 
         return content;
     }

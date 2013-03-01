@@ -309,7 +309,7 @@ public class ItemCollectionAdapter extends BaseCollectionAdapter implements Atom
             ContentProcessor processor =
                 createContentProcessor(request.getContentType().toString());
             processor.processContent(request.getReader(), item);
-            item = (NoteItem) contentService.updateContent((ContentItem) item);
+            item = (NoteItem) contentService.updateContent(item);
 
             return updated(item);
         } catch (IOException e) {
@@ -1042,12 +1042,12 @@ public class ItemCollectionAdapter extends BaseCollectionAdapter implements Atom
                     contentService.updateContentItems(item.getParents(), updates);
                 } else {
                     // otherwise use simple update
-                    item = (NoteItem) contentService.updateContent((ContentItem) item);
+                    item = (NoteItem) contentService.updateContent(item);
                 }
             }
         } else {
             // use simple update
-            item = (NoteItem) contentService.updateContent((ContentItem) item);
+            item = (NoteItem) contentService.updateContent(item);
         }
 
         return item;

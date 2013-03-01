@@ -194,8 +194,7 @@ public class OutputFilter {
         } catch (Exception e) {
             throw new RuntimeException("Error copying master component", e);
         }
-        Iterator<Property> i = (Iterator<Property>)
-            masterCopy.getProperties().iterator();
+        Iterator<Property> i = masterCopy.getProperties().iterator();
         while (i.hasNext()) {
             Property prop = i.next();
             if ((prop instanceof RRule) ||
@@ -368,8 +367,8 @@ public class OutputFilter {
             return true;
 
         Range range = (Range) rid.getParameter(Parameter.RANGE);
-        DtStart dtstart = ((VEvent)event).getStartDate();
-        DtEnd dtend = ((VEvent)event).getEndDate();
+        DtStart dtstart = event.getStartDate();
+        DtEnd dtend = event.getEndDate();
         DateTime start = new DateTime(dtstart.getDate());
         DateTime end = null;
         if (dtend != null) {

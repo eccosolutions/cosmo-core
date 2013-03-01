@@ -68,7 +68,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         
         calendar.setUid(CALENDAR_UID);
         
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(getUser(userDao, "testuser"));
+        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
         
         contentDao.createCollection(root, calendar);
        

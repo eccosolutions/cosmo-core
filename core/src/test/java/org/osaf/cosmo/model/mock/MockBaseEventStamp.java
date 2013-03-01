@@ -244,7 +244,7 @@ public abstract class MockBaseEventStamp extends MockStamp
             prop.getParameters().add(value);
         
         // update timezone for now because ical4j DateList doesn't
-        Parameter param = (Parameter) prop.getParameters().getParameter(
+        Parameter param = prop.getParameters().getParameter(
                 Parameter.TZID);
         if (param != null)
             prop.getParameters().remove(param);

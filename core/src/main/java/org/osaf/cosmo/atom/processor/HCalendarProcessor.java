@@ -62,8 +62,7 @@ public class HCalendarProcessor extends BaseICalendarProcessor {
 
         try {
             Calendar calendar = builder.build(content);
-            Iterator<CalendarComponent> events = (Iterator<CalendarComponent>)
-                calendar.getComponents(Component.VEVENT).iterator();
+            Iterator<CalendarComponent> events = calendar.getComponents(Component.VEVENT).iterator();
             if (! events.hasNext())
                 throw new ValidationException("hCalendar document must contain a vevent");
             return events.next();

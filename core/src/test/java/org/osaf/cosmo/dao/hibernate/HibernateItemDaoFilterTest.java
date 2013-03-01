@@ -71,7 +71,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         calendar1.setUid(CALENDAR_UID_1);
         calendar2.setUid(CALENDAR_UID_2);
         
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(getUser(userDao, "testuser"));
+        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
         
         contentDao.createCollection(root, calendar1);
         contentDao.createCollection(root, calendar2);

@@ -43,7 +43,7 @@ public class HibernateUserDaoSubscriptionTest
     
     public void testSubscribe() throws Exception {
         User user = getUser(userDao, "subuser1");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
         CollectionItem collection = getCollection(root, "subcoll1");
         Ticket ticket = generateTicket(collection, user);
 
@@ -105,7 +105,7 @@ public class HibernateUserDaoSubscriptionTest
     private CollectionItem getCollection(CollectionItem parent,
                                          String name)
         throws Exception {
-        for (Item child : (Set<Item>) parent.getChildren()) {
+        for (Item child : parent.getChildren()) {
             if (child.getName().equals(name))
                 return (CollectionItem) child;
         }

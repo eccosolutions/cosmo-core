@@ -115,7 +115,7 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
 
         // Ticket context can only see itself
         else if (ticket != null) {
-            for (Ticket t : (Set<Ticket>) item.getTickets()) {
+            for (Ticket t : item.getTickets()) {
                 if (ticket.equals(t))
                     visible.add(t);
             }
@@ -123,7 +123,7 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
 
         // User context can only see the tickets he owns
         else if (user != null) {
-            for (Ticket t : (Set<Ticket>) item.getTickets()) {
+            for (Ticket t : item.getTickets()) {
                 if (user.equals(t.getOwner()))
                     visible.add(t);
             }

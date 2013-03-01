@@ -71,7 +71,7 @@ public class StandardRequestHandlerTest extends BaseDavTestCase {
             fail("If-Match bogus etag succeeded");
         } catch (PreconditionFailedException e) {}
 
-        String responseEtag = (String) ctx.getHttpResponse().getHeader("ETag");
+        String responseEtag = ctx.getHttpResponse().getHeader("ETag");
         assertNotNull("Null ETag header", responseEtag);
         assertEquals("Incorrect ETag header value", responseEtag, home.getETag());
     }
@@ -92,7 +92,7 @@ public class StandardRequestHandlerTest extends BaseDavTestCase {
             fail("If-None-Match all (method GET) failed with 412");
         }
 
-        String responseEtag = (String) ctx.getHttpResponse().getHeader("ETag");
+        String responseEtag = ctx.getHttpResponse().getHeader("ETag");
         assertNotNull("Null ETag header", responseEtag);
         assertEquals("Incorrect ETag header value", responseEtag, home.getETag());
     }
@@ -127,7 +127,7 @@ public class StandardRequestHandlerTest extends BaseDavTestCase {
             fail("If-None-Match specific etag (method GET) failed with 412");
         }
 
-        String responseEtag = (String) ctx.getHttpResponse().getHeader("ETag");
+        String responseEtag = ctx.getHttpResponse().getHeader("ETag");
         assertNotNull("Null ETag header", responseEtag);
         assertEquals("Incorrect ETag header value", responseEtag, home.getETag());
     }

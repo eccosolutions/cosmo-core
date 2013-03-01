@@ -55,7 +55,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
 
     public void testContentDaoAttributeTombstones() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         ContentItem item = generateTestContent();
 
@@ -90,7 +90,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
     
     public void testContentDaoItemTombstones() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         //create new collections
         CollectionItem a = new HibCollectionItem();
@@ -164,7 +164,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
     
     public void testContentDaoStampTombstones() throws Exception {
         User user = getUser(userDao, "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(user);
+        CollectionItem root = contentDao.getRootItem(user);
 
         NoteItem item = generateTestNote();
         

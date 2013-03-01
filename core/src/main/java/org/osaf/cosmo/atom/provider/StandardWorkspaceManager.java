@@ -38,7 +38,7 @@ public class StandardWorkspaceManager
     // Manager methods
 
     public CollectionAdapter getCollectionAdapter(RequestContext request) {
-        RequestContext context = (RequestContext) request;
+        RequestContext context = request;
         Target target = context.getTarget();
         if (target == null)
             return null;

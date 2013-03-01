@@ -39,7 +39,7 @@ public class SupportedCalendarComponentSet extends StandardDavProperty
     }
 
     public SupportedCalendarComponentSet(Set<String> componentTypes) {
-        this((String[]) componentTypes.toArray(new String[0]));
+        this(componentTypes.toArray(new String[0]));
     }
 
     public SupportedCalendarComponentSet(String[] componentTypes) {

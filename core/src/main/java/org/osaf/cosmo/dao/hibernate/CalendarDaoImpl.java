@@ -64,7 +64,7 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
                 // translate CalendarFilter to ItemFilter and execute filter
                 ItemFilter itemFilter = filterConverter.translateToItemFilter(collection, filter);
                 Set results = itemFilterProcessor.processFilter(getSession(), itemFilter);
-                return (Set<ICalendarItem>) results;
+                return results;
             } catch (IllegalArgumentException e) {
             }
             
@@ -127,7 +127,7 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
         
         try {
             Set results = itemFilterProcessor.processFilter(getSession(), itemFilter);
-            return (Set<ContentItem>) results;
+            return results;
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);

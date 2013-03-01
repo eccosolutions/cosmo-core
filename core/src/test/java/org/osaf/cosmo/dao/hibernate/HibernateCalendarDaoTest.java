@@ -64,7 +64,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
     public void testCalendarDaoBasic() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(getUser(userDao, "testuser"));
+        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
         
         CollectionItem newItem = contentDao.createCollection(root, calendar);
 
@@ -150,7 +150,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
     public void testLongPropertyValue() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(getUser(userDao, "testuser"));
+        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
         
         CollectionItem newItem = contentDao.createCollection(root, calendar);
 
@@ -169,7 +169,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
     public void testFindByEventIcalUid() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(getUser(userDao, "testuser"));
+        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
         
         contentDao.createCollection(root, calendar);
 
@@ -192,7 +192,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
     public void testCalendarQuerying() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(getUser(userDao, "testuser"));
+        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
         
         CollectionItem newItem = contentDao.createCollection(root, calendar);
 
@@ -246,7 +246,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         propFilter.getTextMatchFilter().setValue("vISiBlE");
         queryEvents = calendarDao.findCalendarItems(calendar, filter);
         Assert.assertEquals(1, queryEvents.size());
-        nextItem = (ContentItem) queryEvents.iterator().next();
+        nextItem = queryEvents.iterator().next();
         Assert.assertEquals("test1.ics", nextItem.getName());
 
         // should match all 5 (none have rrules)
@@ -268,7 +268,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         // should match ics.1
         queryEvents = calendarDao.findCalendarItems(calendar, filter);
         Assert.assertEquals(1, queryEvents.size());
-        nextItem = (ContentItem) queryEvents.iterator().next();
+        nextItem = queryEvents.iterator().next();
         Assert.assertEquals("test1.ics", nextItem.getName());
 
         // 10 year period
@@ -288,7 +288,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         // should match ics.1
         queryEvents = calendarDao.findCalendarItems(calendar, filter);
         Assert.assertEquals(1, queryEvents.size());
-        nextItem = (ContentItem) queryEvents.iterator().next();
+        nextItem = queryEvents.iterator().next();
         Assert.assertEquals("test1.ics", nextItem.getName());
 
         start.setTime(new GregorianCalendar(2006, 8, 6).getTimeInMillis());
@@ -304,7 +304,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
     
     public void testCalendarTimeRangeQuerying() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
-        CollectionItem root = (CollectionItem) contentDao.getRootItem(getUser(userDao, "testuser"));
+        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
         
         calendar = contentDao.createCollection(root, calendar);
 

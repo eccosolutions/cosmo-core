@@ -179,7 +179,7 @@ public class StandardDavRequest extends WebdavRequestImpl
         if (destination == null)
             return null;
 
-        URL context = ((DavResourceLocator)getResourceLocator()).getContext();
+        URL context = getResourceLocator().getContext();
 
         destinationLocator =
             locatorFactory.createResourceLocatorByUri(context, destination);

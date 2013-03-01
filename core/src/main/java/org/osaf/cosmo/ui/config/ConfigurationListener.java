@@ -46,9 +46,8 @@ public class ConfigurationListener implements ServletContextListener {
             WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
 
         // load application configuration
-        ServletContextConfigurer scc = (ServletContextConfigurer)
-            wac.getBean(BEAN_SERVLET_CONTEXT_CONFIGURER,
-                        ServletContextConfigurer.class);
+        ServletContextConfigurer scc = wac.getBean(BEAN_SERVLET_CONTEXT_CONFIGURER,
+                    ServletContextConfigurer.class);
         scc.configure(sc);
     }
 

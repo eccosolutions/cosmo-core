@@ -98,7 +98,7 @@ public class MultigetReport extends CaldavMultiStatusReport {
         if (getResource() instanceof DavContent && hrefElements.size() > 1)
             throw new BadRequestException("Expected at most one " + QN_HREF);
 
-        URL resourceUrl = ((DavResource)getResource()). getResourceLocator().
+        URL resourceUrl = getResource(). getResourceLocator().
             getUrl(true, getResource().isCollection());
 
         hrefs = new HashSet<String>();

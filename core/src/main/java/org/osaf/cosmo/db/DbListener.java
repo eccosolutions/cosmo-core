@@ -52,8 +52,7 @@ public class DbListener implements ServletContextListener {
         WebApplicationContext wac =
             WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
 
-        DbInitializer initializer = (DbInitializer)
-            wac.getBean(BEAN_DB_INITIALIZER, DbInitializer.class);
+        DbInitializer initializer = wac.getBean(BEAN_DB_INITIALIZER, DbInitializer.class);
         initializer.initialize();
     }
 

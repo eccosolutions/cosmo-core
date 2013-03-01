@@ -625,8 +625,7 @@ public class MorseCodeServlet extends HttpServlet implements EimmlConstants {
     private Set<TicketType> parseTicketTypes(HttpServletRequest req) {
         Set<TicketType> types = new HashSet<TicketType>();
 
-        Enumeration<String> e = (Enumeration<String>)
-            req.getHeaders(HEADER_TICKET_TYPE);
+        Enumeration<String> e = req.getHeaders(HEADER_TICKET_TYPE);
         while (e.hasMoreElements()) {
             for (String id : StringUtils.split(e.nextElement())) {
                 if (! (id.equals(TicketType.ID_READ_ONLY) ||

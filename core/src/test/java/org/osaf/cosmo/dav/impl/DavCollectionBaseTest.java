@@ -36,7 +36,7 @@ public class DavCollectionBaseTest extends BaseDavTestCase
     /** */
     public void testDeadFreeBusyRollupProperty() throws Exception {
         testHelper.getHomeCollection().setExcludeFreeBusyRollup(false);
-        DavCollectionBase dc = (DavCollectionBase) testHelper.initializeHomeResource();
+        DavCollectionBase dc = testHelper.initializeHomeResource();
 
         boolean found = false;
         for (String name : dc.getDeadPropertyFilter()) {
@@ -52,7 +52,7 @@ public class DavCollectionBaseTest extends BaseDavTestCase
     /** */
     public void testGetIncludeFreeBusyRollupProperty() throws Exception {
         testHelper.getHomeCollection().setExcludeFreeBusyRollup(false);
-        DavCollectionBase dc = (DavCollectionBase) testHelper.initializeHomeResource();
+        DavCollectionBase dc = testHelper.initializeHomeResource();
 
         DavProperty efbr = dc.getProperty(EXCLUDEFREEBUSYROLLUP);
         assertNotNull("exclude-free-busy-rollup property not found", efbr);
@@ -64,7 +64,7 @@ public class DavCollectionBaseTest extends BaseDavTestCase
     /** */
     public void testGetExcludeFreeBusyRollupProperty() throws Exception {
         testHelper.getHomeCollection().setExcludeFreeBusyRollup(true);
-        DavCollectionBase dc = (DavCollectionBase) testHelper.initializeHomeResource();
+        DavCollectionBase dc = testHelper.initializeHomeResource();
 
         DavProperty efbr = dc.getProperty(EXCLUDEFREEBUSYROLLUP);
         assertNotNull("exclude-free-busy-rollup property not found", efbr);
@@ -76,7 +76,7 @@ public class DavCollectionBaseTest extends BaseDavTestCase
     /** */
     public void testSetIncludeFreeBusyRollupProperty() throws Exception {
         testHelper.getHomeCollection().setExcludeFreeBusyRollup(true);
-        DavCollectionBase dc = (DavCollectionBase) testHelper.initializeHomeResource();
+        DavCollectionBase dc = testHelper.initializeHomeResource();
 
         ExcludeFreeBusyRollup efbr = new ExcludeFreeBusyRollup(false);
         dc.setLiveProperty(efbr);
@@ -88,7 +88,7 @@ public class DavCollectionBaseTest extends BaseDavTestCase
     /** */
     public void testSetExcludeFreeBusyRollupProperty() throws Exception {
         testHelper.getHomeCollection().setExcludeFreeBusyRollup(false);
-        DavCollectionBase dc = (DavCollectionBase) testHelper.initializeHomeResource();
+        DavCollectionBase dc = testHelper.initializeHomeResource();
 
         ExcludeFreeBusyRollup efbr = new ExcludeFreeBusyRollup(true);
         dc.setLiveProperty(efbr);
@@ -100,7 +100,7 @@ public class DavCollectionBaseTest extends BaseDavTestCase
     /** */
     public void testRemoveExcludeFreeBusyRollupProperty() throws Exception {
         testHelper.getHomeCollection().setExcludeFreeBusyRollup(true);
-        DavCollectionBase dc = (DavCollectionBase) testHelper.initializeHomeResource();
+        DavCollectionBase dc = testHelper.initializeHomeResource();
 
         dc.removeLiveProperty(EXCLUDEFREEBUSYROLLUP);
 
