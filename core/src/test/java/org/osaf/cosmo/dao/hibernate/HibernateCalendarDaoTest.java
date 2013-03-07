@@ -20,6 +20,7 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 
 import junit.framework.Assert;
+import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
@@ -33,18 +34,22 @@ import org.osaf.cosmo.calendar.query.TextMatchFilter;
 import org.osaf.cosmo.calendar.query.TimeRangeFilter;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
+import org.osaf.cosmo.model.AvailabilityItem;
 import org.osaf.cosmo.model.CalendarCollectionStamp;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.EventExceptionStamp;
 import org.osaf.cosmo.model.EventStamp;
+import org.osaf.cosmo.model.FreeBusyItem;
 import org.osaf.cosmo.model.ICalendarItem;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.hibernate.HibAvailabilityItem;
 import org.osaf.cosmo.model.hibernate.HibCalendarCollectionStamp;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibEventExceptionStamp;
 import org.osaf.cosmo.model.hibernate.HibEventStamp;
+import org.osaf.cosmo.model.hibernate.HibFreeBusyItem;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 
 /**
@@ -188,7 +193,71 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(event.getUid(), queryEvent.getUid());
     }
 
-   
+   public void testCalendarQueryingFreeBusyOnly() throws Exception {
+       CollectionItem calendar = generateCalendar("test", "testuser");
+       CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
+
+       CollectionItem newItem = contentDao.createCollection(root, calendar);
+
+       // Add a bunch of non-fb stuff
+       for (int i = 1; i <= 5; i++) {
+           ContentItem event = generateEvent("test" + i + ".ics", "cal"
+                   + i + ".ics", "testuser");
+           ContentItem newEvent = contentDao.createContent(calendar, event);
+       }
+       ContentItem freebusy = generateFreeBusy("fb.ics", "vfreebusy.ics", "testuser");
+       contentDao.createContent(calendar, freebusy);
+
+       CalendarFilter filter = new CalendarFilter();
+       ComponentFilter compFilter = new ComponentFilter("VCALENDAR");
+       ComponentFilter fbFilter = new ComponentFilter("VFREEBUSY");
+       filter.setFilter(compFilter);
+       compFilter.getComponentFilters().add(fbFilter);
+
+       clearSession();
+
+       calendar = (CollectionItem) contentDao.findItemByUid(calendar.getUid());
+
+       // Should match ics.1
+       Set<ICalendarItem> queryEvents = calendarDao.findCalendarItems(calendar,
+               filter);
+       Assert.assertEquals(1, queryEvents.size());
+       ContentItem nextItem = queryEvents.iterator().next();
+       Assert.assertEquals("fb.ics", nextItem.getName());
+   }
+
+   public void testCalendarQueryingAvailabilityOnly() throws Exception {
+       CollectionItem calendar = generateCalendar("test", "testuser");
+       CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
+
+       CollectionItem newItem = contentDao.createCollection(root, calendar);
+
+       // Add a bunch of non-fb stuff
+       for (int i = 1; i <= 5; i++) {
+           ContentItem event = generateEvent("test" + i + ".ics", "cal"
+                   + i + ".ics", "testuser");
+           ContentItem newEvent = contentDao.createContent(calendar, event);
+       }
+       ContentItem availability = generateAvailability("avail.ics", "vavailability.ics", "testuser");
+       contentDao.createContent(calendar, availability);
+
+       CalendarFilter filter = new CalendarFilter();
+       ComponentFilter compFilter = new ComponentFilter("VCALENDAR");
+       ComponentFilter fbFilter = new ComponentFilter("VAVAILABILITY");
+       filter.setFilter(compFilter);
+       compFilter.getComponentFilters().add(fbFilter);
+
+       clearSession();
+
+       calendar = (CollectionItem) contentDao.findItemByUid(calendar.getUid());
+
+       // Should match ics.1
+       Set<ICalendarItem> queryEvents = calendarDao.findCalendarItems(calendar,
+               filter);
+       Assert.assertEquals(1, queryEvents.size());
+       ContentItem nextItem = queryEvents.iterator().next();
+       Assert.assertEquals("avail.ics", nextItem.getName());
+   }
 
     public void testCalendarQuerying() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
@@ -416,7 +485,30 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         
         return event;
     }
+
+    private FreeBusyItem generateFreeBusy(String name, String file, String owner) throws Exception {
+        FreeBusyItem freeBusy = new HibFreeBusyItem();
+        freeBusy.setName(name);
+        freeBusy.setOwner(getUser(userDao, owner));
+        CalendarBuilder cb = new CalendarBuilder();
+        net.fortuna.ical4j.model.Calendar calendar = cb.build(helper.getInputStream(file));
+        freeBusy.setFreeBusyCalendar(calendar);
+        return freeBusy;
+    }
     
+    private AvailabilityItem generateAvailability(String name, String file, String owner) throws Exception {
+        AvailabilityItem newItem = new HibAvailabilityItem();
+        newItem.setOwner(getUser(userDao, owner));
+        newItem.setName(name);
+        newItem.setIcalUid("icaluid");
+
+        CalendarBuilder cb = new CalendarBuilder();
+        net.fortuna.ical4j.model.Calendar calendar = cb.build(helper.getInputStream(file));
+
+        newItem.setAvailabilityCalendar(calendar);
+        return newItem;
+    }
+
     private NoteItem generateEventException(String name, String file,
             String owner) throws Exception {
         NoteItem event = new HibNoteItem();
