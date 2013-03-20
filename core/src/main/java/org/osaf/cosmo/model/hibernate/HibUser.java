@@ -79,7 +79,7 @@ public class HibUser extends HibAuditableObject implements User {
      */
     public static final int EMAIL_LEN_MAX = 128;
 
-    @Column(name = "uid", nullable=false, unique=true, length=255)
+    @Column(name = "user_uid", nullable=false, unique=true, length=255)
     @NotNull
     @Length(min=1, max=255)
     @Index(name="idx_useruid")

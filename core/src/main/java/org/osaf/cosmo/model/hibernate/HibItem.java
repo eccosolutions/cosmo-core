@@ -79,7 +79,7 @@ import org.osaf.cosmo.model.User;
 public abstract class HibItem extends HibAuditableObject implements Item {
 
    
-    @Column(name = "uid", nullable = false, length=255)
+    @Column(name = "item_uid", nullable = false, length=255)
     @NotNull
     @Length(min=1, max=255)
     @Index(name="idx_itemuid")
