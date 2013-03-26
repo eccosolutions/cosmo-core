@@ -477,7 +477,15 @@
 		</dependency>
 	</dependencies>
     <build>
-        <resources>
+	<plugins>
+		<plugin>
+			<artifactId>maven-jar-plugin</artifactId>
+			<configuration>
+				<classifier>oracle</classifier>
+			</configuration>
+		</plugin>
+	</plugins>
+	<resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
