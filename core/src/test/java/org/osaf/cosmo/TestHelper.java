@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.HashSet;
 
@@ -401,9 +402,13 @@ public class TestHelper {
 
     /** */
     public Reader getReader(String name) {
+        return getReader(name, Charset.forName("UTF-8"));
+    }
+
+    public Reader getReader(String name, Charset cs) {
         try {
             byte[] buf = IOUtils.toByteArray(getInputStream(name));
-            return new StringReader(new String(buf));
+            return new StringReader(new String(buf, cs));
         } catch (IOException e) {
             throw new RuntimeException("error converting input stream to reader", e);
         }
