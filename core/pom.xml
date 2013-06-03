@@ -25,15 +25,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>people.apache.org-m2-incubating-repository</id>
-            <name>Apache m2 incubating</name>
-            <layout>default</layout>
-            <url>http://people.apache.org/repo/m2-incubating-repository/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
 	</repositories>
 
 	<dependencies>
@@ -410,7 +401,7 @@
 		<dependency>
 			<groupId>woodstox</groupId>
 			<artifactId>wstx-asl</artifactId>
-			<version>3.2.1</version>
+			<version>3.2.7</version>
 		</dependency>
 		<dependency>
 			<groupId>xalan</groupId>
@@ -557,5 +548,5 @@
     		</dependency>
     	</dependencies>
     </dependencyManagement>
- 
+
 </project>
