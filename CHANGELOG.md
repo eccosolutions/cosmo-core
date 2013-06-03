@@ -1,3 +1,10 @@
+RELEASE 1.4.0.M3
+================
+* Remove dependency on apache incubating Maven repository
+
+RELEASE 1.4.0.M2
+================
+* Avoid dependency on platform default encodings
 
 RELEASE 1.4.0.M1
 ================
