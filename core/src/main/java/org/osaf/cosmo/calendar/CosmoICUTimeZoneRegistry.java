@@ -70,6 +70,14 @@ public class CosmoICUTimeZoneRegistry implements TimeZoneRegistry {
 
     /*
      * (non-Javadoc)
+     * @see net.fortuna.ical4j.model.TimeZoneRegistry#register(net.fortuna.ical4j.model.TimeZone, boolean)
+     */
+    public final void register(TimeZone timezone, boolean update) {
+        register(timezone);
+    }
+
+    /*
+     * (non-Javadoc)
      * @see net.fortuna.ical4j.model.TimeZoneRegistry#clear()
      */
     public final void clear() {
