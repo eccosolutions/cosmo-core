@@ -1,3 +1,7 @@
+RELEASE 1.4.0.M4
+================
+* Move to ical4j 1.0.4 to fix a bug with VAVAILABILITY handling
+
 RELEASE 1.4.0.M3
 ================
 * Remove dependency on apache incubating Maven repository
