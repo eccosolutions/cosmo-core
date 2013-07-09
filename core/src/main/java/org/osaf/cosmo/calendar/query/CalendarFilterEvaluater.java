@@ -32,6 +32,7 @@ import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.VAlarm;
+import net.fortuna.ical4j.model.component.VAvailability;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VFreeBusy;
 import net.fortuna.ical4j.model.component.VJournal;
@@ -311,7 +312,7 @@ public class CalendarFilterEvaluater {
         
         Component comp = (Component) comps.get(0);
         
-        if(comp instanceof VEvent)
+        if(comp instanceof VEvent || comp instanceof VAvailability)
             return evaluateVEventTimeRange(comps, filter);
         else if(comp instanceof VFreeBusy)
             return evaulateVFreeBusyTimeRange((VFreeBusy) comp, filter);
