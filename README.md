@@ -8,7 +8,7 @@ For release notes, see CHANGELOG.md
 To Cut A Release
 ================
 
-mvn release:prepare -Prelease,central -Dresume=false -DautoVersionSubmodules=true
+mvn release:prepare -Dresume=false 
 
 For more info on cutting a release and deploying to Maven Central, see:
 
