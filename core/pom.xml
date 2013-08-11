@@ -20,10 +20,7 @@
             <id>osafoundation.org</id>
             <name>OSAF's repository</name>
             <layout>default</layout>
-            <url>http://builds.osafoundation.org/maven2</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <url>http://eccosolutions.github.io/cosmo/maven</url>
         </repository>
 	</repositories>
 
