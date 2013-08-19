@@ -32,6 +32,7 @@ public class HibernateScheduleDaoTest extends AbstractHibernateDaoTestCase {
     @Override
     protected String[] getConfigLocations() {
         return new String[] {
+                "applicationContext-test-sessionFactory.xml",
                 "applicationContext.xml",
                 "applicationContext-scheduler.xml",
                 "applicationContext-test.xml",

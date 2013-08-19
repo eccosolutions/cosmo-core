@@ -41,7 +41,7 @@ public class XmlClobType extends ClobStringType {
     private static final Log log = LogFactory.getLog(XmlClobType.class);
 
     public XmlClobType() {
-        super();
+        super(CosmoLobHandler.INSTANCE, null);
     }
 
     protected XmlClobType(LobHandler lobHandler,

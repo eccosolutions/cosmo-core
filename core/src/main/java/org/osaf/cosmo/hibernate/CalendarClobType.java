@@ -53,7 +53,7 @@ public class CalendarClobType
      * @see org.springframework.orm.hibernate3.LocalSessionFactoryBean#getConfigTimeTransactionManager
      */
     public CalendarClobType() {
-        super();
+        super(CosmoLobHandler.INSTANCE, null);
     }
 
     /**

@@ -27,6 +27,7 @@ public abstract class AbstractSpringDaoTestCase extends AbstractTransactionalSpr
     @Override
     protected String[] getConfigLocations() {
         return new String[] {
+                "applicationContext-test-sessionFactory.xml",
                 "applicationContext.xml",
                 "applicationContext-test.xml",
             };

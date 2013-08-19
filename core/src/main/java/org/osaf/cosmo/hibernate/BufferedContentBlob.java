@@ -48,7 +48,7 @@ public class BufferedContentBlob
      * @see org.springframework.orm.hibernate3.LocalSessionFactoryBean#getConfigTimeTransactionManager
      */
     public BufferedContentBlob() {
-        super();
+        super(CosmoLobHandler.INSTANCE, null);
     }
 
     /**
