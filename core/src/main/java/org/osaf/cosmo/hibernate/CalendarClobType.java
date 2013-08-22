@@ -22,12 +22,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Iterator;
 
 import javax.transaction.TransactionManager;
 
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 
+import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.ComponentList;
+import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.component.VAvailability;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -121,12 +126,28 @@ public class CalendarClobType
     public Object deepCopy(Object value) throws HibernateException {
         if (value == null)
             return null;
+        final Calendar original = (Calendar) value;
         try {
-            return new Calendar((Calendar) value);
+            final Calendar copy = new Calendar(original);
+            // TODO: Remove the below availability mangling when the underlying iCal bug is fixed
+            final ComponentList vAvailabilities = copy.getComponents(Component.VAVAILABILITY);
+            final ComponentList originalAvailabilities = original.getComponents(Component.VAVAILABILITY);
+            for (int i = 0; i < vAvailabilities.size(); i++) {
+                VAvailability vAvailability = (VAvailability) vAvailabilities.get(i);
+                if (vAvailability.getAvailable().isEmpty()) {
+                    final VAvailability originalAvailability = (VAvailability) originalAvailabilities.get(i);
+                    // Check it's the same availability we're mangling
+                    assert originalAvailability.getProperty(Property.UID).equals(vAvailability.getProperty(Property.UID));
+                    vAvailability.getAvailable().addAll(originalAvailability.getAvailable());
+                } else {
+                    log.warn("VAvailability.copy() has been fixed - remove the workaround in CalendarClobType.deepCopy()");
+                }
+            }
+            return copy;
         } catch (IOException e) {
             throw new HibernateException("Unable to read original calendar", e);
         } catch (ParseException e) {
-            log.error("parse error with following ics:" + ((Calendar) value).toString());
+            log.error("parse error with following ics:" + original.toString());
             throw new HibernateException("Unable to parse original calendar", e);
         } catch (URISyntaxException e) {
             throw new HibernateException("Unknown syntax exception", e);

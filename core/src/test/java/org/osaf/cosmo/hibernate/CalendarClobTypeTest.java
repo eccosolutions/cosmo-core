@@ -27,13 +27,11 @@ public class CalendarClobTypeTest extends TestCase {
 
     public void test_GivenCalendarContainsVAvailability_WhenDeepCopied_ThenAvailableComponentsAreCopied() throws ParseException, IOException, URISyntaxException {
         final Calendar calendar = createCalendar();
-        System.out.println("calendar = " + calendar);
-
         final Calendar copiedCalendar = (Calendar) calendarClobType.deepCopy(calendar);
-        System.out.println("copiedCalendar = " + copiedCalendar);
         final VAvailability copiedVAvailability = (VAvailability) copiedCalendar.getComponent(Component.VAVAILABILITY);
         assertNotNull("Expect a VAVAILABILITY component", copiedVAvailability);
-        assertEquals("Expect one AVAILABILE component", 1, copiedVAvailability.getAvailable().size());
+        assertEquals("Expect one AVAILABLE component", 1, copiedVAvailability.getAvailable().size());
+        assertEquals("Expect calendars to be identical as strings", calendar.toString(), copiedCalendar.toString());
     }
 
     private Calendar createCalendar() {
