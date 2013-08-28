@@ -15,21 +15,64 @@
  */
 package org.osaf.cosmo.hibernate;
 
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.hibernate.Hibernate;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobCreator;
 
 /**
  * LobHandler that uses java.sql.Blob to work with PostgreSQL.
  * Hibernate creates BLOB columns as OID in Postgres and 
  * DefaultLobHandler uses setBinaryStream(), which works fine
  * with MySQL and Derby BLOB, but not Postgres OID.
+ * <p>
+ * It works rather like {@code DefaultLobHandler} with wrapAsLob set for reading BLOBs, but has its own behaviour
+ * for setting - and for CLOBs, the default behaviour applies throughout.
  */
 public class CosmoLobHandler extends DefaultLobHandler {
     public static final CosmoLobHandler INSTANCE = new CosmoLobHandler();
 
     private CosmoLobHandler() {
-        super();
-        setWrapAsLob(true);
     }
 
-    // The code that was here seems to be identical to that included in DefaultLobHandler, if you set the wrapAsLob property.
+    @Override
+    public byte[] getBlobAsBytes(ResultSet rs, int index) throws SQLException {
+        Blob blob = rs.getBlob(index); 
+        return blob.getBytes(1, (int) blob.length()); 
+    }
+
+    @Override
+    public InputStream getBlobAsBinaryStream(ResultSet rs, int columnIndex)
+            throws SQLException {
+        Blob blob = rs.getBlob(columnIndex);
+        return blob.getBinaryStream();
+    }
+
+    @Override
+    public LobCreator getLobCreator() {
+        return new CosmoLobCreator();
+    }
+    
+    protected class CosmoLobCreator extends DefaultLobCreator {
+
+        public void setBlobAsBytes(PreparedStatement ps, int paramIndex, byte[] content)
+                throws SQLException {
+            ps.setBlob(paramIndex, Hibernate.createBlob(content));
+        }
+
+        @Override
+        public void setBlobAsBinaryStream(PreparedStatement ps, int paramIndex,
+                InputStream binaryStream, int contentLength)
+                throws SQLException {
+            ps.setBlob(paramIndex, Hibernate.createBlob(binaryStream, contentLength));
+        }
+        
+
+    }
+
 }
