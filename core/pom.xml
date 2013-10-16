@@ -87,6 +87,10 @@
 					<artifactId>jaxen</artifactId>
 					<groupId>jaxen</groupId>
 				</exclusion>
+				<exclusion>
+				    <artifactId>wstx-asl</artifactId>
+				    <groupId>org.codehaus.woodstox</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
