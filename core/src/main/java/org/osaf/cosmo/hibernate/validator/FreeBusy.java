@@ -22,6 +22,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
+import javax.validation.Payload;
 
 @Constraint(validatedBy = FreeBusyValidator.class)
 @Target(METHOD) 
@@ -29,4 +30,8 @@ import javax.validation.Constraint;
 @Documented
 public @interface FreeBusy {
     String message() default "has no VFREEBUSY";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

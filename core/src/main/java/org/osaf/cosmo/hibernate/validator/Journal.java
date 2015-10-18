@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 
 @Constraint(validatedBy = JournalValidator.class)
 @Target(METHOD)
@@ -30,4 +31,8 @@ import javax.validation.Constraint;
 @Documented
 public @interface Journal {
     String message() default "has no VJOURNAL";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

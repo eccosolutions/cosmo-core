@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 
 @Constraint(validatedBy = EventExceptionValidator.class)
 @Target(METHOD)
@@ -30,4 +31,8 @@ import javax.validation.Constraint;
 @Documented
 public @interface EventException {
     String message() default "has no VEVENT exception";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }
