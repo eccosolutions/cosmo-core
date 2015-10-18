@@ -3,7 +3,7 @@
         "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
     <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <!--<property name="lobHandler" ref="defaultLobHandler" />-->
         <property name="annotatedPackages">
             <list>
@@ -54,25 +54,16 @@
                 <value>org.osaf.cosmo.model.hibernate.HibTombstone</value>
                 <value>org.osaf.cosmo.model.hibernate.HibUser</value>
                 <value>org.osaf.cosmo.model.hibernate.HibXmlAttribute</value>
+                <value>org.osaf.cosmo.model.hibernate.JpaConverters</value>
             </list>
         </property>
         <property name="entityInterceptor" ref="cosmoHibernateInterceptor"/>
-        <property name="eventListeners">
-            <map>
-                <entry key="pre-update">
-                    <ref local="validatePreUpdateEventListener"/>
-                </entry>
-                <entry key="pre-insert">
-                    <ref local="validatePreInsertEventListener"/>
-                </entry>
-            </map>
-        </property>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.generate_statistics">false</prop>
                 <prop key="hibernate.cache.use_query_cache">false</prop>
                 <prop key="hibernate.cache.use_second_level_cache">false</prop>
-                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+                <prop key="cache.region.factory_class">net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory</prop>
                 <prop key="hibernate.show_sql">false</prop>
 
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
@@ -81,17 +72,8 @@
             </props>
         </property>
         <property name="dataSource" ref="jdbcDataSource"/>
-        <property name="lobHandler">
-            <bean class="org.springframework.jdbc.support.lob.DefaultLobHandler"/>
-        </property>
+
     </bean>
-
-    <bean id="validatePreUpdateEventListener"
-          class="org.hibernate.validator.event.ValidatePreUpdateEventListener"/>
-
-    <bean id="validatePreInsertEventListener"
-          class="org.hibernate.validator.event.ValidatePreInsertEventListener"/>
-
 
     <bean id="auditableObjectInterceptor"
           class="org.osaf.cosmo.model.hibernate.AuditableObjectInterceptor"/>
@@ -119,7 +101,7 @@
     <!-- Transaction manager for a single Hibernate SessionFactory
          (alternative to JTA) -->
     <bean id="transactionManager"
-          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory">
             <ref local="sessionFactory"/>
         </property>

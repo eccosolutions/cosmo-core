@@ -15,6 +15,27 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Length;
+import org.osaf.cosmo.model.Attribute;
+import org.osaf.cosmo.model.AttributeTombstone;
+import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.CollectionItemDetails;
+import org.osaf.cosmo.model.Item;
+import org.osaf.cosmo.model.QName;
+import org.osaf.cosmo.model.Stamp;
+import org.osaf.cosmo.model.StampTombstone;
+import org.osaf.cosmo.model.Ticket;
+import org.osaf.cosmo.model.Tombstone;
+import org.osaf.cosmo.model.User;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -24,7 +45,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -37,29 +57,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
-
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.MapKey;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.Length;
-import org.hibernate.validator.NotNull;
-import org.osaf.cosmo.model.Attribute;
-import org.osaf.cosmo.model.AttributeTombstone;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionItemDetails;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.Stamp;
-import org.osaf.cosmo.model.StampTombstone;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.Tombstone;
-import org.osaf.cosmo.model.User;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -110,13 +108,12 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     private transient Boolean isActive = Boolean.TRUE;
     
     @OneToMany(targetEntity=HibAttribute.class, mappedBy = "item", fetch=FetchType.LAZY)
-    @MapKey(targetElement=HibQName.class)
     // turns out this creates a query that is unoptimized for MySQL
     //@Fetch(FetchMode.SUBSELECT)
     @BatchSize(size=50)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Map<QName, Attribute> attributes = new HashMap<QName, Attribute>(0);
+    private Map<HibQName, Attribute> attributes = new HashMap<HibQName, Attribute>(0);
     
     @OneToMany(targetEntity=HibTicket.class, mappedBy = "item", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
@@ -231,7 +228,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
      * @see org.osaf.cosmo.model.Item#getAttributes()
      */
     public Map<QName, Attribute> getAttributes() {
-        return Collections.unmodifiableMap(attributes);
+        return Collections.<QName, Attribute>unmodifiableMap(attributes);
     }
     
     /* (non-Javadoc)
@@ -266,7 +263,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
         
         ((HibAttribute) attribute).validate();
         attribute.setItem(this);
-        attributes.put(attribute.getQName(), attribute);
+        attributes.put(((HibAttribute) attribute).getQName(), attribute);
     }
     
     /* (non-Javadoc)
@@ -358,7 +355,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
      */
     public Map<String, Attribute> getAttributes(String namespace) {
         HashMap<String, Attribute> attrs = new HashMap<String, Attribute>();
-        for(Entry<QName, Attribute> e: attributes.entrySet()) {
+        for(Entry<HibQName, Attribute> e: attributes.entrySet()) {
             if(e.getKey().getNamespace().equals(namespace))
                 attrs.put(e.getKey().getLocalName(), e.getValue());
         }
@@ -460,7 +457,6 @@ public abstract class HibItem extends HibAuditableObject implements Item {
 
     /**
      * @param parent collection to add item to
-     * @param readOnly true if item is read-only in collection
      */
     public void addParent(CollectionItem parent) {
         parentDetails.add(new HibCollectionItemDetails(parent,this));
@@ -587,7 +583,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
         item.setDisplayName(getDisplayName());
         
         // copy attributes
-        for(Entry<QName, Attribute> entry: attributes.entrySet())
+        for(Entry<HibQName, Attribute> entry: attributes.entrySet())
             item.addAttribute(entry.getValue().copy());
         
         // copy stamps

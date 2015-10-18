@@ -45,9 +45,10 @@ public interface FileItem extends ContentItem{
      * Set ContentItem's data using InputStream.  The provided InputStream
      * is not closed.
      * @param is data
+     * @param length
      * @throws IOException
      */
-    public void setContent(InputStream is) throws IOException;
+    public void setContent(InputStream is, final long length) throws IOException;
 
     public InputStream getContentInputStream();
 

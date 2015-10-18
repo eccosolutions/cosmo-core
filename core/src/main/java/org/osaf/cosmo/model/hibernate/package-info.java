@@ -20,25 +20,9 @@
  */
 @TypeDefs({
     @TypeDef(
-        name="bytearray_blob",
-        typeClass = org.osaf.cosmo.hibernate.BlobByteArrayType.class
-    ),
-    
-    @TypeDef(
-            name="bufferedcontent_blob",
-            typeClass = org.osaf.cosmo.hibernate.BufferedContentBlob.class
-        ),
-
-    @TypeDef(
-            name="calendar_clob",
+            name = "calendar_clob",
             typeClass = org.osaf.cosmo.hibernate.CalendarClobType.class
     ),
-
-    @TypeDef(
-            name="xml_clob",
-            typeClass = org.osaf.cosmo.hibernate.XmlClobType.class
-    ),
-    
     @TypeDef(
             name="composite_calendar",
             typeClass = org.osaf.cosmo.hibernate.CalendarType.class

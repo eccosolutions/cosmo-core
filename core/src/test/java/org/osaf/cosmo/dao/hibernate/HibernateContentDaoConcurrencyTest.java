@@ -39,6 +39,7 @@ import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 import org.osaf.cosmo.model.hibernate.HibQName;
 import org.osaf.cosmo.model.hibernate.HibStringAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -61,19 +62,15 @@ import edu.emory.mathcs.backport.java.util.Collections;
  */
 public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTestCase {
 
-    protected UserDaoImpl userDao = null;
-    protected ContentDaoImpl contentDao = null;
-    protected DataSource jdbcDataSource = null;
+    @Autowired protected UserDaoImpl userDao = null;
+    @Autowired protected ContentDaoImpl contentDao = null;
+    @Autowired protected DataSource jdbcDataSource = null;
+    @Autowired PlatformTransactionManager transactionManager;
     
     public HibernateContentDaoConcurrencyTest() {
         super();
     }
     
-    @Override
-    protected void onSetUp() throws Exception {
-        super.onSetUp();
-    }
-
     public void testConcurrentContentDaoUpdateContent() throws Exception {
         
         TransactionThread txThread1 = new TransactionThread(transactionManager,sessionFactory);

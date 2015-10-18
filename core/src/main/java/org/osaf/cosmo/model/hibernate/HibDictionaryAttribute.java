@@ -18,14 +18,14 @@ package org.osaf.cosmo.model.hibernate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.MapKeyColumn;
 
-import org.hibernate.annotations.CollectionOfElements;
-import org.hibernate.annotations.MapKey;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.DictionaryAttribute;
 import org.osaf.cosmo.model.ModelValidationException;
@@ -45,12 +45,12 @@ public class HibDictionaryAttribute extends HibAttribute
      */
     private static final long serialVersionUID = 3713980765847199175L;
     
-    @CollectionOfElements
-    @JoinTable(
+    @ElementCollection
+    @CollectionTable(
             name="cosmo_dictionary_values",
             joinColumns = @JoinColumn(name="attributeid")
     )
-    @MapKey(columns=@Column(name="keyname", length=255))
+    @MapKeyColumn(name="keyname", length=255)
     @Column(name="stringvalue", length=2048)
     private Map<String, String> value = new HashMap<String,String>(0);
 

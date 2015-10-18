@@ -18,13 +18,13 @@ package org.osaf.cosmo.model.hibernate;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 
-import org.hibernate.annotations.CollectionOfElements;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.ModelValidationException;
 import org.osaf.cosmo.model.MultiValueStringAttribute;
@@ -44,8 +44,8 @@ public class HibMultiValueStringAttribute extends HibAttribute
      */
     private static final long serialVersionUID = 8518583717902318228L;
     
-    @CollectionOfElements
-    @JoinTable(
+    @ElementCollection
+    @CollectionTable(
             name="cosmo_multistring_values",
             joinColumns = @JoinColumn(name="attributeid")
     )

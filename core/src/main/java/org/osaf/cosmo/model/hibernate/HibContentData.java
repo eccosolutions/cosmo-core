@@ -15,18 +15,23 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.hibernate.annotations.Type;
-import org.osaf.cosmo.io.BufferedContent;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.aspectj.AnnotationBeanConfigurerAspect;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Lob;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 /**
@@ -36,6 +41,7 @@ import org.osaf.cosmo.io.BufferedContent;
  */
 @Entity
 @Table(name="cosmo_content_data")
+@Configurable
 public class HibContentData extends BaseModelObject {
 
     /**
@@ -44,8 +50,19 @@ public class HibContentData extends BaseModelObject {
     private static final long serialVersionUID = -5014854905531456753L;
     
     @Column(name = "content", length=102400000)
-    @Type(type="bufferedcontent_blob")
-    private BufferedContent content = null;
+    @Lob
+    private Blob content = null;
+
+    @Transient
+    @PersistenceUnit
+    EntityManagerFactory entityManagerFactory;
+
+    { readResolve(); }
+
+    public Object readResolve() {
+        AnnotationBeanConfigurerAspect.aspectOf().configureBean(this);
+        return this;
+    }
    
     /**
      */
@@ -63,8 +80,12 @@ public class HibContentData extends BaseModelObject {
     public InputStream getContentInputStream() {
         if(content==null)
             return null;
-        
-        return content.getInputStream();
+
+        try {
+            return content.getBinaryStream();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -73,17 +94,20 @@ public class HibContentData extends BaseModelObject {
      * @param is content data
      * @throws IOException
      */
-    public void setContentInputStream(InputStream is) throws IOException {
-        content = new BufferedContent(is);
+    public void setContentInputStream(InputStream is, long length) throws IOException {
+        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+        content = sessionFactory.getCurrentSession().getLobHelper().createBlob(is, length);
     }
     
     /**
      * @return the size of the data read, or -1 for no data present
      */
     public long getSize() {
-        if(content != null)
-            return content.getLength();
-        else
-            return -1;
+        try {
+            if(content != null) return content.length();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     } 
 }

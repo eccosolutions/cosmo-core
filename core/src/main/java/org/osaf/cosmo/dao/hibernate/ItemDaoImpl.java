@@ -33,8 +33,6 @@ import org.hibernate.Query;
 import org.hibernate.UnresolvableObjectException;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.validator.InvalidStateException;
-import org.hibernate.validator.InvalidValue;
 import org.osaf.cosmo.dao.ItemDao;
 import org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor;
 import org.osaf.cosmo.model.CollectionItem;
@@ -56,7 +54,9 @@ import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibHomeCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  * Implementation of ItemDao using Hibernate persistent objects.
@@ -213,9 +213,9 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
-            throw ise;
+        } catch (ConstraintViolationException cve) {
+            logConstraintViolationException(cve);
+            throw cve;
         }
     }
     
@@ -292,9 +292,9 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
-            throw ise;
+        } catch (ConstraintViolationException cve) {
+            logConstraintViolationException(cve);
+            throw cve;
         }
     }
 
@@ -378,9 +378,9 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
-            throw ise;
+        } catch (ConstraintViolationException cve) {
+            logConstraintViolationException(cve);
+            throw cve;
         }
     }
     
@@ -435,9 +435,9 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
-            throw ise;
+        } catch (ConstraintViolationException cve) {
+            logConstraintViolationException(cve);
+            throw cve;
         }
     }
 
@@ -528,7 +528,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
     /**
      * Set the unique key generator for new tickets
      *
-     * @param idGenerator
+     * @param ticketKeyGenerator
      */
     public void setTicketKeyGenerator(IdentifierGenerator ticketKeyGenerator) {
         this.ticketKeyGenerator = ticketKeyGenerator;
@@ -650,7 +650,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
     /**
      * Verifies that name is unique in collection, meaning no item exists
      * in collection with the same item name.
-     * @param name item name to check
+     * @param item item to check
      * @param collection collection to check against
      * @throws DuplicateItemNameException if item with same name exists
      *         in collection
@@ -793,13 +793,14 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         getSession().lock(item, LockMode.NONE);
     }
     
-    protected void logInvalidStateException(InvalidStateException ise) {
+    protected void logConstraintViolationException(ConstraintViolationException ise) {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {
             log.debug(ise.getLocalizedMessage());
-            for (InvalidValue iv : ise.getInvalidValues())
-                log.debug("property name: " + iv.getPropertyName() + " value: "
-                        + iv.getValue());
+
+            for (ConstraintViolation iv : ise.getConstraintViolations())
+                log.debug("property name: " + iv.getPropertyPath() + " value: "
+                        + iv.getInvalidValue());
         }
     }
     

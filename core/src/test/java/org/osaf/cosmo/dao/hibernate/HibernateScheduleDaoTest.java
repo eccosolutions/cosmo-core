@@ -20,24 +20,24 @@ import junit.framework.Assert;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibPreference;
 import org.osaf.cosmo.model.hibernate.HibUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Test UserPreferencesScheduleDao
  */
+@ContextConfiguration({
+                "classpath:applicationContext-test-sessionFactory.xml",
+                "classpath:applicationContext.xml",
+                "classpath:applicationContext-scheduler.xml",
+                "classpath:applicationContext-test.xml",
+            })
 public class HibernateScheduleDaoTest extends AbstractHibernateDaoTestCase {
     
+    @Autowired
     protected UserPreferencesScheduleDao scheduleDao = null;
+    @Autowired
     protected UserDaoImpl userDao = null;
-    
-    @Override
-    protected String[] getConfigLocations() {
-        return new String[] {
-                "applicationContext-test-sessionFactory.xml",
-                "applicationContext.xml",
-                "applicationContext-scheduler.xml",
-                "applicationContext-test.xml",
-            };
-    }
     
     public HibernateScheduleDaoTest() {
         super();

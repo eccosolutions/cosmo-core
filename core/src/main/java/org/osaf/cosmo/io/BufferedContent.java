@@ -33,6 +33,9 @@ import org.apache.commons.logging.LogFactory;
  * of the content.  Smaller sizes will be buffered into memory
  * and larger sizes will be written to a temporary file.  The size
  * buffered into memory is configurable.
+ * <p>
+ *     This class is no longer used for persistence, as we use native java.sql.Blob types instead.
+ * </p>
  */
 public class BufferedContent {
    

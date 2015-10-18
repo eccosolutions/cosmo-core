@@ -21,8 +21,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
-import org.springframework.orm.hibernate3.SessionHolder;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
@@ -38,12 +38,12 @@ public class HibernateSessionFilter implements Filter {
 
     public void doFilter(JobExecutionContext context, FilterChain chain)
             throws JobExecutionException {
-
+        boolean opened = false;
         try {
-            bindSession();
+            opened = bindSession();
             chain.doFilter(context);
         } finally {
-            releaseSession();
+            if (opened) releaseSession();
         }
     }
 
@@ -55,20 +55,22 @@ public class HibernateSessionFilter implements Filter {
         log.debug("unbinding session to thread");
 
         // Unbind session from TransactionManager and close
-        SessionHolder holder = (SessionHolder) TransactionSynchronizationManager
-                .getResource(sessionFactory);
-        Session s = holder.getSession();
-        TransactionSynchronizationManager.unbindResource(sessionFactory);
-        SessionFactoryUtils.closeSession(s);
+        SessionHolder sessionHolder =
+                (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
+        SessionFactoryUtils.closeSession(sessionHolder.getSession());
     }
 
-    private void bindSession() {
+    private boolean bindSession() {
         log.debug("binding session to thread");
 
         // Get a reference to the Session and bind it to the TransactionManager
-        Session session = SessionFactoryUtils.getSession(sessionFactory, true);
+        if (TransactionSynchronizationManager.hasResource(sessionFactory)) {
+            return false;
+        }
+        Session session = sessionFactory.openSession();
         TransactionSynchronizationManager.bindResource(sessionFactory,
                 new SessionHolder(session));
+        return true;
     }
 
 }

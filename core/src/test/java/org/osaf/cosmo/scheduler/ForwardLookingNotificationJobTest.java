@@ -15,10 +15,6 @@
  */
 package org.osaf.cosmo.scheduler;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import net.fortuna.ical4j.model.DateTime;
@@ -26,7 +22,6 @@ import net.fortuna.ical4j.model.Dur;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
-
 import org.apache.commons.id.random.SessionIdGenerator;
 import org.osaf.cosmo.TestHelper;
 import org.osaf.cosmo.dao.mock.MockCalendarDao;
@@ -45,8 +40,14 @@ import org.osaf.cosmo.service.impl.StandardUserService;
 import org.osaf.cosmo.service.lock.SingleVMLockManager;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
-import org.quartz.SimpleTrigger;
+import org.quartz.impl.JobDetailImpl;
+import org.quartz.impl.JobExecutionContextImpl;
+import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.quartz.spi.TriggerFiredBundle;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Test ForwardLookingNotificationJob
@@ -92,15 +93,13 @@ public class ForwardLookingNotificationJobTest extends TestCase {
     public void testGenerateReport() throws Exception {
         TimeZone tz = TIMEZONE_REGISTRY.getTimeZone("America/Chicago");
         
-        JobDetail jobDetail = new JobDetail();
-        jobDetail.setName("1");
-        jobDetail.setGroup("user1");
-        
+        JobDetail jobDetail = new JobDetailImpl("1", "user1", Job.class);
+
         Date fireTime = new DateTime("20080101T100000", tz);
         
-        TriggerFiredBundle tfb = new TriggerFiredBundle(jobDetail, new SimpleTrigger(), null, false, fireTime, null, null, null);
+        TriggerFiredBundle tfb = new TriggerFiredBundle(jobDetail, new SimpleTriggerImpl(), null, false, fireTime, null, null, null);
         
-        JobExecutionContext context = new JobExecutionContext(null, tfb, null);
+        JobExecutionContext context = new JobExecutionContextImpl(null, tfb, null);
         
         ForwardLookingNotificationJob job = new ForwardLookingNotificationJob();
         job.setUsername("user1");

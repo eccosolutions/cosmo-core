@@ -21,10 +21,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.validation.Constraint;
 
-import org.hibernate.validator.ValidatorClass;
-
-@ValidatorClass(FreeBusyValidator.class)
+@Constraint(validatedBy = FreeBusyValidator.class)
 @Target(METHOD) 
 @Retention(RUNTIME)
 @Documented

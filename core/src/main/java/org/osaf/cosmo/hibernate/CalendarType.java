@@ -25,10 +25,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.cfg.Environment;
-import org.hibernate.engine.SessionImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.TimeZoneType;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
 
@@ -74,7 +74,7 @@ public class CalendarType implements CompositeUserType {
     }
 
     public Type[] getPropertyTypes() {
-        return new Type[] {Hibernate.CALENDAR, Hibernate.TIMEZONE};
+        return new Type[] {org.hibernate.type.CalendarType.INSTANCE, TimeZoneType.INSTANCE};
     }
 
     public Object getPropertyValue(Object component, int property)
@@ -99,7 +99,7 @@ public class CalendarType implements CompositeUserType {
             SessionImplementor session, Object owner) throws HibernateException,
             SQLException {
         
-        TimeZone tz = Hibernate.TIMEZONE.nullSafeGet(rs, names[1]);
+        TimeZone tz = TimeZoneType.INSTANCE.nullSafeGet(rs, names[1], session);
         if(tz==null)
             tz = TimeZone.getDefault();
         Calendar cal = new GregorianCalendar(tz);
@@ -126,11 +126,11 @@ public class CalendarType implements CompositeUserType {
 
     	// for hibernate 36 we simply passed the sessionImplementor back in as the last argument (except the last - since the object is typed)
         if(obj==null) {
-            Hibernate.CALENDAR.nullSafeSet(st, obj, index, session);
-            Hibernate.TIMEZONE.nullSafeSet(st, obj, index+1, session);
+            org.hibernate.type.CalendarType.INSTANCE.nullSafeSet(st, null, index, session);
+            TimeZoneType.INSTANCE.nullSafeSet(st, null, index+1, session);
         } else {
-            Hibernate.CALENDAR.nullSafeSet(st, obj, index, session);
-            Hibernate.TIMEZONE.nullSafeSet(st, ((Calendar) obj).getTimeZone(), index+1);
+            org.hibernate.type.CalendarType.INSTANCE.nullSafeSet(st, obj, index, session);
+            TimeZoneType.INSTANCE.nullSafeSet(st, ((Calendar) obj).getTimeZone(), index+1, session);
         }
     }
 

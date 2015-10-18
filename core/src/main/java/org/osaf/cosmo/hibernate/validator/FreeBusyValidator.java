@@ -26,18 +26,21 @@ import net.fortuna.ical4j.model.ValidationException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Validator;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * Check if a Calendar object contains a valid VFREEBUSY
  */
-public class FreeBusyValidator implements Validator<FreeBusy>, Serializable {
+public class FreeBusyValidator implements ConstraintValidator<FreeBusy, Object>, Serializable {
 
     private static final Log log = LogFactory.getLog(FreeBusyValidator.class);
-    
-    public boolean isValid(Object value) {
-        
+
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+
         if(value==null)
             return true;
         

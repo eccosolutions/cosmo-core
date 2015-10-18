@@ -37,6 +37,7 @@ import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Standard implementation of {@link UserService}.
@@ -416,6 +417,7 @@ public class StandardUserService extends BaseService implements UserService {
         this.userDao = userDao;
     }
 
+    @Transactional
     public PasswordRecovery getPasswordRecovery(String key) {
          PasswordRecovery passwordRecovery = userDao.getPasswordRecovery(key);
          

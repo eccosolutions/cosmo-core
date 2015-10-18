@@ -32,8 +32,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.validator.InvalidStateException;
-import org.hibernate.validator.InvalidValue;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
@@ -44,7 +42,9 @@ import org.osaf.cosmo.model.hibernate.HibUser;
 import org.osaf.cosmo.util.ArrayPagedList;
 import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  * Implemtation of UserDao using Hibernate persistence objects.
@@ -81,9 +81,9 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
-            throw ise;
+        } catch (ConstraintViolationException cve) {
+            logInvalidStateException(cve);
+            throw cve;
         }
 
     }
@@ -235,7 +235,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
+        } catch (ConstraintViolationException ise) {
             logInvalidStateException(ise);
             throw ise;
         }
@@ -250,7 +250,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
             throw convertHibernateAccessException(e);
         } 
     }
-    
+
     public PasswordRecovery getPasswordRecovery(String key){
         try {
             Query hibQuery = getSession().getNamedQuery("passwordRecovery.byKey")
@@ -423,13 +423,14 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         return (BaseModelObject) obj;
     }
     
-    protected void logInvalidStateException(InvalidStateException ise) {
+    protected void logInvalidStateException(javax.validation.ConstraintViolationException cve) {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {
-            log.debug(ise.getLocalizedMessage());
-            for (InvalidValue iv : ise.getInvalidValues())
-                log.debug("property name: " + iv.getPropertyName() + " value: "
-                        + iv.getValue());
+            log.debug(cve.getLocalizedMessage());
+            for (ConstraintViolation iv : cve.getConstraintViolations()) {
+                log.debug("property name: " + iv.getPropertyPath() + " value: "
+                        + iv.getInvalidValue());
+            }
         }
     }
 }

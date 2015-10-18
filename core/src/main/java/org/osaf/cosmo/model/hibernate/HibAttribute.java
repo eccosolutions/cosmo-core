@@ -67,7 +67,7 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
     		@AttributeOverride(name="namespace", column = @Column(name="namespace", nullable = false, length=128) ),
             @AttributeOverride(name="localName", column = @Column(name="localname", nullable = false, length=128) )
     } )
-    private QName qname;
+    private HibQName qname;
     
     @ManyToOne(targetEntity=HibItem.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "itemid", nullable = false)
@@ -81,7 +81,7 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getQName()
      */
-    public QName getQName() {
+    public HibQName getQName() {
         return qname;
     }
     
@@ -89,7 +89,7 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
      * @see org.osaf.cosmo.model.Attribute#setQName(org.osaf.cosmo.model.QName)
      */
     public void setQName(QName qname) {
-        this.qname = qname;
+        this.qname = (HibQName) qname;
     }
         
     /* (non-Javadoc)

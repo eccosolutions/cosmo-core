@@ -46,8 +46,8 @@ public class FilterChainImpl implements FilterChain {
             try {
                 job.executeJob(context);
             } catch (RuntimeException e) {
-                scheduler.handleError(context.getJobDetail().getGroup(),
-                        context.getJobDetail().getName(), e);
+                scheduler.handleError(context.getJobDetail().getKey().getGroup(),
+                        context.getJobDetail().getKey().getName(), e);
             }
         }
     }

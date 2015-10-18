@@ -16,6 +16,7 @@
 package org.osaf.cosmo.model.hibernate;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -39,7 +40,7 @@ public class HibXmlAttribute extends HibAttribute
     private static final Log log = LogFactory.getLog(XmlAttribute.class);
 
     @Column(name = "textvalue")
-    @Type(type="xml_clob")
+    @Convert(converter = JpaConverters.XmlConverter.class)
     private Element value;
 
     public HibXmlAttribute() {

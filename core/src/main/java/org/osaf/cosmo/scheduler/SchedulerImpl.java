@@ -15,18 +15,24 @@
  */
 package org.osaf.cosmo.scheduler;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.service.ScheduleService;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.SchedulerException;
-import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
+import org.quartz.impl.matchers.GroupMatcher;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * Cosmo Scheduler implementation based on Quartz job scheduling engine.
@@ -75,10 +81,16 @@ public class SchedulerImpl implements Scheduler {
             log.debug("scheduler initializing");
         
         // schedule job that will refresh schedules
-        JobDetail jt = new JobDetail("scheduler", "refresh",
-                ScheduleRefreshJob.class);
-        Trigger trigger = new SimpleTrigger("refresh", "scheduler",
-                SimpleTrigger.REPEAT_INDEFINITELY, refreshInterval);
+        JobDetail jt = newJob(ScheduleRefreshJob.class)
+                .withIdentity("scheduler", "refresh")
+                .build();
+
+        Trigger trigger = newTrigger()
+                .withIdentity("refresh", "scheduler")
+                .withSchedule(simpleSchedule()
+                        .withIntervalInMilliseconds(refreshInterval)
+                        .repeatForever())
+                .build();
 
         try {
             scheduler.start();
@@ -140,7 +152,7 @@ public class SchedulerImpl implements Scheduler {
         int num = 0;
         try {
             for (String group : scheduler.getJobGroupNames())
-                num += scheduler.getJobNames(group).length;
+                num += scheduler.getJobKeys(GroupMatcher.<JobKey>groupEquals(group)).size();
 
             return num;
         } catch (SchedulerException e) {
@@ -159,9 +171,13 @@ public class SchedulerImpl implements Scheduler {
     public void scheduleSingleRefresh() {
         // schedule job that will refresh schedules
         long currTime = System.currentTimeMillis();
-        JobDetail jt = new JobDetail("scheduler", "refresh" + currTime,
-                ScheduleRefreshJob.class);
-        Trigger trigger = new SimpleTrigger("refresh" + currTime, "scheduler");
+        JobDetail jt = newJob(ScheduleRefreshJob.class)
+                .withIdentity("scheduler", "refresh" + currTime)
+                .build();
+
+        Trigger trigger = newTrigger()
+                .withIdentity("refresh" + currTime, "scheduler")
+                .build();
 
         try {
             scheduler.start();
@@ -230,22 +246,22 @@ public class SchedulerImpl implements Scheduler {
     private void removeAllJobsForUser(String username) {
 
         // jobs are organized by group (username) and jobname
-        String[] jobNames = null;
+        Collection<JobKey> jobKeys = null;
 
         if (log.isDebugEnabled())
             log.debug("unscheduling jobs for user: " + username);
 
         try {
-            jobNames = scheduler.getJobNames(username);
+            jobKeys = scheduler.getJobKeys(GroupMatcher.<JobKey>groupEquals(username));
         } catch (SchedulerException e) {
             // log and continue
             log.error("scheduler error", e);
             return;
         }
 
-        for (String jobName : jobNames) {
+        for (JobKey jobKey : jobKeys) {
             try {
-                scheduler.deleteJob(jobName, username);
+                scheduler.deleteJob(jobKey);
             } catch (SchedulerException e) {
                 log.error("scheduler error: " + e.getMessage());
             }
@@ -278,7 +294,7 @@ public class SchedulerImpl implements Scheduler {
         
         // check if user has reached max number of schedules
         if (maxJobsPerUser > 0
-                && scheduler.getJobNames(user.getUsername()).length >= maxJobsPerUser) {
+                && scheduler.getJobKeys(GroupMatcher.<JobKey>groupEquals(user.getUsername())).size() >= maxJobsPerUser) {
             log.info("user " + user.getUsername()
                     + " has reached the maximum allowed of schedules, ignoring schedule");
             return;

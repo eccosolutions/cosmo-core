@@ -17,8 +17,8 @@ package org.osaf.cosmo.dao.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
-import org.springframework.orm.hibernate3.SessionHolder;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -39,7 +39,7 @@ public class HibernateTransactionHelper {
     }
     
     public TransactionStatus startNewTransaction() {
-        Session session = SessionFactoryUtils.getSession(sessionFactory, true);
+        Session session = sessionFactory.openSession();
         TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
         TransactionStatus transactionStatus = txManager.getTransaction(new DefaultTransactionDefinition());
         return transactionStatus;
@@ -51,10 +51,9 @@ public class HibernateTransactionHelper {
         else
             txManager.commit(ts);
         
-        SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
-        Session s = holder.getSession(); 
-        TransactionSynchronizationManager.unbindResource(sessionFactory);
-        SessionFactoryUtils.releaseSession(s, sessionFactory);
+        SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
+        Session s = holder.getSession();
+        SessionFactoryUtils.closeSession(s);
     }
     
 }

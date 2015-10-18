@@ -93,7 +93,7 @@ public class HibFileItem extends HibContentItem implements FileItem {
             throw new DataSizeException("Item content too large");
         
         try {
-            setContent(new ByteArrayInputStream(content));
+            setContent(new ByteArrayInputStream(content), content.length);
         } catch (IOException e) {
             throw new RuntimeException("Error setting content");
         }
@@ -109,19 +109,19 @@ public class HibFileItem extends HibContentItem implements FileItem {
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.FileItem#setContent(java.io.InputStream)
      */
-    public void setContent(InputStream is) throws IOException {
+    public void setContent(InputStream is, final long length) throws IOException {
         if(contentData==null) {
             contentData = new HibContentData(); 
         }
         
-        contentData.setContentInputStream(is);
-        
         // Verify size is not greater than MAX.
         // TODO: do this checking in ContentData.setContentInputStream()
-        if (contentData.getSize() > MAX_CONTENT_SIZE)
+        if (length > MAX_CONTENT_SIZE)
             throw new DataSizeException("Item content too large");
         
-        setContentLength(contentData.getSize());
+        contentData.setContentInputStream(is, length);
+
+        setContentLength(length);
     }
 
     /* (non-Javadoc)
@@ -211,7 +211,7 @@ public class HibFileItem extends HibContentItem implements FileItem {
         try {
             InputStream contentStream = getContentInputStream();
             if(contentStream!=null) {
-                contentItem.setContent(contentStream);
+                contentItem.setContent(contentStream, getContentLength());
                 contentStream.close();
             }
             contentItem.setContentEncoding(getContentEncoding());

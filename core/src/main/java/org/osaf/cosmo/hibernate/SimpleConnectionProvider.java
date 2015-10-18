@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
-import org.hibernate.connection.ConnectionProvider;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 
 /**
  * Simple ConnectionProvider implementation that relies on a 
@@ -56,4 +56,16 @@ public class SimpleConnectionProvider implements ConnectionProvider {
         return false;
     }
 
+    @Override
+    public boolean isUnwrappableAs(Class unwrapType) {
+        return unwrapType == SimpleConnectionProvider.class;
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> unwrapType) {
+        if (isUnwrappableAs(unwrapType)) {
+            return unwrapType.cast(this);
+        }
+        return null;
+    }
 }

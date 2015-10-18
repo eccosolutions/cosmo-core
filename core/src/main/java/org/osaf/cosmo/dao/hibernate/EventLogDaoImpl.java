@@ -15,10 +15,6 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +35,10 @@ import org.osaf.cosmo.model.hibernate.HibEventLogEntry;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibTicket;
 import org.osaf.cosmo.model.hibernate.HibUser;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Implementation of EventLogDao using Hibernate persistence objects.

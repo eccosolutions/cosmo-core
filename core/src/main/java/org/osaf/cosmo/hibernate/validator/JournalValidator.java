@@ -26,18 +26,21 @@ import net.fortuna.ical4j.model.ValidationException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Validator;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * Check if a Calendar object contains a valid VJOURNAL
  */
-public class JournalValidator implements Validator<Journal>, Serializable {
+public class JournalValidator implements ConstraintValidator<Journal, Object>, Serializable {
 
     private static final Log log = LogFactory.getLog(JournalValidator.class);
-    
-    public boolean isValid(Object value) {
-        
+
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+
         if(value==null)
             return true;
         

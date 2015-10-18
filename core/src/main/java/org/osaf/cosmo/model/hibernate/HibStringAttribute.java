@@ -19,7 +19,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import org.hibernate.validator.Length;
+import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.DataSizeException;
 import org.osaf.cosmo.model.Item;

@@ -21,8 +21,7 @@ import org.hibernate.HibernateException;
 import org.osaf.cosmo.dao.ServerPropertyDao;
 import org.osaf.cosmo.model.ServerProperty;
 import org.osaf.cosmo.model.hibernate.HibServerProperty;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 /**
  * Implementation of ServerPropertyDao using Hibernate persistent objects.

@@ -123,13 +123,13 @@ public class ForwardLookingNotificationJob extends MultipleCollectionJob {
                 log.info("user " + getUsername()
                         + " not authorized for collection " + colUid
                         + ", removing from schedule "
-                        + context.getJobDetail().getName());
+                        + context.getJobDetail().getKey().getName());
                 it.remove();
             } catch (ItemNotFoundException infe) {
                 // collection not found, remove collection for next execution
                 log.info("collection " + colUid
                         + " not found removing from schedule " + getUsername()
-                        + ":" + context.getJobDetail().getName());
+                        + ":" + context.getJobDetail().getKey().getName());
                 it.remove();
             }
         }

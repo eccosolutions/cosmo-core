@@ -22,8 +22,8 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
-import org.springframework.orm.hibernate3.SessionHolder;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
@@ -67,7 +67,7 @@ public class ThrowAwayHibernateSessionOnErrorInterceptor implements MethodInterc
             
             // Open new session and bind (this session should be closed and
             // unbound elsewhere, for example OpenSessionInViewFilter)
-            Session session = SessionFactoryUtils.getSession(sessionFactory, true);
+            Session session = sessionFactory.openSession();
             session.setFlushMode(FlushMode.MANUAL);
             TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
         }

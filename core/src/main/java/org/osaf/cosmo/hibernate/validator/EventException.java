@@ -22,10 +22,10 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.hibernate.validator.ValidatorClass;
+import javax.validation.Constraint;
 
-@ValidatorClass(EventExceptionValidator.class)
-@Target(METHOD) 
+@Constraint(validatedBy = EventExceptionValidator.class)
+@Target(METHOD)
 @Retention(RUNTIME)
 @Documented
 public @interface EventException {

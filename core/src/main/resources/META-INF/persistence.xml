@@ -45,5 +45,6 @@
         <class>org.osaf.cosmo.model.hibernate.HibTombstone</class>
         <class>org.osaf.cosmo.model.hibernate.HibUser</class>
         <class>org.osaf.cosmo.model.hibernate.HibXmlAttribute</class>
+        <class>org.osaf.cosmo.model.hibernate.JpaConverters</class>
     </persistence-unit>
 </persistence>

@@ -127,7 +127,7 @@ public class DavFile extends DavContentBase {
         try {
             InputStream content = inputContext.getInputStream();
             if (content != null)
-                file.setContent(content);
+                file.setContent(content, inputContext.getContentLength());
 
             if (inputContext.getContentLanguage() != null)
                 file.setContentLanguage(inputContext.getContentLanguage());

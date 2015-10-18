@@ -20,6 +20,7 @@ import java.util.Set;
 import junit.framework.Assert;
 import net.fortuna.ical4j.model.DateTime;
 
+import org.junit.Before;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.dao.hibernate.AbstractHibernateDaoTestCase;
@@ -38,6 +39,8 @@ import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 import org.osaf.cosmo.service.triage.TriageStatusQueryContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.transaction.BeforeTransaction;
 
 /**
  * Test StandardTriageStatusQueryProcessor using hibernate
@@ -45,7 +48,9 @@ import org.osaf.cosmo.service.triage.TriageStatusQueryContext;
  */
 public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDaoTestCase {
 
+    @Autowired
     protected ContentDaoImpl contentDao = null;
+    @Autowired
     protected UserDaoImpl userDao = null;
     protected StandardTriageStatusQueryProcessor queryProcessor = null;
     
@@ -56,11 +61,8 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         super();
     }
     
-    @Override
+    @BeforeTransaction
     protected void onSetUpInTransaction() throws Exception {
-        // TODO Auto-generated method stub
-        super.onSetUpInTransaction();
-        
         queryProcessor = new StandardTriageStatusQueryProcessor();
         queryProcessor.setContentDao(contentDao);
         

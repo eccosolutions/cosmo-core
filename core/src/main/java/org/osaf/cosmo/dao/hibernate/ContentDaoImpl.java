@@ -28,7 +28,6 @@ import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.validator.InvalidStateException;
 import org.osaf.cosmo.dao.ContentDao;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.ContentItem;
@@ -41,6 +40,8 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
+
+import javax.validation.ConstraintViolationException;
 
 /**
  * Implementation of ContentDao using hibernate persistence objects
@@ -86,9 +87,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
-            throw ise;
+        } catch (ConstraintViolationException cve) {
+            logConstraintViolationException(cve);
+            throw cve;
         }
     }
     
@@ -173,8 +174,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
+        } catch (ConstraintViolationException ise) {
+            logConstraintViolationException(ise);
             throw ise;
         }
     }
@@ -196,8 +197,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
+        } catch (ConstraintViolationException ise) {
+            logConstraintViolationException(ise);
             throw ise;
         }
     }
@@ -215,8 +216,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
+        } catch (ConstraintViolationException ise) {
+            logConstraintViolationException(ise);
             throw ise;
         }
     }
@@ -254,8 +255,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
+        } catch (ConstraintViolationException ise) {
+            logConstraintViolationException(ise);
             throw ise;
         }
     }
@@ -273,8 +274,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
+        } catch (ConstraintViolationException ise) {
+            logConstraintViolationException(ise);
             throw ise;
         }
     }

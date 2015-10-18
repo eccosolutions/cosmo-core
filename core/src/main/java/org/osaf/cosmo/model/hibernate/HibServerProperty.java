@@ -18,9 +18,9 @@ package org.osaf.cosmo.model.hibernate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Index;
-import org.hibernate.validator.NotNull;
 import org.osaf.cosmo.model.ServerProperty;
 
 /**

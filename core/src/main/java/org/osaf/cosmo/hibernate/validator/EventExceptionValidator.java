@@ -28,7 +28,9 @@ import net.fortuna.ical4j.model.property.RecurrenceId;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Validator;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 
 /**
@@ -36,12 +38,13 @@ import org.osaf.cosmo.calendar.util.CalendarUtils;
  * @author randy
  *
  */
-public class EventExceptionValidator implements Validator<EventException>, Serializable {
+public class EventExceptionValidator implements ConstraintValidator<EventException, Object>, Serializable {
 
     private static final Log log = LogFactory.getLog(EventExceptionValidator.class);
-    
-    public boolean isValid(Object value) {
-        
+
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+
         Calendar calendar = null;
         try {
             calendar = (Calendar) value;

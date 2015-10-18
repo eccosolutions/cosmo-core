@@ -22,17 +22,19 @@ import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.component.VTimeZone;
 
-import org.hibernate.validator.Validator;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * Check if a Calendar object contains a valid VTIMEZONE
  * @author randy
  *
  */
-public class TimezoneValidator implements Validator<Timezone>, Serializable {
+public class TimezoneValidator implements ConstraintValidator<Timezone, Object>, Serializable {
 
-    public boolean isValid(Object value) {
-        
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+
         if(value==null)
             return true;
         

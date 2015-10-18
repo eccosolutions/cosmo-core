@@ -15,14 +15,14 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.Item;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Default implementation for ItempPathTranslator. This implementation expects
@@ -32,10 +32,10 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 public class DefaultItemPathTranslator implements ItemPathTranslator {
 
     
-    private HibernateTemplate template = null;
+    private SessionFactory sessionFactory = null;
     
-    public DefaultItemPathTranslator(HibernateTemplate template) {
-        this.template = template;
+    public DefaultItemPathTranslator(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
     
     /*
@@ -44,25 +44,19 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
      * @see org.osaf.cosmo.dao.hibernate.ItemPathTranslator#findItemByPath(org.hibernate.Session,
      *      java.lang.String)
      */
+    @Transactional
     public Item findItemByPath(final String path) {
-        
-        return (Item) template.execute(new HibernateCallback() {
-            public Object doInHibernate(Session session){
-                return findItemByPath(session, path);
-            }
-        });
-        
+        final Session session = sessionFactory.getCurrentSession();
+        return findItemByPath(session, path);
     }
     
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.hibernate.ItemPathTranslator#findItemByPath(java.lang.String, org.osaf.cosmo.model.CollectionItem)
      */
+    @Transactional
     public Item findItemByPath(final String path, final CollectionItem root) {
-        return (Item) template.execute(new HibernateCallback() {
-            public Object doInHibernate(Session session){
-                return findItemByPath(session, path, root);
-            }
-        });
+        final Session session = sessionFactory.getCurrentSession();
+        return findItemByPath(session, path, root);
     }
 
     public Item findItemParent(String path) {

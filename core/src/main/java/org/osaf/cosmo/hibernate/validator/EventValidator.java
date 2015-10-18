@@ -27,20 +27,23 @@ import net.fortuna.ical4j.model.component.VEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Validator;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * Check if a Calendar object contains a valid VEvent
  * @author randy
  *
  */
-public class EventValidator implements Validator<Event>, Serializable {
+public class EventValidator implements ConstraintValidator<Event, Object>, Serializable {
 
     private static final Log log = LogFactory.getLog(EventValidator.class);
-    
-    public boolean isValid(Object value) {
-        
+
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+
         Calendar calendar = null;
         try {
             calendar = (Calendar) value;

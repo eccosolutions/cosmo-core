@@ -23,6 +23,7 @@ import junit.framework.Assert;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 
+import org.junit.Before;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CalendarCollectionStamp;
@@ -42,6 +43,8 @@ import org.osaf.cosmo.model.hibernate.HibCalendarCollectionStamp;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.transaction.BeforeTransaction;
 
 /**
  * Test findItems() api in ItemDao.
@@ -49,8 +52,10 @@ import org.osaf.cosmo.model.hibernate.HibNoteItem;
  */
 public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
 
+    @Autowired
     protected ContentDaoImpl contentDao = null;
 
+    @Autowired
     protected UserDaoImpl userDao = null;
     
     protected final String CALENDAR_UID_1 = "calendar1";
@@ -61,11 +66,8 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         super();
     }
     
-    @Override
+    @Before
     protected void onSetUpInTransaction() throws Exception {
-        // TODO Auto-generated method stub
-        super.onSetUpInTransaction();
-        
         CollectionItem calendar1 = generateCalendar("test1", "testuser");
         CollectionItem calendar2 = generateCalendar("test2", "testuser");
         calendar1.setUid(CALENDAR_UID_1);

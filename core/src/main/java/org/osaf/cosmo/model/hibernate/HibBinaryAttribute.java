@@ -23,6 +23,7 @@ import java.io.InputStream;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 import org.apache.commons.io.IOUtils;
 import org.hibernate.annotations.Type;
@@ -47,7 +48,7 @@ public class HibBinaryAttribute extends HibAttribute implements java.io.Serializ
     public static final long MAX_BINARY_ATTR_SIZE = 100 * 1024 * 1024;
     
     @Column(name = "binvalue", length=102400000)
-    @Type(type="bytearray_blob")
+    @Lob
     private byte[] value;
 
     /** default constructor */

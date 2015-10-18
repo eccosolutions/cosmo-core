@@ -23,6 +23,7 @@ import java.util.List;
 import junit.framework.Assert;
 import net.fortuna.ical4j.model.DateTime;
 
+import org.junit.Before;
 import org.osaf.cosmo.model.ItemChangeRecord;
 import org.osaf.cosmo.model.event.EventLogEntry;
 import org.osaf.cosmo.model.event.ItemAddedEntry;
@@ -33,12 +34,14 @@ import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibEventLogEntry;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 import org.osaf.cosmo.model.hibernate.HibUser;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Test EventLogDaoImpl
  */
 public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
 
+    @Autowired
     protected EventLogDaoImpl eventLogDao = null;
 
     public HibernateEventLogDaoTest() {
@@ -49,10 +52,8 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
     HibCollectionItem col1, col2;
     HibNoteItem note;
     
-    @Override
+    @Before
     protected void onSetUp() throws Exception {
-        super.onSetUp();
-        
         user = new HibUser();
         user.setUsername("test");
         setId(user, new Long(1));

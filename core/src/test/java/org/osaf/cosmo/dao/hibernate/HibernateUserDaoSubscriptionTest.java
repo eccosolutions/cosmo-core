@@ -15,10 +15,6 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
@@ -28,13 +24,19 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibCollectionSubscription;
 import org.osaf.cosmo.model.hibernate.HibTicket;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class HibernateUserDaoSubscriptionTest
     extends AbstractHibernateDaoTestCase {
-    private static final Log log =
-        LogFactory.getLog(HibernateUserDaoSubscriptionTest.class);
-    
+
+    @Autowired
     protected ContentDaoImpl contentDao = null;
+    @Autowired
     protected UserDaoImpl userDao = null;
     
     public HibernateUserDaoSubscriptionTest() {
@@ -59,7 +61,7 @@ public class HibernateUserDaoSubscriptionTest
         user = getUser(userDao, "subuser1");
         
         assertFalse("no subscriptions saved",
-                    user.getCollectionSubscriptions().isEmpty());
+                user.getCollectionSubscriptions().isEmpty());
 
         CollectionSubscription querySub = user
                 .getSubscription("sub1");

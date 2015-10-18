@@ -155,6 +155,8 @@
       <tx:method name="*"/>
     </tx:attributes>
   </tx:advice>
+
+    <tx:annotation-driven/>
   
   <!-- required for aspectj annotations support -->
   <aop:aspectj-autoproxy/>
@@ -222,14 +224,9 @@
  
   <!-- data access objects -->
 
-  <bean id="hibernateTemplate"
-        class="org.springframework.orm.hibernate3.HibernateTemplate">
-    <constructor-arg><ref bean="sessionFactory"/></constructor-arg>
-  </bean>
-
   <bean id="itemPathTranslator"
         class="org.osaf.cosmo.dao.hibernate.DefaultItemPathTranslator">
-    <constructor-arg><ref bean="hibernateTemplate"/></constructor-arg>
+    <constructor-arg><ref bean="sessionFactory"/></constructor-arg>
   </bean>
 
   <bean id="idGenerator"

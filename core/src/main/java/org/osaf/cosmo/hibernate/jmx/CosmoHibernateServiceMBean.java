@@ -16,13 +16,13 @@
 
 package org.osaf.cosmo.hibernate.jmx;
 
-import org.hibernate.jmx.StatisticsServiceMBean;
+import org.hibernate.stat.Statistics;
 
 /**
  * Extends the out-of-the box MBean for more hibernate related tasks
  * @author bobbyrullo
  */
-public interface CosmoHibernateServiceMBean extends StatisticsServiceMBean {
+public interface CosmoHibernateServiceMBean extends Statistics {
     
     /**
      * Evicts of all of the instances with the given entity name from the 
@@ -30,5 +30,5 @@ public interface CosmoHibernateServiceMBean extends StatisticsServiceMBean {
      * @see org.hibernate.SessionFactory#evictEntity(String entityName)
      * @param entityName
      */
-    public void evictEntity(String entityName);
+    void evictEntity(String entityName);
 }

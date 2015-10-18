@@ -23,7 +23,6 @@ import net.fortuna.ical4j.model.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.InvalidStateException;
 import org.junit.Assert;
 import org.osaf.cosmo.calendar.EntityConverter;
 import org.osaf.cosmo.dao.UserDao;
@@ -43,6 +42,8 @@ import org.osaf.cosmo.model.hibernate.HibMessageStamp;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 import org.osaf.cosmo.model.hibernate.HibQName;
 import org.osaf.cosmo.model.hibernate.HibStringAttribute;
+
+import javax.validation.ConstraintViolationException;
 
 public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCase {
 
@@ -220,8 +221,8 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
             contentDao.createContent(root, item);
             clearSession();
             Assert.fail("able to create invalid event!");
-        } catch (InvalidStateException e) {}
-        catch (IllegalStateException e) {}
+        } catch (ConstraintViolationException ignored) {}
+        catch (IllegalStateException ignored) {}
     }
     
     public void testRemoveStamp() throws Exception {
@@ -321,7 +322,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
             contentDao.updateCollection(root);
             clearSession();
             Assert.fail("able to save invalid timezone");
-        } catch (InvalidStateException ise) {
+        } catch (ConstraintViolationException ignored) {
             
         } 
     }
@@ -375,7 +376,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
             ContentItem newItem = contentDao.createContent(root, item);
             clearSession();
             Assert.fail("able to save invalid exception event");
-        } catch (InvalidStateException e) {
+        } catch (ConstraintViolationException ignored) {
         }
     }
 

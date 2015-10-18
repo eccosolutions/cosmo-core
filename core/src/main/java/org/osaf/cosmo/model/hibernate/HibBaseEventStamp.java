@@ -23,8 +23,10 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
+import javax.validation.constraints.NotNull;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Date;
@@ -60,7 +62,6 @@ import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Trigger;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.NotNull;
 import org.osaf.cosmo.calendar.ICalendarUtils;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
 import org.osaf.cosmo.model.BaseEventStamp;
@@ -82,14 +83,14 @@ public abstract class HibBaseEventStamp extends HibStamp
         TimeZoneRegistryFactory.getInstance().createRegistry();
     
     public static final String TIME_INFINITY = "Z-TIME-INFINITY";
-    
+
     protected static final String VALUE_MISSING = "MISSING";
-    
+
     @Column(table="cosmo_event_stamp", name = "icaldata", length=102400000, nullable = false)
     @Type(type="calendar_clob")
     @NotNull
     private Calendar eventCalendar = null;
-    
+
     @Embedded
     private HibEventTimeRangeIndex timeRangeIndex = null;
     

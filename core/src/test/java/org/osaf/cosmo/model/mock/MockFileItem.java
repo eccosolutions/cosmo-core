@@ -78,7 +78,7 @@ public class MockFileItem extends MockContentItem implements FileItem {
             throw new DataSizeException("Item content too large");
         
         try {
-            setContent(new ByteArrayInputStream(content));
+            setContent(new ByteArrayInputStream(content), content.length);
         } catch (IOException e) {
             throw new RuntimeException("Error setting content");
         }
@@ -94,7 +94,7 @@ public class MockFileItem extends MockContentItem implements FileItem {
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceFileItem#setContent(java.io.InputStream)
      */
-    public void setContent(InputStream is) throws IOException {
+    public void setContent(InputStream is, final long length) throws IOException {
         if(contentData==null) {
             contentData = new MockContentData(); 
         }
@@ -196,7 +196,7 @@ public class MockFileItem extends MockContentItem implements FileItem {
         try {
             InputStream contentStream = getContentInputStream();
             if(contentStream!=null) {
-                contentItem.setContent(contentStream);
+                contentItem.setContent(contentStream, getContentLength());
                 contentStream.close();
             }
             contentItem.setContentEncoding(getContentEncoding());

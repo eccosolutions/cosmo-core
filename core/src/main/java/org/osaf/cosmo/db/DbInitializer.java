@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaValidator;
 import org.osaf.cosmo.CosmoConstants;
 import org.osaf.cosmo.acegisecurity.ui.UIConstants;
@@ -35,7 +36,7 @@ import org.osaf.cosmo.model.ServerProperty;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.service.ServerPropertyService;
 import org.osaf.cosmo.service.UserService;
-import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
 /**
  * A helper class that initializes the Cosmo database schema and populates the
@@ -68,7 +69,8 @@ public class DbInitializer {
         // Create DB schema if not present
         if (!isSchemaInitialized()) {
             log.info("Creating database");
-            localSessionFactory.createDatabaseSchema();
+            SchemaExport schemaExport = new SchemaExport(localSessionFactory.getConfiguration());
+            schemaExport.create(false, true);
             addServerProperties();
             log.info("Initializing database");
             addOverlord();

@@ -15,13 +15,7 @@
  */
 package org.osaf.cosmo.scheduler;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import net.fortuna.ical4j.model.TimeZone;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.util.TimeZoneUtils;
@@ -32,12 +26,18 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.security.CosmoSecurityManager;
 import org.osaf.cosmo.service.ContentService;
 import org.osaf.cosmo.util.StringPropertyUtils;
-import org.quartz.CronTrigger;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * JobTypeScheduler implementation that schedules forward looking jobs, which
@@ -140,12 +140,16 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
                  cronTab = WEEKLY_CRON_EXP;
         }
 
-        Trigger trigger = null;
+        Trigger trigger;
         try {
-            trigger = new CronTrigger(schedule.getName(), user.getUsername(),
-                    schedule.getName(), user.getUsername(), cronTab,
-                    tz == null ? TimeZone.getDefault() : tz);
-        } catch (ParseException e) {
+            trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(schedule.getName(), user.getUsername())
+                    .withSchedule(CronScheduleBuilder
+                            .cronSchedule(cronTab)
+                            .inTimeZone(tz == null ? TimeZone.getDefault() : tz))
+                    .build();
+            ;
+        } catch (RuntimeException e) {
             throw new SchedulerException("invalid cron expression: " + cronTab,
                     e);
         }
@@ -192,8 +196,9 @@ public class ForwardLookingJobTypeScheduler implements JobTypeScheduler {
         }
 
         // create jobdetail, which is essentially the job + parameters
-        JobDetail jt = new JobDetail(schedule.getName(), user.getUsername(),
-                ForwardLookingNotificationJob.class);
+        JobDetail jt = JobBuilder.newJob(ForwardLookingNotificationJob.class)
+                .withIdentity(schedule.getName(), user.getUsername())
+                .build();
         jt.getJobDataMap().put("username", user.getUsername());
         jt.getJobDataMap().put("reportType", reportType);
         jt.getJobDataMap().put("timezone", timezone);

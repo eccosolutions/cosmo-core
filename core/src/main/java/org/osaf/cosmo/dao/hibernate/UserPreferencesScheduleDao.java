@@ -22,14 +22,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.validator.InvalidStateException;
-import org.hibernate.validator.InvalidValue;
 import org.osaf.cosmo.dao.ScheduleDao;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibEntityFactory;
 import org.osaf.cosmo.scheduler.Schedule;
 import org.osaf.cosmo.scheduler.UserPreferencesScheduleHelper;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  * Implementation of ScheduleDao using user preferences.
@@ -97,19 +97,19 @@ public class UserPreferencesScheduleDao extends HibernateDaoSupport implements S
         } catch (HibernateException e) {
             getSession().clear();
             throw convertHibernateAccessException(e);
-        } catch (InvalidStateException ise) {
-            logInvalidStateException(ise);
-            throw ise;
+        } catch (ConstraintViolationException cve) {
+            logInvalidStateException(cve);
+            throw cve;
         }
     }
     
-    protected void logInvalidStateException(InvalidStateException ise) {
+    protected void logInvalidStateException(ConstraintViolationException cve) {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {
-            log.debug(ise.getLocalizedMessage());
-            for (InvalidValue iv : ise.getInvalidValues())
-                log.debug("property name: " + iv.getPropertyName() + " value: "
-                        + iv.getValue());
+            log.debug(cve.getLocalizedMessage());
+            for (ConstraintViolation iv : cve.getConstraintViolations())
+                log.debug("property name: " + iv.getPropertyPath() + " value: "
+                        + iv.getInvalidValue());
         }
     }
 }

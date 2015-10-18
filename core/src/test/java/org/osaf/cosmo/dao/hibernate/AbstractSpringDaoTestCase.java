@@ -15,22 +15,14 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.springframework.test.AbstractTransactionalSpringContextTests;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-public abstract class AbstractSpringDaoTestCase extends AbstractTransactionalSpringContextTests {
 
-    public AbstractSpringDaoTestCase()
-    {
-        setPopulateProtectedVariables(true);
-    }
-    
-    @Override
-    protected String[] getConfigLocations() {
-        return new String[] {
-                "applicationContext-test-sessionFactory.xml",
-                "applicationContext.xml",
-                "applicationContext-test.xml",
-            };
-    }
-
+@ContextConfiguration({
+                "classpath:applicationContext-test-sessionFactory.xml",
+                "classpath:applicationContext.xml",
+                "classpath:applicationContext-test.xml",
+            })
+public abstract class AbstractSpringDaoTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 }

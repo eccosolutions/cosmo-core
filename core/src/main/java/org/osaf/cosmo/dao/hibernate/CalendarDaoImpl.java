@@ -15,13 +15,9 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -39,7 +35,9 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.filter.EventStampFilter;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.NoteItemFilter;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Implementation of CalendarDao using Hibernate persistence objects.
@@ -50,8 +48,8 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
 
     private ItemFilterProcessor itemFilterProcessor = null;
     private EntityConverter entityConverter = new EntityConverter(null);
-   
-   
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.CalendarDao#findCalendarItems(org.osaf.cosmo.model.CollectionItem, org.osaf.cosmo.calendar.query.CalendarFilter)
      */
@@ -107,8 +105,8 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
             throw convertHibernateAccessException(e);
         }
     }
-    
-   
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.CalendarDao#findEvents(org.osaf.cosmo.model.CollectionItem, net.fortuna.ical4j.model.DateTime, net.fortuna.ical4j.model.DateTime, boolean)
      */
@@ -177,5 +175,5 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
         }
 
     }
-    
+
 }

@@ -20,21 +20,21 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
-import org.hibernate.validator.NotNull;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.TicketType;
@@ -61,8 +61,8 @@ public class HibTicket extends HibAuditableObject implements Comparable<Ticket>,
     @Column(name = "tickettimeout", nullable = false, length=255)
     private String timeout;
     
-    @CollectionOfElements
-    @JoinTable(
+    @ElementCollection
+    @CollectionTable(
             name="cosmo_ticket_privilege",
             joinColumns = @JoinColumn(name="ticketid")
     )

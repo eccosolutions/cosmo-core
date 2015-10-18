@@ -22,10 +22,10 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.hibernate.validator.ValidatorClass;
+import javax.validation.Constraint;
 
-@ValidatorClass(JournalValidator.class)
-@Target(METHOD) 
+@Constraint(validatedBy = JournalValidator.class)
+@Target(METHOD)
 @Retention(RUNTIME)
 @Documented
 public @interface Journal {
