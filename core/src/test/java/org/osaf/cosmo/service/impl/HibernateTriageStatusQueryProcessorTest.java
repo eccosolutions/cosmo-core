@@ -21,6 +21,7 @@ import junit.framework.Assert;
 import net.fortuna.ical4j.model.DateTime;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.dao.hibernate.AbstractHibernateDaoTestCase;
@@ -49,9 +50,9 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDaoTestCase {
 
     @Autowired
-    protected ContentDaoImpl contentDao = null;
+    protected ContentDaoImpl contentDao;
     @Autowired
-    protected UserDaoImpl userDao = null;
+    protected UserDaoImpl userDao;
     protected StandardTriageStatusQueryProcessor queryProcessor = null;
     
     protected final String CALENDAR_UID = "calendaruid";
@@ -62,7 +63,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
     }
     
     @BeforeTransaction
-    protected void onSetUpInTransaction() throws Exception {
+    public void onSetUpInTransaction() throws Exception {
         queryProcessor = new StandardTriageStatusQueryProcessor();
         queryProcessor.setContentDao(contentDao);
         
@@ -98,6 +99,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         }
     }
 
+    @Test
     public void testGetAllCollection() throws Exception {
         CollectionItem calendar = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID);
         TriageStatusQueryContext context =
@@ -114,6 +116,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         verifyItemInSet(done,"calendar2_3");
     }
 
+    @Test
     public void testGetDoneCollection() throws Exception {
         CollectionItem calendar = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID);
         TriageStatusQueryContext context =
@@ -127,6 +130,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         verifyItemInSet(done,"calendar2_3");
     }
     
+    @Test
     public void testGetDoneItem() throws Exception {
         NoteItem done = (NoteItem) contentDao.findItemByUid("calendar2_1");
         TriageStatusQueryContext context =
@@ -138,6 +142,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         verifyItemInSet(results,"calendar2_1");
     }
     
+    @Test
     public void testGetLaterCollection() throws Exception {
         CollectionItem calendar = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID);
         TriageStatusQueryContext context =
@@ -151,6 +156,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         verifyItemInSet(later,"calendar2_3");
     }
     
+    @Test
     public void testGetLaterItem() throws Exception {
         NoteItem later = (NoteItem) contentDao.findItemByUid("calendar2_1");
         TriageStatusQueryContext context =
@@ -161,6 +167,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         verifyItemInSet(results,"calendar2_1");
     }
     
+    @Test
     public void testGetNowCollection() throws Exception {
         CollectionItem calendar = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID);
         TriageStatusQueryContext context =
@@ -180,6 +187,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         verifyItemInSet(now, "calendar2_3");
     }
     
+    @Test
     public void testGetNowItem() throws Exception {
         NoteItem now = (NoteItem) contentDao.findItemByUid("calendar2_3");
         TriageStatusQueryContext context =

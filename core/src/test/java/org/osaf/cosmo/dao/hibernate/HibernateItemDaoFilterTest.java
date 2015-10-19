@@ -24,6 +24,7 @@ import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CalendarCollectionStamp;
@@ -53,10 +54,10 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
 
     @Autowired
-    protected ContentDaoImpl contentDao = null;
+    protected ContentDaoImpl contentDao;
 
     @Autowired
-    protected UserDaoImpl userDao = null;
+    protected UserDaoImpl userDao;
     
     protected final String CALENDAR_UID_1 = "calendar1";
     protected final String CALENDAR_UID_2 = "calendar2";
@@ -67,7 +68,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
     }
     
     @Before
-    protected void onSetUpInTransaction() throws Exception {
+    public void onSetUpInTransaction() throws Exception {
         CollectionItem calendar1 = generateCalendar("test1", "testuser");
         CollectionItem calendar2 = generateCalendar("test2", "testuser");
         calendar1.setUid(CALENDAR_UID_1);
@@ -112,6 +113,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         
     }
 
+    @Test
     public void testFilterByUid() throws Exception {
         ItemFilter filter = new ItemFilter();
         filter.setUid(Restrictions.eq(CALENDAR_UID_1));
@@ -120,6 +122,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         verifyItemInSet(results, CALENDAR_UID_1);
     }
     
+    @Test
     public void testNoteFilter() throws Exception {
         NoteItemFilter filter = new NoteItemFilter();
         Set<Item> results = contentDao.findItems(filter);
@@ -199,6 +202,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(0, results.size());
     }
     
+    @Test
     public void testFilterByParent() throws Exception {
         CollectionItem calendar1 = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID_1);
         ItemFilter filter = new NoteItemFilter();
@@ -208,6 +212,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(8, results.size());
     }
     
+    @Test
     public void testFilterByNoStamp() throws Exception {
         CollectionItem calendar1 = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID_1);
         ItemFilter filter = new NoteItemFilter();
@@ -222,6 +227,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         verifyItemInSet(results, NOTE_UID);
     }
     
+    @Test
     public void testFilterByEventStamp() throws Exception {
         CollectionItem calendar1 = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID_1);
         CollectionItem calendar2 = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID_2);
@@ -325,6 +331,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(36, results.size());
     }
     
+    @Test
     public void testMultipleFilters() throws Exception {
         CollectionItem calendar1 = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID_1);
  

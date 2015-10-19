@@ -35,6 +35,7 @@ import org.dom4j.Element;
 import org.dom4j.io.DOMWriter;
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.Attribute;
@@ -87,19 +88,23 @@ import org.osaf.cosmo.model.hibernate.HibTimestampAttribute;
 import org.osaf.cosmo.model.hibernate.HibTriageStatus;
 import org.osaf.cosmo.model.hibernate.HibXmlAttribute;
 import org.osaf.cosmo.xml.DomWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
 
 public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
-    protected UserDaoImpl userDao = null;
+    @Autowired
+    protected UserDaoImpl userDao;
 
-    protected ContentDaoImpl contentDao = null;
+    @Autowired
+    protected ContentDaoImpl contentDao;
 
     public HibernateContentDaoTest() {
         super();
     }
 
+    @Test
     public void testContentDaoCreateContent() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -119,6 +124,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         helper.verifyItem(newItem, queryItem);
     }
     
+    @Test
     public void testContentDaoLoadChildren() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -143,6 +149,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(1, children.size());
     }
     
+    @Test
     public void testContentDaoCreateContentDuplicateUid() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -165,6 +172,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         }
     }
 
+    @Test
     public void testContentDaoCreateNoteDuplicateIcalUid() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -185,6 +193,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
     
     }
 
+    @Test
     public void testContentDaoInvalidContentEmptyName() throws Exception {
         
         User user = getUser(userDao, "testuser");
@@ -200,6 +209,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         }
     }
 
+    @Test
     public void testContentAttributes() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -287,6 +297,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
     }
     
     @Ignore("Timezone seems to be GMT+1 when testing")
+    @Test
     public void junit3ignored_testCalendarAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -327,6 +338,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(cal, attr.getValue()); // fails: 1 hour out (something is using GMT+1 ...
     }
     
+    @Test
     public void testTimestampAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -366,6 +378,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertTrue(dateVal.equals(val));
     }
     
+    @Test
     public void testXmlAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -436,6 +449,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(DomWriter.write(testElement2),DomWriter.write(element));
     }
     
+    @Test
     public void testICalendarAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -476,6 +490,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertFalse(expected.toString().equals(ica.getValue().toString()));
     }
 
+    @Test
     public void testCreateDuplicateRootItem() throws Exception {
         User testuser = getUser(userDao, "testuser");
         try {
@@ -485,6 +500,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         }
     }
 
+    @Test
     public void testFindItem() throws Exception {
         User testuser2 = getUser(userDao, "testuser2");
 
@@ -525,6 +541,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(a.getUid(), queryItem.getUid());
     }
 
+    @Test
     public void testContentDaoUpdateContent() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -563,6 +580,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
                 queryItem2.getModifiedDate()));
     }
 
+    @Test
     public void testContentDaoDeleteContent() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -590,6 +608,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         
     }
     
+    @Test
     public void testContentDaoDeleteUserContent() throws Exception {
         User user1 = getUser(userDao, "testuser1");
         User user2 = getUser(userDao, "testuser2");
@@ -615,6 +634,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(0, root.getChildren().size());
     }
 
+    @Test
     public void testDeleteContentByPath() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -636,6 +656,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem);
     }
 
+    @Test
     public void testDeleteContentByUid() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -657,6 +678,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem);
     }
     
+    @Test
     public void testTombstoneDeleteContent() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -702,6 +724,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(root.getTombstones().size(), 0);
     }
 
+    @Test
     public void testContentDaoCreateCollection() throws Exception {
         User user = getUser(userDao, "testuser2");
         CollectionItem root = contentDao.getRootItem(user);
@@ -723,6 +746,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         helper.verifyItem(a, queryItem);
     }
 
+    @Test
     public void testContentDaoUpdateCollection() throws Exception {
         User user = getUser(userDao, "testuser2");
         CollectionItem root = contentDao.getRootItem(user);
@@ -750,6 +774,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals("b", queryItem.getName());
     }
     
+    @Test
     public void testContentDaoUpdateCollectionTimestamp() throws Exception {
         User user = getUser(userDao, "testuser2");
         CollectionItem root = contentDao.getRootItem(user);
@@ -770,6 +795,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertTrue(timestamp.before(a.getModifiedDate()));
     }
 
+    @Test
     public void testContentDaoDeleteCollection() throws Exception {
         User user = getUser(userDao, "testuser2");
         CollectionItem root = contentDao.getRootItem(user);
@@ -793,6 +819,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem);
     }
 
+    @Test
     public void testContentDaoAdvanced() throws Exception {
         User testuser2 = getUser(userDao, "testuser2");
         CollectionItem root = contentDao
@@ -873,6 +900,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
     }
 
   
+    @Test
     public void testHomeCollection() throws Exception {
         User testuser2 = getUser(userDao, "testuser2");
         HomeCollectionItem root = contentDao.getRootItem(testuser2);
@@ -883,6 +911,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
     }
 
+    @Test
     public void testItemDaoMove() throws Exception {
         User testuser2 = getUser(userDao, "testuser2");
         CollectionItem root = contentDao
@@ -968,6 +997,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertTrue(queryItem instanceof ContentItem);
     }
 
+    @Test
     public void testItemDaoCopy() throws Exception {
         User testuser2 = getUser(userDao, "testuser2");
         CollectionItem root = contentDao
@@ -1079,6 +1109,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNotNull(dcopy);
     }
 
+    @Test
     public void testTickets() throws Exception {
         User testuser = getUser(userDao, "testuser");
         String name = "ticketable:" + System.currentTimeMillis();
@@ -1156,6 +1187,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(0, tickets.size());
     }
     
+    @Test
     public void testItemInMutipleCollections() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1201,6 +1233,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem);
     }
     
+    @Test
     public void testItemInMutipleCollectionsError() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1239,6 +1272,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         }
     }
     
+    @Test
     public void testItemInMutipleCollectionsDeleteCollection() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1290,6 +1324,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem);
     }
     
+    @Test
     public void testContentDaoTriageStatus() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1335,6 +1370,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(triageStatus);
     }
     
+    @Test
     public void testContentDaoCreateFreeBusy() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1361,6 +1397,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         helper.verifyItem(newItem, queryItem);
     }
     
+    @Test
     public void testContentDaoCreateAvailability() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1387,6 +1424,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         helper.verifyItem(newItem, queryItem);
     }
     
+    @Test
     public void testContentDaoUpdateCollection2() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1427,6 +1465,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(note2);
     }
     
+    @Test
     public void testContentDaoUpdateCollectionWithMods() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -1512,6 +1551,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(2, b.getChildren().size());
     }
     
+    @Test
     public void testContentDaoUpdateCollectionWithDuplicateIcalUids() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);

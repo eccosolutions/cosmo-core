@@ -16,16 +16,20 @@
 package org.osaf.cosmo.dao.hibernate;
 
 import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class HibernateServerPropertyDaoTest extends
         AbstractHibernateDaoTestCase {
 
-    protected ServerPropertyDaoImpl serverPropertyDao = null;
+    @Autowired
+    protected ServerPropertyDaoImpl serverPropertyDao;
 
     public HibernateServerPropertyDaoTest() {
         super();
     }
 
+    @Test
     public void testServerProperties() throws Exception {
         serverPropertyDao.setServerProperty("testprop1", "testvalue1");
         clearSession();

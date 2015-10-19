@@ -17,6 +17,7 @@ package org.osaf.cosmo.dao.hibernate;
 
 import junit.framework.Assert;
 
+import org.junit.Test;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibPreference;
 import org.osaf.cosmo.model.hibernate.HibUser;
@@ -27,22 +28,23 @@ import org.springframework.test.context.ContextConfiguration;
  * Test UserPreferencesScheduleDao
  */
 @ContextConfiguration({
-                "classpath:applicationContext-test-sessionFactory.xml",
-                "classpath:applicationContext.xml",
-                "classpath:applicationContext-scheduler.xml",
-                "classpath:applicationContext-test.xml",
+                "/applicationContext-test-sessionFactory.xml",
+                "/applicationContext.xml",
+                "/applicationContext-scheduler.xml",
+                "/applicationContext-test.xml",
             })
 public class HibernateScheduleDaoTest extends AbstractHibernateDaoTestCase {
     
     @Autowired
-    protected UserPreferencesScheduleDao scheduleDao = null;
+    protected UserPreferencesScheduleDao scheduleDao;
     @Autowired
-    protected UserDaoImpl userDao = null;
+    protected UserDaoImpl userDao;
     
     public HibernateScheduleDaoTest() {
         super();
     }
     
+    @Test
     public void testGetUsersWithSchedules() {
         User user1 = new HibUser();
         user1.setUsername("user1");

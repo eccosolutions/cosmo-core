@@ -17,6 +17,7 @@ package org.osaf.cosmo.dao.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.test.context.transaction.AfterTransaction;
@@ -25,10 +26,10 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTestCase {
 
-    protected HibernateTestHelper helper = null;
+    protected HibernateTestHelper helper;
     
     protected Session session = null;
-    protected SessionFactory sessionFactory = null;
+    @Autowired protected SessionFactory sessionFactory;
     
     public AbstractHibernateDaoTestCase() {
         super();
@@ -37,11 +38,11 @@ public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTest
     
     
     @AfterTransaction
-    protected void onTearDownAfterTransaction() throws Exception {
+    public void onTearDownAfterTransaction() throws Exception {
         // Get a reference to the Session and bind it to the TransactionManager
         SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
-        Session s = holder.getSession();
-        SessionFactoryUtils.closeSession(s);
+        session = holder.getSession();
+        SessionFactoryUtils.closeSession(session);
     }
 
 
@@ -51,7 +52,7 @@ public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTest
     }
 
     @BeforeTransaction
-    protected void onSetUpBeforeTransaction() throws Exception {
+    public void onSetUpBeforeTransaction() throws Exception {
         // Unbind session from TransactionManager
         session = sessionFactory.openSession();
         TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));

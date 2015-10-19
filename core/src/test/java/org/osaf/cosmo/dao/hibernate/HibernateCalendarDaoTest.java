@@ -25,6 +25,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 
+import org.junit.Test;
 import org.osaf.cosmo.calendar.EntityConverter;
 import org.osaf.cosmo.calendar.query.CalendarFilter;
 import org.osaf.cosmo.calendar.query.ComponentFilter;
@@ -51,22 +52,27 @@ import org.osaf.cosmo.model.hibernate.HibEventExceptionStamp;
 import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibFreeBusyItem;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Test CalendarDaoImpl
  */
 public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
-    protected CalendarDaoImpl calendarDao = null;
+    @Autowired
+    CalendarDaoImpl calendarDao;
 
-    protected ContentDaoImpl contentDao = null;
+    @Autowired
+    protected ContentDaoImpl contentDao;
 
-    protected UserDaoImpl userDao = null;
+    @Autowired
+    protected UserDaoImpl userDao;
 
     public HibernateCalendarDaoTest() {
         super();
     }
 
+    @Test
     public void testCalendarDaoBasic() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
@@ -153,6 +159,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem);
     }
 
+    @Test
     public void testLongPropertyValue() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
@@ -172,6 +179,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
     
 
+    @Test
     public void testFindByEventIcalUid() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
@@ -193,6 +201,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(event.getUid(), queryEvent.getUid());
     }
 
+    @Test
    public void testCalendarQueryingFreeBusyOnly() throws Exception {
        CollectionItem calendar = generateCalendar("test", "testuser");
        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
@@ -226,6 +235,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
        Assert.assertEquals("fb.ics", nextItem.getName());
    }
 
+    @Test
    public void testCalendarQueryingAvailabilityOnly() throws Exception {
        CollectionItem calendar = generateCalendar("test", "testuser");
        CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
@@ -259,6 +269,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
        Assert.assertEquals("avail.ics", nextItem.getName());
    }
 
+    @Test
     public void testCalendarQuerying() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
@@ -371,6 +382,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(0, queryEvents.size());
     }
     
+    @Test
     public void testCalendarTimeRangeQuerying() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));

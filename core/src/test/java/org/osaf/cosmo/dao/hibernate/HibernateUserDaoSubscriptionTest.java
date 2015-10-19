@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import org.junit.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
@@ -35,14 +36,15 @@ public class HibernateUserDaoSubscriptionTest
     extends AbstractHibernateDaoTestCase {
 
     @Autowired
-    protected ContentDaoImpl contentDao = null;
+    protected ContentDaoImpl contentDao;
     @Autowired
-    protected UserDaoImpl userDao = null;
+    protected UserDaoImpl userDao;
     
     public HibernateUserDaoSubscriptionTest() {
         super();
     }
     
+    @Test
     public void testSubscribe() throws Exception {
         User user = getUser(userDao, "subuser1");
         CollectionItem root = contentDao.getRootItem(user);

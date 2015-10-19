@@ -17,21 +17,26 @@ package org.osaf.cosmo.dao.hibernate;
 
 import junit.framework.Assert;
 
+import org.junit.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class HibernateContentDaoModificationsTest extends AbstractHibernateDaoTestCase {
 
-    protected UserDaoImpl userDao = null;
-    protected ContentDaoImpl contentDao = null;
+    @Autowired
+    protected UserDaoImpl userDao;
+    @Autowired
+    protected ContentDaoImpl contentDao;
 
     public HibernateContentDaoModificationsTest() {
         super();
     }
 
+    @Test
     public void testModificationsCreate() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -72,6 +77,7 @@ public class HibernateContentDaoModificationsTest extends AbstractHibernateDaoTe
         Assert.assertEquals(itemC.getModifies().getUid(), itemA.getUid());
     }
     
+    @Test
     public void testModificationsDelete() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);

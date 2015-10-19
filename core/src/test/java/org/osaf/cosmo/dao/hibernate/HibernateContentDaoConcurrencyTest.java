@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import junit.framework.Assert;
 
 import org.hibernate.SessionFactory;
+import org.junit.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.ContentItem;
@@ -62,15 +63,16 @@ import edu.emory.mathcs.backport.java.util.Collections;
  */
 public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTestCase {
 
-    @Autowired protected UserDaoImpl userDao = null;
-    @Autowired protected ContentDaoImpl contentDao = null;
-    @Autowired protected DataSource jdbcDataSource = null;
+    @Autowired protected UserDaoImpl userDao;
+    @Autowired protected ContentDaoImpl contentDao;
+    @Autowired protected DataSource jdbcDataSource;
     @Autowired PlatformTransactionManager transactionManager;
     
     public HibernateContentDaoConcurrencyTest() {
         super();
     }
     
+    @Test
     public void testConcurrentContentDaoUpdateContent() throws Exception {
         
         TransactionThread txThread1 = new TransactionThread(transactionManager,sessionFactory);
@@ -166,6 +168,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         cleanupDb();
     }
     
+    @Test
     public void testConcurrentContentDaoDeleteContent() throws Exception {
         
         TransactionThread txThread1 = new TransactionThread(transactionManager,sessionFactory);

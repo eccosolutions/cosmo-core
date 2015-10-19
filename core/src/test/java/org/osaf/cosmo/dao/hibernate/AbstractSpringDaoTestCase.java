@@ -20,9 +20,9 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 
 
 @ContextConfiguration({
-                "classpath:applicationContext-test-sessionFactory.xml",
-                "classpath:applicationContext.xml",
-                "classpath:applicationContext-test.xml",
+                "/applicationContext-test-sessionFactory.xml",
+                "/applicationContext.xml",
+                "/applicationContext-test.xml",
             })
 public abstract class AbstractSpringDaoTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 }

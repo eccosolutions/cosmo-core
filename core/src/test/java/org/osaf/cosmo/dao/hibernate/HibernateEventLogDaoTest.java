@@ -24,6 +24,7 @@ import junit.framework.Assert;
 import net.fortuna.ical4j.model.DateTime;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.osaf.cosmo.model.ItemChangeRecord;
 import org.osaf.cosmo.model.event.EventLogEntry;
 import org.osaf.cosmo.model.event.ItemAddedEntry;
@@ -42,7 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
 
     @Autowired
-    protected EventLogDaoImpl eventLogDao = null;
+    protected EventLogDaoImpl eventLogDao;
 
     public HibernateEventLogDaoTest() {
         super();
@@ -53,7 +54,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
     HibNoteItem note;
     
     @Before
-    protected void onSetUp() throws Exception {
+    public void onSetUp() throws Exception {
         user = new HibUser();
         user.setUsername("test");
         setId(user, new Long(1));
@@ -74,6 +75,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
     }
     
     
+    @Test
     public void testEventLogDaoItemAddedEntry() throws Exception {
        ItemAddedEntry entry = new ItemAddedEntry(note, col1);
        entry.setUser(user);
@@ -101,6 +103,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
     }
     
     
+    @Test
     public void testEventLogDaoItemRemovedEntry() throws Exception {
         ItemRemovedEntry entry = new ItemRemovedEntry(note, col1);
         entry.setUser(user);
@@ -126,6 +129,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         
      }
     
+    @Test
     public void testEventLogDaoItemUpdatedEntry() throws Exception {
         // ensure note has multiple parents
         note.addParent(col1);
@@ -171,6 +175,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
      }
     
     
+    @Test
     public void testEventLogDaoQuery() throws Exception {
         ItemAddedEntry entry = new ItemAddedEntry(note, col1);
         entry.setUser(user);

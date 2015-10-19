@@ -24,6 +24,7 @@ import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 
 import org.hibernate.Query;
+import org.junit.Test;
 import org.osaf.cosmo.dao.hibernate.AbstractHibernateDaoTestCase;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.EventStamp;
@@ -53,6 +54,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         super();
     }
 
+    @Test
     public void testUidQuery() throws Exception {
         ItemFilter filter = new ItemFilter();
         filter.setUid(Restrictions.eq("abc"));
@@ -60,6 +62,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals("select i from HibItem i where i.uid=:param0", query.getQueryString());
     }
     
+    @Test
     public void testDisplayNameQuery() throws Exception {
         ItemFilter filter = new ItemFilter();
         filter.setDisplayName(Restrictions.eq("test"));
@@ -92,6 +95,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     
     }
     
+    @Test
     public void testParentQuery() throws Exception {
         ItemFilter filter = new ItemFilter();
         CollectionItem parent = new HibCollectionItem();
@@ -100,6 +104,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals("select i from HibItem i join i.parentDetails pd where pd.primaryKey.collection=:parent", query.getQueryString());
     }
     
+    @Test
     public void testDisplayNameAndParentQuery() throws Exception {
         ItemFilter filter = new ItemFilter();
         CollectionItem parent = new HibCollectionItem();
@@ -109,6 +114,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals("select i from HibItem i join i.parentDetails pd where pd.primaryKey.collection=:parent and i.displayName=:param1", query.getQueryString());
     }
     
+    @Test
     public void testContentItemQuery() throws Exception {
         ContentItemFilter filter = new ContentItemFilter();
         CollectionItem parent = new HibCollectionItem();
@@ -127,6 +133,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals("select i from HibContentItem i join i.parentDetails pd where pd.primaryKey.collection=:parent and i.triageStatus.code=:param1 order by i.triageStatus.rank", query.getQueryString());
     }
     
+    @Test
     public void testNoteItemQuery() throws Exception {
         NoteItemFilter filter = new NoteItemFilter();
         CollectionItem parent = new HibCollectionItem();
@@ -172,6 +179,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     
     }
     
+    @Test
     public void testEventStampQuery() throws Exception {
         NoteItemFilter filter = new NoteItemFilter();
         EventStampFilter eventFilter = new EventStampFilter();
@@ -189,6 +197,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and i.displayName=:param1 and es.item=i and (es.timeRangeIndex.isRecurring=true or i.modifies is not null) and i.icalUid=:param2", query.getQueryString());
     }
     
+    @Test
     public void testEventStampTimeRangeQuery() throws Exception {
         NoteItemFilter filter = new NoteItemFilter();
         EventStampFilter eventFilter = new EventStampFilter();
@@ -203,6 +212,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and es.item=i and ( (es.timeRangeIndex.isFloating=true and es.timeRangeIndex.startDate < '20070201T040000' and es.timeRangeIndex.endDate > '20070101T040000') or (es.timeRangeIndex.isFloating=false and es.timeRangeIndex.startDate < '20070201T100000Z' and es.timeRangeIndex.endDate > '20070101T100000Z') or (es.timeRangeIndex.startDate=es.timeRangeIndex.endDate and (es.timeRangeIndex.startDate='20070101T040000' or es.timeRangeIndex.startDate='20070101T100000Z')))", query.getQueryString());
     }
     
+    @Test
     public void testBasicStampQuery() throws Exception {
         NoteItemFilter filter = new NoteItemFilter();
         StampFilter missingFilter = new StampFilter();
@@ -215,6 +225,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals("select i from HibNoteItem i where not exists (select s.id from HibStamp s where s.item=i and s.class=HibEventStamp)", query.getQueryString());
     }
     
+    @Test
     public void testBasicAttributeQuery() throws Exception {
         NoteItemFilter filter = new NoteItemFilter();
         AttributeFilter missingFilter = new AttributeFilter();

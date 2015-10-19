@@ -20,6 +20,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.junit.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.AttributeTombstone;
 import org.osaf.cosmo.model.CollectionItem;
@@ -39,20 +40,24 @@ import org.osaf.cosmo.model.hibernate.HibQName;
 import org.osaf.cosmo.model.hibernate.HibStampTombstone;
 import org.osaf.cosmo.model.hibernate.HibStringAttribute;
 import org.osaf.cosmo.model.hibernate.HibTaskStamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Test that HibernateContentDao correctly manages Tombstones.
  */
 public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestCase {
 
-    protected UserDaoImpl userDao = null;
+    @Autowired
+    protected UserDaoImpl userDao;
 
-    protected ContentDaoImpl contentDao = null;
+    @Autowired
+    protected ContentDaoImpl contentDao;
 
     public HibernateContentDaoTombstonesTest() {
         super();
     }
 
+    @Test
     public void testContentDaoAttributeTombstones() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -88,6 +93,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         Assert.assertEquals(0, queryItem.getTombstones().size());
     }
     
+    @Test
     public void testContentDaoItemTombstones() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -162,6 +168,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         
     }
     
+    @Test
     public void testContentDaoStampTombstones() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);

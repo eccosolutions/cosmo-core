@@ -24,6 +24,7 @@ import net.fortuna.ical4j.model.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
+import org.junit.Test;
 import org.osaf.cosmo.calendar.EntityConverter;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CalendarCollectionStamp;
@@ -42,13 +43,16 @@ import org.osaf.cosmo.model.hibernate.HibMessageStamp;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 import org.osaf.cosmo.model.hibernate.HibQName;
 import org.osaf.cosmo.model.hibernate.HibStringAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
 
 public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCase {
 
-    protected UserDaoImpl userDao = null;
-    protected ContentDaoImpl contentDao = null;
+    @Autowired
+    protected UserDaoImpl userDao;
+    @Autowired
+    protected ContentDaoImpl contentDao;
 
     private static final Log log = LogFactory.getLog(HibernateContentDaoStampingTest.class);
 
@@ -57,6 +61,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         super();
     }
 
+    @Test
     public void testStampsCreate() throws Exception {
         EntityConverter entityConverter = new EntityConverter(null);
         User user = getUser(userDao, "testuser");
@@ -108,6 +113,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals(ms.getFrom(), message.getFrom());
     }
     
+    @Test
     public void testStampHandlers() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -148,6 +154,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         Assert.assertTrue(event.getTimeRangeIndex().getIsFloating().booleanValue());
     }
     
+    @Test
     public void testStampsUpdate() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -207,6 +214,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals(es.getEventCalendar().toString(), newCal.toString());
     }
     
+    @Test
     public void testEventStampValidation() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -225,6 +233,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         catch (IllegalStateException ignored) {}
     }
     
+    @Test
     public void testRemoveStamp() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -266,6 +275,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals(1, queryItem.getStamps().size());
     }
     
+    @Test
     public void testCalendarCollectionStamp() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -307,6 +317,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         Assert.assertEquals(1, cal.getComponents().getComponents(Component.VEVENT).size());
     }
     
+    @Test
     public void testCalendarCollectionStampValidation() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -327,6 +338,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
         } 
     }
     
+    @Test
     public void testEventExceptionStamp() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
@@ -358,6 +370,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
                 .toString());
     }
     
+    @Test
     public void testEventExceptionStampValidation() throws Exception {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
