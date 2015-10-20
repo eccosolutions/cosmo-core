@@ -18,8 +18,12 @@ package org.osaf.cosmo.model.hibernate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.SessionFactory;
+import org.osaf.cosmo.spring.ConfigurableEntitySupport;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.aspectj.AnnotationBeanConfigurerAspect;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +36,8 @@ import javax.persistence.Lob;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import static org.osaf.cosmo.spring.ConfigurableEntitySupport.configureBean;
 
 
 /**
@@ -54,13 +60,13 @@ public class HibContentData extends BaseModelObject {
     private Blob content = null;
 
     @Transient
-    @PersistenceUnit
-    EntityManagerFactory entityManagerFactory;
+    @Autowired
+    SessionFactory sessionFactory;
 
     { readResolve(); }
 
     public Object readResolve() {
-        AnnotationBeanConfigurerAspect.aspectOf().configureBean(this);
+        configureBean(this);
         return this;
     }
    
@@ -95,7 +101,6 @@ public class HibContentData extends BaseModelObject {
      * @throws IOException
      */
     public void setContentInputStream(InputStream is, long length) throws IOException {
-        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         content = sessionFactory.getCurrentSession().getLobHelper().createBlob(is, length);
     }
     

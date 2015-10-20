@@ -75,6 +75,8 @@
     </property>
     -->
 
+    <bean id="configurableEntitySupport" class="org.osaf.cosmo.spring.ConfigurableEntitySupport"/>
+
   <!-- Hibernate statistics MBean -->
   <bean name="cosmo:name=hibernateStatistics" class="org.osaf.cosmo.hibernate.jmx.CosmoHibernateService">
     <property name="sessionFactory" ref="sessionFactory"/>

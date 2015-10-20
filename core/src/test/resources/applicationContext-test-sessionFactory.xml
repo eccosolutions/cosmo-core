@@ -107,6 +107,7 @@
         </property>
     </bean>
 
+    <bean id="configurableEntitySupport" class="org.osaf.cosmo.spring.ConfigurableEntitySupport"/>
 
 </beans>
 

@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import junit.framework.Assert;
 
 import org.hibernate.SessionFactory;
+import org.junit.Assume;
 import org.junit.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionItem;
@@ -40,6 +41,8 @@ import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 import org.osaf.cosmo.model.hibernate.HibQName;
 import org.osaf.cosmo.model.hibernate.HibStringAttribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -47,6 +50,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
 import edu.emory.mathcs.backport.java.util.Collections;
+
+import static org.hamcrest.Matchers.instanceOf;
 
 /**
  * Test concurrent modification of an item.  Since cosmo uses
@@ -62,6 +67,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
  *
  */
 public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTestCase {
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired protected UserDaoImpl userDao;
     @Autowired protected ContentDaoImpl contentDao;
@@ -78,7 +84,10 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         TransactionThread txThread1 = new TransactionThread(transactionManager,sessionFactory);
         TransactionThread txThread2 = new TransactionThread(transactionManager,sessionFactory);
         TransactionThread txThread3 = new TransactionThread(transactionManager,sessionFactory);
-        
+        txThread1.setName("txThread1");
+        txThread2.setName("txThread2");
+        txThread3.setName("txThread3");
+
         cleanupDb();
         
         // create item to be updated concurrently
@@ -91,6 +100,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
                 item.setUid("test");
 
                 ContentItem newItem = contentDao.createContent(root, item);
+                Assume.assumeNotNull(newItem);
                 return newItem;
             }
         });
@@ -100,6 +110,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
             public Object run() {
                 
                 ContentItem item = (ContentItem) contentDao.findItemByUid("test");
+                Assume.assumeNotNull(item);
                 return item;
             }
         });
@@ -107,8 +118,9 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         // read item by thread 3
         txThread3.addRunnable("1", new TxRunnable() {
             public Object run() {
-                
+
                 ContentItem item = (ContentItem) contentDao.findItemByUid("test");
+                Assume.assumeNotNull(item);
                 return item;
             }
         });
@@ -118,7 +130,8 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread1.start();
         txThread1.commit();
         txThread1.join();
-        
+        Assume.assumeThat(txThread1.getRunnableResults("1"), instanceOf(ContentItem.class));
+
         // read item at the same time
         txThread2.start();
         txThread3.start();
@@ -174,7 +187,10 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         TransactionThread txThread1 = new TransactionThread(transactionManager,sessionFactory);
         TransactionThread txThread2 = new TransactionThread(transactionManager,sessionFactory);
         TransactionThread txThread3 = new TransactionThread(transactionManager,sessionFactory);
-        
+        txThread1.setName("txThread1");
+        txThread2.setName("txThread2");
+        txThread3.setName("txThread3");
+
         cleanupDb();
         
         // create item to be updated concurrently
@@ -194,8 +210,9 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         // read item by thread 2
         txThread2.addRunnable("1", new TxRunnable() {
             public Object run() {
-                
+
                 ContentItem item = (ContentItem) contentDao.findItemByUid("test");
+                Assume.assumeNotNull(item);
                 return item;
             }
         });
@@ -203,8 +220,9 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         // read item by thread 3
         txThread3.addRunnable("1", new TxRunnable() {
             public Object run() {
-                
+
                 ContentItem item = (ContentItem) contentDao.findItemByUid("test");
+                Assume.assumeNotNull(item);
                 return item;
             }
         });
@@ -214,6 +232,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread1.start();
         txThread1.commit();
         txThread1.join();
+        Assume.assumeThat(txThread1.getRunnableResults("1"), instanceOf(ContentItem.class));
         
         // read item at the same time
         txThread2.start();
@@ -232,7 +251,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         // delete item by thread 2
         txThread2.addRunnable("2", new TxRunnable() {
             public Object run() {
-                
+
                 contentDao.removeContent(item1);
                 return item1;
             }
@@ -358,7 +377,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
             
             while(!commit || toRun.size()>0) {
                 RunContext rc = null;
-                
+
                 if(toRun.size()>0)
                     rc = toRun.remove(0); 
                 
