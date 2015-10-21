@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -50,7 +51,7 @@ public class HibTextAttribute extends HibAttribute implements
     private static final long serialVersionUID = 2417093506524504993L;
     
     @Column(name="textvalue", length=102400000, columnDefinition = "CLOB")
-    @Type(type="text")
+    @Lob
     private String value;
 
     // Constructors
