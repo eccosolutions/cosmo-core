@@ -154,7 +154,7 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
                     try {
                         return CalendarUtils.parseCalendar(characterStream);
                     } finally {
-                        characterStream.close();;
+                        characterStream.close();
                     }
                 } else if (Reader.class.isAssignableFrom(value.getClass())) {
                     try {

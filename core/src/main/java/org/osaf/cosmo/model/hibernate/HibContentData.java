@@ -17,13 +17,10 @@ package org.osaf.cosmo.model.hibernate;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.osaf.cosmo.spring.ConfigurableEntitySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.aspectj.AnnotationBeanConfigurerAspect;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,9 +28,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Lob;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -104,6 +99,15 @@ public class HibContentData extends BaseModelObject {
         content = sessionFactory.getCurrentSession().getLobHelper().createBlob(is, length);
     }
     
+    /**
+     * Set the content using a byte array.
+     * @param b content data
+     * @throws IOException
+     */
+    public void setContentBytes(byte[] b) throws HibernateException {
+        content = sessionFactory.getCurrentSession().getLobHelper().createBlob(b);
+    }
+
     /**
      * @return the size of the data read, or -1 for no data present
      */

@@ -15,8 +15,6 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -74,11 +72,10 @@ public class HibFileItem extends HibContentItem implements FileItem {
      */
     public byte[] getContent() {
         try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             InputStream contentStream = contentData.getContentInputStream();
-            IOUtils.copy(contentStream, bos);
+            byte[] result = IOUtils.toByteArray(contentStream);
             contentStream.close();
-            return bos.toByteArray();
+            return result;
         } catch (IOException e) {
             throw new RuntimeException("Error getting content");
         }
@@ -89,14 +86,18 @@ public class HibFileItem extends HibContentItem implements FileItem {
      * @see org.osaf.cosmo.model.FileItem#setContent(byte[])
      */
     public void setContent(byte[] content) {
+        if(contentData==null) {
+            contentData = new HibContentData();
+        }
+
+        // Verify size is not greater than MAX.
+        // TODO: do this checking in ContentData.setContentBytes()
         if (content.length > MAX_CONTENT_SIZE)
             throw new DataSizeException("Item content too large");
-        
-        try {
-            setContent(new ByteArrayInputStream(content), content.length);
-        } catch (IOException e) {
-            throw new RuntimeException("Error setting content");
-        }
+
+        contentData.setContentBytes(content);
+
+        setContentLength((long) content.length);
     }
     
     /* (non-Javadoc)
@@ -209,16 +210,13 @@ public class HibFileItem extends HibContentItem implements FileItem {
         FileItem contentItem = (FileItem) item;
         
         try {
-            InputStream contentStream = getContentInputStream();
-            if(contentStream!=null) {
-                contentItem.setContent(contentStream, getContentLength());
-                contentStream.close();
-            }
+            contentItem.setContent(getContent());
             contentItem.setContentEncoding(getContentEncoding());
             contentItem.setContentLanguage(getContentLanguage());
             contentItem.setContentType(getContentType());
-            contentItem.setContentLength(getContentLength());
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
             throw new RuntimeException("Error copying content");
         }
     }
