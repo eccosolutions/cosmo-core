@@ -86,7 +86,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
        eventLogDao.addEventLogEntries(entries);
        
        // verify
-       List<HibEventLogEntry> results = session.createQuery("from HibEventLogEntry").list();
+       List<HibEventLogEntry> results = getSession().createQuery("from HibEventLogEntry").list();
        Assert.assertEquals(1, results.size());
        HibEventLogEntry hibEntry = results.get(0);
        
@@ -114,7 +114,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         eventLogDao.addEventLogEntries(entries);
         
         // verify
-        List<HibEventLogEntry> results = session.createQuery("from HibEventLogEntry").list();
+        List<HibEventLogEntry> results = getSession().createQuery("from HibEventLogEntry").list();
         Assert.assertEquals(1, results.size());
         HibEventLogEntry hibEntry = results.get(0);
         
@@ -148,7 +148,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         eventLogDao.addEventLogEntries(entries);
         
         // verify
-        List<HibEventLogEntry> results = session.createQuery("from HibEventLogEntry order by id1").list();
+        List<HibEventLogEntry> results = getSession().createQuery("from HibEventLogEntry order by id1").list();
         Assert.assertEquals(2, results.size());
         HibEventLogEntry hibEntry = results.get(0);
         

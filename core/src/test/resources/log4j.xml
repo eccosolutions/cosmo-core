@@ -45,6 +45,10 @@
     <level value="WARN"/>
   </logger>
 
+  <logger name="org.springframework.transaction">
+    <level value="DEBUG" />
+  </logger>
+
   <logger name="org.osaf">
     <level value="ERROR"/>
   </logger>

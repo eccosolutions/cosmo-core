@@ -17,6 +17,7 @@ package org.osaf.cosmo.dao.hibernate;
 
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 
 @ContextConfiguration({
@@ -24,5 +25,6 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
                 "/applicationContext.xml",
                 "/applicationContext-test.xml",
             })
+@TransactionConfiguration(defaultRollback = true)
 public abstract class AbstractSpringDaoTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 }

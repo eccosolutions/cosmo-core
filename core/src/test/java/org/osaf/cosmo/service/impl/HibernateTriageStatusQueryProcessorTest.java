@@ -41,7 +41,6 @@ import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibNoteItem;
 import org.osaf.cosmo.service.triage.TriageStatusQueryContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.transaction.BeforeTransaction;
 
 /**
  * Test StandardTriageStatusQueryProcessor using hibernate
@@ -62,7 +61,7 @@ public class HibernateTriageStatusQueryProcessorTest extends AbstractHibernateDa
         super();
     }
     
-    @BeforeTransaction
+    @Before
     public void onSetUpInTransaction() throws Exception {
         queryProcessor = new StandardTriageStatusQueryProcessor();
         queryProcessor.setContentDao(contentDao);
