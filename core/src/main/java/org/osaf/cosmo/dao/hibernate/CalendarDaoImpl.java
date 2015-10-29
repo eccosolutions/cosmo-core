@@ -35,6 +35,8 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.filter.EventStampFilter;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.NoteItemFilter;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -61,7 +63,7 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
             try {
                 // translate CalendarFilter to ItemFilter and execute filter
                 ItemFilter itemFilter = filterConverter.translateToItemFilter(collection, filter);
-                Set results = itemFilterProcessor.processFilter(getSession(), itemFilter);
+                Set results = itemFilterProcessor.processFilter(currentSession(), itemFilter);
                 return results;
             } catch (IllegalArgumentException e) {
             }
@@ -77,7 +79,7 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
             // all items.
             ItemFilter firstPassItemFilter = filterConverter.getFirstPassFilter(collection, filter);
             if(firstPassItemFilter!=null)
-                itemsToProcess = itemFilterProcessor.processFilter(getSession(), firstPassItemFilter);
+                itemsToProcess = itemFilterProcessor.processFilter(currentSession(), firstPassItemFilter);
             else
                 itemsToProcess = collection.getChildren();
             
@@ -101,8 +103,8 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
             
             return results;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
 
@@ -124,11 +126,11 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
         itemFilter.getStampFilters().add(eventFilter);
         
         try {
-            Set results = itemFilterProcessor.processFilter(getSession(), itemFilter);
+            Set results = itemFilterProcessor.processFilter(currentSession(), itemFilter);
             return results;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
 
@@ -143,14 +145,14 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
     public ContentItem findEventByIcalUid(String uid,
             CollectionItem calendar) {
         try {
-            Query hibQuery = getSession().getNamedQuery(
+            Query hibQuery = currentSession().getNamedQuery(
                     "event.by.calendar.icaluid");
             hibQuery.setParameter("calendar", calendar);
             hibQuery.setParameter("uid", uid);
             return (ContentItem) hibQuery.uniqueResult();
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
     

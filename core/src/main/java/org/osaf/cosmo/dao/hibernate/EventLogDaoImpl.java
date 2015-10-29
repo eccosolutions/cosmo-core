@@ -35,6 +35,8 @@ import org.osaf.cosmo.model.hibernate.HibEventLogEntry;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibTicket;
 import org.osaf.cosmo.model.hibernate.HibUser;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,10 +53,10 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
     public void addEventLogEntry(EventLogEntry entry) {
         try {
             addEventLogEntryInternal(entry);
-            getSession().flush();
+            currentSession().flush();
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
     
@@ -64,10 +66,10 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
             for(EventLogEntry entry: entries)
                 addEventLogEntryInternal(entry);
             
-            getSession().flush();
+            currentSession().flush();
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
     
@@ -75,7 +77,7 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
     public List<ItemChangeRecord> findChangesForCollection(
             CollectionItem collection, Date start, Date end) {
         try {
-            Query hibQuery = getSession().getNamedQuery("logEntry.by.collection.date");
+            Query hibQuery = currentSession().getNamedQuery("logEntry.by.collection.date");
             hibQuery.setParameter("parentId", ((HibItem) collection).getId());
             hibQuery.setParameter("startDate", start);
             hibQuery.setParameter("endDate", end);
@@ -89,8 +91,8 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
             return changeRecords;
             
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
     
@@ -170,7 +172,7 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
         hibEntry.setUid1(entry.getItem().getUid());
         updateDisplayName(hibEntry, entry);
         updateLastModifiedBy(hibEntry, entry);
-        getSession().save(hibEntry);
+        currentSession().save(hibEntry);
     }
     
     private void updateLastModifiedBy(HibEventLogEntry hibEntry, ItemEntry entry) {

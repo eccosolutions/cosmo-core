@@ -27,6 +27,8 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibEntityFactory;
 import org.osaf.cosmo.scheduler.Schedule;
 import org.osaf.cosmo.scheduler.UserPreferencesScheduleHelper;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -65,13 +67,13 @@ public class UserPreferencesScheduleDao extends HibernateDaoSupport implements S
         Set<User> users = new HashSet<User>();
         
         try {
-            Query hibQuery = getSession().getNamedQuery("users.withSchedules");
+            Query hibQuery = currentSession().getNamedQuery("users.withSchedules");
             hibQuery.setCacheable(true);
             users.addAll(hibQuery.list());
             return users;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
 
@@ -92,11 +94,11 @@ public class UserPreferencesScheduleDao extends HibernateDaoSupport implements S
     protected void updateUser(User user) {
         try {
             user.updateTimestamp();
-            getSession().update(user);
-            getSession().flush();
+            currentSession().update(user);
+            currentSession().flush();
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         } catch (ConstraintViolationException cve) {
             logInvalidStateException(cve);
             throw cve;

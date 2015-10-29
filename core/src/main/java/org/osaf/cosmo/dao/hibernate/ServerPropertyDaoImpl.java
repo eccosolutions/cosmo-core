@@ -22,6 +22,7 @@ import org.osaf.cosmo.dao.ServerPropertyDao;
 import org.osaf.cosmo.model.ServerProperty;
 import org.osaf.cosmo.model.hibernate.HibServerProperty;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 /**
  * Implementation of ServerPropertyDao using Hibernate persistent objects.
@@ -38,7 +39,7 @@ public class ServerPropertyDaoImpl extends HibernateDaoSupport implements
      */
     public String getServerProperty(String property) {
         try {
-            ServerProperty prop = (ServerProperty) getSession().createQuery(
+            ServerProperty prop = (ServerProperty) currentSession().createQuery(
                     "from HibServerProperty where name=:name").setParameter(
                     "name", property).uniqueResult();
             if (prop != null)
@@ -56,19 +57,19 @@ public class ServerPropertyDaoImpl extends HibernateDaoSupport implements
     public void setServerProperty(String property, String value) {
         try {
             
-            ServerProperty prop = (ServerProperty) getSession().createQuery(
+            ServerProperty prop = (ServerProperty) currentSession().createQuery(
                     "from HibServerProperty where name=:name").setParameter(
                     "name", property).uniqueResult();
             if (prop != null) {
                 prop.setValue(value);
-                getSession().update(prop);
+                currentSession().update(prop);
             }
             else {
                 prop = new HibServerProperty(property, value);
-                getSession().save(prop);
+                currentSession().save(prop);
             }
             
-            getSession().flush();
+            currentSession().flush();
            
         } catch (HibernateException e) {
             throw SessionFactoryUtils.convertHibernateAccessException(e);

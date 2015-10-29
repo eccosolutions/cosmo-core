@@ -40,6 +40,7 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 import javax.validation.ConstraintViolationException;
 
@@ -80,13 +81,13 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             setBaseItemProps(collection);
             ((HibItem) collection).addParent(parent);
             
-            getSession().save(collection);
-            getSession().flush();
+            currentSession().save(collection);
+            currentSession().flush();
             
             return collection;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         } catch (ConstraintViolationException cve) {
             logConstraintViolationException(cve);
             throw cve;
@@ -162,18 +163,18 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                 }
             }
             
-            getSession().flush();
+            currentSession().flush();
             
             // clear the session to improve subsequent flushes
-            getSession().clear();
+            currentSession().clear();
             
             // load collection to get it back into the session
-            getSession().load(collection, getBaseModelObject(collection).getId());
+            currentSession().load(collection, getBaseModelObject(collection).getId());
             
             return collection;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -192,11 +193,11 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         
         try {
             createContentInternal(parent, content);
-            getSession().flush();
+            currentSession().flush();
             return content;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -211,11 +212,11 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
         try {
             createContentInternal(parents, content);
-            getSession().flush();
+            currentSession().flush();
             return content;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -228,14 +229,14 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
      */
     public CollectionItem updateCollectionTimestamp(CollectionItem collection) {
         try {
-            if(!getSession().contains(collection))
-                collection = (CollectionItem) getSession().merge(collection);
+            if(!currentSession().contains(collection))
+                collection = (CollectionItem) currentSession().merge(collection);
             collection.updateTimestamp();
-            getSession().flush();
+            currentSession().flush();
             return collection;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
     
@@ -249,12 +250,12 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         try {
             
             updateCollectionInternal(collection);
-            getSession().flush();
+            currentSession().flush();
             
             return collection;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -269,11 +270,11 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
     public ContentItem updateContent(ContentItem content) {
         try {     
             updateContentInternal(content);
-            getSession().flush();
+            currentSession().flush();
             return content;
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -291,12 +292,12 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             throw new IllegalArgumentException("collection cannot be null");
         
         try {
-            getSession().refresh(collection);
+            currentSession().refresh(collection);
             removeCollectionRecursive(collection);
-            getSession().flush();
+            currentSession().flush();
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
 
@@ -311,12 +312,12 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             throw new IllegalArgumentException("content cannot be null");
         
         try {
-            getSession().refresh(content);
+            currentSession().refresh(content);
             removeContentRecursive(content);
-            getSession().flush();
+            currentSession().flush();
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
     
@@ -326,16 +327,16 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
      */
     public void removeUserContent(User user) {
         try {
-            Query query = getSession().getNamedQuery("contentItem.by.owner")
+            Query query = currentSession().getNamedQuery("contentItem.by.owner")
                 .setParameter("owner", user);
             
             List<ContentItem> results = query.list();
             for(ContentItem content: results)
                 removeContentRecursive(content);
-            getSession().flush();
+            currentSession().flush();
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
 
@@ -350,10 +351,10 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
             // use custom HQL query that will eager fetch all associations
             if (timestamp == null)
-                query = getSession().getNamedQuery("contentItem.by.parent")
+                query = currentSession().getNamedQuery("contentItem.by.parent")
                         .setParameter("parent", collection);
             else
-                query = getSession().getNamedQuery("contentItem.by.parent.timestamp")
+                query = currentSession().getNamedQuery("contentItem.by.parent.timestamp")
                         .setParameter("parent", collection).setParameter(
                                 "timestamp", timestamp);
             
@@ -368,8 +369,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             return children;
             
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
 
@@ -388,8 +389,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                }
            }
         } catch (HibernateException e) {
-            getSession().clear();
-            throw convertHibernateAccessException(e);
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
         
     }
@@ -454,7 +455,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             }
         }
             
-        getSession().delete(content);
+        currentSession().delete(content);
     }
     
     private void removeContentCommon(ContentItem content) {
@@ -462,7 +463,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         // when the removal occurred.
         for (CollectionItem parent : content.getParents()) {
             getHibItem(parent).addTombstone(new HibItemTombstone(parent,content));
-            getSession().update(parent);
+            currentSession().update(parent);
         }
     }
     
@@ -477,19 +478,19 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             } else if(item instanceof ContentItem) {                    
                 ((HibItem) item).removeParent(collection);
                 if(item.getParents().isEmpty())
-                    getSession().delete(item);
+                    currentSession().delete(item);
             } else {
-                getSession().delete(item);
+                currentSession().delete(item);
             }
         }
         
-        getSession().delete(collection);
+        currentSession().delete(collection);
     }
     
     
     private void removeNoteItemFromCollectionInternal(NoteItem note, CollectionItem collection) {
-        getSession().update(collection);
-        getSession().update(note);
+        currentSession().update(collection);
+        currentSession().update(note);
         
         // do nothing if item doesn't belong to collection
         if(!note.getParents().contains(collection))
@@ -551,7 +552,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             // Add modification to all parents of master
             for (CollectionItem col : note.getModifies().getParents()) {
                 if (((HibCollectionItem) col).removeTombstone(content) == true)
-                    getSession().update(col);
+                    currentSession().update(col);
                 ((HibItem) note).addParent(col);
             }
         } else {
@@ -560,11 +561,11 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             
             // remove tombstone (if it exists) from parent
             if(((HibCollectionItem)parent).removeTombstone(content)==true)
-                getSession().update(parent);
+                currentSession().update(parent);
         }
         
        
-        getSession().save(content);    
+        currentSession().save(content);    
     }
 
     protected void createContentInternal(Set<CollectionItem> parents, ContentItem content) {
@@ -621,11 +622,11 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         for(CollectionItem parent: parents) {
             ((HibItem) content).addParent(parent);
             if(((HibCollectionItem)parent).removeTombstone(content)==true)
-                getSession().update(parent);
+                currentSession().update(parent);
         }
         
       
-        getSession().save(content);
+        currentSession().save(content);
     }
 
     protected void updateContentInternal(ContentItem content) {
@@ -636,7 +637,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if(content.getIsActive()==Boolean.FALSE)
             throw new IllegalArgumentException("content must be active");
         
-        getSession().update(content);
+        currentSession().update(content);
         
         if (content.getOwner() == null)
             throw new IllegalArgumentException("content must have owner");
@@ -654,7 +655,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (collection == null)
             throw new IllegalArgumentException("collection cannot be null");
         
-        getSession().update(collection);
+        currentSession().update(collection);
         
         if (collection.getOwner() == null)
             throw new IllegalArgumentException("collection must have owner");
@@ -723,11 +724,11 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         // Lookup item by parent/icaluid
         Query hibQuery = null;
         if (item instanceof NoteItem)
-            hibQuery = getSession().getNamedQuery(
+            hibQuery = currentSession().getNamedQuery(
                     "noteItemId.by.parent.icaluid").setParameter("parentid",
                             getBaseModelObject(parent).getId()).setParameter("icaluid", item.getIcalUid());
         else
-            hibQuery = getSession().getNamedQuery(
+            hibQuery = currentSession().getNamedQuery(
                     "icalendarItem.by.parent.icaluid").setParameter("parentid",
                             getBaseModelObject(parent).getId()).setParameter("icaluid", item.getIcalUid());
         
@@ -739,7 +740,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (itemId != null) {
             // If the note is new, then its a duplicate icaluid
             if (getBaseModelObject(item).getId() == -1) {
-                Item dup = (Item) getSession().load(HibItem.class, itemId);
+                Item dup = (Item) currentSession().load(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
                         + " already in use for collection " + parent.getUid(),
                         item.getUid(), dup.getUid());
@@ -747,7 +748,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             // If the note exists and there is another note with the same
             // icaluid, then its a duplicate icaluid
             if (getBaseModelObject(item).getId().equals(itemId)) {
-                Item dup = (Item) getSession().load(HibItem.class, itemId);
+                Item dup = (Item) currentSession().load(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
                         + " already in use for collection " + parent.getUid(),
                         item.getUid(), dup.getUid());
