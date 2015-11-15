@@ -11,6 +11,7 @@
 	</parent>
 
 	<properties>
+		<hibernate.version>4.3.10.Final</hibernate.version>
 		<spring.version>4.1.8.RELEASE</spring.version>
 		<spring.security.version>3.2.7.RELEASE</spring.security.version>
 	</properties>
@@ -321,7 +322,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>4.3.10.Final</version>
+			<version>${hibernate.version}</version>
 			<exclusions>
 				<!-- brings in some old version -->
 				<exclusion>
@@ -333,7 +334,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.10.Final</version>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -406,9 +407,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-			<version>2.6.9</version>
+			<groupId>org.hibernate</groupId>
+   			<artifactId>hibernate-ehcache</artifactId>
+			<version>${hibernate.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
