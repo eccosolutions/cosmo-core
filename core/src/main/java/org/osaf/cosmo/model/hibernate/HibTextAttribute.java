@@ -50,7 +50,7 @@ public class HibTextAttribute extends HibAttribute implements
      */
     private static final long serialVersionUID = 2417093506524504993L;
     
-    @Column(name="textvalue", length=102400000, columnDefinition = "CLOB")
+    @Column(name="textvalue", length=102400000)
     @Lob
     private String value;
 

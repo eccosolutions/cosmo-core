@@ -86,7 +86,7 @@ public abstract class HibBaseEventStamp extends HibStamp
 
     protected static final String VALUE_MISSING = "MISSING";
 
-    @Column(table="cosmo_event_stamp", name = "icaldata", length=102400000, nullable = false, columnDefinition = "CLOB")
+    @Column(table="cosmo_event_stamp", name = "icaldata", length=102400000, nullable = false)
     @Type(type="calendar_clob")
     @Lob
     @NotNull

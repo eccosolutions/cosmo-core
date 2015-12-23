@@ -19,6 +19,7 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +40,7 @@ public class HibXmlAttribute extends HibAttribute
     implements java.io.Serializable, XmlAttribute {
     private static final Log log = LogFactory.getLog(XmlAttribute.class);
 
-    @Column(name = "textvalue")
+    @Column(name="textvalue", length=102400000)
     @Convert(converter = JpaConverters.XmlConverter.class)
     private Element value;
 

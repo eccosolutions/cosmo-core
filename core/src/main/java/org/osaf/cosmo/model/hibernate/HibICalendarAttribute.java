@@ -42,7 +42,7 @@ import org.osaf.cosmo.model.QName;
 public class HibICalendarAttribute extends HibAttribute implements
         java.io.Serializable, ICalendarAttribute {
 
-    @Column(name = "textvalue", length=102400000)
+    @Column(name="textvalue", length=102400000)
     @Type(type="calendar_clob")
     private Calendar value;
 
