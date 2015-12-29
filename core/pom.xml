@@ -233,6 +233,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <!-- NOTE: should be transitive from above but there seem to be 2 diff versions of the above -->
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <scope>provided</scope>
+            <version>2.2.5</version>
+        </dependency>
+        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4</version>
