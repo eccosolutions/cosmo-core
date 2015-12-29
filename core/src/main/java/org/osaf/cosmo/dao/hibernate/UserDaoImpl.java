@@ -296,10 +296,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 
     private User findUserByUsername(String username) {
         // take advantage of optimized caching with naturalId
-        return (User) currentSession().createCriteria(HibUser.class).add(
-                Restrictions.naturalId().set("username", username))
-                .setCacheable(true).setFlushMode(FlushMode.MANUAL)
-                .uniqueResult();
+        return (User) currentSession().bySimpleNaturalId(HibUser.class).load(username);
     }
     
     private User findUserByUsernameIgnoreCase(String username) {

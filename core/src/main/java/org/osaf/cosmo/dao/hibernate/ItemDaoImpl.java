@@ -130,10 +130,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             currentSession().setFlushMode(FlushMode.MANUAL);
             
             // take advantage of optimized caching with naturalId
-            Item item = (Item) currentSession().createCriteria(HibItem.class).add(
-                    Restrictions.naturalId().set("uid", uid))
-                    .setCacheable(true).setFlushMode(FlushMode.MANUAL)
-                    .uniqueResult();
+            Item item = (Item) currentSession().bySimpleNaturalId(HibItem.class).load(uid);
 
             // Prevent proxied object from being returned
             if (item instanceof HibernateProxy)
