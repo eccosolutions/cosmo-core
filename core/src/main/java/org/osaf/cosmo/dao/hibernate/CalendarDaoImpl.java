@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,8 +35,8 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.filter.EventStampFilter;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.NoteItemFilter;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -67,12 +67,12 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
                 return results;
             } catch (IllegalArgumentException e) {
             }
-            
+
             // Use brute-force method if CalendarFilter can't be translated
             // to an ItemFilter (slower but at least gets the job done).
             HashSet<ICalendarItem> results = new HashSet<ICalendarItem>();
             Set<Item> itemsToProcess = null;
-            
+
             // Optimization:
             // Do a first pass query if possible to reduce the number
             // of items we have to examine.  Otherwise we have to examine
@@ -82,25 +82,25 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
                 itemsToProcess = itemFilterProcessor.processFilter(currentSession(), firstPassItemFilter);
             else
                 itemsToProcess = collection.getChildren();
-            
+
             CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
-            
+
             // Evaluate filter against all calendar items
             for (Item child : itemsToProcess) {
-                
+
                 // only care about calendar items
                 if (child instanceof ICalendarItem) {
-                    
+
                     ICalendarItem content = (ICalendarItem) child;
                     Calendar calendar = entityConverter.convertContent(content);
-                        
+
                     if(calendar!=null) {
                         if (evaluater.evaluate(calendar, filter) == true)
                             results.add(content);
                     }
                 }
             }
-            
+
             return results;
         } catch (HibernateException e) {
             currentSession().clear();
@@ -113,18 +113,18 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
      * @see org.osaf.cosmo.dao.CalendarDao#findEvents(org.osaf.cosmo.model.CollectionItem, net.fortuna.ical4j.model.DateTime, net.fortuna.ical4j.model.DateTime, boolean)
      */
     public Set<ContentItem> findEvents(CollectionItem collection, DateTime rangeStart, DateTime rangeEnd, boolean expandRecurringEvents) {
-        
+
         // Create a NoteItemFilter that filters by parent
         NoteItemFilter itemFilter = new NoteItemFilter();
         itemFilter.setParent(collection);
-        
+
         // and EventStamp by timeRange
         EventStampFilter eventFilter = new EventStampFilter();
         Period period = new Period(rangeStart, rangeEnd);
         eventFilter.setPeriod(period);
         eventFilter.setExpandRecurringEvents(expandRecurringEvents);
         itemFilter.getStampFilters().add(eventFilter);
-        
+
         try {
             Set results = itemFilterProcessor.processFilter(currentSession(), itemFilter);
             return results;
@@ -138,7 +138,7 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.osaf.cosmo.dao.CalendarDao#findEventByIcalUid(java.lang.String,
      *      org.osaf.cosmo.model.CollectionItem)
      */
@@ -155,8 +155,8 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
-  
+
+
     public ItemFilterProcessor getItemFilterProcessor() {
         return itemFilterProcessor;
     }
@@ -171,7 +171,7 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
      * optional properties.
      */
     public void init() {
-        
+
         if (itemFilterProcessor == null) {
             throw new IllegalStateException("itemFilterProcessor is required");
         }

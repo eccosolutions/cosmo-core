@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,8 +49,8 @@ import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibHomeCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -86,8 +86,8 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
-  
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.ItemDao#findItemByPath(java.lang.String, java.lang.String)
      */
@@ -128,14 +128,14 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         try {
             // prevent auto flushing when looking up item by uid
             currentSession().setFlushMode(FlushMode.MANUAL);
-            
+
             // take advantage of optimized caching with naturalId
             Item item = (Item) currentSession().bySimpleNaturalId(HibItem.class).load(uid);
 
             // Prevent proxied object from being returned
             if (item instanceof HibernateProxy)
                 item = (Item) ((HibernateProxy) item).getHibernateLazyInitializer().getImplementation();
-        
+
             return item;
         } catch (HibernateException e) {
             currentSession().clear();
@@ -153,13 +153,13 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
 
             if(item==null)
                 throw new IllegalArgumentException("item cannot be null");
-            
+
             if(item instanceof HomeCollectionItem)
                 throw new IllegalArgumentException("cannot remove root item");
 
             removeItemInternal(item);
             currentSession().flush();
-            
+
         } catch(ObjectNotFoundException onfe) {
             throw new ItemNotFoundException("item not found");
         } catch(ObjectDeletedException ode) {
@@ -172,7 +172,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         }
     }
 
-    
+
     /*
      * (non-Javadoc)
      *
@@ -216,7 +216,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw cve;
         }
     }
-    
+
     public void addItemToCollection(Item item, CollectionItem collection) {
         try {
             addItemToCollectionInternal(item, collection);
@@ -226,7 +226,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
+
     public void removeItemFromCollection(Item item, CollectionItem collection) {
         try {
             removeItemFromCollectionInternal(item, collection);
@@ -234,9 +234,9 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
-        } 
+        }
     }
-    
+
     public Set<Ticket> getTickets(Item item) {
         if(item==null)
             throw new IllegalArgumentException("item cannot be null");
@@ -249,11 +249,11 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
+
     public Ticket findTicket(String key) {
         if(key==null)
             throw new IllegalArgumentException("key cannot be null");
-        
+
         try {
             // prevent auto flushing when looking up ticket
             currentSession().setFlushMode(FlushMode.MANUAL);
@@ -272,7 +272,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         try {
             if(ticket==null)
                 throw new IllegalArgumentException("ticket cannot be null");
-            
+
             if(item==null)
                 throw new IllegalArgumentException("item cannot be null");
 
@@ -350,29 +350,29 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
+
 
     public void copyItem(Item item, String destPath, boolean deepCopy) {
         try {
             String copyName = itemPathTranslator.getItemName(destPath);
-            
+
             if(copyName==null || copyName != null && copyName.isEmpty())
                 throw new IllegalArgumentException("path must include name");
-            
+
             if(item instanceof HomeCollectionItem)
                 throw new IllegalArgumentException("cannot copy root collection");
-            
+
             CollectionItem newParent = (CollectionItem) itemPathTranslator.findItemParent(destPath);
-            
+
             if(newParent==null)
                 throw new ItemNotFoundException("parent collection not found");
-          
+
             verifyNotInLoop(item, newParent);
-            
+
             Item newItem = copyItemInternal(item, newParent, deepCopy);
             newItem.setName(copyName);
             currentSession().flush();
-            
+
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
@@ -381,55 +381,55 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw cve;
         }
     }
-    
-    
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.ItemDao#moveItem(java.lang.String, java.lang.String)
      */
     public void moveItem(String fromPath, String toPath) {
         try {
-            
+
             // Get current item
             Item item = itemPathTranslator.findItemByPath(fromPath);
-            
+
             if(item==null)
                 throw new ItemNotFoundException("item " + fromPath + " not found");
-            
+
             if(item instanceof HomeCollectionItem)
                 throw new IllegalArgumentException("cannot move root collection");
-            
+
             // Name of moved item
             String moveName = itemPathTranslator.getItemName(toPath);
-            
+
             if(moveName==null || moveName != null && moveName.isEmpty())
                 throw new IllegalArgumentException("path must include name");
-            
+
             // Parent of moved item
             CollectionItem parent = (CollectionItem) itemPathTranslator.findItemParent(toPath);
-            
+
             if(parent==null)
                 throw new ItemNotFoundException("parent collecion not found");
-            
+
             // Current parent
             CollectionItem oldParent = (CollectionItem) itemPathTranslator.findItemParent(fromPath);
-            
+
             verifyNotInLoop(item, parent);
-            
+
             item.setName(moveName);
             if(!parent.getUid().equals(oldParent.getUid())) {
                 ((HibCollectionItem)parent).removeTombstone(item);
-                
+
                 // Copy over existing CollectionItemDetails
                 CollectionItemDetails cid = item.getParentDetails(oldParent);
                 ((HibItem) item).addParent(parent);
-                
+
                 // Remove item from old parent collection
                 getHibItem(oldParent).addTombstone(new HibItemTombstone(oldParent, item));
                 ((HibItem) item).removeParent(oldParent);
             }
-            
+
             currentSession().flush();
-            
+
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
@@ -439,7 +439,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         }
     }
 
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.ItemDao#refreshItem(org.osaf.cosmo.model.Item)
      */
@@ -451,8 +451,8 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
-    
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.ItemDao#initializeItem(org.osaf.cosmo.model.Item)
      */
@@ -468,7 +468,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw SessionFactoryUtils.convertHibernateAccessException(e);
          }
     }
-    
+
     /**
      * Find a set of items using an ItemFilter.
      * @param filter criteria to filter items by
@@ -482,7 +482,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
+
     /**
      * Find a set of items using a set of ItemFilters.  The set of items
      * returned includes all items that match any of the filters.
@@ -522,7 +522,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
     public IdentifierGenerator getIdGenerator() {
         return idGenerator;
     }
-    
+
     /**
      * Set the unique key generator for new tickets
      *
@@ -549,8 +549,8 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
     public void setItemPathTranslator(ItemPathTranslator itemPathTranslator) {
         this.itemPathTranslator = itemPathTranslator;
     }
-    
-    
+
+
     public ItemFilterProcessor getItemFilterProcessor() {
         return itemFilterProcessor;
     }
@@ -579,7 +579,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         if (idGenerator == null) {
             throw new IllegalStateException("idGenerator is required");
         }
-        
+
         if (ticketKeyGenerator == null) {
             throw new IllegalStateException("ticketKeyGenerator is required");
         }
@@ -587,7 +587,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         if (itemPathTranslator == null) {
             throw new IllegalStateException("itemPathTranslator is required");
         }
-        
+
         if (itemFilterProcessor == null) {
             throw new IllegalStateException("itemFilterProcessor is required");
         }
@@ -595,29 +595,29 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
     }
 
     protected Item copyItemInternal(Item item, CollectionItem newParent, boolean deepCopy) {
-        
+
         Item item2 = item.copy();
         item2.setName(item.getName());
-        
+
         // copy base Item fields
         setBaseItemProps(item2);
-        
+
         ((HibItem) item2).addParent(newParent);
-        
+
         // save Item before attempting deep copy
         currentSession().save(item2);
         currentSession().flush();
-        
+
         // copy children if collection and deepCopy = true
         if(deepCopy==true && (item instanceof CollectionItem) ) {
             CollectionItem collection = (CollectionItem) item;
             for(Item child: collection.getChildren())
-                copyItemInternal(child, (CollectionItem) item2,true);       
+                copyItemInternal(child, (CollectionItem) item2,true);
         }
-        
+
         return item2;
     }
-    
+
     /**
      * Checks to see if a parent Item is currently a child of a target item. If
      * so, then this would put the hierarchy into a loop and is not allowed.
@@ -633,18 +633,18 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         if (getBaseModelObject(item).getId().equals(getBaseModelObject(newParent).getId()))
             throw new ModelValidationException(newParent,
                     "Invalid parent - will cause loop");
-        
+
         // If item is not a collection then all is good
         if(!(item instanceof CollectionItem ))
             return;
-        
+
         CollectionItem collection = (CollectionItem) item;
         currentSession().refresh(collection);
 
         for (Item nextItem: collection.getChildren())
             verifyNotInLoop(nextItem, newParent);
     }
-    
+
     /**
      * Verifies that name is unique in collection, meaning no item exists
      * in collection with the same item name.
@@ -659,9 +659,9 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
                 ((HibItem) collection).getId());
         List<Long> results = hibQuery.list();
         if(!results.isEmpty()) {
-            throw new DuplicateItemNameException(item, "item name " + item.getName() + 
+            throw new DuplicateItemNameException(item, "item name " + item.getName() +
                     " already exists in collection " + collection.getUid());
-        } 
+        }
     }
 
     /**
@@ -709,7 +709,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
                     "item.by.ownerId.parentId.name").setParameter("ownerid",
                     userDbId).setParameter("parentid", parentDbId)
                     .setParameter("name", name);
-            
+
         } else {
             hibQuery = currentSession().getNamedQuery(
                     "item.by.ownerId.nullParent.name").setParameter("ownerid",
@@ -718,7 +718,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         hibQuery.setFlushMode(FlushMode.MANUAL);
         return (Item) hibQuery.uniqueResult();
     }
-    
+
     protected Item findItemByParentAndNameMinusItem(Long userDbId, Long parentDbId,
             String name, Long itemId) {
         Query hibQuery = null;
@@ -727,7 +727,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
                     "item.by.ownerId.parentId.name.minusItem").setParameter("itemid", itemId)
                     .setParameter("ownerid",
                     userDbId).setParameter("parentid", parentDbId)
-                    .setParameter("name", name);      
+                    .setParameter("name", name);
         } else {
             hibQuery = currentSession().getNamedQuery(
                     "item.by.ownerId.nullParent.name.minusItem").setParameter("itemid", itemId)
@@ -737,7 +737,7 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         hibQuery.setFlushMode(FlushMode.MANUAL);
         return (Item) hibQuery.uniqueResult();
     }
-    
+
     protected HomeCollectionItem findRootItem(Long dbUserId) {
         Query hibQuery = currentSession().getNamedQuery(
                 "homeCollection.by.ownerId").setParameter("ownerid",
@@ -766,31 +766,31 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
             }
         }
     }
-    
+
     protected Ticket getTicketRecursive(Item item, String key) {
         if(item==null)
             return null;
-        
+
         for (Ticket ticket : item.getTickets()) {
             if (ticket.getKey().equals(key))
                 return ticket;
         }
-        
+
         for(Item parent: item.getParents()) {
             Ticket ticket = getTicketRecursive(parent, key);
             if(ticket!=null)
                 return ticket;
         }
-        
+
         return null;
     }
-    
+
     protected void attachToSession(Item item) {
         if(currentSession().contains(item))
             return;
         currentSession().lock(item, LockMode.NONE);
     }
-    
+
     protected void logConstraintViolationException(ConstraintViolationException ise) {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {
@@ -801,25 +801,25 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
                         + iv.getInvalidValue());
         }
     }
-    
+
     protected void removeItemFromCollectionInternal(Item item, CollectionItem collection) {
-       
+
         currentSession().update(collection);
         currentSession().update(item);
-        
+
         // do nothing if item doesn't belong to collection
         if(!item.getParents().contains(collection))
             return;
-        
+
         getHibItem(collection).addTombstone(new HibItemTombstone(collection, item));
         ((HibItem) item).removeParent(collection);
-        
+
         // If the item belongs to no collection, then it should
         // be purged.
         if(item.getParents().isEmpty())
             removeItemInternal(item);
     }
-    
+
     protected void addItemToCollectionInternal(Item item,
             CollectionItem collection) {
         verifyItemNameUnique(item, collection);
@@ -828,21 +828,21 @@ public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao
         ((HibCollectionItem)collection).removeTombstone(item);
         ((HibItem) item).addParent(collection);
     }
-    
+
     protected void removeItemInternal(Item item) {
         currentSession().delete(item);
     }
-    
+
     protected BaseModelObject getBaseModelObject(Object obj) {
         return (BaseModelObject) obj;
     }
-    
+
     protected HibItem getHibItem(Item item) {
         return (HibItem) item;
     }
-    
+
     protected HibCollectionItem getHibCollectionItem(CollectionItem item) {
         return (HibCollectionItem) item;
     }
-    
+
 }

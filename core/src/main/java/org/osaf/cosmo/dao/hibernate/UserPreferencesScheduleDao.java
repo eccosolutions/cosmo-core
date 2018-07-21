@@ -27,8 +27,8 @@ import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibEntityFactory;
 import org.osaf.cosmo.scheduler.Schedule;
 import org.osaf.cosmo.scheduler.UserPreferencesScheduleHelper;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -42,7 +42,7 @@ public class UserPreferencesScheduleDao extends HibernateDaoSupport implements S
             .getLog(UserPreferencesScheduleDao.class);
     private UserPreferencesScheduleHelper helper = new UserPreferencesScheduleHelper(
             new HibEntityFactory());
-    
+
     public Schedule createScheduleForUser(Schedule schedule, User user) {
         helper.addScheduleToUser(user, schedule);
         updateUser(user);
@@ -65,7 +65,7 @@ public class UserPreferencesScheduleDao extends HibernateDaoSupport implements S
 
     public Set<User> getUsersWithSchedules() {
         Set<User> users = new HashSet<User>();
-        
+
         try {
             Query hibQuery = currentSession().getNamedQuery("users.withSchedules");
             hibQuery.setCacheable(true);
@@ -84,13 +84,13 @@ public class UserPreferencesScheduleDao extends HibernateDaoSupport implements S
     }
 
     public void destroy() {
-        
+
     }
 
     public void init() {
-        
+
     }
-    
+
     protected void updateUser(User user) {
         try {
             user.updateTimestamp();
@@ -104,7 +104,7 @@ public class UserPreferencesScheduleDao extends HibernateDaoSupport implements S
             throw cve;
         }
     }
-    
+
     protected void logInvalidStateException(ConstraintViolationException cve) {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {

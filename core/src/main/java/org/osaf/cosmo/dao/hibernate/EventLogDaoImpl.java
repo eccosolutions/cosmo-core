@@ -35,8 +35,8 @@ import org.osaf.cosmo.model.hibernate.HibEventLogEntry;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibTicket;
 import org.osaf.cosmo.model.hibernate.HibUser;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,8 +48,8 @@ import java.util.List;
 public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao {
 
     private static final Log log = LogFactory.getLog(EventLogDaoImpl.class);
-    
-   
+
+
     public void addEventLogEntry(EventLogEntry entry) {
         try {
             addEventLogEntryInternal(entry);
@@ -59,21 +59,21 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
+
     public void addEventLogEntries(List<EventLogEntry> entries) {
-       
+
         try {
             for(EventLogEntry entry: entries)
                 addEventLogEntryInternal(entry);
-            
+
             currentSession().flush();
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
-    
+
+
     public List<ItemChangeRecord> findChangesForCollection(
             CollectionItem collection, Date start, Date end) {
         try {
@@ -82,30 +82,30 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
             hibQuery.setParameter("startDate", start);
             hibQuery.setParameter("endDate", end);
             List<HibEventLogEntry> results = hibQuery.list();
-            
+
             ArrayList<ItemChangeRecord> changeRecords = new ArrayList<ItemChangeRecord>();
-            
+
             for(HibEventLogEntry result: results)
                 changeRecords.add(convertToItemChangeRecord(result));
-            
+
             return changeRecords;
-            
+
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
-   
+
+
 
     public void destroy() {
-        
+
     }
 
     public void init() {
-        
+
     }
-    
+
     private ItemChangeRecord convertToItemChangeRecord(HibEventLogEntry entry) {
         ItemChangeRecord record = new ItemChangeRecord();
         record.setAction(ItemChangeRecord.toAction(entry.getType()));
@@ -113,59 +113,59 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
         record.setItemUuid(entry.getUid1());
         record.setItemDisplayName(entry.getStrval1());
         record.setModifiedBy(entry.getStrval2());
-        
+
         return record;
     }
-    
+
     private void addEventLogEntryInternal(EventLogEntry entry) {
-        
+
         if(entry instanceof ItemAddedEntry)
             addItemAddedEntry((ItemAddedEntry) entry);
         else if(entry instanceof ItemRemovedEntry)
             addItemRemovedEntry((ItemRemovedEntry) entry);
         else if(entry instanceof ItemUpdatedEntry)
             addItemUpdatedEntry((ItemUpdatedEntry) entry);
-        
+
     }
-    
+
     // translate ItemAddedEntry to HibEventLogEntry
     private void addItemAddedEntry(ItemAddedEntry entry) {
         HibEventLogEntry hibEntry = createBaseHibEntry(entry);
         hibEntry.setType("ItemAdded");
         setBaseItemEntryAttributes(hibEntry, entry);
     }
-    
+
     // translate ItemRevmoedEntry to HibEventLogEntry
     private void addItemRemovedEntry(ItemRemovedEntry entry) {
         HibEventLogEntry hibEntry = createBaseHibEntry(entry);
         hibEntry.setType("ItemRemoved");
         setBaseItemEntryAttributes(hibEntry, entry);
     }
-    
+
     // translate ItemUpdatedEntry to HibEventLogEntry(s)
     private void addItemUpdatedEntry(ItemUpdatedEntry entry) {
         HibEventLogEntry hibEntry = createBaseHibEntry(entry);
         hibEntry.setType("ItemUpdated");
         setBaseItemEntryAttributes(hibEntry, entry);
     }
-    
+
     private HibEventLogEntry createBaseHibEntry(EventLogEntry entry) {
         HibEventLogEntry hibEntry = new HibEventLogEntry();
-        
+
         if(entry.getDate()!=null)
             hibEntry.setDate(entry.getDate());
-        
+
         if(entry.getUser()!=null) {
             hibEntry.setAuthType("user");
             hibEntry.setAuthId(((HibUser) entry.getUser()).getId());
         } else {
             hibEntry.setAuthType("ticket");
-            hibEntry.setAuthId(((HibTicket) entry.getTicket()).getId());  
+            hibEntry.setAuthId(((HibTicket) entry.getTicket()).getId());
         }
 
         return hibEntry;
     }
-    
+
     private void setBaseItemEntryAttributes(HibEventLogEntry hibEntry, ItemEntry entry) {
         hibEntry.setId1(((HibItem) entry.getCollection()).getId());
         hibEntry.setId2(((HibItem) entry.getItem()).getId());
@@ -174,12 +174,12 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
         updateLastModifiedBy(hibEntry, entry);
         currentSession().save(hibEntry);
     }
-    
+
     private void updateLastModifiedBy(HibEventLogEntry hibEntry, ItemEntry entry) {
         Item item = entry.getItem();
         if(item instanceof ContentItem)
             hibEntry.setStrval2(((ContentItem) item).getLastModifiedBy());
-        
+
         if(hibEntry.getStrval2()==null) {
             if(entry.getUser()!=null)
                 hibEntry.setStrval2(entry.getUser().getEmail());
@@ -187,11 +187,11 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
                 hibEntry.setStrval2("ticket: anonymous");
         }
     }
-    
+
     private void updateDisplayName(HibEventLogEntry hibEntry, ItemEntry entry) {
         Item item = entry.getItem();
         String displayName = item.getDisplayName();
-       
+
         // handle case of "missing" displayName
         if(displayName==null) {
             if(item instanceof NoteItem) {
@@ -200,7 +200,7 @@ public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao 
                    displayName = note.getModifies().getDisplayName();
             }
         }
-        
+
         // limit to 255 chars
         hibEntry.setStrval1(StringUtils.substring(displayName, 0, 255));
     }

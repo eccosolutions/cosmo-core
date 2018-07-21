@@ -42,8 +42,8 @@ import org.osaf.cosmo.model.hibernate.HibUser;
 import org.osaf.cosmo.util.ArrayPagedList;
 import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -64,10 +64,10 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         try {
             if(user==null)
                 throw new IllegalArgumentException("user is required");
-            
+
             if(getBaseModelObject(user).getId()!=-1)
                 throw new IllegalArgumentException("new user is required");
-            
+
             if (findUserByUsernameIgnoreCase(user.getUsername()) != null)
                 throw new DuplicateUsernameException(user);
 
@@ -98,11 +98,11 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
+
     public User getUserByUid(String uid) {
         if(uid==null)
             throw new IllegalArgumentException("uid required");
-        
+
         try {
             return findUserByUid(uid);
         } catch (HibernateException e) {
@@ -114,7 +114,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
     public User getUserByActivationId(String id) {
         if(id==null)
             throw new IllegalArgumentException("id required");
-        
+
         try {
             return findUserByActivationId(id);
         } catch (HibernateException e) {
@@ -126,7 +126,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
     public User getUserByEmail(String email) {
         if(email==null)
             throw new IllegalArgumentException("email required");
-            
+
         try {
             return findUserByEmail(email);
         } catch (HibernateException e) {
@@ -166,7 +166,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         }
     }
 
-      
+
     public Set<User> findUsersByPreference(String key, String value) {
         try {
             Query hibQuery = currentSession().getNamedQuery("users.byPreference");
@@ -174,13 +174,13 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
             List<User> results = hibQuery.list();
 
             Set<User> users = new HashSet<User>();
-            
+
             // TODO figure out how to load all properties using HQL
             for (User user : results) {
                 Hibernate.initialize(user);
                 users.add(user);
             }
-            
+
             return users;
         } catch (HibernateException e) {
             currentSession().clear();
@@ -205,7 +205,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
             // TODO: should probably let db take care of this with
             // cacade constaint
             deleteAllPasswordRecoveries(user);
-            
+
             currentSession().delete(user);
             currentSession().flush();
         } catch (HibernateException e) {
@@ -242,7 +242,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
             throw ise;
         }
     }
-    
+
     public void createPasswordRecovery(PasswordRecovery passwordRecovery){
         try {
             currentSession().save(passwordRecovery);
@@ -250,7 +250,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
-        } 
+        }
     }
 
     public PasswordRecovery getPasswordRecovery(String key){
@@ -264,7 +264,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-    
+
     public void deletePasswordRecovery(PasswordRecovery passwordRecovery) {
         try {
             currentSession().delete(passwordRecovery);
@@ -298,7 +298,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         // take advantage of optimized caching with naturalId
         return (User) currentSession().bySimpleNaturalId(HibUser.class).load(username);
     }
-    
+
     private User findUserByUsernameIgnoreCase(String username) {
         Session session = currentSession();
         Query hibQuery = session.getNamedQuery("user.byUsername.ignorecase").setParameter(
@@ -311,7 +311,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         else
             return null;
     }
-    
+
     private User findUserByUsernameOrEmailIgnoreCaseAndId(Long userId,
             String username, String email) {
         Session session = currentSession();
@@ -340,7 +340,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         else
             return null;
     }
-    
+
     private User findUserByEmailIgnoreCase(String email) {
         Session session = currentSession();
         Query hibQuery = session.getNamedQuery("user.byEmail.ignorecase").setParameter(
@@ -362,7 +362,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         hibQuery.setFlushMode(FlushMode.MANUAL);
         return (User) hibQuery.uniqueResult();
     }
-    
+
     private void deleteAllPasswordRecoveries(User user) {
         Session session = currentSession();
         session.getNamedQuery("passwordRecovery.delete.byUser").setParameter(
@@ -417,11 +417,11 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
                    Order.desc(property);
         }
     }
-    
+
     protected BaseModelObject getBaseModelObject(Object obj) {
         return (BaseModelObject) obj;
     }
-    
+
     protected void logInvalidStateException(javax.validation.ConstraintViolationException cve) {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {
