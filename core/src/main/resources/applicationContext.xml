@@ -82,17 +82,17 @@
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
-  <!--  ICalendar Client Filter Manager 
+  <!--  ICalendar Client Filter Manager
         The ICalendar Client Filter Manager provides a way
         for cosmo to tailor the icalendar data depending
         on the client requesting the data.
   -->
-  
+
   <!--  filter for iCal clients -->
-  <bean id="ical3ClientFilter" 
+  <bean id="ical3ClientFilter"
         class="org.osaf.cosmo.icalendar.ICal3ClientFilter"/>
-  
-  <bean id="iCalendarClientFilterManager" 
+
+  <bean id="iCalendarClientFilterManager"
         class="org.osaf.cosmo.icalendar.ICalendarClientFilterManager">
      <property name="clientFilters">
        <map>
@@ -101,7 +101,7 @@
        </map>
      </property>
   </bean>
-  
+
   <!--  servlet filter to determine client and initialize the manager -->
   <bean id="clientICalendarFilterManagerFilter"
         class="org.osaf.cosmo.filters.ClientICalendarFilter">
@@ -113,7 +113,7 @@
             </map>
         </property>
   </bean>
-  
+
   <!-- Define MBeans to export -->
   <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
       <property name="assembler" ref="assembler"/>
@@ -129,7 +129,7 @@
         class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
       <property name="attributeSource" ref="jmxAttributeSource"/>
   </bean>
-  
+
   <!-- will pick up the ObjectName from the annotation -->
   <bean id="namingStrategy"
         class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
@@ -137,14 +137,14 @@
   </bean>
 
   <!--  AOP Configuration -->
-  
+
   <!-- transactional advice -->
   <tx:advice id="txAdvice" transaction-manager="transactionManager">
     <!-- the transactional semantics... -->
     <tx:attributes>
       <!-- getPasswordRecovery is only 'get' thats not read-only -->
       <tx:method name="getPasswordRecovery"/>
-      
+
       <!--  checked exception OverlordDeletionException should cause rollback  -->
       <tx:method name="remove*" rollback-for="OverlordDeletionException"/>
 
@@ -152,24 +152,24 @@
       <tx:method name="get*" read-only="true"/>
       <tx:method name="load*" read-only="true"/>
       <tx:method name="find*" read-only="true"/>
-      
+
       <!-- other methods use the default transaction settings -->
       <tx:method name="*"/>
     </tx:attributes>
   </tx:advice>
 
     <tx:annotation-driven/>
-  
+
   <!-- required for aspectj annotations support -->
   <aop:aspectj-autoproxy/>
-  
+
   <!--  Monitors all service calls (ContentService for now) and
-        logs all calls that aren't secured by advice in SecurityAdvice 
+        logs all calls that aren't secured by advice in SecurityAdvice
    -->
   <bean id="securityAdviceMonitorAspect" class="org.osaf.cosmo.security.aop.SecurityAdviceMonitor">
     <property name="order" value="4"/>
   </bean>
-  
+
   <!--  Intercepts service calls and verifies current principal has sufficient
         privileges to execute api.  Aspect bean is annotated with aspecj
         annotations.
@@ -187,7 +187,7 @@
     <property name="order" value="5"/>
     <property name="enabled" value="true"/>
   </bean>
-  
+
   <!--  Intercepts service calls and logs events
    -->
   <bean id="eventLogAspect" init-method="init" class="org.osaf.cosmo.event.aop.EventLogAdvice">
@@ -200,30 +200,30 @@
     <property name="order" value="6"/>
     <property name="enabled" value="true"/>
   </bean>
-  
+
   <!-- Timing advice, useful for timing operations -->
   <bean id="timingAdvice" class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor">
     <property name="loggerName" value="org.osaf.cosmo.perf" />
   </bean>
-  
-  <!-- Interceptor that throws away curent Hibernate session 
+
+  <!-- Interceptor that throws away curent Hibernate session
        and binds new one on errors -->
   <bean id="throwAwayHibernateSessionAdvice" class="org.osaf.cosmo.hibernate.ThrowAwayHibernateSessionOnErrorInterceptor">
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
- 
+
   <!--  define advice for all service methods -->
   <aop:config>
       <aop:pointcut id="serviceOperation"
                   expression="execution(* org.osaf.cosmo.service.*Service.*(..))"/>
-    
+
       <aop:advisor pointcut-ref="serviceOperation" order="1" advice-ref="timingAdvice"/>
       <aop:advisor pointcut-ref="serviceOperation" order="2" advice-ref="throwAwayHibernateSessionAdvice"/>
       <aop:advisor pointcut-ref="serviceOperation" order="3" advice-ref="txAdvice"/>
-      
+
   </aop:config>
-  
- 
+
+
   <!-- data access objects -->
 
   <bean id="itemPathTranslator"
@@ -233,7 +233,7 @@
 
   <bean id="idGenerator"
         class="org.apache.commons.id.uuid.VersionFourGenerator" />
-  
+
   <bean id="ticketKeyGenerator"
         class="org.apache.commons.id.random.SessionIdGenerator" />
 
@@ -289,7 +289,7 @@
       <ref bean="standardItemFilterProcessor" />
     </property>
   </bean>
-	
+
   <!-- services -->
   <bean id="passwordGenerator"
         class="org.apache.commons.id.random.SessionIdGenerator"/>
@@ -309,10 +309,10 @@
         <value>${cosmo.service.account.requireActivation}</value>
     </property>
   </bean>
-  
+
   <bean id="passwordRecoverer"
           class="org.osaf.cosmo.service.account.EmailPasswordRecoverer">
-          
+
     <property name="idGenerator">
       <ref bean="idGenerator" />
     </property>
@@ -343,7 +343,7 @@
       <ref bean="contentDao" />
     </property>
   </bean>
-  
+
 
   <bean id="userService"
         class="org.osaf.cosmo.service.impl.StandardUserService"
@@ -353,7 +353,7 @@
     <property name="userDao" ref="userDao"/>
     <property name="passwordGenerator" ref="passwordGenerator"/>
   </bean>
-	
+
   <bean id="contentLockManager"
         class="org.osaf.cosmo.service.lock.SingleVMLockManager"/>
 
@@ -379,7 +379,7 @@
     <property name="calendarDao" ref="calendarDao"/>
     <property name="contentDao" ref="contentDao"/>
   </bean>
-  
+
   <!-- general protocol/interface resources -->
 
   <bean id="serviceLocatorFactory"
@@ -403,7 +403,7 @@
     <constructor-arg><ref bean="cosmoEntityFactory"/></constructor-arg>
     <constructor-arg><ref bean="calendarQueryProcessor"/></constructor-arg>
     <constructor-arg><ref bean="iCalendarClientFilterManager"/></constructor-arg>
-    
+
     <property name="schedulingEnabled" value="${cosmo.caldav.schedulingEnabled}"/>
   </bean>
 
@@ -434,7 +434,7 @@
       <ref bean="securityManager"/>
     </property>
   </bean>
-	
+
   <bean id="atomTargetResolver" class="org.osaf.cosmo.atom.provider.StandardTargetResolver"
             init-method="init">
     <property name="contentService">
@@ -444,7 +444,7 @@
       <ref bean="userService"/>
     </property>
   </bean>
-	
+
   <bean id="atomBaseAdapter" class="org.osaf.cosmo.atom.provider.BaseCollectionAdapter"
         init-method="init" abstract="true">
     <property name="generatorFactory"><ref bean="atomGeneratorFactory"/></property>
@@ -469,7 +469,7 @@
       <ref bean="contentService"/>
     </property>
   </bean>
-  
+
   <bean id="atomDetachedItemAdapter"
         class="org.osaf.cosmo.atom.provider.DetachedItemCollectionAdapter"
         init-method="init" parent="atomItemAdapter"/>
@@ -531,7 +531,7 @@
        <ref bean="atomUserAdapter"/>
      </property>
   </bean>
-	
+
   <bean id="atomProvider"
         class="org.osaf.cosmo.atom.provider.StandardProvider">
     <property name="abdera"><ref bean="abdera"/></property>
@@ -600,7 +600,7 @@
         class="org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationProvider">
     <property name="contentDao" ref="contentDao"/>
   </bean>
-  
+
   <bean id="wsseAuthenticationProvider"
         class="org.osaf.cosmo.acegisecurity.providers.wsse.WsseAuthenticationProvider">
     <property name="userDao" ref="userDao"/>
@@ -629,10 +629,10 @@
       </list>
     </property>
   </bean>
-  
+
   <!--  AccessDecisionManager that verifies principal has access to
         user paths -->
-  <bean id="userPathAccessDecisionManager" 
+  <bean id="userPathAccessDecisionManager"
         class="org.osaf.cosmo.acegisecurity.UserPathAccessDecisionManager"/>
 
   <!-- security facade resources -->
@@ -681,10 +681,10 @@
 
 		<security:intercept-url pattern="/logout" access="ROLE_ROOT, ROLE_USER"/>
 		<security:intercept-url pattern="/browse/**" access="ROLE_USER, ROLE_ROOT"/>
-		
+
 		<security:intercept-url pattern="/admin/status/**" access="ROLE_ROOT"/>
 		<security:intercept-url pattern="/admin/user/**" access="ROLE_ROOT"/>
-		
+
 		<security:intercept-url pattern="/error" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
 		<security:intercept-url pattern="/error/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
 
@@ -706,7 +706,7 @@
           <security:filter-chain pattern="/**" filters="defaultHttpSessionContextIntegrationFilter,protocolTicketAuthenticationClearingFilter,defaultAnonymousProcessingFilter,defaultExceptionTranslationFilter,defaultFilterInvocationInterceptor"/>
       </security:filter-chain-map>
    </bean>
-   
+
    <bean id="webuiFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
       <security:filter-chain-map path-type="ant">
           <security:filter-chain pattern="/**" filters="defaultHttpSessionContextIntegrationFilter,protocolTicketAuthenticationClearingFilter,webuiFormBasedProcessingFilter,defaultExceptionTranslationFilter,defaultFilterInvocationInterceptor"/>
@@ -738,18 +738,9 @@
 
   <bean id="defaultAnonymousProcessingFilter"
         class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-    <property name="key" value="badgerbadgerbadger"/>
-    <property name="userAttribute" value="anonymous,ROLE_ANONYMOUS"/>
+    <constructor-arg name="key" value="anonymous"/>
   </bean>
 
-  <!-- filter that converts authen/authz exceptions to web pages -->
-
-  <bean id="defaultExceptionTranslationFilter"
-        class="org.springframework.security.web.access.ExceptionTranslationFilter">
-    <property name="authenticationEntryPoint">
-      <ref bean="defaultFormBasedAuthenticationEntryPoint"/>
-    </property>
-  </bean>
 
   <!-- security beans for protocol access -->
   <bean id="dummyAccessDecisionMaanger"
@@ -757,9 +748,6 @@
 
   <bean id="protocolHttpRequestContextIntegrationFilter"
         class="org.osaf.cosmo.acegisecurity.context.HttpRequestContextIntegrationFilter"/>
-
-  <bean id="protocolAuthenticationEntryPoint"
-        class="org.osaf.cosmo.acegisecurity.ui.CosmoAuthenticationEntryPoint"/>
 
   <bean id="protocolTicketProcessingFilter"
         class="org.osaf.cosmo.acegisecurity.providers.ticket.TicketProcessingFilter"/>
@@ -774,26 +762,12 @@
     </property>
   </bean>
 
-  <bean id="protocolBasicProcessingFilter"
-        class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
-    <property name="authenticationManager" ref="authenticationManager"/>
-    <property name="authenticationEntryPoint" ref="protocolAuthenticationEntryPoint"/>
-  </bean>
 
-  <bean id="protocolExceptionTranslationFilter"
-        class="org.springframework.security.web.access.ExceptionTranslationFilter">
-        <constructor-arg name="authenticationEntryPoint" ref="protocolAuthenticationEntryPoint"/>
-<!--     <property name="createSessionAllowed" value="false"/> -->
-  </bean>
-
-  <bean id="protocolWsseProcessingFilter"
-        class="org.osaf.cosmo.acegisecurity.providers.wsse.WsseTokenProcessingFilter"/>
-  
   <!-- Logging resources -->
   <bean id="httpLoggingFormat" class="java.lang.String">
     <constructor-arg type="java.lang.String" value="${cosmo.log.HttpLoggingFilter.format}"/>
   </bean>
-   
+
   <!--  Retry Filter -->
   <bean id="retryFilter" class="org.osaf.cosmo.filters.RetryFilter">
     <property name="maxRetries" value="10"/>
@@ -812,7 +786,7 @@
       </list>
     </property>
   </bean>
-   
+
   <!-- give JSP tag functions access to config properties -->
   <bean id="jspConfigProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
     <property name="targetClass" value="org.osaf.cosmo.ui.TagFunctions"/>
