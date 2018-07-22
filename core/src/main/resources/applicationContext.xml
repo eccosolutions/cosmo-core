@@ -20,13 +20,11 @@
     xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:jee="http://www.springframework.org/schema/jee"
     xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:security="http://www.springframework.org/schema/security"
     xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
-    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
   <bean id="messageSource"
         class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -571,195 +569,13 @@
     <property name="userService" ref="userService"/>
   </bean>
 
-  <!-- authentication resources -->
 
-  <bean id="userDetailsService"
-        class="org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetailsService">
-     <property name="userDao" ref="userDao"/>
-  </bean>
-
-  <bean id="passwordEncoder"
-        class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>
-
-  <bean id="daoAuthenticationProvider"
-        class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-    <property name="userDetailsService">
-      <ref bean="userDetailsService"/>
-    </property>
-    <property name="passwordEncoder">
-      <ref bean="passwordEncoder"/>
-    </property>
-  </bean>
-
-  <bean id="anonymousAuthenticationProvider"
-        class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-    <property name="key" value="badgerbadgerbadger"/>
-  </bean>
-
-  <bean id="ticketAuthenticationProvider"
-        class="org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationProvider">
-    <property name="contentDao" ref="contentDao"/>
-  </bean>
-
-  <bean id="wsseAuthenticationProvider"
-        class="org.osaf.cosmo.acegisecurity.providers.wsse.WsseAuthenticationProvider">
-    <property name="userDao" ref="userDao"/>
-  </bean>
-
-	<security:authentication-manager alias="authenticationManager">
-		<security:authentication-provider ref="daoAuthenticationProvider"/>
-		<security:authentication-provider ref="anonymousAuthenticationProvider"/>
-		<security:authentication-provider ref="ticketAuthenticationProvider"/>
-		<security:authentication-provider ref="wsseAuthenticationProvider"/>
-	</security:authentication-manager>
-
-  <!-- authorization resources -->
-
-  <bean id="ticketVoter"
-        class="org.osaf.cosmo.acegisecurity.providers.ticket.TicketVoter"/>
-
-  <bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter"/>
-
-  <bean id="defaultAccessDecisionManager"
-        class="org.springframework.security.access.vote.AffirmativeBased">
-    <property name="allowIfAllAbstainDecisions" value="false"/>
-    <property name="decisionVoters">
-      <list>
-        <ref bean="roleVoter"/>
-      </list>
-    </property>
-  </bean>
-
-  <!--  AccessDecisionManager that verifies principal has access to
-        user paths -->
-  <bean id="userPathAccessDecisionManager"
-        class="org.osaf.cosmo.acegisecurity.UserPathAccessDecisionManager"/>
-
-  <!-- security facade resources -->
 
   <bean id="securityManager"
         class="org.osaf.cosmo.security.impl.CosmoSecurityManagerImpl">
-    <property name="authenticationManager">
-      <ref bean="authenticationManager"/>
-    </property>
-  </bean>
-
-  <!-- filter that checks for Ticket authentication and clears.  To be used
-       after the session integration filter to prevent ticket authentication
-       from sticking -->
-  <bean id="protocolTicketAuthenticationClearingFilter"
-        class="org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationClearingFilter"/>
-
-  <bean id="defaultFilterInvocationInterceptor"
-         class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-     <property name="authenticationManager" ref="authenticationManager"/>
-     <property name="accessDecisionManager" ref="defaultAccessDecisionManager"/>
-     <property name="securityMetadataSource" ref="defaultSecurityMetadata"/>
-  </bean>
-
-	<security:filter-security-metadata-source id="defaultSecurityMetadata">
-
-		<security:intercept-url pattern="/account/new" access="ROLE_ANONYMOUS"/>
-		<security:intercept-url pattern="/account/signup" access="ROLE_ANONYMOUS"/>
-
-		<security:intercept-url pattern="/account" access="ROLE_ROOT, ROLE_USER"/>
-		<security:intercept-url pattern="/account/view" access="ROLE_ROOT, ROLE_USER"/>
-		<security:intercept-url pattern="/account/update" access="ROLE_ROOT, ROLE_USER"/>
-
-		<security:intercept-url pattern="/account/activate/*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/account/deleted" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/account/password/reset/*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/account/password/recover" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/account/activation/recover" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-
-		<security:intercept-url pattern="/login" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/signup" access="ROLE_ANONYMOUS"/>
-
-		<security:intercept-url pattern="/welcome" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/security_check" access="ROLE_ANONYMOUS"/>
-		<security:intercept-url pattern="/loginfailed" access="ROLE_ANONYMOUS"/>
-
-		<security:intercept-url pattern="/logout" access="ROLE_ROOT, ROLE_USER"/>
-		<security:intercept-url pattern="/browse/**" access="ROLE_USER, ROLE_ROOT"/>
-
-		<security:intercept-url pattern="/admin/status/**" access="ROLE_ROOT"/>
-		<security:intercept-url pattern="/admin/user/**" access="ROLE_ROOT"/>
-
-		<security:intercept-url pattern="/error" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/error/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-
-		<security:intercept-url pattern="/help/privacy" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/help/about" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/help/tos" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ROOT"/>
-
-		<security:intercept-url pattern="/help" access="ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/help/**" access="ROLE_USER, ROLE_ROOT"/>
-		<security:intercept-url pattern="/**" access="ROLE_ROOT"/>
-	</security:filter-security-metadata-source>
-
-
-
-   <!-- filter chain that kicks off request-time processing -->
-
-   <bean id="defaultFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
-      <security:filter-chain-map path-type="ant">
-          <security:filter-chain pattern="/**" filters="defaultHttpSessionContextIntegrationFilter,protocolTicketAuthenticationClearingFilter,defaultAnonymousProcessingFilter,defaultExceptionTranslationFilter,defaultFilterInvocationInterceptor"/>
-      </security:filter-chain-map>
-   </bean>
-
-   <bean id="webuiFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
-      <security:filter-chain-map path-type="ant">
-          <security:filter-chain pattern="/**" filters="defaultHttpSessionContextIntegrationFilter,protocolTicketAuthenticationClearingFilter,webuiFormBasedProcessingFilter,defaultExceptionTranslationFilter,defaultFilterInvocationInterceptor"/>
-      </security:filter-chain-map>
-   </bean>
-
-  <!-- filter that integrates SecurityContext into HTTP Session -->
-
-  <bean id="defaultHttpSessionContextIntegrationFilter"
-        class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
-
-  <!-- filter that performs form-based authentication -->
-
-  <bean id="defaultFormBasedAuthenticationEntryPoint"
-        class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-    <property name="loginFormUrl" value="/login"/>
-    <property name="forceHttps" value="false"/>
-  </bean>
-
-  <bean id="webuiFormBasedProcessingFilter"
-        class="org.osaf.cosmo.acegisecurity.ui.webapp.CosmoAuthenticationProcessingFilter">
-    <property name="authenticationManager" ref="authenticationManager"/>
-    <property name="filterProcessesUrl" value="/security_check"/>
-    <property name="authenticationFailureUrl" value="/loginfailed"/>
-    <property name="cosmoDefaultLoginUrl" value="/pim"/>
-  </bean>
-
-  <!-- filter that performs anonymous authentication -->
-
-  <bean id="defaultAnonymousProcessingFilter"
-        class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-    <constructor-arg name="key" value="anonymous"/>
-  </bean>
-
-
-  <!-- security beans for protocol access -->
-  <bean id="dummyAccessDecisionMaanger"
-        class="org.osaf.cosmo.acegisecurity.DummyAccessDecisionManager"/>
-
-  <bean id="protocolHttpRequestContextIntegrationFilter"
-        class="org.osaf.cosmo.acegisecurity.context.HttpRequestContextIntegrationFilter"/>
-
-  <bean id="protocolTicketProcessingFilter"
-        class="org.osaf.cosmo.acegisecurity.providers.ticket.TicketProcessingFilter"/>
-
-  <bean id="protocolExtraTicketProcessingFilter"
-        class="org.osaf.cosmo.acegisecurity.providers.ticket.ExtraTicketProcessingFilter">
-    <property name="securityManager">
-      <ref bean="securityManager" />
-    </property>
-    <property name="contentDao">
-      <ref bean="contentDao" />
-    </property>
+    <!--<property name="authenticationManager">-->
+      <!--<ref bean="authenticationManager"/>-->
+    <!--</property>-->
   </bean>
 
 
