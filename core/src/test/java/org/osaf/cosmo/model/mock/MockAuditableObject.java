@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,11 +16,13 @@
 package org.osaf.cosmo.model.mock;
 
 import java.security.MessageDigest;
+import java.util.Base64;
 import java.util.Date;
 
-import org.apache.commons.codec.binary.Base64;
 import org.osaf.cosmo.model.AuditableObject;
 import org.osaf.cosmo.model.EntityFactory;
+
+import static java.util.Base64.getEncoder;
 
 /**
  * Extends BaseModelObject and adds creationDate, modifiedDate
@@ -29,13 +31,13 @@ import org.osaf.cosmo.model.EntityFactory;
 public abstract class MockAuditableObject implements AuditableObject {
 
     private static final ThreadLocal<MessageDigest> etagDigestLocal = new ThreadLocal<MessageDigest>();
-    private static final Base64 etagEncoder = new Base64();
+    private static final Base64.Encoder etagEncoder = getEncoder();
     private static final EntityFactory FACTORY = new MockEntityFactory();
-    
+
     private Date creationDate;
     private Date modifiedDate;
     private String etag = "";
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceAuditableObject#getCreationDate()
      */
@@ -70,31 +72,31 @@ public abstract class MockAuditableObject implements AuditableObject {
     public void updateTimestamp() {
         modifiedDate = new Date();
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceAuditableObject#getEntityTag()
      */
     public String getEntityTag() {
         return etag;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceAuditableObject#setEntityTag(java.lang.String)
      */
     public void setEntityTag(String etag) {
         this.etag = etag;
     }
-    
+
     /**
      * <p>
      * Calculates updates object's entity tag.
-     * Returns calculated entity tag.  
+     * Returns calculated entity tag.
      * </p>
      * <p>
      * This implementation simply returns the empty string. Subclasses should
      * override it when necessary.
      * </p>
-     * 
+     *
      * Subclasses should override
      * this.
      */
@@ -108,11 +110,11 @@ public abstract class MockAuditableObject implements AuditableObject {
      * </p>
      */
     protected static String encodeEntityTag(byte[] bytes) {
-        
+
         // Use MessageDigest stored in threadlocal so that each
         // thread has its own instance.
         MessageDigest md = etagDigestLocal.get();
-        
+
         if(md==null) {
             try {
                 // initialize threadlocal
@@ -122,10 +124,10 @@ public abstract class MockAuditableObject implements AuditableObject {
                 throw new RuntimeException("Platform does not support sha1?", e);
             }
         }
-        
+
         return new String(etagEncoder.encode(md.digest(bytes)));
     }
-    
+
     public EntityFactory getFactory() {
         return FACTORY;
     }

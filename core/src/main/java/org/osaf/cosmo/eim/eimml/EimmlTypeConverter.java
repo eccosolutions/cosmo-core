@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,11 +30,13 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Locale;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.util.DateUtil;
+
+import static java.util.Base64.getDecoder;
+import static java.util.Base64.getEncoder;
 
 /**
  * This class converts between EIMML primitive types and Java types.
@@ -50,7 +52,7 @@ public class EimmlTypeConverter implements EimmlConstants {
         throws EimmlConversionException {
         if (value == null)
             return null;
-        return decodeBase64String(value);
+        return getDecoder().decode(value);
     }
 
     /**
@@ -60,7 +62,7 @@ public class EimmlTypeConverter implements EimmlConstants {
         throws EimmlConversionException {
         if (value == null)
             return null;
-        return encodeBase64String(value);
+        return getEncoder().encodeToString(value);
     }
 
     /**
@@ -87,8 +89,7 @@ public class EimmlTypeConverter implements EimmlConstants {
      * Returns the given value as a reader, preserving the value in
      * its original encoding.
      */
-    public static Reader toClob(String value)
-        throws EimmlConversionException {
+    public static Reader toClob(String value) {
         if (value == null)
             return null;
         return new StringReader(value);
@@ -211,8 +212,7 @@ public class EimmlTypeConverter implements EimmlConstants {
      */
     public static String fromDecimal(BigDecimal value,
                                      int digits,
-                                     int decimalPlaces)
-        throws EimmlConversionException {
+                                     int decimalPlaces) {
         if (value == null)
             return null;
 
@@ -234,13 +234,11 @@ public class EimmlTypeConverter implements EimmlConstants {
         return new DecimalFormat(pattern.toString(), new DecimalFormatSymbols(Locale.US)).format(value);
     }
 
-    private static byte[] decodeBase64String(String value)
-        throws EimmlConversionException {
-        return Base64.decodeBase64(value.getBytes());
+    private static byte[] decodeBase64String(String value) {
+        return getDecoder().decode(value.getBytes());
     }
 
-    private static String encodeBase64String(byte[] value)
-        throws EimmlConversionException {
-        return new String(Base64.encodeBase64(value));
+    private static String encodeBase64String(byte[] value) {
+        return new String(getEncoder().encodeToString(value));
     }
 }

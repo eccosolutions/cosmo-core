@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,9 +25,10 @@ import java.util.TimeZone;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import static java.util.Base64.getEncoder;
 
 /**
  * Test Case for {@link EimmlTypeConverter}.
@@ -42,7 +43,7 @@ public class EimmlTypeConverterTest extends TestCase
         String testString = "this is a test string";
 
         byte[] testBytes = testString.getBytes();
-        String testEncoded = new String(Base64.encodeBase64(testBytes));
+        String testEncoded = getEncoder().encodeToString(testBytes);
         byte[] resultBytes = EimmlTypeConverter.toBytes(testEncoded);
 
         for (int i=0; i<resultBytes.length; i++)
@@ -58,7 +59,7 @@ public class EimmlTypeConverterTest extends TestCase
         String resultEncoded = EimmlTypeConverter.fromBytes(testBytes);
 
         assertEquals("Encoded string does not match",
-                     new String(Base64.encodeBase64(testBytes)),
+                     new String(getEncoder().encodeToString(testBytes)),
                      resultEncoded);
     }
 
@@ -80,7 +81,7 @@ public class EimmlTypeConverterTest extends TestCase
         assertEquals("Result UTF-8 string does not match", testString,
                      resultString);
 
-        // XXX: encode testString with a non UTF-8 encoding 
+        // XXX: encode testString with a non UTF-8 encoding
     }
 
     /** */
@@ -113,7 +114,7 @@ public class EimmlTypeConverterTest extends TestCase
         String testString = "this is a test string";
 
         byte[] testBytes = testString.getBytes();
-        String testEncoded = new String(Base64.encodeBase64(testBytes));
+        String testEncoded = getEncoder().encodeToString(testBytes);
         InputStream resultStream = EimmlTypeConverter.toBlob(testEncoded);
 
         for (int i=0; i<testBytes.length; i++) {
@@ -129,7 +130,7 @@ public class EimmlTypeConverterTest extends TestCase
         String testString = "this is a test string";
         byte[] testBytes = testString.getBytes();
         String testEncoded =
-            new String(Base64.encodeBase64(testBytes));
+            getEncoder().encodeToString(testBytes);
         ByteArrayInputStream testStream = new ByteArrayInputStream(testBytes);
 
         String resultEncoded = EimmlTypeConverter.fromBlob(testStream);
