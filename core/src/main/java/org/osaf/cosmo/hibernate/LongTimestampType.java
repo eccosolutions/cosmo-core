@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import java.util.Date;
 import org.hibernate.HibernateException;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.LiteralType;
 import org.hibernate.type.VersionType;
@@ -30,7 +31,7 @@ import org.hibernate.type.descriptor.sql.BigIntTypeDescriptor;
 
 /**
  * Custom Hibernate type that maps a java.util.Date
- * to a SQL BIGINT column, storing the number of 
+ * to a SQL BIGINT column, storing the number of
  * milliseconds that have passed since Jan 1, 1970 GMT.
  *
  */
@@ -55,11 +56,13 @@ public class LongTimestampType extends AbstractSingleColumnStandardBasicType<Dat
 		super( BigIntTypeDescriptor.INSTANCE, JdbcTimestampTypeDescriptor.INSTANCE );
 	}
 
+	@Override
 	public String getName() {
 		return "long_timestamp";
 	}
 
 	// the generic method of the super super class - unsure why this is overridden in TimestampType [perhaps to use Date, and not Timestamp]
+	@Override
 	public Date fromStringValue(String xml) throws HibernateException {
 		return fromString( xml );
 	}
@@ -71,17 +74,21 @@ public class LongTimestampType extends AbstractSingleColumnStandardBasicType<Dat
 	}
 
 	// implement VersionType
-	public Date next(Date current, SessionImplementor session) {
+	@Override
+	public Date next(Date current, SharedSessionContractImplementor session) {
 		return seed( session );
 	}
-	public Date seed(SessionImplementor session) {
+	@Override
+	public Date seed(SharedSessionContractImplementor session) {
 		return new Timestamp( System.currentTimeMillis() );
 	}
+	@Override
 	public Comparator<Date> getComparator() {
 		return getJavaTypeDescriptor().getComparator();
 	}
 
 	// implement LiteralType
+	@Override
 	public String objectToSQLString(Date value, Dialect dialect) throws Exception {
 		// seems the below could do the trick, but we stick to what cosmo had...
 		return "" + value.getTime();
