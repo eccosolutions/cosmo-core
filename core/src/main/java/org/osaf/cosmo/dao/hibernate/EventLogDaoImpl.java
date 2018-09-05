@@ -36,7 +36,6 @@ import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibTicket;
 import org.osaf.cosmo.model.hibernate.HibUser;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +44,7 @@ import java.util.List;
 /**
  * Implementation of EventLogDao using Hibernate persistence objects.
  */
-public class EventLogDaoImpl extends HibernateDaoSupport implements EventLogDao {
+public class EventLogDaoImpl extends HibernateSessionSupport implements EventLogDao {
 
     private static final Log log = LogFactory.getLog(EventLogDaoImpl.class);
 

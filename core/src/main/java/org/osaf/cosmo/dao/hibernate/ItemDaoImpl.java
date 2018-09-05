@@ -50,7 +50,6 @@ import org.osaf.cosmo.model.hibernate.HibHomeCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -63,7 +62,7 @@ import javax.validation.ConstraintViolationException;
  * Implementation of ItemDao using Hibernate persistent objects.
  *
  */
-public abstract class ItemDaoImpl extends HibernateDaoSupport implements ItemDao {
+public abstract class ItemDaoImpl extends HibernateSessionSupport implements ItemDao {
 
     private static final Log log = LogFactory.getLog(ItemDaoImpl.class);
 

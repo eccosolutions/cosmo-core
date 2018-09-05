@@ -25,7 +25,6 @@
         class="org.osaf.cosmo.dao.hibernate.UserPreferencesScheduleDao"
         init-method="init"
         destroy-method="destroy">
-    <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
   <!--  Service -->
@@ -35,7 +34,7 @@
         destroy-method="destroy">
     <property name="scheduleDao" ref="scheduleDao"/>
   </bean>
-  
+
   <!-- scheduler configuration -->
   <bean id="logNotifier" class="org.osaf.cosmo.scheduler.LogNotifier"/>
 
@@ -71,7 +70,6 @@
   </bean>
 
   <bean id="hibernateJobFilter" class="org.osaf.cosmo.scheduler.HibernateSessionFilter">
-    <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
   <bean id="securityContextJobFilter" class="org.osaf.cosmo.scheduler.SecurityContextFilter">
@@ -114,8 +112,8 @@
   </bean>
 
   <bean id="cosmoScheduler" depends-on="dbInitializer"
-                            init-method="init" 
-	                        destroy-method="destroy" 
+                            init-method="init"
+	                        destroy-method="destroy"
 	                        class="org.osaf.cosmo.scheduler.SchedulerImpl">
     <property name="enabled" value="${cosmo.scheduler.enabled}"/>
 	<property name="maxJobsPerUser" value="1"/>
@@ -128,9 +126,9 @@
     </property>
     <property name="refreshInterval" value="90000"/>
   </bean>
-	
+
   <bean id="schedulerManager" class="org.osaf.cosmo.scheduler.SchedulerManager">
-    <property name="scheduler" ref="cosmoScheduler"/>	  
+    <property name="scheduler" ref="cosmoScheduler"/>
   </bean>
 
 </beans>

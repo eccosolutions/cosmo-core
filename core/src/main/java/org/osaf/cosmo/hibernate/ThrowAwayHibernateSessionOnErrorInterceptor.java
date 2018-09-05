@@ -24,7 +24,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 import org.springframework.orm.hibernate5.SessionHolder;
+import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
+import javax.persistence.PersistenceUnit;
 
 /**
  * Interceptor that catches RuntimeException and throws
@@ -34,9 +40,10 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * using session.clear() doesn't always work, and a new
  * session should be used for additional retry attempts.
  */
-public class ThrowAwayHibernateSessionOnErrorInterceptor implements MethodInterceptor{
+public class ThrowAwayHibernateSessionOnErrorInterceptor implements MethodInterceptor {
 
-    private SessionFactory sessionFactory = null;
+    @PersistenceUnit
+    private EntityManagerFactory entityManagerFactory;
 
     private static final Log log =
         LogFactory.getLog(ThrowAwayHibernateSessionOnErrorInterceptor.class);
@@ -54,26 +61,22 @@ public class ThrowAwayHibernateSessionOnErrorInterceptor implements MethodInterc
 
         // If session is bound to transaction, close it and create/bind
         // new session to prevent stale data when retrying transaction
-        if (TransactionSynchronizationManager.hasResource(sessionFactory)) {
+        if (TransactionSynchronizationManager.hasResource(entityManagerFactory)) {
 
             if(log.isDebugEnabled())
                 log.debug("throwing away bad session and binding new one");
 
             // Get current session and close
             SessionHolder sessionHolder =
-                (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
+                (SessionHolder) TransactionSynchronizationManager.unbindResource(entityManagerFactory);
 
             SessionFactoryUtils.closeSession(sessionHolder.getSession());
 
             // Open new session and bind (this session should be closed and
             // unbound elsewhere, for example OpenSessionInViewFilter)
-            Session session = sessionFactory.openSession();
-            session.setFlushMode(FlushMode.MANUAL);
-            TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            entityManager.setFlushMode(FlushModeType.COMMIT);
+            TransactionSynchronizationManager.bindResource(entityManagerFactory, new EntityManagerHolder(entityManager));
         }
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

@@ -28,7 +28,6 @@ import org.osaf.cosmo.model.hibernate.HibEntityFactory;
 import org.osaf.cosmo.scheduler.Schedule;
 import org.osaf.cosmo.scheduler.UserPreferencesScheduleHelper;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -36,7 +35,7 @@ import javax.validation.ConstraintViolationException;
 /**
  * Implementation of ScheduleDao using user preferences.
  */
-public class UserPreferencesScheduleDao extends HibernateDaoSupport implements ScheduleDao {
+public class UserPreferencesScheduleDao extends HibernateSessionSupport implements ScheduleDao {
 
     private static final Log log = LogFactory
             .getLog(UserPreferencesScheduleDao.class);

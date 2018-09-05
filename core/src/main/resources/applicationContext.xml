@@ -49,9 +49,7 @@
 
   <bean id="mailSender"
         class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="session">
-      <ref bean="mailSession"/>
-    </property>
+    <property name="session" ref="mailSession"/>
   </bean>
 
     <!-- TODO: We did have a ValidatePreUpdateEventListener and ValidatePreInsertEventListener configured too -->
@@ -173,15 +171,9 @@
         annotations.
    -->
   <bean id="securityAspect" init-method="init" class="org.osaf.cosmo.security.aop.SecurityAdvice">
-    <property name="securityManager">
-      <ref bean="securityManager" />
-    </property>
-    <property name="contentDao">
-      <ref bean="contentDao" />
-    </property>
-    <property name="userDao">
-      <ref bean="userDao" />
-    </property>
+    <property name="securityManager" ref="securityManager"/>
+    <property name="contentDao" ref="contentDao"/>
+    <property name="userDao" ref="userDao"/>
     <property name="order" value="5"/>
     <property name="enabled" value="true"/>
   </bean>
@@ -189,12 +181,8 @@
   <!--  Intercepts service calls and logs events
    -->
   <bean id="eventLogAspect" init-method="init" class="org.osaf.cosmo.event.aop.EventLogAdvice">
-    <property name="securityManager">
-      <ref bean="securityManager" />
-    </property>
-    <property name="eventLogDao">
-      <ref bean="eventLogDao" />
-    </property>
+    <property name="securityManager" ref="securityManager"/>
+    <property name="eventLogDao" ref="eventLogDao"/>
     <property name="order" value="6"/>
     <property name="enabled" value="true"/>
   </bean>
@@ -207,7 +195,6 @@
   <!-- Interceptor that throws away curent Hibernate session
        and binds new one on errors -->
   <bean id="throwAwayHibernateSessionAdvice" class="org.osaf.cosmo.hibernate.ThrowAwayHibernateSessionOnErrorInterceptor">
-    <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
   <!--  define advice for all service methods -->
@@ -226,7 +213,7 @@
 
   <bean id="itemPathTranslator"
         class="org.osaf.cosmo.dao.hibernate.DefaultItemPathTranslator">
-    <constructor-arg><ref bean="sessionFactory"/></constructor-arg>
+    <constructor-arg ref="sessionFactory"/>
   </bean>
 
   <bean id="idGenerator"
@@ -239,7 +226,6 @@
         class="org.osaf.cosmo.dao.hibernate.ServerPropertyDaoImpl"
         init-method="init"
         destroy-method="destroy">
-    <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
   <bean id="standardItemFilterProcessor"
@@ -249,43 +235,29 @@
         class="org.osaf.cosmo.dao.hibernate.EventLogDaoImpl"
         init-method="init"
         destroy-method="destroy">
-    <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
   <bean id="contentDao"
         class="org.osaf.cosmo.dao.hibernate.ContentDaoImpl"
         init-method="init"
         destroy-method="destroy">
-    <property name="sessionFactory" ref="sessionFactory"/>
     <property name="itemPathTranslator" ref="itemPathTranslator"/>
-    <property name="idGenerator">
-      <ref bean="idGenerator" />
-    </property>
-    <property name="ticketKeyGenerator">
-      <ref bean="ticketKeyGenerator" />
-    </property>
-    <property name="itemFilterProcessor">
-      <ref bean="standardItemFilterProcessor" />
-    </property>
+    <property name="idGenerator" ref="idGenerator"/>
+    <property name="ticketKeyGenerator" ref="ticketKeyGenerator"/>
+    <property name="itemFilterProcessor" ref="standardItemFilterProcessor"/>
   </bean>
 
   <bean id="userDao"
         class="org.osaf.cosmo.dao.hibernate.UserDaoImpl"
         init-method="init"
         destroy-method="destroy">
-    <property name="sessionFactory" ref="sessionFactory"/>
-    <property name="idGenerator">
-      <ref bean="idGenerator" />
-    </property>
+    <property name="idGenerator" ref="idGenerator"/>
   </bean>
 
   <bean id="calendarDao"
         class="org.osaf.cosmo.dao.hibernate.CalendarDaoImpl"
         init-method="init">
-    <property name="sessionFactory" ref="sessionFactory"/>
-    <property name="itemFilterProcessor">
-      <ref bean="standardItemFilterProcessor" />
-    </property>
+    <property name="itemFilterProcessor" ref="standardItemFilterProcessor"/>
   </bean>
 
   <!-- services -->
@@ -294,15 +266,9 @@
 
   <bean id="accountActivator"
         class="org.osaf.cosmo.service.account.EmailAccountActivator">
-    <property name="idGenerator">
-      <ref bean="idGenerator" />
-    </property>
-    <property name="mailSender">
-      <ref bean="mailSender" />
-    </property>
-    <property name="messageSource">
-      <ref bean="messageSource" />
-    </property>
+    <property name="idGenerator" ref="idGenerator"/>
+    <property name="mailSender" ref="mailSender"/>
+    <property name="messageSource" ref="messageSource"/>
     <property name="required">
         <value>${cosmo.service.account.requireActivation}</value>
     </property>
@@ -311,35 +277,21 @@
   <bean id="passwordRecoverer"
           class="org.osaf.cosmo.service.account.EmailPasswordRecoverer">
 
-    <property name="idGenerator">
-      <ref bean="idGenerator" />
-    </property>
-    <property name="mailSender">
-      <ref bean="mailSender" />
-    </property>
-    <property name="messageSource">
-      <ref bean="messageSource" />
-    </property>
+    <property name="idGenerator" ref="idGenerator"/>
+    <property name="mailSender" ref="mailSender"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 
   <bean id="ootbHelper"
         class="org.osaf.cosmo.service.account.OutOfTheBoxHelper">
-    <property name="contentDao">
-      <ref bean="contentDao"/>
-    </property>
-    <property name="messageSource">
-      <ref bean="messageSource" />
-    </property>
-    <property name="entityFactory">
-      <ref bean="cosmoEntityFactory"/>
-    </property>
+    <property name="contentDao" ref="contentDao"/>
+    <property name="messageSource" ref="messageSource"/>
+    <property name="entityFactory" ref="cosmoEntityFactory"/>
   </bean>
 
   <bean id="triageStatusQueryProcessor"
       class="org.osaf.cosmo.service.impl.StandardTriageStatusQueryProcessor">
-    <property name="contentDao">
-      <ref bean="contentDao" />
-    </property>
+    <property name="contentDao" ref="contentDao"/>
   </bean>
 
 
@@ -395,12 +347,12 @@
 
   <bean id="davResourceFactory"
         class="org.osaf.cosmo.dav.StandardResourceFactory">
-    <constructor-arg><ref bean="contentService"/></constructor-arg>
-    <constructor-arg><ref bean="userService"/></constructor-arg>
-    <constructor-arg><ref bean="securityManager"/></constructor-arg>
-    <constructor-arg><ref bean="cosmoEntityFactory"/></constructor-arg>
-    <constructor-arg><ref bean="calendarQueryProcessor"/></constructor-arg>
-    <constructor-arg><ref bean="iCalendarClientFilterManager"/></constructor-arg>
+    <constructor-arg ref="contentService"/>
+    <constructor-arg ref="userService"/>
+    <constructor-arg ref="securityManager"/>
+    <constructor-arg ref="cosmoEntityFactory"/>
+    <constructor-arg ref="calendarQueryProcessor"/>
+    <constructor-arg ref="iCalendarClientFilterManager"/>
 
     <property name="schedulingEnabled" value="${cosmo.caldav.schedulingEnabled}"/>
   </bean>
@@ -421,34 +373,24 @@
 
   <bean id="atomGeneratorFactory" class="org.osaf.cosmo.atom.generator.StandardGeneratorFactory"
             init-method="init">
-    <property name="abdera"><ref bean="abdera"/></property>
+    <property name="abdera" ref="abdera"/>
     <property name="contentFactory">
       <bean class="org.osaf.cosmo.atom.generator.ContentFactory"/>
     </property>
-    <property name="contentService">
-      <ref bean="contentService"/>
-    </property>
-    <property name="securityManager">
-      <ref bean="securityManager"/>
-    </property>
+    <property name="contentService" ref="contentService"/>
+    <property name="securityManager" ref="securityManager"/>
   </bean>
 
   <bean id="atomTargetResolver" class="org.osaf.cosmo.atom.provider.StandardTargetResolver"
             init-method="init">
-    <property name="contentService">
-      <ref bean="contentService"/>
-    </property>
-    <property name="userService">
-      <ref bean="userService"/>
-    </property>
+    <property name="contentService" ref="contentService"/>
+    <property name="userService" ref="userService"/>
   </bean>
 
   <bean id="atomBaseAdapter" class="org.osaf.cosmo.atom.provider.BaseCollectionAdapter"
         init-method="init" abstract="true">
-    <property name="generatorFactory"><ref bean="atomGeneratorFactory"/></property>
-    <property name="serviceLocatorFactory">
-      <ref bean="serviceLocatorFactory"/>
-    </property>
+    <property name="generatorFactory" ref="atomGeneratorFactory"/>
+    <property name="serviceLocatorFactory" ref="serviceLocatorFactory"/>
     <property name="entityFactory" ref="cosmoEntityFactory"/>
   </bean>
 
@@ -460,12 +402,8 @@
   <bean id="atomItemAdapter"
         class="org.osaf.cosmo.atom.provider.ItemCollectionAdapter"
         init-method="init" parent="atomBaseAdapter">
-    <property name="processorFactory">
-      <ref bean="atomStandardProcessorFactory"/>
-    </property>
-    <property name="contentService">
-      <ref bean="contentService"/>
-    </property>
+    <property name="processorFactory" ref="atomStandardProcessorFactory"/>
+    <property name="contentService" ref="contentService"/>
   </bean>
 
   <bean id="atomDetachedItemAdapter"
@@ -479,68 +417,42 @@
   <bean id="atomSubscriptionAdapter"
         class="org.osaf.cosmo.atom.provider.SubscriptionCollectionAdapter"
         init-method="init" parent="atomBaseAdapter">
-    <property name="userService">
-      <ref bean="userService"/>
-    </property>
+    <property name="userService" ref="userService"/>
   </bean>
 
   <bean id="atomPreferencesAdapter"
         class="org.osaf.cosmo.atom.provider.PreferencesCollectionAdapter"
         init-method="init" parent="atomBaseAdapter">
-    <property name="userService">
-      <ref bean="userService"/>
-    </property>
+    <property name="userService" ref="userService"/>
   </bean>
 
   <bean id="atomTicketsAdapter"
         class="org.osaf.cosmo.atom.provider.TicketsCollectionAdapter"
         init-method="init" parent="atomBaseAdapter">
-    <property name="contentService">
-      <ref bean="contentService"/>
-    </property>
-    <property name="securityManager">
-      <ref bean="securityManager"/>
-    </property>
+    <property name="contentService" ref="contentService"/>
+    <property name="securityManager" ref="securityManager"/>
   </bean>
 
   <bean id="atomUserAdapter" class="org.osaf.cosmo.atom.provider.UserCollectionAdapter"
         init-method="init" parent="atomBaseAdapter"/>
 
   <bean id="atomWorkspaceManager" class="org.osaf.cosmo.atom.provider.StandardWorkspaceManager">
-	 <property name="itemAdapter">
-       <ref bean="atomItemAdapter"/>
-     </property>
-     <property name="detachedItemAdapter">
-       <ref bean="atomDetachedItemAdapter"/>
-     </property>
-     <property name="expandedItemAdapter">
-       <ref bean="atomExpandedItemAdapter"/>
-     </property>
-     <property name="subscriptionAdapter">
-       <ref bean="atomSubscriptionAdapter"/>
-     </property>
-     <property name="preferencesAdapter">
-        <ref bean="atomPreferencesAdapter"/>
-     </property>
-     <property name="ticketsAdapter">
-       <ref bean="atomTicketsAdapter"/>
-     </property>
-     <property name="userAdapter">
-       <ref bean="atomUserAdapter"/>
-     </property>
+	 <property name="itemAdapter" ref="atomItemAdapter"/>
+     <property name="detachedItemAdapter" ref="atomDetachedItemAdapter"/>
+     <property name="expandedItemAdapter" ref="atomExpandedItemAdapter"/>
+     <property name="subscriptionAdapter" ref="atomSubscriptionAdapter"/>
+     <property name="preferencesAdapter" ref="atomPreferencesAdapter"/>
+     <property name="ticketsAdapter" ref="atomTicketsAdapter"/>
+     <property name="userAdapter" ref="atomUserAdapter"/>
   </bean>
 
   <bean id="atomProvider"
         class="org.osaf.cosmo.atom.provider.StandardProvider">
-    <property name="abdera"><ref bean="abdera"/></property>
-    <property name="workspaceManager"><ref bean="atomWorkspaceManager"/></property>
-    <property name="generatorFactory"><ref bean="atomGeneratorFactory"/></property>
-    <property name="serviceLocatorFactory">
-      <ref bean="serviceLocatorFactory"/>
-    </property>
-    <property name="targetResolver">
-      <ref bean="atomTargetResolver"/>
-    </property>
+    <property name="abdera" ref="abdera"/>
+    <property name="workspaceManager" ref="atomWorkspaceManager"/>
+    <property name="generatorFactory" ref="atomGeneratorFactory"/>
+    <property name="serviceLocatorFactory" ref="serviceLocatorFactory"/>
+    <property name="targetResolver" ref="atomTargetResolver"/>
   </bean>
 
   <!-- morse code protocol resources -->
@@ -548,15 +460,9 @@
   <bean id="morseCodeController"
         class="org.osaf.cosmo.mc.StandardMorseCodeController"
         init-method="init">
-    <property name="contentService">
-      <ref bean="contentService"/>
-    </property>
-    <property name="userService">
-      <ref bean="userService"/>
-    </property>
-    <property name="securityManager">
-      <ref bean="securityManager"/>
-    </property>
+    <property name="contentService" ref="contentService"/>
+    <property name="userService" ref="userService"/>
+    <property name="securityManager" ref="securityManager"/>
     <property name="entityFactory" ref="cosmoEntityFactory"/>
   </bean>
 

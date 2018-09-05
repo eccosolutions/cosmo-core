@@ -36,7 +36,6 @@ import org.osaf.cosmo.model.filter.EventStampFilter;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.NoteItemFilter;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -44,7 +43,7 @@ import java.util.Set;
 /**
  * Implementation of CalendarDao using Hibernate persistence objects.
  */
-public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao {
+public class CalendarDaoImpl extends HibernateSessionSupport implements CalendarDao {
 
     private static final Log log = LogFactory.getLog(CalendarDaoImpl.class);
 
@@ -63,9 +62,8 @@ public class CalendarDaoImpl extends HibernateDaoSupport implements CalendarDao 
             try {
                 // translate CalendarFilter to ItemFilter and execute filter
                 ItemFilter itemFilter = filterConverter.translateToItemFilter(collection, filter);
-                Set results = itemFilterProcessor.processFilter(currentSession(), itemFilter);
-                return results;
-            } catch (IllegalArgumentException e) {
+                return (Set) itemFilterProcessor.processFilter(currentSession(), itemFilter);
+            } catch (IllegalArgumentException ignored) {
             }
 
             // Use brute-force method if CalendarFilter can't be translated

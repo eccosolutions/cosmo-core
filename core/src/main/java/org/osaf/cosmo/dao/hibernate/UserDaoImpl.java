@@ -43,7 +43,6 @@ import org.osaf.cosmo.util.ArrayPagedList;
 import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -51,7 +50,7 @@ import javax.validation.ConstraintViolationException;
 /**
  * Implemtation of UserDao using Hibernate persistence objects.
  */
-public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
+public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private static final Log log = LogFactory.getLog(UserDaoImpl.class);
 

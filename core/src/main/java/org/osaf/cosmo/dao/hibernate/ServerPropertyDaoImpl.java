@@ -22,13 +22,12 @@ import org.osaf.cosmo.dao.ServerPropertyDao;
 import org.osaf.cosmo.model.ServerProperty;
 import org.osaf.cosmo.model.hibernate.HibServerProperty;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 /**
  * Implementation of ServerPropertyDao using Hibernate persistent objects.
  *
  */
-public class ServerPropertyDaoImpl extends HibernateDaoSupport implements
+public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
         ServerPropertyDao {
 
     private static final Log log = LogFactory
