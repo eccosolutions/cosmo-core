@@ -13,7 +13,7 @@
     <properties>
         <hibernate.version>5.2.17.Final</hibernate.version>
         <spring.version>5.0.7.RELEASE</spring.version>
-        <spring.security.version>4.1.4.RELEASE</spring.security.version>
+        <spring.security.version>5.4.2</spring.security.version>
     </properties>
 
     <repositories>
