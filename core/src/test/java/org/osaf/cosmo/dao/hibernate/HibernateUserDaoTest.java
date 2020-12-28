@@ -135,9 +135,6 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNotNull(queryUser1.getUid());
         verifyUser(user1, queryUser1);
 
-        // attempt to find by pref
-        Assert.assertEquals(0, userDao.findUsersByPreference("prop1", "value1").size());
-
         userDao.updateUser(queryUser1);
 
         clearSession();

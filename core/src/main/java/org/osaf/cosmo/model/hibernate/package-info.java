@@ -27,12 +27,12 @@
             name="composite_calendar",
             typeClass = org.osaf.cosmo.hibernate.CalendarType.class
     ),
-    
+
     @TypeDef(
             name="long_timestamp",
             typeClass = org.osaf.cosmo.hibernate.LongTimestampType.class
     ),
-    
+
     @TypeDef(
             name="boolean_integer",
             typeClass = org.osaf.cosmo.hibernate.BooleanIntegerType.class
@@ -62,11 +62,11 @@
     @NamedQuery(name="noteItemId.by.parent.icaluid", query="select item.id from HibNoteItem item join item.parentDetails pd where pd.primaryKey.collection.id=:parentid and item.icalUid=:icaluid and item.modifies is null"),
     @NamedQuery(name="icalendarItem.by.parent.icaluid", query="select item.id from HibICalendarItem item join item.parentDetails pd where pd.primaryKey.collection.id=:parentid and item.icalUid=:icaluid"),
     @NamedQuery(name="contentItem.by.owner", query="from HibContentItem i where i.owner=:owner"),
-    
+
     // Ticket Queries
     @NamedQuery(name="ticket.by.key", query="from HibTicket t where t.key=:key"),
-    
-    
+
+
     // User Queries
     @NamedQuery(name="user.byUsername", query="from HibUser where username=:username"),
     @NamedQuery(name="user.byUsername.ignorecase", query="from HibUser where lower(username)=lower(:username)"),
@@ -77,22 +77,19 @@
     @NamedQuery(name="user.byActivationId", query="from HibUser where activationid=:activationId"),
     @NamedQuery(name="user.all", query="from HibUser"),
     @NamedQuery(name="user.count", query="select count(id) from HibUser"),
-    @NamedQuery(name="users.byPreference", query="select u from HibUser u join u.preferences preference where preference.key=:key and preference.value=:value"),
 
-    // Scheduler Queries
-    @NamedQuery(name="users.withSchedules", query="select u from HibUser u join u.preferences preference where preference.key like 'cosmo.scheduler.job.%.enabled' and preference.value='true'" ),
 
-    
+
     // Password Recovery entity query
     @NamedQuery(name="passwordRecovery.byKey", query="from HibPasswordRecovery where key=:key"),
     @NamedQuery(name="passwordRecovery.delete.byUser", query="delete from HibPasswordRecovery where user=:user"),
-    
+
     // Event Queries
     @NamedQuery(name="event.by.calendar.icaluid", query="select i from HibNoteItem i join i.parentDetails pd join i.stamps stamp where pd.primaryKey.collection=:calendar and stamp.class=HibEventStamp and i.icalUid=:uid"),
-    
+
     // Event Log Queries
     @NamedQuery(name="logEntry.by.collection.date", query="from HibEventLogEntry e where id1=:parentId and entryDate between :startDate and :endDate")
-    
+
 })
 package org.osaf.cosmo.model.hibernate;
 
