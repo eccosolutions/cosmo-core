@@ -12,7 +12,7 @@
 
     <properties>
         <hibernate.version>5.2.17.Final</hibernate.version>
-        <spring.version>5.0.7.RELEASE</spring.version>
+        <spring.version>5.2.12.RELEASE</spring.version>
         <spring.security.version>4.1.4.RELEASE</spring.security.version>
     </properties>
 
@@ -126,6 +126,23 @@
             <artifactId>activation</artifactId>
             <version>1.1</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Dependencies now needed to be supplied by us, as Java 9 onwards don't ahve them by default.
+     see https://stackoverflow.com/a/43574427/1998186 -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.2.11</version>
         </dependency>
         <dependency>
             <groupId>javax.resource</groupId>
@@ -306,6 +323,16 @@
             <version>6.0.18.Final</version>
         </dependency>
         <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.1-b06</version>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>javax.el</artifactId>
             <version>2.2.4</version>
@@ -363,9 +390,9 @@
             <version>2.2.3</version>
         </dependency>
         <dependency>
-            <groupId>javassist</groupId>
+            <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.11.0.GA</version>
+            <version>3.23.2-GA</version>
             <scope>runtime</scope>
         </dependency>
 
