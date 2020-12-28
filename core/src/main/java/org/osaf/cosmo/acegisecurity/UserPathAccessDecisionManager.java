@@ -19,7 +19,6 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationToken;
 import org.osaf.cosmo.acegisecurity.providers.wsse.WsseAuthenticationToken;
 import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
 import org.osaf.cosmo.model.User;
@@ -48,8 +47,7 @@ public class UserPathAccessDecisionManager
      *
      * @throws InsufficientAuthenticationException if
      * <code>Authentication</code> is not a
-     * {@link UsernamePasswordAuthenticationToken} or a
-     * {@link TicketAuthenticationToken}.
+     * {@link UsernamePasswordAuthenticationToken}
      */
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
@@ -58,7 +56,7 @@ public class UserPathAccessDecisionManager
         HttpServletRequest request =
             ((FilterInvocation)object).getHttpRequest();
 
-        if (!((authentication instanceof UsernamePasswordAuthenticationToken) || (authentication instanceof TicketAuthenticationToken)
+        if (!((authentication instanceof UsernamePasswordAuthenticationToken)
                 || (authentication instanceof WsseAuthenticationToken)))
             throw new InsufficientAuthenticationException(
                     "Unrecognized authentication token");

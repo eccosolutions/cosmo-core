@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osaf.cosmo.acegisecurity.providers.ticket.TicketAuthenticationToken;
 import org.osaf.cosmo.acegisecurity.providers.wsse.WsseAuthenticationToken;
 import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
 import org.osaf.cosmo.model.Ticket;
@@ -63,10 +62,6 @@ public class CosmoSecurityContextImpl extends BaseSecurityContext {
                     ((Authentication) getPrincipal()).getPrincipal();
                 setUser(details.getUser());
                 setAdmin(details.getUser().getAdmin().booleanValue());
-        } else if (getPrincipal() instanceof TicketAuthenticationToken) {
-            Ticket ticket = (Ticket)
-                ((Authentication) getPrincipal()).getPrincipal();
-            setTicket(ticket);
         } else {
             throw new RuntimeException("Unknown principal type " + getPrincipal().getClass().getName());
         }
