@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,6 @@ import java.util.Set;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.HomeCollectionItem;
 import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.filter.ItemFilter;
 
@@ -40,7 +39,7 @@ public interface ItemDao extends Dao {
      * @return item represented by uid
      */
     public Item findItemByUid(String uid);
-    
+
     /**
      * Find an item with the specified path. The return type will be one of
      * ContentItem, NoteItem, CollectionItem.
@@ -50,7 +49,7 @@ public interface ItemDao extends Dao {
      * @return item represented by path
      */
     public Item findItemByPath(String path);
-    
+
     /**
      * Find an item with the specified path, relative to a parent collection.
      * The return type will be one of
@@ -63,9 +62,9 @@ public interface ItemDao extends Dao {
      * @return item represented by path
      */
     public Item findItemByPath(String path, String parentUid);
-    
+
     /**
-     * Find the parent item of the item with the specified path. 
+     * Find the parent item of the item with the specified path.
      * The return type will be of type CollectionItem.
      *
      * @param path
@@ -99,8 +98,8 @@ public interface ItemDao extends Dao {
      *         if path points to an item with the same path
      */
     public void copyItem(Item item, String destPath, boolean deepCopy);
-    
-  
+
+
     /**
      * Move item to the given path
      * @param fromPath path of item to move
@@ -111,7 +110,7 @@ public interface ItemDao extends Dao {
      *         if path points to an item with the same path
      */
     public void moveItem(String fromPath, String toPath);
-    
+
     /**
      * Remove an item.
      *
@@ -133,49 +132,6 @@ public interface ItemDao extends Dao {
     public void removeItemByUid(String uid);
 
     /**
-     * Creates a ticket on an item.
-     *
-     * @param item the item to be ticketed
-     * @param ticket the ticket to be saved
-     */
-    public void createTicket(Item item,
-                             Ticket ticket);
-
-    /**
-     * Returns all tickets on the given item.
-     *
-     * @param item the item to be ticketed
-     */
-    public Set<Ticket> getTickets(Item item);
-
-    /**
-     * Find ticket for ticket key.
-     * @param key ticket key
-     * @return Ticket corresponding to key
-     */
-    public Ticket findTicket(String key);
-    
-    /**
-     * Returns the identified ticket on the given item, or
-     * <code>null</code> if the ticket does not exists. Tickets are
-     * inherited, so if the specified item does not have the ticket
-     * but an ancestor does, it will still be returned.
-     *
-     * @param item the ticketed item
-     * @param key the ticket to return
-     */
-    public Ticket getTicket(Item item,
-                            String key);
-
-    /**
-     * Removes a ticket from an item.
-     *
-     * @param item the item to be de-ticketed
-     * @param ticket the ticket to remove
-     */
-    public void removeTicket(Item item,
-                             Ticket ticket);
-    /**
      * Adds item to a collection.
      *
      * @param item the item
@@ -190,27 +146,27 @@ public interface ItemDao extends Dao {
      * @param collection the collection to remove from
      */
     public void removeItemFromCollection(Item item, CollectionItem collection);
-    
+
     /**
      * Refresh item with persistent state.
      *
      * @param item the item
      */
     public void refreshItem(Item item);
-    
+
     /**
      * Initialize item, ensuring any proxied associations will be loaded.
      * @param item
      */
     public void initializeItem(Item item);
-    
+
     /**
      * Find a set of items using an ItemFilter.
      * @param filter criteria to filter items by
      * @return set of items matching ItemFilter
      */
     public Set<Item> findItems(ItemFilter filter);
-    
+
     /**
      * Find a set of items using a set of ItemFilters.  The set of items
      * returned includes all items that match any of the filters.

@@ -423,28 +423,6 @@ public class HibUser extends HibAuditableObject implements User {
     }
 
     /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.User#getSubscription(java.lang.String, java.lang.String)
-     */
-    public CollectionSubscription getSubscription(String collectionUid, String ticketKey){
-        for (CollectionSubscription sub : subscriptions) {
-            if (sub.getCollectionUid().equals(collectionUid)
-                    && sub.getTicketKey().equals(ticketKey)) {
-                return sub;
-            }
-        }
-
-        return null;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.User#removeSubscription(java.lang.String, java.lang.String)
-     */
-    public void removeSubscription(String collectionUid, String ticketKey){
-        removeSubscription(getSubscription(collectionUid, ticketKey));
-    }
-
-    /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#removeSubscription(java.lang.String)
      */
     public void removeSubscription(String displayName) {

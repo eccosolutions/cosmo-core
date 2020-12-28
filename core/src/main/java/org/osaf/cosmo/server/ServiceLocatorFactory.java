@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,36 +51,26 @@ public class ServiceLocatorFactory {
     public ServiceLocator createServiceLocator(HttpServletRequest request) {
         return createServiceLocator(request, ABSOLUTE_BY_DEFAULT);
     }
-    
-    /**
-     * Returns a <code>ServiceLocator</code> instance that returns
-     * relative URLs based on the application mount URL calculated from 
-     * information in the given request.
-     */
-    public ServiceLocator createServiceLocator(HttpServletRequest request, 
-                                               Boolean absoluteUrls) {
-        Ticket ticket = securityManager.getSecurityContext().getTicket();
-        return createServiceLocator(request, ticket == null ? null : ticket.getKey(), absoluteUrls);
-    }
 
     /**
      * Returns a <code>ServiceLocator</code> instance that returns
-     * URLs based on the application mount URL calculated from
-     * information in the given request and including the given ticket.
+     * relative URLs based on the application mount URL calculated from
+     * information in the given request.
      */
     public ServiceLocator createServiceLocator(HttpServletRequest request,
-                                               Ticket ticket) {
-        return createServiceLocator(request, ticket, ABSOLUTE_BY_DEFAULT);
+                                               Boolean absoluteUrls) {
+        return createServiceLocator(request, (String) null, absoluteUrls);
     }
-    
+
+
     public ServiceLocator createServiceLocator(HttpServletRequest request,
                                                String ticketKey){
         return createServiceLocator(request, ticketKey, ABSOLUTE_BY_DEFAULT);
     }
-    
+
     /**
      * Returns a <code>ServiceLocator</code> instance that returns
-     * relative URLs based on the application mount URL calculated from 
+     * relative URLs based on the application mount URL calculated from
      * information in the given request and including the given ticket
      */
     public ServiceLocator createServiceLocator(HttpServletRequest request,
@@ -90,12 +80,6 @@ public class ServiceLocatorFactory {
         return createServiceLocator(appMountUrl, ticketKey);
     }
 
-    public ServiceLocator createServiceLocator(HttpServletRequest request,
-                                               Ticket ticket,
-                                               Boolean absoluteUrls) {
-        String ticketKey = ticket != null ? ticket.getKey() : null;
-        return createServiceLocator(request, ticketKey, absoluteUrls);
-    }
 
     public ServiceLocator createServiceLocator(String appMountUrl) {
         return createServiceLocator(appMountUrl, null);
@@ -204,9 +188,9 @@ public class ServiceLocatorFactory {
             buf.append(request.getScheme()).
                 append("://").
                 append(request.getServerName());
-            if (((request.getScheme().equalsIgnoreCase("https")) && 
+            if (((request.getScheme().equalsIgnoreCase("https")) &&
                     request.getServerPort() != 443) ||
-                (((request.getScheme().equalsIgnoreCase("http")) && 
+                (((request.getScheme().equalsIgnoreCase("http")) &&
                         request.getServerPort() != 80))) {
                 buf.append(":").append(request.getServerPort());
             }
@@ -216,5 +200,5 @@ public class ServiceLocatorFactory {
         }
         return buf.toString();
     }
-    
+
 }

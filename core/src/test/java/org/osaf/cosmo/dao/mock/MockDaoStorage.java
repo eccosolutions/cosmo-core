@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,31 +15,20 @@
  */
 package org.osaf.cosmo.dao.mock;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
-
 import org.apache.commons.id.random.SessionIdGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.DuplicateItemNameException;
-import org.osaf.cosmo.model.HomeCollectionItem;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.mock.MockCollectionItem;
 import org.osaf.cosmo.model.mock.MockHomeCollectionItem;
 import org.osaf.cosmo.model.mock.MockItem;
 
+import java.util.*;
+
 /**
  * Simple in-memory storage system for mock data access objects.
  */
+@SuppressWarnings("rawtypes")
 public class MockDaoStorage {
     private static final Log log = LogFactory.getLog(MockDaoStorage.class);
 
@@ -51,10 +40,10 @@ public class MockDaoStorage {
 
     /** */
     public MockDaoStorage() {
-        itemsByPath = new HashMap<String, Item>();
-        itemsByUid = new HashMap<String, Item>();
-        rootUidsByUsername = new HashMap<String, String>();
-        tickets = new HashMap<String, Set>();
+        itemsByPath = new HashMap<>();
+        itemsByUid = new HashMap<>();
+        rootUidsByUsername = new HashMap<>();
+        tickets = new HashMap<>();
         idGenerator = new SessionIdGenerator();
     }
 
@@ -107,7 +96,7 @@ public class MockDaoStorage {
     public Collection<Item> getAllItems() {
         return itemsByUid.values();
     }
-    
+
     /** */
     public HomeCollectionItem getRootItem(String userName) {
         String rootUid = rootUidsByUsername.get(userName);
@@ -146,29 +135,25 @@ public class MockDaoStorage {
         ((MockItem) item).setCreationDate(new Date());
         ((MockItem) item).setModifiedDate(item.getCreationDate());
         ((MockItem) item).setEntityTag(getMockItem(item).calculateEntityTag());
-        
+
         if(item.getParent()!=null) {
             for (Item sibling : item.getParent().getChildren()) {
                 if (sibling.getName().equals(item.getName()))
                     throw new DuplicateItemNameException(item);
             }
-            
+
             ((MockCollectionItem) item.getParent()).addChild(item);
             itemsByPath.put(getItemPath(item.getParent()) + "/" + item.getName(),
                     item);
         }
-        
+
         // handle NoteItem modifications
         if(item instanceof NoteItem) {
             NoteItem note = (NoteItem) item;
             if(note.getModifies()!=null)
                 note.getModifies().addModification(note);
         }
-        
-        // handle tickets
-        for(Ticket ticket: item.getTickets())
-            this.createTicket(item, ticket);
-        
+
         itemsByUid.put(item.getUid(), item);
     }
 
@@ -222,39 +207,9 @@ public class MockDaoStorage {
     }
 
     /** */
-    public Set<Ticket> findItemTickets(Item item) {
-        Set<Ticket> itemTickets = tickets.get(item.getUid());
-        if (itemTickets == null) {
-            itemTickets = new HashSet<Ticket>();
-            tickets.put(item.getUid(), itemTickets);
-        }
-        return itemTickets;
-    }
-    
-    public Ticket findTicket(String key) {
-        for(Set ticketSet: tickets.values())
-            for(Ticket ticket: (Set<Ticket>) ticketSet)
-                if(ticket.getKey().equals(key))
-                    return ticket;
-        
-        return null;
-    }
-
-    /** */
-    public void createTicket(Item item, Ticket ticket) {
-        if (ticket.getKey() == null) ticket.setKey(calculateTicketKey());
-        findItemTickets(item).add(ticket);
-    }
-
-    /** */
-    public void removeTicket(Item item, Ticket ticket) {
-        findItemTickets(item).remove(ticket);
-    }
-
-    /** */
     public String getItemPath(Item item) {
         StringBuffer path = new StringBuffer();
-        LinkedList<String> hierarchy = new LinkedList<String>();
+        LinkedList<String> hierarchy = new LinkedList<>();
         hierarchy.addFirst(item.getName());
 
         Item currentItem = item;
@@ -282,7 +237,7 @@ public class MockDaoStorage {
     private String calculateTicketKey() {
         return idGenerator.nextStringIdentifier();
     }
-    
+
     private MockItem getMockItem(Item item) {
         return (MockItem) item;
     }

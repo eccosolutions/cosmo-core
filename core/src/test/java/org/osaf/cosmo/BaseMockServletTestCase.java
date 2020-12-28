@@ -15,28 +15,24 @@
  */
 package org.osaf.cosmo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import junit.framework.TestCase;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.webdav.xml.XmlSerializable;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.security.mock.MockSecurityManager;
-import org.osaf.cosmo.security.mock.MockTicketPrincipal;
 import org.osaf.cosmo.security.mock.MockUserPrincipal;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
 import org.springframework.mock.web.MockServletContext;
 import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Base class for executing servlet tests in a mock servlet container.
@@ -78,12 +74,6 @@ public abstract class BaseMockServletTestCase extends TestCase {
      */
     protected void logInUser(User user) {
         securityManager.setUpMockSecurityContext(new MockUserPrincipal(user));
-    }
-
-    /**
-     */
-    protected void logInTicket(Ticket ticket) {
-        securityManager.setUpMockSecurityContext(new MockTicketPrincipal(ticket));
     }
 
     /**

@@ -33,7 +33,6 @@ import org.osaf.cosmo.model.event.ItemRemovedEntry;
 import org.osaf.cosmo.model.event.ItemUpdatedEntry;
 import org.osaf.cosmo.model.hibernate.HibEventLogEntry;
 import org.osaf.cosmo.model.hibernate.HibItem;
-import org.osaf.cosmo.model.hibernate.HibTicket;
 import org.osaf.cosmo.model.hibernate.HibUser;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
@@ -157,9 +156,6 @@ public class EventLogDaoImpl extends HibernateSessionSupport implements EventLog
         if(entry.getUser()!=null) {
             hibEntry.setAuthType("user");
             hibEntry.setAuthId(((HibUser) entry.getUser()).getId());
-        } else {
-            hibEntry.setAuthType("ticket");
-            hibEntry.setAuthId(((HibTicket) entry.getTicket()).getId());
         }
 
         return hibEntry;

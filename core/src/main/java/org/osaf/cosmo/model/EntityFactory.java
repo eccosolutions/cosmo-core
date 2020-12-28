@@ -146,22 +146,6 @@ public interface EntityFactory {
      */
     MessageStamp createMessageStamp();
 
-
-    /**
-     * Create new Ticket
-     * @return new Ticket
-     */
-    Ticket creatTicket();
-
-
-    /**
-     * Create new Ticket with specified type.
-     * @param type ticket type
-     * @return new Ticket
-     */
-    Ticket createTicket(TicketType type);
-
-
     /**
      * Create new BinaryAttribute using InpuStream.
      * @param qname QName of attribute

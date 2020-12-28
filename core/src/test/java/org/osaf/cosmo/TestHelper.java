@@ -15,50 +15,27 @@
  */
 package org.osaf.cosmo;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.nio.charset.Charset;
-import java.security.Principal;
-import java.util.HashSet;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
+import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.parameter.XParameter;
-import net.fortuna.ical4j.model.property.Action;
-import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
-import net.fortuna.ical4j.model.property.XProperty;
-
+import net.fortuna.ical4j.model.property.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionSubscription;
-import org.osaf.cosmo.model.ContentItem;
-import org.osaf.cosmo.model.EntityFactory;
-import org.osaf.cosmo.model.FileItem;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.mock.MockEntityFactory;
 import org.osaf.cosmo.security.mock.MockAnonymousPrincipal;
 import org.osaf.cosmo.security.mock.MockUserPrincipal;
 import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.security.Principal;
 
 /**
  */
@@ -158,37 +135,6 @@ public class TestHelper {
         return event;
     }
 
-    /**
-     */
-    public Ticket makeDummyTicket(String timeout) {
-        Ticket ticket = entityFactory.creatTicket();
-        ticket.setTimeout(timeout);
-        ticket.setPrivileges(new HashSet());
-        ticket.getPrivileges().add(Ticket.PRIVILEGE_READ);
-        return ticket;
-    }
-
-    /**
-     */
-    public Ticket makeDummyTicket(int timeout) {
-        return makeDummyTicket("Second-" + timeout);
-    }
-
-    /**
-     */
-    public Ticket makeDummyTicket() {
-        return makeDummyTicket(Ticket.TIMEOUT_INFINITE);
-    }
-
-    /**
-     */
-    public Ticket makeDummyTicket(User user) {
-        Ticket ticket = makeDummyTicket();
-        ticket.setOwner(user);
-        ticket.setKey(new Integer(++tseq).toString());
-        return ticket;
-    }
-
     /** */
     public User makeDummyUser(String username,
                               String password) {
@@ -212,38 +158,6 @@ public class TestHelper {
         String serial = new Integer(++useq).toString();
         String username = "dummy" + serial;
         return makeDummyUser(username, username);
-    }
-
-    /** */
-    public CollectionSubscription
-        makeDummySubscription(CollectionItem collection,
-                              Ticket ticket) {
-        if (collection == null)
-            throw new IllegalArgumentException("collection required");
-        if (ticket == null)
-            throw new IllegalArgumentException("ticket required");
-
-        String serial = new Integer(++sseq).toString();
-        String displayName = "dummy sub " + serial;
-
-        CollectionSubscription sub = entityFactory.createCollectionSubscription();
-        sub.setDisplayName(displayName);
-        sub.setTicketKey(ticket.getKey());
-        sub.setCollectionUid(collection.getUid());
-
-        return sub;
-    }
-
-    /** */
-    public CollectionSubscription
-        makeDummySubscription(User user) {
-        CollectionItem collection = makeDummyCollection(user);
-        Ticket ticket = makeDummyTicket(user);
-
-        CollectionSubscription sub = makeDummySubscription(collection, ticket);
-        sub.setOwner(user);
-
-        return sub;
     }
 
     /**

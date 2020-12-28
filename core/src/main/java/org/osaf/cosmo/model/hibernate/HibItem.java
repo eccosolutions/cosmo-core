@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,7 +67,7 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Table(name="cosmo_item")
 @org.hibernate.annotations.Table(
-        appliesTo="cosmo_item", 
+        appliesTo="cosmo_item",
         indexes={@Index(name="idx_itemtype", columnNames={"itemtype"})})
 @DiscriminatorColumn(
         name="itemtype",
@@ -76,97 +76,92 @@ import javax.validation.constraints.NotNull;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public abstract class HibItem extends HibAuditableObject implements Item {
 
-   
+
     @Column(name = "item_uid", nullable = false, length=255)
     @NotNull
     @Length(min=1, max=255)
     @Index(name="idx_itemuid")
     @NaturalId
     private String uid;
-    
-    @Column(name = "itemname", nullable = false, length=255)
+
+    @Column(name = "itemname", nullable = false)
     @NotNull
     @Length(min=1, max=255)
     @Index(name="idx_itemname")
     private String name;
-    
+
     @Column(name = "displayname", length=1024)
     private String displayName;
-    
+
     @Column(name = "clientcreatedate")
     @Type(type="long_timestamp")
     private Date clientCreationDate;
-    
+
     @Column(name = "clientmodifieddate")
     @Type(type="long_timestamp")
     private Date clientModifiedDate;
-    
+
     @Version
     @Column(name="version", nullable = false)
     private Integer version;
-    
+
     private transient Boolean isActive = Boolean.TRUE;
-    
+
     @OneToMany(targetEntity=HibAttribute.class, mappedBy = "item", fetch=FetchType.LAZY)
     // turns out this creates a query that is unoptimized for MySQL
     //@Fetch(FetchMode.SUBSELECT)
     @BatchSize(size=50)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
+    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Map<HibQName, Attribute> attributes = new HashMap<HibQName, Attribute>(0);
-    
-    @OneToMany(targetEntity=HibTicket.class, mappedBy = "item", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Ticket> tickets = new HashSet<Ticket>(0);
-    
+    private Map<HibQName, Attribute> attributes = new HashMap<>(0);
+
     @OneToMany(targetEntity=HibStamp.class, mappedBy = "item", fetch=FetchType.LAZY)
     // turns out this creates a query that is unoptimized for MySQL
     //@Fetch(FetchMode.SUBSELECT)
     @BatchSize(size=50)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Stamp> stamps = new HashSet<Stamp>(0);
-    
+    private Set<Stamp> stamps = new HashSet<>(0);
+
     @OneToMany(targetEntity=HibTombstone.class, mappedBy="item", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
-    protected Set<Tombstone> tombstones = new HashSet<Tombstone>(0);
-    
+    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
+    protected Set<Tombstone> tombstones = new HashSet<>(0);
+
     private transient Map<String, Stamp> stampMap = null;
-    
+
     @OneToMany(targetEntity=HibCollectionItemDetails.class, mappedBy="primaryKey.item", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
+    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<CollectionItemDetails> parentDetails = new HashSet<CollectionItemDetails>(0);
-    
+    private Set<CollectionItemDetails> parentDetails = new HashSet<>(0);
+
     private transient Set<CollectionItem> parents = null;
-    
+
     @ManyToOne(targetEntity=HibUser.class, fetch=FetchType.LAZY)
     @JoinColumn(name="ownerid", nullable = false)
     @NotNull
     private User owner;
-  
-    
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getStamps()
      */
     public Set<Stamp> getStamps() {
         return Collections.unmodifiableSet(stamps);
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getStampMap()
      */
     public Map<String, Stamp> getStampMap() {
         if(stampMap==null) {
-            stampMap = new HashMap<String, Stamp>();
+            stampMap = new HashMap<>();
             for(Stamp stamp : stamps)
                 stampMap.put(stamp.getType(), stamp);
         }
-        
+
         return stampMap;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#addStamp(org.osaf.cosmo.model.Stamp)
      */
@@ -181,11 +176,11 @@ public abstract class HibItem extends HibAuditableObject implements Item {
                 if(((StampTombstone) ts).getStampType().equals(stamp.getType()))
                     it.remove();
         }
-        
+
         stamp.setItem(this);
         stamps.add(stamp);
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#removeStamp(org.osaf.cosmo.model.Stamp)
      */
@@ -193,13 +188,13 @@ public abstract class HibItem extends HibAuditableObject implements Item {
         // only remove stamps that belong to item
         if(!stamps.contains(stamp))
             return;
-        
+
         stamps.remove(stamp);
-        
+
         // add tombstone for tracking purposes
         tombstones.add(new HibStampTombstone(this, stamp));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getStamp(java.lang.String)
      */
@@ -208,10 +203,10 @@ public abstract class HibItem extends HibAuditableObject implements Item {
             // only return stamp if it matches class and is active
             if(stamp.getType().equals(type))
                 return stamp;
-        
+
         return null;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getStamp(java.lang.Class)
      */
@@ -220,7 +215,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
             // only return stamp if it is an instance of the specified class
             if(clazz.isInstance(stamp))
                 return stamp;
-        
+
         return null;
     }
 
@@ -230,21 +225,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public Map<QName, Attribute> getAttributes() {
         return Collections.<QName, Attribute>unmodifiableMap(attributes);
     }
-    
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.Item#addTicket(org.osaf.cosmo.model.Ticket)
-     */
-    public void addTicket(Ticket ticket) {
-        ticket.setItem(this);
-        tickets.add(ticket);
-    }
-    
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.Item#removeTicket(org.osaf.cosmo.model.Ticket)
-     */
-    public void removeTicket(Ticket ticket) {
-        tickets.remove(ticket);
-    }
+
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#addAttribute(org.osaf.cosmo.model.Attribute)
@@ -260,19 +241,19 @@ public abstract class HibItem extends HibAuditableObject implements Item {
                 if(((AttributeTombstone) ts).getQName().equals(attribute.getQName()))
                     it.remove();
         }
-        
+
         ((HibAttribute) attribute).validate();
         attribute.setItem(this);
         attributes.put(((HibAttribute) attribute).getQName(), attribute);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#removeAttribute(java.lang.String)
      */
     public void removeAttribute(String name) {
        removeAttribute(new HibQName(name));
     }
-  
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#removeAttribute(org.osaf.cosmo.model.QName)
      */
@@ -287,12 +268,12 @@ public abstract class HibItem extends HibAuditableObject implements Item {
      * @see org.osaf.cosmo.model.Item#removeAttributes(java.lang.String)
      */
     public void removeAttributes(String namespace) {
-        ArrayList<QName> toRemove = new ArrayList<QName>();
+        ArrayList<QName> toRemove = new ArrayList<>();
         for (QName qname: attributes.keySet()) {
             if (qname.getNamespace().equals(namespace))
                 toRemove.add(qname);
         }
-        
+
         for(QName qname: toRemove)
             removeAttribute(qname);
     }
@@ -303,21 +284,21 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public Attribute getAttribute(String name) {
         return getAttribute(new HibQName(name));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getAttribute(org.osaf.cosmo.model.QName)
      */
     public Attribute getAttribute(QName qname) {
         return attributes.get(qname);
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getAttributeValue(java.lang.String)
      */
     public Object getAttributeValue(String name) {
        return getAttributeValue(new HibQName(name));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getAttributeValue(org.osaf.cosmo.model.QName)
      */
@@ -334,14 +315,14 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public void setAttribute(String name, Object value) {
         setAttribute(new HibQName(name),value);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#setAttribute(org.osaf.cosmo.model.QName, java.lang.Object)
      */
     @SuppressWarnings("unchecked")
     public void setAttribute(QName key, Object value) {
         HibAttribute attr = (HibAttribute) attributes.get(key);
-    
+
         if(attr!=null) {
             attr.setValue(value);
             attr.validate();
@@ -354,15 +335,15 @@ public abstract class HibItem extends HibAuditableObject implements Item {
      * @see org.osaf.cosmo.model.Item#getAttributes(java.lang.String)
      */
     public Map<String, Attribute> getAttributes(String namespace) {
-        HashMap<String, Attribute> attrs = new HashMap<String, Attribute>();
+        HashMap<String, Attribute> attrs = new HashMap<>();
         for(Entry<HibQName, Attribute> e: attributes.entrySet()) {
             if(e.getKey().getNamespace().equals(namespace))
                 attrs.put(e.getKey().getLocalName(), e.getValue());
         }
-        
+
         return attrs;
     }
-    
+
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getClientCreationDate()
@@ -377,7 +358,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public void setClientCreationDate(Date clientCreationDate) {
         this.clientCreationDate = clientCreationDate;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getClientModifiedDate()
      */
@@ -391,7 +372,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public void setClientModifiedDate(Date clientModifiedDate) {
         this.clientModifiedDate = clientModifiedDate;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getName()
      */
@@ -405,7 +386,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public void setName(String name) {
         this.name = name;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getDisplayName()
      */
@@ -460,7 +441,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
      */
     public void addParent(CollectionItem parent) {
         parentDetails.add(new HibCollectionItemDetails(parent,this));
-        
+
         // clear cached parents
         parents = null;
     }
@@ -480,13 +461,13 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public Set<CollectionItem> getParents() {
         if(parents!=null)
             return parents;
-        
-        parents = new HashSet<CollectionItem>();
+
+        parents = new HashSet<>();
         for(CollectionItemDetails cid: parentDetails)
             parents.add(cid.getCollection());
-        
+
         parents = Collections.unmodifiableSet(parents);
-        
+
         return parents;
     }
 
@@ -496,10 +477,10 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public CollectionItem getParent() {
         if(getParents().isEmpty())
             return null;
-        
+
         return getParents().iterator().next();
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getParentDetails(org.osaf.cosmo.model.CollectionItem)
      */
@@ -507,7 +488,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
         for(CollectionItemDetails cid: parentDetails)
             if(cid.getCollection().equals(parent))
                 return cid;
-        
+
         return null;
     }
 
@@ -526,13 +507,6 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     }
 
     /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.Item#getTickets()
-     */
-    public Set<Ticket> getTickets() {
-        return Collections.unmodifiableSet(tickets);
-    }
-
-    /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getTombstones()
      */
     public Set<Tombstone> getTombstones() {
@@ -546,10 +520,10 @@ public abstract class HibItem extends HibAuditableObject implements Item {
         tombstone.setItem(this);
         tombstones.add(tombstone);
     }
-    
-    
+
+
     /**
-     * Item uid determines equality 
+     * Item uid determines equality
      */
     @Override
     public boolean equals(Object obj) {
@@ -557,7 +531,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
             return false;
         if( ! (obj instanceof Item))
             return false;
-        
+
         return uid.equals(((Item) obj).getUid());
     }
 
@@ -568,7 +542,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
         else
             return uid.hashCode();
     }
-    
+
     @Override
     public String calculateEntityTag() {
         String uid = getUid() != null ? getUid() : "-";
@@ -581,11 +555,11 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     protected void copyToItem(Item item) {
         item.setOwner(getOwner());
         item.setDisplayName(getDisplayName());
-        
+
         // copy attributes
         for(Entry<HibQName, Attribute> entry: attributes.entrySet())
             item.addAttribute(entry.getValue().copy());
-        
+
         // copy stamps
         for(Stamp stamp: stamps)
             item.addStamp(stamp.copy());

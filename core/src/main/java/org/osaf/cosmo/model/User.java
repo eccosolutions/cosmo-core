@@ -257,23 +257,6 @@ public interface User extends AuditableObject{
     CollectionSubscription getSubscription(String displayname);
 
     /**
-     * Get the CollectionSubscription with the specified collectionUid
-     * and ticketKey
-     * @param collectionUid collection uid of subscription to return
-     * @param ticketKey ticketKey of subscription to return
-     * @return subscription with specified collectionUid and ticketKey
-     */
-    CollectionSubscription getSubscription(String collectionUid,
-                                           String ticketKey);
-
-    /**
-     * Remove the CollectionSubscription with the specifed collectionUid and ticketKey
-     * @param collectionUid collection uid of subscription to remove
-     * @param ticketKey ticketKey of subscription to remove
-     */
-    void removeSubscription(String collectionUid, String ticketKey);
-
-    /**
      * Remove the CollectionSubscription with the specifed displayName
      * @param displayName display name of the subscription to remove
      */

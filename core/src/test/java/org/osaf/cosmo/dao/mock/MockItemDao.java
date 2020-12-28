@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,30 +15,20 @@
  */
 package org.osaf.cosmo.dao.mock;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.ItemDao;
-import org.osaf.cosmo.model.Attribute;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.HomeCollectionItem;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.ItemNotFoundException;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.ItemFilterEvaluater;
 import org.osaf.cosmo.model.filter.ItemFilterPostProcessor;
-import org.osaf.cosmo.model.mock.MockAuditableObject;
 import org.osaf.cosmo.model.mock.MockCollectionItem;
 import org.osaf.cosmo.model.mock.MockItem;
 import org.osaf.cosmo.util.PathUtil;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Mock implementation of <code>ItemDao</code> useful for testing.
@@ -62,7 +52,7 @@ public class MockItemDao implements ItemDao {
     /**
      * Find an item with the specified uid. The return type will be one of
      * Item, CollectionItem, CalendarCollectionItem, CalendarItem.
-     * 
+     *
      * @param uid
      *            uid of item to find
      * @return item represented by uid
@@ -70,12 +60,12 @@ public class MockItemDao implements ItemDao {
     public Item findItemByUid(String uid) {
         return storage.getItemByUid(uid);
     }
-    
+
 
     /**
      * Find an item with the specified path. The return type will be one of
      * Item, CollectionItem, CalendarCollectionItem, CalendarItem.
-     * 
+     *
      * @param path
      *            path of item to find
      * @return item represented by path
@@ -83,9 +73,9 @@ public class MockItemDao implements ItemDao {
     public Item findItemByPath(String path) {
         return storage.getItemByPath(path);
     }
-    
+
     /**
-     * Find the parent item of the item with the specified path. 
+     * Find the parent item of the item with the specified path.
      * The return type will be one of CollectionItem, CalendarCollectionItem.
      *
      * @param path
@@ -99,7 +89,7 @@ public class MockItemDao implements ItemDao {
     /**
      * Return the path to an item. The path has the format:
      * /username/parent1/parent2/itemname
-     * 
+     *
      * @param item
      *            the item to calculate the path for
      * @return hierarchical path to item
@@ -111,7 +101,7 @@ public class MockItemDao implements ItemDao {
     /**
      * Return the path to an item. The path has the format:
      * /username/parent1/parent2/itemname
-     * 
+     *
      * @param uid
      *            the uid of the item to calculate the path for
      * @return hierarchical path to item
@@ -122,7 +112,7 @@ public class MockItemDao implements ItemDao {
 
     /**
      * Get the root item for a user
-     * 
+     *
      * @param user
      * @return
      */
@@ -221,8 +211,8 @@ public class MockItemDao implements ItemDao {
 
         return copy;
     }
-    
-  
+
+
     /**
      * Move item to the given path
      * @param fromPath item to move
@@ -236,17 +226,17 @@ public class MockItemDao implements ItemDao {
                          String toPath) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * Remove an item.
-     * 
+     *
      * @param item
      *            item to remove
      */
     public void removeItem(Item item) {
         if(item.getParent()!=null)
             ((MockCollectionItem) item.getParent()).removeChild(item);
-        
+
         // update modifications
         if(item instanceof NoteItem) {
             NoteItem note = (NoteItem) item;
@@ -262,83 +252,6 @@ public class MockItemDao implements ItemDao {
         }
     }
 
-    /**
-     * Creates a ticket on an item.
-     *
-     * @param item the item to be ticketed
-     * @param ticket the ticket to be saved
-     */
-    public void createTicket(Item item,
-                             Ticket ticket) {
-        item.addTicket(ticket);
-        ((MockAuditableObject) ticket).setModifiedDate(new Date());
-        storage.createTicket(item, ticket);
-    }
-
-    /**
-     * Returns all tickets on the given item.
-     *
-     * @param item the item to be ticketed
-     */
-    public Set getTickets(Item item) {
-        return storage.findItemTickets(item);
-    }
-
-    public Ticket findTicket(String key) {
-        return storage.findTicket(key);
-    }
-    
-    
-    /**
-     * Returns the identified ticket on the given item, or
-     * <code>null</code> if the ticket does not exists. Tickets are
-     * inherited, so if the specified item does not have the ticket
-     * but an ancestor does, it will still be returned.
-     *
-     * @param item the ticketed item
-     * @param key the ticket to return
-     */
-    public Ticket getTicket(Item item,
-                            String key) {
-        for(Ticket t : storage.findItemTickets(item)) {
-            if (t.getKey().equals(key))
-                return t;
-        }
-        // the ticket might be on an ancestor, so check the parent
-        if (item.getParent() != null) {
-            return getTicket(storage.getItemByUid(item.getParent().getUid()),
-                             key);
-        }
-        // this is the root item; the ticket simply doesn't exist
-        // anywhere in the given path
-        return null;
-    }
-
-    /**
-     * Removes a ticket from an item.
-     *
-     * @param item the item to be de-ticketed
-     * @param ticket the ticket to remove
-     */
-    public void removeTicket(Item item,
-                             Ticket ticket) {
-        Set itemTickets = storage.findItemTickets(item);
-        if (itemTickets.contains(ticket)) {
-            item.removeTicket(ticket);
-            storage.removeTicket(item, ticket);
-            return;
-        }
-        // the ticket might be on an ancestor, so check the parent
-        if (item.getParent() != null) {
-            removeTicket(storage.getItemByUid(item.getParent().getUid()),
-                         ticket);
-        }
-        // this is the root item; the ticket simply doesn't exist
-        // anywhere in the given path
-        return;
-    }
-
-    
     public Item findItemByPath(String path, String parentUid) {
         // TODO Auto-generated method stub
         return null;
@@ -351,27 +264,27 @@ public class MockItemDao implements ItemDao {
     public void removeItemByUid(String uid) {
         removeItem(findItemByUid(uid));
     }
-    
+
     public void addItemToCollection(Item item, CollectionItem collection) {
         ((MockCollectionItem) collection).addChild(item);
         ((MockItem) item).addParent(collection);
     }
-    
+
     public void removeItemFromCollection(Item item, CollectionItem collection) {
         ((MockItem) item).removeParent(collection);
         ((MockCollectionItem) collection).removeChild(item);
         if(item.getParents().size()==0)
             removeItem(item);
     }
-    
+
     public void refreshItem(Item item) {
         // do nothing
     }
-    
+
     public void initializeItem(Item item) {
         // do nothing
     }
-    
+
     public Set<Item> findItems(ItemFilter filter) {
         ItemFilterEvaluater evaluater = new ItemFilterEvaluater();
         ItemFilterPostProcessor postProcessor = new ItemFilterPostProcessor();
@@ -379,24 +292,24 @@ public class MockItemDao implements ItemDao {
         for(Item i : storage.getAllItems())
             if(evaluater.evaulate(i, filter))
                 results.add(i);
-        
+
         return postProcessor.processResults(results, filter);
     }
-    
+
     public Set<Item> findItems(ItemFilter[] filters) {
         ItemFilterEvaluater evaluater = new ItemFilterEvaluater();
         ItemFilterPostProcessor postProcessor = new ItemFilterPostProcessor();
         HashSet<Item> allResults = new HashSet<Item>();
-        
+
         for(ItemFilter f: filters) {
             HashSet<Item> results = new HashSet<Item>();
             for(Item i : storage.getAllItems())
                 if(evaluater.evaulate(i, f))
                     results.add(i);
-            
+
             allResults.addAll(postProcessor.processResults(results, f));
         }
-        
+
         return allResults;
     }
 

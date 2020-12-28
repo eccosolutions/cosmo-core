@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,14 +16,12 @@
 package org.osaf.cosmo.security;
 
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 
@@ -37,7 +35,6 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
     private boolean admin;
     private boolean anonymous;
     private Principal principal;
-    private Ticket ticket;
     private User user;
     private Set<Ticket> tickets;
 
@@ -62,9 +59,6 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
         if (isAnonymous()) {
             return "anonymous";
         }
-        if (ticket != null) {
-            return ticket.getKey();
-        }
         return user.getUsername();
     }
 
@@ -86,15 +80,6 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
     }
 
     /**
-     * Returns an instance of {@link Ticket} describing the ticket
-     * represented by the security context, or <code>null</code> if
-     * the context does not represent a ticket.
-     */
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    /**
      * Determines whether or not the security context represents an
      * administrator
      */
@@ -102,37 +87,6 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
         return admin;
     }
 
-    /**
-     * Returns the set of tickets granted on the given item that are
-     * visible to the current security context.
-     */
-    public Set<Ticket> findVisibleTickets(Item item) {
-        HashSet<Ticket> visible = new HashSet<Ticket>();
-
-        // Admin context has access to all tickets
-        if (admin)
-            visible.addAll(item.getTickets());
-
-        // Ticket context can only see itself
-        else if (ticket != null) {
-            for (Ticket t : item.getTickets()) {
-                if (ticket.equals(t))
-                    visible.add(t);
-            }
-        }
-
-        // User context can only see the tickets he owns
-        else if (user != null) {
-            for (Ticket t : item.getTickets()) {
-                if (user.equals(t.getOwner()))
-                    visible.add(t);
-            }
-        }
-
-        // Anonymous context can't see any tickets
-
-        return visible;
-    }
 
     /* ----- our methods ----- */
 
@@ -150,10 +104,6 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
 
     protected void setAdmin(boolean admin) {
         this.admin = admin;
-    }
-
-    protected void setTicket(Ticket ticket) {
-        this.ticket = ticket;
     }
 
     /**

@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,27 +44,23 @@ import org.osaf.cosmo.model.User;
 public class HibCollectionSubscription extends HibAuditableObject implements CollectionSubscription {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1376628118792909419L;
-    
+
     @ManyToOne(targetEntity=HibUser.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "ownerid", nullable = false)
     @NotNull
     private User owner;
-    
+
     @Column(name = "displayname", nullable = false, length = 255)
     @NotNull
     private String displayName;
-    
-    @Column(name = "ticketkey", nullable = false, length = 255)
-    @NotNull
-    private String ticketKey;
-    
+
     @Column(name = "collectionuid", nullable = false, length = 255)
     @NotNull
     private String collectionUid;
-    
+
     /**
      */
     public HibCollectionSubscription() {
@@ -83,7 +79,7 @@ public class HibCollectionSubscription extends HibAuditableObject implements Col
     public void setCollectionUid(String collectionUid) {
         this.collectionUid = collectionUid;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.CollectionSubscription#setCollection(org.osaf.cosmo.model.CollectionItem)
      */
@@ -117,27 +113,6 @@ public class HibCollectionSubscription extends HibAuditableObject implements Col
      */
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.CollectionSubscription#getTicketKey()
-     */
-    public String getTicketKey() {
-        return ticketKey;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.CollectionSubscription#setTicketKey(java.lang.String)
-     */
-    public void setTicketKey(String ticketKey) {
-        this.ticketKey = ticketKey;
-    }  
-    
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.CollectionSubscription#setTicket(org.osaf.cosmo.model.Ticket)
-     */
-    public void setTicket(Ticket ticket) {
-        this.ticketKey = ticket.getKey();
     }
 
     public String calculateEntityTag() {

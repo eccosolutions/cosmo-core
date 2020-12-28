@@ -15,39 +15,15 @@
  */
 package org.osaf.cosmo.model.mock;
 
+import org.apache.commons.id.IdentifierGenerator;
+import org.apache.commons.id.uuid.VersionFourGenerator;
+import org.osaf.cosmo.model.*;
+import org.w3c.dom.Element;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.Calendar;
-
-import org.apache.commons.id.IdentifierGenerator;
-import org.apache.commons.id.uuid.VersionFourGenerator;
-import org.osaf.cosmo.model.AvailabilityItem;
-import org.osaf.cosmo.model.BinaryAttribute;
-import org.osaf.cosmo.model.CalendarAttribute;
-import org.osaf.cosmo.model.CalendarCollectionStamp;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionSubscription;
-import org.osaf.cosmo.model.DecimalAttribute;
-import org.osaf.cosmo.model.EntityFactory;
-import org.osaf.cosmo.model.EventExceptionStamp;
-import org.osaf.cosmo.model.EventStamp;
-import org.osaf.cosmo.model.FileItem;
-import org.osaf.cosmo.model.FreeBusyItem;
-import org.osaf.cosmo.model.IntegerAttribute;
-import org.osaf.cosmo.model.MessageStamp;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.PasswordRecovery;
-import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.StringAttribute;
-import org.osaf.cosmo.model.TaskStamp;
-import org.osaf.cosmo.model.TextAttribute;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.TicketType;
-import org.osaf.cosmo.model.TriageStatus;
-import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.model.XmlAttribute;
-import org.w3c.dom.Element;
 
 /**
  * EntityFactory implementation that uses mock objects.
@@ -140,20 +116,12 @@ public class MockEntityFactory implements EntityFactory {
         return new MockTextAttribute(qname, reader);
     }
 
-    public Ticket createTicket(TicketType type) {
-        return new MockTicket(type);
-    }
-
     public TriageStatus createTriageStatus() {
         return new MockTriageStatus();
     }
 
     public User createUser() {
         return new MockUser();
-    }
-
-    public Ticket creatTicket() {
-        return new MockTicket();
     }
 
     public String generateUid() {

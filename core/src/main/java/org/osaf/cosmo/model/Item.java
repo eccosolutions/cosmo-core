@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -64,15 +64,11 @@ public interface Item extends AuditableObject{
     public Stamp getStamp(Class clazz);
 
     /**
-     * Get all Attributes of Item.  Use addAttribute() and 
+     * Get all Attributes of Item.  Use addAttribute() and
      * removeAttribute() to manipulate map.
      * @return
      */
     public Map<QName, Attribute> getAttributes();
-
-    public void addTicket(Ticket ticket);
-
-    public void removeTicket(Ticket ticket);
 
     public void addAttribute(Attribute attribute);
 
@@ -177,7 +173,7 @@ public interface Item extends AuditableObject{
     public void setUid(String uid);
 
     public Set<CollectionItem> getParents();
-    
+
     /**
      * Each collection an item belongs to contains additional
      * attributes, and is represented as a CollectionItemDetails object.
@@ -203,12 +199,6 @@ public interface Item extends AuditableObject{
      * @param isActive true if item should be deleted
      */
     public void setIsActive(Boolean isActive);
-
-    /**
-     * Get all Tickets on Item.  
-     * @return set of tickets
-     */
-    public Set<Ticket> getTickets();
 
     public Set<Tombstone> getTombstones();
 

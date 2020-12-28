@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,15 +48,15 @@ public class EventLogAdvice extends OrderedAdvice {
     private boolean enabled = true;
     private CosmoSecurityManager securityManager = null;
     private EventLogDao eventLogDao = null;
-  
+
     private static final Log log =
         LogFactory.getLog(EventLogAdvice.class);
-    
+
     public void init() {
         if(eventLogDao==null)
             throw new IllegalStateException("eventLogDao must not be null");
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.addItemToCollection(..)) &&"
             + "args(item, collection)")
     public Object addItemToCollection(ProceedingJoinPoint pjp,
@@ -65,18 +65,18 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in addItemToCollection(item, collection)");
         if (!enabled)
             return pjp.proceed();
-        
+
         // for now only care about content items
         if(!(item instanceof ContentItem))
             return pjp.proceed();
-        
+
         Object returnVal = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntry(createItemAddedEntry(collection, item));
-        
+
         return returnVal;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.removeItem(..)) &&"
             + "args(item)")
     public Object removeItem(ProceedingJoinPoint pjp,
@@ -85,24 +85,24 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in removeItem(item)");
         if (!enabled)
             return pjp.proceed();
-        
+
         // for now only care about content items
         if(!(item instanceof ContentItem))
             return pjp.proceed();
-        
+
         ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
-        
+
         for(CollectionItem parent: item.getParents()) {
             entries.add(createItemRemovedEntry(parent, item));
         }
-        
+
         Object returnValue = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntries(entries);
-        
+
         return returnValue;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.removeItemFromCollection(..)) &&"
             + "args(item, collection)")
     public Object removeItemFromCollection(ProceedingJoinPoint pjp,
@@ -111,18 +111,18 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in removeItemFromCollection(item, collection)");
         if (!enabled)
             return pjp.proceed();
-        
+
         // for now only care about content items
         if(!(item instanceof ContentItem))
             return pjp.proceed();
-        
+
         Object returnVal = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntry(createItemRemovedEntry(collection, item));
-        
+
         return returnVal;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.createCollection(..)) &&"
             + "args(parent, collection, children)")
     public Object createCollection(ProceedingJoinPoint pjp,
@@ -131,32 +131,32 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in createCollection(parent, collection, children)");
         if (!enabled)
             return pjp.proceed();
-        
-       
+
+
         // create update and added record for each item
         ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
         for(Item child: children) {
-            
+
             // for now only care about content items
             if(!(child instanceof ContentItem))
                 continue;
-            
+
             // existing items are updated in existing collections
             if(child.getCreationDate()!=null) {
                 entries.addAll(createItemUpdatedEntries(child));
-            } 
-            
+            }
+
             // added to new collection
             entries.add(createItemAddedEntry(collection, child));
         }
-        
+
         Object returnVal = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntries(entries);
-        
+
         return returnVal;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.updateCollection(..)) &&"
             + "args(collection, children)")
     public Object updateCollection(ProceedingJoinPoint pjp,
@@ -165,15 +165,15 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in updateCollection(collection, children)");
         if (!enabled)
             return pjp.proceed();
-        
-        
+
+
         ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
         for(Item child: children) {
-            
+
             // for now only care about content items
             if(!(child instanceof ContentItem))
                 continue;
-            
+
             // removed items
             if(child.getIsActive()==Boolean.FALSE) {
                entries.add(createItemRemovedEntry(collection, child));
@@ -181,7 +181,7 @@ public class EventLogAdvice extends OrderedAdvice {
                 // existing items are updated
                 if(child.getCreationDate()!=null) {
                     entries.addAll(createItemUpdatedEntries(child));
-                    // if item isn't in collection it is gets 
+                    // if item isn't in collection it is gets
                     // and "added" entry
                     if(!child.getParents().contains(collection))
                         entries.add(createItemAddedEntry(collection, child));
@@ -190,15 +190,15 @@ public class EventLogAdvice extends OrderedAdvice {
                 }
             }
         }
-        
+
         Object returnVal = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntries(entries);
-        
+
         return returnVal;
     }
-    
-    
+
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.createContent(..)) &&"
             + "args(parent, content)")
     public Object createContent(ProceedingJoinPoint pjp,
@@ -207,14 +207,14 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in createContent(parent, content)");
         if (!enabled)
             return pjp.proceed();
-       
+
         Object returnVal = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntry(createItemAddedEntry(parent, content));
-     
+
         return returnVal;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.createContentItems(..)) &&"
             + "args(parent, contentItems)")
     public Object createContentItems(ProceedingJoinPoint pjp,
@@ -223,18 +223,18 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in createContent(parent, contentItems)");
         if (!enabled)
             return pjp.proceed();
-        
+
         ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
         for(Item child: contentItems)
             entries.add(createItemAddedEntry(parent, child));
-        
+
         Object returnVal = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntries(entries);
-        
+
         return returnVal;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.updateContent(..)) &&"
             + "args(content)")
     public Object updateContent(ProceedingJoinPoint pjp,
@@ -243,15 +243,15 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in updateContent(content)");
         if (!enabled)
             return pjp.proceed();
-       
+
         Object returnVal = pjp.proceed();
         ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
         entries.addAll(createItemUpdatedEntries(content));
         eventLogDao.addEventLogEntries(entries);
-        
+
         return returnVal;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.updateContentItems(..)) &&"
             + "args(parents, contentItems)")
     public Object updateContentItems(ProceedingJoinPoint pjp,
@@ -260,8 +260,8 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in updateContentItems(parents, contentItems)");
         if (!enabled)
             return pjp.proceed();
-        
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();    
+
+        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
         for(ContentItem content: contentItems) {
            if(content.getIsActive()==Boolean.FALSE) {
                for(CollectionItem parent: content.getParents())
@@ -273,16 +273,16 @@ public class EventLogAdvice extends OrderedAdvice {
                else
                    entries.addAll(createItemUpdatedEntries(content));
            }
-               
+
         }
-       
+
         Object returnVal = pjp.proceed();
-        
+
         eventLogDao.addEventLogEntries(entries);
-        
+
         return returnVal;
     }
-    
+
     @Around("execution(* org.osaf.cosmo.service.ContentService.removeContent(..)) &&"
             + "args(content)")
     public Object removeContent(ProceedingJoinPoint pjp,
@@ -291,27 +291,27 @@ public class EventLogAdvice extends OrderedAdvice {
             log.debug("in removeContent(content)");
         if (!enabled)
             return pjp.proceed();
-        
+
         HashSet<CollectionItem> parents = new HashSet<CollectionItem>();
         parents.addAll(content.getParents());
-        
+
         Object returnValue = pjp.proceed();
-        
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();    
+
+        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
         for(CollectionItem parent: parents)
             entries.add(createItemRemovedEntry(parent, content));
-        
+
         eventLogDao.addEventLogEntries(entries);
-        
+
         return returnValue;
     }
-    
+
     protected ItemAddedEntry createItemAddedEntry(CollectionItem collection, Item item) {
         ItemAddedEntry entry = new ItemAddedEntry(item, collection);
         setBaseEntryProps(entry);
         return entry;
     }
-    
+
     protected List<ItemUpdatedEntry> createItemUpdatedEntries(Item item) {
         ArrayList<ItemUpdatedEntry> entries = new ArrayList<ItemUpdatedEntry>();
         for(CollectionItem parent: item.getParents()) {
@@ -322,13 +322,13 @@ public class EventLogAdvice extends OrderedAdvice {
 
         return entries;
     }
-    
+
     protected ItemRemovedEntry createItemRemovedEntry(CollectionItem collection, Item item) {
         ItemRemovedEntry entry = new ItemRemovedEntry(item, collection);
         setBaseEntryProps(entry);
         return entry;
     }
-    
+
     public void setEventLogDao(EventLogDao eventLogDao) {
         this.eventLogDao = eventLogDao;
     }
@@ -337,10 +337,8 @@ public class EventLogAdvice extends OrderedAdvice {
         CosmoSecurityContext context = securityManager.getSecurityContext();
         if(context.getUser()!=null)
             entry.setUser(context.getUser());
-        else
-            entry.setTicket(context.getTicket());
     }
-   
+
     public CosmoSecurityManager getSecurityManager() {
         return securityManager;
     }

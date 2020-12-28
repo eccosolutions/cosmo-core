@@ -25,18 +25,10 @@ import org.osaf.cosmo.dao.mock.MockContentDao;
 import org.osaf.cosmo.dao.mock.MockDaoStorage;
 import org.osaf.cosmo.dao.mock.MockUserDao;
 import org.osaf.cosmo.icalendar.ICalendarClientFilterManager;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionSubscription;
-import org.osaf.cosmo.model.ContentItem;
-import org.osaf.cosmo.model.EntityFactory;
-import org.osaf.cosmo.model.HomeCollectionItem;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.mock.MockEntityFactory;
 import org.osaf.cosmo.security.CosmoSecurityManager;
 import org.osaf.cosmo.security.mock.MockSecurityManager;
-import org.osaf.cosmo.security.mock.MockTicketPrincipal;
 import org.osaf.cosmo.security.mock.MockUserPrincipal;
 import org.osaf.cosmo.server.ServiceLocatorFactory;
 import org.osaf.cosmo.service.ContentService;
@@ -121,10 +113,6 @@ public class MockHelper extends TestHelper {
 
     public void logInUser(User u) {
         securityManager.setUpMockSecurityContext(new MockUserPrincipal(u));
-    }
-
-    public void logInTicket(Ticket t) {
-        securityManager.setUpMockSecurityContext(new MockTicketPrincipal(t));
     }
 
     public CosmoSecurityManager getSecurityManager() {
@@ -213,29 +201,7 @@ public class MockHelper extends TestHelper {
         return (NoteItem) contentService.createContent(parent, i);
     }
 
-    public Ticket makeAndStoreDummyTicket(CollectionItem collection)
-        throws Exception {
-        Ticket ticket = makeDummyTicket(user);
-        contentService.createTicket(collection, ticket);
-        return ticket;
-    }
 
-    public CollectionSubscription makeAndStoreDummySubscription()
-        throws Exception {
-        CollectionItem collection = makeAndStoreDummyCollection();
-        Ticket ticket = makeAndStoreDummyTicket(collection);
-        return makeAndStoreDummySubscription(collection, ticket);
-    }
-
-    public CollectionSubscription
-        makeAndStoreDummySubscription(CollectionItem collection,
-                                      Ticket ticket)
-        throws Exception {
-        CollectionSubscription sub = makeDummySubscription(collection, ticket);
-        user.addSubscription(sub);
-        userService.updateUser(user);
-        return sub;
-    }
 
 
     public NoteItem findItem(String uid) {

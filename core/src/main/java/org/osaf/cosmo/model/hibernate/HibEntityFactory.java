@@ -141,20 +141,12 @@ public class HibEntityFactory implements EntityFactory {
         return new HibTextAttribute(qname, reader);
     }
 
-    public Ticket createTicket(TicketType type) {
-        return new HibTicket(type);
-    }
-
     public TriageStatus createTriageStatus() {
         return new HibTriageStatus();
     }
 
     public User createUser() {
         return new HibUser();
-    }
-
-    public Ticket creatTicket() {
-        return new HibTicket();
     }
 
     public String generateUid() {

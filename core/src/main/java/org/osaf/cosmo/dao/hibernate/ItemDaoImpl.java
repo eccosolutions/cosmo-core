@@ -236,87 +236,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         }
     }
 
-    public Set<Ticket> getTickets(Item item) {
-        if(item==null)
-            throw new IllegalArgumentException("item cannot be null");
-
-        try {
-            currentSession().refresh(item);
-            return item.getTickets();
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        }
-    }
-
-    public Ticket findTicket(String key) {
-        if(key==null)
-            throw new IllegalArgumentException("key cannot be null");
-
-        try {
-            // prevent auto flushing when looking up ticket
-            currentSession().setFlushMode(FlushMode.MANUAL);
-            Query hibQuery = currentSession().getNamedQuery("ticket.by.key")
-                    .setParameter("key", key);
-            hibQuery.setCacheable(true);
-            hibQuery.setFlushMode(FlushMode.MANUAL);
-            return (Ticket) hibQuery.uniqueResult();
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        }
-    }
-
-    public void createTicket(Item item, Ticket ticket) {
-        try {
-            if(ticket==null)
-                throw new IllegalArgumentException("ticket cannot be null");
-
-            if(item==null)
-                throw new IllegalArgumentException("item cannot be null");
-
-            User owner = ticket.getOwner();
-            if (owner == null)
-                throw new IllegalArgumentException("ticket must have owner");
-
-            if (ticket.getKey() == null)
-                ticket.setKey(ticketKeyGenerator.nextIdentifier().toString());
-
-            ticket.setCreated(new Date());
-            currentSession().update(item);
-            item.addTicket(ticket);
-            currentSession().flush();
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        } catch (ConstraintViolationException cve) {
-            logConstraintViolationException(cve);
-            throw cve;
-        }
-    }
-
-    public Ticket getTicket(Item item, String key) {
-        try {
-            currentSession().refresh(item);
-            return getTicketRecursive(item, key);
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        }
-    }
-
-    public void removeTicket(Item item, Ticket ticket) {
-        try {
-            currentSession().update(item);
-            item.removeTicket(ticket);
-            currentSession().flush();
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        }
-
-    }
-
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.ItemDao#removeItemByPath(java.lang.String)
      */
@@ -689,15 +608,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     es.setIcalUid(ical.getIcalUid());
             }
         }
-        for (Ticket ticket : item.getTickets()) {
-            if (ticket.getOwner() == null)
-                ticket.setOwner(item.getOwner());
-            if (ticket.getKey() == null)
-                ticket.setKey(ticketKeyGenerator.nextIdentifier().toString());
-            if (ticket.getTimeout() == null)
-                ticket.setTimeout(Ticket.TIMEOUT_INFINITE);
-            ticket.setCreated(new Date());
-        }
     }
 
     protected Item findItemByParentAndName(Long userDbId, Long parentDbId,
@@ -764,24 +674,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                         + " already in use");
             }
         }
-    }
-
-    protected Ticket getTicketRecursive(Item item, String key) {
-        if(item==null)
-            return null;
-
-        for (Ticket ticket : item.getTickets()) {
-            if (ticket.getKey().equals(key))
-                return ticket;
-        }
-
-        for(Item parent: item.getParents()) {
-            Ticket ticket = getTicketRecursive(parent, key);
-            if(ticket!=null)
-                return ticket;
-        }
-
-        return null;
     }
 
     protected void attachToSession(Item item) {

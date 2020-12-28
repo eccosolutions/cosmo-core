@@ -15,16 +15,16 @@
  */
 package org.osaf.cosmo.model.mock;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.ModelValidationException;
 import org.osaf.cosmo.model.User;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  */
@@ -450,27 +450,6 @@ public class MockUser extends MockAuditableObject implements User {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#getSubscription(java.lang.String, java.lang.String)
-     */
-    public CollectionSubscription getSubscription(String collectionUid, String ticketKey){
-        for (CollectionSubscription sub : subscriptions) {
-            if (sub.getCollectionUid().equals(collectionUid)
-                    && sub.getTicketKey().equals(ticketKey)) {
-                return sub;
-            }
-        }
-
-        return null;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#removeSubscription(java.lang.String, java.lang.String)
-     */
-    public void removeSubscription(String collectionUid, String ticketKey){
-        removeSubscription(getSubscription(collectionUid, ticketKey));
-    }
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#removeSubscription(java.lang.String)

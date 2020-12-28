@@ -39,7 +39,6 @@
         <class>org.osaf.cosmo.model.hibernate.HibStampTombstone</class>
         <class>org.osaf.cosmo.model.hibernate.HibTaskStamp</class>
         <class>org.osaf.cosmo.model.hibernate.HibTextAttribute</class>
-        <class>org.osaf.cosmo.model.hibernate.HibTicket</class>
         <class>org.osaf.cosmo.model.hibernate.HibTimestampAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibTombstone</class>
         <class>org.osaf.cosmo.model.hibernate.HibUser</class>

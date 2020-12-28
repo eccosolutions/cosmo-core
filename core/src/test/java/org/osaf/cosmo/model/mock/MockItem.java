@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,53 +44,53 @@ import org.osaf.cosmo.model.User;
  */
 public abstract class MockItem extends MockAuditableObject implements Item {
 
-   
+
     private String uid;
-    
-   
+
+
     private String name;
-    
-    
+
+
     private String displayName;
-    
-    
+
+
     private Date clientCreationDate;
-    
-    
+
+
     private Date clientModifiedDate;
-    
+
     private Integer version = 0;
-    
+
     private transient Boolean isActive = Boolean.TRUE;
-    
-    
+
+
     private Map<QName, Attribute> attributes = new HashMap<QName, Attribute>(0);
-    
-    
+
+
     private Set<Ticket> tickets = new HashSet<Ticket>(0);
-    
-    
+
+
     private Set<Stamp> stamps = new HashSet<Stamp>(0);
-    
-    
+
+
     private Set<Tombstone> tombstones = new HashSet<Tombstone>(0);
-    
+
     private transient Map<String, Stamp> stampMap = null;
-    
+
     private Set<CollectionItemDetails> parentDetails = new HashSet<CollectionItemDetails>(0);
-    
+
     private User owner;
-  
-    
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getStamps()
      */
     public Set<Stamp> getStamps() {
         return Collections.unmodifiableSet(stamps);
     }
-    
-    
-    
+
+
+
     public void setVersion(Integer version) {
         this.version = version;
     }
@@ -106,10 +106,10 @@ public abstract class MockItem extends MockAuditableObject implements Item {
             for(Stamp stamp : stamps)
                 stampMap.put(stamp.getType(), stamp);
         }
-        
+
         return stampMap;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#addStamp(org.osaf.cosmo.model.copy.Stamp)
      */
@@ -124,11 +124,11 @@ public abstract class MockItem extends MockAuditableObject implements Item {
                 if(((StampTombstone) ts).getStampType().equals(stamp.getType()))
                     it.remove();
         }
-        
+
         stamp.setItem(this);
         stamps.add(stamp);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#removeStamp(org.osaf.cosmo.model.copy.Stamp)
      */
@@ -136,13 +136,13 @@ public abstract class MockItem extends MockAuditableObject implements Item {
         // only remove stamps that belong to item
         if(!stamps.contains(stamp))
             return;
-        
+
         stamps.remove(stamp);
-        
+
         // add tombstone for tracking purposes
         tombstones.add(new MockStampTombstone(this, stamp));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getStamp(java.lang.String)
      */
@@ -151,10 +151,10 @@ public abstract class MockItem extends MockAuditableObject implements Item {
             // only return stamp if it matches class and is active
             if(stamp.getType().equals(type))
                 return stamp;
-        
+
         return null;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getStamp(java.lang.Class)
      */
@@ -163,7 +163,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
             // only return stamp if it is an instance of the specified class
             if(clazz.isInstance(stamp))
                 return stamp;
-        
+
         return null;
     }
 
@@ -173,21 +173,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     public Map<QName, Attribute> getAttributes() {
         return Collections.unmodifiableMap(attributes);
     }
-    
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceItem#addTicket(org.osaf.cosmo.model.copy.Ticket)
-     */
-    public void addTicket(Ticket ticket) {
-        ticket.setItem(this);
-        tickets.add(ticket);
-    }
-    
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceItem#removeTicket(org.osaf.cosmo.model.copy.Ticket)
-     */
-    public void removeTicket(Ticket ticket) {
-        tickets.remove(ticket);
-    }
+
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#addAttribute(org.osaf.cosmo.model.copy.Attribute)
@@ -203,19 +189,19 @@ public abstract class MockItem extends MockAuditableObject implements Item {
                 if(((AttributeTombstone) ts).getQName().equals(attribute.getQName()))
                     it.remove();
         }
-        
+
         ((MockAttribute) attribute).validate();
         attribute.setItem(this);
         attributes.put(attribute.getQName(), attribute);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#removeAttribute(java.lang.String)
      */
     public void removeAttribute(String name) {
        removeAttribute(new MockQName(name));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#removeAttribute(org.osaf.cosmo.model.copy.QName)
      */
@@ -235,7 +221,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
             if (qname.getNamespace().equals(namespace))
                 toRemove.add(qname);
         }
-        
+
         for(QName qname: toRemove)
             removeAttribute(qname);
     }
@@ -246,21 +232,21 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     public Attribute getAttribute(String name) {
         return getAttribute(new MockQName(name));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getAttribute(org.osaf.cosmo.model.copy.QName)
      */
     public Attribute getAttribute(QName qname) {
         return attributes.get(qname);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getAttributeValue(java.lang.String)
      */
     public Object getAttributeValue(String name) {
        return getAttributeValue(new MockQName(name));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getAttributeValue(org.osaf.cosmo.model.copy.QName)
      */
@@ -277,14 +263,14 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     public void setAttribute(String name, Object value) {
         setAttribute(new MockQName(name),value);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#setAttribute(org.osaf.cosmo.model.QName, java.lang.Object)
      */
     @SuppressWarnings("unchecked")
     public void setAttribute(QName key, Object value) {
         MockAttribute attr = (MockAttribute) attributes.get(key);
-    
+
         if(attr!=null) {
             attr.setValue(value);
             attr.validate();
@@ -302,10 +288,10 @@ public abstract class MockItem extends MockAuditableObject implements Item {
             if(e.getKey().getNamespace().equals(namespace))
                 attrs.put(e.getKey().getLocalName(), e.getValue());
         }
-        
+
         return attrs;
     }
-    
+
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getClientCreationDate()
@@ -320,7 +306,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     public void setClientCreationDate(Date clientCreationDate) {
         this.clientCreationDate = clientCreationDate;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getClientModifiedDate()
      */
@@ -334,7 +320,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     public void setClientModifiedDate(Date clientModifiedDate) {
         this.clientModifiedDate = clientModifiedDate;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getName()
      */
@@ -348,7 +334,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getDisplayName()
      */
@@ -408,29 +394,29 @@ public abstract class MockItem extends MockAuditableObject implements Item {
         if(cid!=null)
             parentDetails.remove(cid);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getParents()
      */
     public Set<CollectionItem> getParents() {
-        
+
         Set<CollectionItem> parents = new HashSet<CollectionItem>();
         for(CollectionItemDetails cid: parentDetails)
             parents.add(cid.getCollection());
-        
+
         return Collections.unmodifiableSet(parents);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getParent()
      */
     public CollectionItem getParent() {
         if(getParents().size()==0)
             return null;
-        
+
         return getParents().iterator().next();
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getParentDetails(org.osaf.cosmo.model.CollectionItem)
      */
@@ -438,7 +424,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
         for(CollectionItemDetails cid: parentDetails)
             if(cid.getCollection().equals(parent))
                 return cid;
-        
+
         return null;
     }
 
@@ -457,13 +443,6 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     }
 
     /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceItem#getTickets()
-     */
-    public Set<Ticket> getTickets() {
-        return tickets;
-    }
-
-    /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getTombstones()
      */
     public Set<Tombstone> getTombstones() {
@@ -477,10 +456,10 @@ public abstract class MockItem extends MockAuditableObject implements Item {
         tombstone.setItem(this);
         tombstones.add(tombstone);
     }
-    
-    
+
+
     /**
-     * Item uid determines equality 
+     * Item uid determines equality
      */
     @Override
     public boolean equals(Object obj) {
@@ -488,7 +467,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
             return false;
         if( ! (obj instanceof Item))
             return false;
-        
+
         return uid.equals(((Item) obj).getUid());
     }
 
@@ -499,13 +478,13 @@ public abstract class MockItem extends MockAuditableObject implements Item {
         else
             return uid.hashCode();
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#copy()
      */
     public abstract Item copy();
-   
-    
+
+
     @Override
     public String calculateEntityTag() {
         String uid = getUid() != null ? getUid() : "-";
@@ -519,11 +498,11 @@ public abstract class MockItem extends MockAuditableObject implements Item {
         item.setOwner(getOwner());
         item.setName(getName());
         item.setDisplayName(getDisplayName());
-        
+
         // copy attributes
         for(Entry<QName, Attribute> entry: attributes.entrySet())
             item.addAttribute(entry.getValue().copy());
-        
+
         // copy stamps
         for(Stamp stamp: stamps)
             item.addStamp(stamp.copy());

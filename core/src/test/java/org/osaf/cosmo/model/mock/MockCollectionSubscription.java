@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,31 +17,30 @@ package org.osaf.cosmo.model.mock;
 
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 
 /**
  * Represents a subscription to a shared collection.
- * A subscription belongs to a user and consists of 
+ * A subscription belongs to a user and consists of
  * a ticket key and a collection uid.
  */
 public class MockCollectionSubscription extends MockAuditableObject implements CollectionSubscription {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1376628118792909419L;
-    
-   
+
+
     private User owner;
-    
-    
+
+
     private String displayName;
-    
+
     private String ticketKey;
-    
+
     private String collectionUid;
-    
+
     /**
      */
     public MockCollectionSubscription() {
@@ -60,7 +59,7 @@ public class MockCollectionSubscription extends MockAuditableObject implements C
     public void setCollectionUid(String collectionUid) {
         this.collectionUid = collectionUid;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceCollectionSubscription#setCollection(org.osaf.cosmo.model.copy.CollectionItem)
      */
@@ -94,27 +93,6 @@ public class MockCollectionSubscription extends MockAuditableObject implements C
      */
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceCollectionSubscription#getTicketKey()
-     */
-    public String getTicketKey() {
-        return ticketKey;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceCollectionSubscription#setTicketKey(java.lang.String)
-     */
-    public void setTicketKey(String ticketKey) {
-        this.ticketKey = ticketKey;
-    }  
-    
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceCollectionSubscription#setTicket(org.osaf.cosmo.model.copy.Ticket)
-     */
-    public void setTicket(Ticket ticket) {
-        this.ticketKey = ticket.getKey();
     }
 
     public String calculateEntityTag() {
