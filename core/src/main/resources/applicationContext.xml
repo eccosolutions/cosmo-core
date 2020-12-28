@@ -213,7 +213,6 @@
 
   <bean id="itemPathTranslator"
         class="org.osaf.cosmo.dao.hibernate.DefaultItemPathTranslator">
-    <constructor-arg ref="sessionFactory"/>
   </bean>
 
   <bean id="idGenerator"
@@ -345,126 +344,9 @@
 
   <!-- dav protocol resources -->
 
-  <bean id="davResourceFactory"
-        class="org.osaf.cosmo.dav.StandardResourceFactory">
-    <constructor-arg ref="contentService"/>
-    <constructor-arg ref="userService"/>
-    <constructor-arg ref="securityManager"/>
-    <constructor-arg ref="cosmoEntityFactory"/>
-    <constructor-arg ref="calendarQueryProcessor"/>
-    <constructor-arg ref="iCalendarClientFilterManager"/>
 
-    <property name="schedulingEnabled" value="${cosmo.caldav.schedulingEnabled}"/>
-  </bean>
 
-  <bean id="davResourceLocatorFactory"
-        class="org.osaf.cosmo.dav.StandardResourceLocatorFactory"/>
 
-  <bean id="dav"
-        class="org.osaf.cosmo.dav.servlet.StandardRequestHandler">
-    <property name="resourceLocatorFactory" ref="davResourceLocatorFactory"/>
-    <property name="resourceFactory" ref="davResourceFactory"/>
-    <property name="entityFactory" ref="cosmoEntityFactory"/>
-  </bean>
-
-  <!-- atom protocol resources -->
-
-  <bean id="abdera" class="org.apache.abdera.Abdera"/>
-
-  <bean id="atomGeneratorFactory" class="org.osaf.cosmo.atom.generator.StandardGeneratorFactory"
-            init-method="init">
-    <property name="abdera" ref="abdera"/>
-    <property name="contentFactory">
-      <bean class="org.osaf.cosmo.atom.generator.ContentFactory"/>
-    </property>
-    <property name="contentService" ref="contentService"/>
-    <property name="securityManager" ref="securityManager"/>
-  </bean>
-
-  <bean id="atomTargetResolver" class="org.osaf.cosmo.atom.provider.StandardTargetResolver"
-            init-method="init">
-    <property name="contentService" ref="contentService"/>
-    <property name="userService" ref="userService"/>
-  </bean>
-
-  <bean id="atomBaseAdapter" class="org.osaf.cosmo.atom.provider.BaseCollectionAdapter"
-        init-method="init" abstract="true">
-    <property name="generatorFactory" ref="atomGeneratorFactory"/>
-    <property name="serviceLocatorFactory" ref="serviceLocatorFactory"/>
-    <property name="entityFactory" ref="cosmoEntityFactory"/>
-  </bean>
-
-  <bean id="atomStandardProcessorFactory"
-        class="org.osaf.cosmo.atom.processor.StandardProcessorFactory">
-    <property name="entityFactory" ref="cosmoEntityFactory"/>
-  </bean>
-
-  <bean id="atomItemAdapter"
-        class="org.osaf.cosmo.atom.provider.ItemCollectionAdapter"
-        init-method="init" parent="atomBaseAdapter">
-    <property name="processorFactory" ref="atomStandardProcessorFactory"/>
-    <property name="contentService" ref="contentService"/>
-  </bean>
-
-  <bean id="atomDetachedItemAdapter"
-        class="org.osaf.cosmo.atom.provider.DetachedItemCollectionAdapter"
-        init-method="init" parent="atomItemAdapter"/>
-
-  <bean id="atomExpandedItemAdapter"
-        class="org.osaf.cosmo.atom.provider.ExpandedItemCollectionAdapter"
-        init-method="init" parent="atomItemAdapter"/>
-
-  <bean id="atomSubscriptionAdapter"
-        class="org.osaf.cosmo.atom.provider.SubscriptionCollectionAdapter"
-        init-method="init" parent="atomBaseAdapter">
-    <property name="userService" ref="userService"/>
-  </bean>
-
-  <bean id="atomPreferencesAdapter"
-        class="org.osaf.cosmo.atom.provider.PreferencesCollectionAdapter"
-        init-method="init" parent="atomBaseAdapter">
-    <property name="userService" ref="userService"/>
-  </bean>
-
-  <bean id="atomTicketsAdapter"
-        class="org.osaf.cosmo.atom.provider.TicketsCollectionAdapter"
-        init-method="init" parent="atomBaseAdapter">
-    <property name="contentService" ref="contentService"/>
-    <property name="securityManager" ref="securityManager"/>
-  </bean>
-
-  <bean id="atomUserAdapter" class="org.osaf.cosmo.atom.provider.UserCollectionAdapter"
-        init-method="init" parent="atomBaseAdapter"/>
-
-  <bean id="atomWorkspaceManager" class="org.osaf.cosmo.atom.provider.StandardWorkspaceManager">
-	 <property name="itemAdapter" ref="atomItemAdapter"/>
-     <property name="detachedItemAdapter" ref="atomDetachedItemAdapter"/>
-     <property name="expandedItemAdapter" ref="atomExpandedItemAdapter"/>
-     <property name="subscriptionAdapter" ref="atomSubscriptionAdapter"/>
-     <property name="preferencesAdapter" ref="atomPreferencesAdapter"/>
-     <property name="ticketsAdapter" ref="atomTicketsAdapter"/>
-     <property name="userAdapter" ref="atomUserAdapter"/>
-  </bean>
-
-  <bean id="atomProvider"
-        class="org.osaf.cosmo.atom.provider.StandardProvider">
-    <property name="abdera" ref="abdera"/>
-    <property name="workspaceManager" ref="atomWorkspaceManager"/>
-    <property name="generatorFactory" ref="atomGeneratorFactory"/>
-    <property name="serviceLocatorFactory" ref="serviceLocatorFactory"/>
-    <property name="targetResolver" ref="atomTargetResolver"/>
-  </bean>
-
-  <!-- morse code protocol resources -->
-
-  <bean id="morseCodeController"
-        class="org.osaf.cosmo.mc.StandardMorseCodeController"
-        init-method="init">
-    <property name="contentService" ref="contentService"/>
-    <property name="userService" ref="userService"/>
-    <property name="securityManager" ref="securityManager"/>
-    <property name="entityFactory" ref="cosmoEntityFactory"/>
-  </bean>
 
   <!-- the servlet context configurer, which is used instead of
        spring's servlet context export mechanism because config
