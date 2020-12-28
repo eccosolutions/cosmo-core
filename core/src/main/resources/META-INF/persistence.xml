@@ -10,7 +10,7 @@
         <class>org.osaf.cosmo.model.hibernate.HibBinaryAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibBooleanAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibCalendarAttribute</class>
-        <class>org.osaf.cosmo.model.hibernate.HibCalendarCollectionStamp</class>			
+        <class>org.osaf.cosmo.model.hibernate.HibCalendarCollectionStamp</class>
         <class>org.osaf.cosmo.model.hibernate.HibCollectionItem</class>
         <class>org.osaf.cosmo.model.hibernate.HibCollectionItemDetails</class>
         <class>org.osaf.cosmo.model.hibernate.HibCollectionSubscription</class>
@@ -19,7 +19,7 @@
         <class>org.osaf.cosmo.model.hibernate.HibDecimalAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibDictionaryAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibEventExceptionStamp</class>
-        <class>org.osaf.cosmo.model.hibernate.HibEventLogEntry</class> 
+        <class>org.osaf.cosmo.model.hibernate.HibEventLogEntry</class>
         <class>org.osaf.cosmo.model.hibernate.HibEventStamp</class>
         <class>org.osaf.cosmo.model.hibernate.HibFileItem</class>
         <class>org.osaf.cosmo.model.hibernate.HibFreeBusyItem</class>
@@ -33,7 +33,6 @@
         <class>org.osaf.cosmo.model.hibernate.HibMultiValueStringAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibNoteItem</class>
         <class>org.osaf.cosmo.model.hibernate.HibPasswordRecovery</class>
-        <class>org.osaf.cosmo.model.hibernate.HibPreference</class>
         <class>org.osaf.cosmo.model.hibernate.HibServerProperty</class>
         <class>org.osaf.cosmo.model.hibernate.HibStringAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibStamp</class>

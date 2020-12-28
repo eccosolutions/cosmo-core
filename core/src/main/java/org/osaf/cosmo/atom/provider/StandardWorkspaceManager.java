@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,6 @@ public class StandardWorkspaceManager
     private ExpandedItemCollectionAdapter expandedItemAdapter;
     private ItemCollectionAdapter itemAdapter;
     private SubscriptionCollectionAdapter subscriptionAdapter;
-    private PreferencesCollectionAdapter preferencesAdapter;
     private TicketsCollectionAdapter ticketsAdapter;
     private UserCollectionAdapter userAdapter;
 
@@ -52,9 +51,6 @@ public class StandardWorkspaceManager
         if (target instanceof SubscriptionsTarget ||
             target instanceof SubscriptionTarget)
             return subscriptionAdapter;
-        if (target instanceof PreferencesTarget ||
-            target instanceof PreferenceTarget)
-                return preferencesAdapter;
         if (target instanceof TicketsTarget ||
             target instanceof TicketTarget)
                 return ticketsAdapter;
@@ -99,14 +95,6 @@ public class StandardWorkspaceManager
         this.subscriptionAdapter = adapter;
     }
 
-    public PreferencesCollectionAdapter getPreferencesAdapter() {
-        return preferencesAdapter;
-    }
-
-    public void setPreferencesAdapter(PreferencesCollectionAdapter adapter) {
-        this.preferencesAdapter = adapter;
-    }
-
     public TicketsCollectionAdapter getTicketsAdapter() {
         return ticketsAdapter;
     }
@@ -132,14 +120,12 @@ public class StandardWorkspaceManager
             throw new IllegalStateException("itemAdapter is required");
         if (subscriptionAdapter == null)
             throw new IllegalStateException("subscriptionAdapter is required");
-        if (preferencesAdapter == null)
-            throw new IllegalStateException("preferencesAdapter is required");
-        if (preferencesAdapter == null)
+        if (ticketsAdapter == null)
             throw new IllegalStateException("ticketsAdapter is required");
         if (userAdapter == null)
             throw new IllegalStateException("userAdapter is required");
     }
-    
+
     public Collection<WorkspaceInfo> getWorkspaces(RequestContext request) {
         throw new RuntimeException("getWorkspaces() not implemented");
     }

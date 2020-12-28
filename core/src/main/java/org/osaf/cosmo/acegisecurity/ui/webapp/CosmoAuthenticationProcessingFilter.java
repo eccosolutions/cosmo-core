@@ -21,9 +21,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osaf.cosmo.acegisecurity.ui.UIConstants;
-import org.osaf.cosmo.acegisecurity.userdetails.CosmoUserDetails;
-import org.osaf.cosmo.model.Preference;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -78,16 +75,6 @@ public class CosmoAuthenticationProcessingFilter extends
             @Override
             protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
                 String targetUrl = super.determineTargetUrl(request, response);
-
-                // TODO: Test/Review: This is best guess migration to Spring Security 3,
-                // but not tested in cosmo-core AFAIK
-                if (targetUrl == null) {
-                    Preference loginUrlPref =
-                        ((CosmoUserDetails) currentAuthentication.get().getPrincipal()).
-                        getUser().getPreference(UIConstants.PREF_KEY_LOGIN_URL);
-                    if (loginUrlPref != null)
-                        targetUrl = getRelativeUrl(request, loginUrlPref.getValue());
-                }
 
                 if (targetUrl == null) {
                     targetUrl = getRelativeUrl(request, cosmoDefaultLoginUrl);

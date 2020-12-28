@@ -38,7 +38,6 @@ import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.ModelValidationException;
-import org.osaf.cosmo.model.Preference;
 import org.osaf.cosmo.model.User;
 
 /**
@@ -52,7 +51,7 @@ public class HibUser extends HibAuditableObject implements User {
     /**
      */
     private static final long serialVersionUID = -5401963358519490736L;
-   
+
     /**
      */
     public static final int USERNAME_LEN_MIN = 3;
@@ -60,7 +59,7 @@ public class HibUser extends HibAuditableObject implements User {
      */
     //public static final int USERNAME_LEN_MAX = 32;
     public static final int USERNAME_LEN_MAX = 50;
-   
+
     /**
      */
     public static final int FIRSTNAME_LEN_MIN = 1;
@@ -85,7 +84,7 @@ public class HibUser extends HibAuditableObject implements User {
     @Length(min=1, max=255)
     @Index(name="idx_useruid")
     private String uid;
-    
+
     @Column(name = "username", nullable=false)
     @Index(name="idx_username")
     @NotNull
@@ -99,52 +98,47 @@ public class HibUser extends HibAuditableObject implements User {
     // them in urls (tomcat doesn't support it)
     @Pattern(regexp="^[\\u0020-\\ud7ff\\ue000-\\ufffd&&[^\\u007f\\u003a;/\\\\]]+$")
     private String username;
-    
+
     private transient String oldUsername;
-    
+
     @Column(name = "password")
     @NotNull
     private String password;
-    
+
     @Column(name = "firstname")
     @Length(min=FIRSTNAME_LEN_MIN, max=FIRSTNAME_LEN_MAX)
     private String firstName;
-    
+
     @Column(name = "lastname")
     @Length(min=LASTNAME_LEN_MIN, max=LASTNAME_LEN_MAX)
     private String lastName;
-    
+
     @Column(name = "email", nullable=false, unique=true)
     @Index(name="idx_useremail")
     @NotNull
     @Length(min=EMAIL_LEN_MIN, max=EMAIL_LEN_MAX)
     @Email
     private String email;
-    
+
     private transient String oldEmail;
-    
+
     @Column(name = "activationid", nullable=true, length=255)
     @Length(min=1, max=255)
     @Index(name="idx_activationid")
     private String activationId;
-    
+
     @Column(name = "admin")
     private Boolean admin;
-    
+
     private transient Boolean oldAdmin;
-    
+
     @Column(name = "locked")
     private Boolean locked;
-    
-    @OneToMany(targetEntity=HibPreference.class, mappedBy = "user", fetch=FetchType.LAZY)
+
+    @OneToMany(targetEntity=HibCollectionSubscription.class, mappedBy = "owner", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private final Set<Preference> preferences = new HashSet<Preference>(0);
-    
-    @OneToMany(targetEntity=HibCollectionSubscription.class, mappedBy = "owner", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN }) 
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private final Set<CollectionSubscription> subscriptions = 
+    private final Set<CollectionSubscription> subscriptions =
         new HashSet<CollectionSubscription>(0);
 
     /**
@@ -274,7 +268,7 @@ public class HibUser extends HibAuditableObject implements User {
     public Boolean getAdmin() {
         return admin;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#getOldAdmin()
      */
@@ -338,7 +332,7 @@ public class HibUser extends HibAuditableObject implements User {
     public Boolean isLocked() {
         return locked;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#setLocked(java.lang.Boolean)
      */
@@ -347,7 +341,7 @@ public class HibUser extends HibAuditableObject implements User {
     }
 
     /**
-     * Username determines equality 
+     * Username determines equality
      */
     @Override
     public boolean equals(Object obj) {
@@ -355,7 +349,7 @@ public class HibUser extends HibAuditableObject implements User {
             return false;
         if (! (obj instanceof User))
             return false;
-        
+
         return username.equals(((User) obj).getUsername());
     }
 
@@ -383,7 +377,7 @@ public class HibUser extends HibAuditableObject implements User {
             toString();
     }
 
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#validateRawPassword()
      */
@@ -399,48 +393,7 @@ public class HibUser extends HibAuditableObject implements User {
                                                " characters in length");
         }
     }
-    
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.User#getPreferences()
-     */
-    public Set<Preference> getPreferences() {
-        return preferences;
-    }
 
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.User#addPreference(org.osaf.cosmo.model.Preference)
-     */
-    public void addPreference(Preference preference) {
-        preference.setUser(this);
-        preferences.add(preference);
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.User#getPreference(java.lang.String)
-     */
-    public Preference getPreference(String key) {
-        for (Preference pref : preferences) {
-            if (pref.getKey().equals(key))
-                return pref;
-        }
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.User#removePreference(java.lang.String)
-     */
-    public void removePreference(String key) {
-        removePreference(getPreference(key));
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.User#removePreference(org.osaf.cosmo.model.Preference)
-     */
-    public void removePreference(Preference preference) {
-        if (preference != null)
-            preferences.remove(preference);
-    }
-    
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#getCollectionSubscriptions()
      */
@@ -468,7 +421,7 @@ public class HibUser extends HibAuditableObject implements User {
 
         return null;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#getSubscription(java.lang.String, java.lang.String)
      */
@@ -483,14 +436,14 @@ public class HibUser extends HibAuditableObject implements User {
         return null;
     }
 
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#removeSubscription(java.lang.String, java.lang.String)
      */
     public void removeSubscription(String collectionUid, String ticketKey){
         removeSubscription(getSubscription(collectionUid, ticketKey));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.User#removeSubscription(java.lang.String)
      */

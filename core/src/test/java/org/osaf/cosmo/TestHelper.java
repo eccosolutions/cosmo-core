@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,7 +53,6 @@ import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.EntityFactory;
 import org.osaf.cosmo.model.FileItem;
 import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.Preference;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.mock.MockEntityFactory;
@@ -83,7 +82,7 @@ public class TestHelper {
     static int useq = 0;
 
     private EntityFactory entityFactory = new MockEntityFactory();
-    
+
     public TestHelper() {
     }
 
@@ -125,10 +124,10 @@ public class TestHelper {
 
         // 1 hour duration
         Dur duration = new Dur(0, 1, 0, 0);
- 
+
         VEvent event = new VEvent(new Date(start.getTime()), duration, summary);
         event.getProperties().add(new Uid(serial));
- 
+
         // add timezone information
         VTimeZone tz = TimeZoneRegistryFactory.getInstance().createRegistry().
             getTimeZone("America/Los_Angeles").getVTimeZone();
@@ -231,7 +230,7 @@ public class TestHelper {
         sub.setDisplayName(displayName);
         sub.setTicketKey(ticket.getKey());
         sub.setCollectionUid(collection.getUid());
-        
+
         return sub;
     }
 
@@ -247,16 +246,6 @@ public class TestHelper {
         return sub;
     }
 
-    public Preference makeDummyPreference() {
-        String serial = new Integer(++pseq).toString();
-
-        Preference pref = entityFactory.createPreference();
-        pref.setKey("dummy pref " + serial);
-        pref.setValue(pref.getKey());
-       
-        return pref;
-    }
-
     /**
      */
     public Principal makeDummyUserPrincipal() {
@@ -269,7 +258,7 @@ public class TestHelper {
                                             String password) {
         return new MockUserPrincipal(makeDummyUser(name, password));
     }
-    
+
     /**
      */
     public Principal makeDummyUserPrincipal(User user) {
@@ -300,7 +289,7 @@ public class TestHelper {
         DocumentBuilder docBuilder = BUILDER_FACTORY.newDocumentBuilder();
         return docBuilder.parse(in);
     }
-    
+
     public Calendar loadIcs(String name) throws Exception{
         InputStream in = getInputStream(name);
         return calendarBuilder.build(in);
@@ -320,7 +309,7 @@ public class TestHelper {
         content.setContentEncoding("UTF-8");
         content.setContentLanguage("en_US");
         content.setContentType("text/plain");
-        
+
         return content;
     }
 
@@ -341,7 +330,7 @@ public class TestHelper {
         note.setOwner(user);
         note.setIcalUid(serial);
         note.setBody("This is a note. I love notes.");
-       
+
         return note;
     }
 
@@ -355,10 +344,10 @@ public class TestHelper {
         collection.setName(name);
         collection.setDisplayName(name);
         collection.setOwner(user);
-       
+
         return collection;
     }
-    
+
     public CollectionItem makeDummyCalendarCollection(User user) {
         return makeDummyCalendarCollection(user, null);
     }
@@ -374,7 +363,7 @@ public class TestHelper {
         collection.setName(name);
         collection.setDisplayName(name);
         collection.setOwner(user);
-       
+
         collection.addStamp(entityFactory.createCalendarCollectionStamp(collection));
 
         return collection;
@@ -388,7 +377,7 @@ public class TestHelper {
         }
         return in;
     }
-    
+
     /** */
     public byte[] getBytes(String name) throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream(name);
@@ -421,6 +410,6 @@ public class TestHelper {
     public void setEntityFactory(EntityFactory entityFactory) {
         this.entityFactory = entityFactory;
     }
-    
-    
+
+
 }

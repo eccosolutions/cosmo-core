@@ -31,7 +31,6 @@ import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.EntityFactory;
 import org.osaf.cosmo.model.HomeCollectionItem;
 import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.Preference;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.mock.MockEntityFactory;
@@ -82,22 +81,22 @@ public class MockHelper extends TestHelper {
         MockContentDao contentDao = new MockContentDao(storage);
         MockUserDao userDao = new MockUserDao(storage);
         SingleVMLockManager lockManager = new SingleVMLockManager();
-        
+
         entityFactory = new MockEntityFactory();
-        
+
         contentService = new StandardContentService();
         contentService.setCalendarDao(calendarDao);
         contentService.setContentDao(contentDao);
         contentService.setLockManager(lockManager);
         contentService.setTriageStatusQueryProcessor(new StandardTriageStatusQueryProcessor());
-        
+
         contentService.init();
 
         clientFilterManager = new ICalendarClientFilterManager();
-        
+
         calendarQueryProcessor = new StandardCalendarQueryProcessor();
         calendarQueryProcessor.setCalendarDao(calendarDao);
-        
+
         userService = new StandardUserService();
         userService.setContentDao(contentDao);
         userService.setUserDao(userDao);
@@ -139,11 +138,11 @@ public class MockHelper extends TestHelper {
     public ContentService getContentService() {
         return contentService;
     }
-    
+
     public EntityFactory getEntityFactory() {
         return entityFactory;
     }
-    
+
     public CalendarQueryProcessor getCalendarQueryProcessor() {
         return calendarQueryProcessor;
     }
@@ -170,7 +169,7 @@ public class MockHelper extends TestHelper {
         CollectionItem c = makeDummyCollection(user);
         return contentService.createCollection(parent, c);
     }
-    
+
     public CollectionItem makeAndStoreDummyCalendarCollection()
         throws Exception {
         return makeAndStoreDummyCalendarCollection(null);
@@ -238,13 +237,6 @@ public class MockHelper extends TestHelper {
         return sub;
     }
 
-    public Preference makeAndStoreDummyPreference()
-        throws Exception {
-        Preference pref = makeDummyPreference();
-        user.addPreference(pref);
-        userService.updateUser(user);
-        return pref;
-    }
 
     public NoteItem findItem(String uid) {
         return (NoteItem) contentService.findItemByUid(uid);

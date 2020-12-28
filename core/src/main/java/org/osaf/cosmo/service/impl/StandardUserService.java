@@ -49,7 +49,7 @@ public class StandardUserService extends BaseService implements UserService {
      * The service uses MD5 if no digest algorithm is explicitly set.
      */
     public static final String DEFAULT_DIGEST_ALGORITHM = "MD5";
-    
+
     private MessageDigest digest;
     private String digestAlgorithm;
     private StringIdentifierGenerator passwordGenerator;
@@ -124,18 +124,6 @@ public class StandardUserService extends BaseService implements UserService {
 
         return userDao.getUserByActivationId(activationId);
     }
-    
-    /**
-     * Returns a set of users that contain a user preference that
-     * matches a specific key and value.
-     * @param key user preference key to match
-     * @param value user preference value to match
-     * @return set of users containing a user preference that matches
-     *         key and value
-     */
-    public Set<User> findUsersByPreference(String key, String value) {
-        return userDao.findUsersByPreference(key, value);
-    }
 
     /**
      * Creates a user account in the repository. Digests the raw
@@ -171,7 +159,7 @@ public class StandardUserService extends BaseService implements UserService {
         user.validateRawPassword();
 
         user.setPassword(digestPassword(user.getPassword()));
-        
+
         fireBeforeEvent(new ServiceEvent("CREATE_USER", user), listeners);
 
         try {
@@ -221,7 +209,7 @@ public class StandardUserService extends BaseService implements UserService {
             user.validateRawPassword();
             user.setPassword(digestPassword(user.getPassword()));
         }
-       
+
         userDao.updateUser(user);
 
         User newUser = userDao.getUser(user.getUsername());
@@ -420,7 +408,7 @@ public class StandardUserService extends BaseService implements UserService {
     @Transactional
     public PasswordRecovery getPasswordRecovery(String key) {
          PasswordRecovery passwordRecovery = userDao.getPasswordRecovery(key);
-         
+
          if (passwordRecovery != null){
              if (passwordRecovery.hasExpired()){
                  userDao.deletePasswordRecovery(passwordRecovery);
@@ -430,18 +418,18 @@ public class StandardUserService extends BaseService implements UserService {
          }
          return null;
      }
-     
+
      public PasswordRecovery createPasswordRecovery(
                  PasswordRecovery passwordRecovery){
-         
+
          userDao.createPasswordRecovery(passwordRecovery);
-         
+
          return userDao.getPasswordRecovery(passwordRecovery.getKey());
      }
-     
+
      public void deletePasswordRecovery(PasswordRecovery passwordRecovery){
          userDao.deletePasswordRecovery(passwordRecovery);
-     }    
+     }
 
     /**
      * Remove all Items associated to User.
@@ -454,7 +442,7 @@ public class StandardUserService extends BaseService implements UserService {
         HomeCollectionItem home = contentDao.getRootItem(user);
         // remove collections/subcollections
         contentDao.removeCollection(home);
-        // remove dangling items 
+        // remove dangling items
         // (items that only exist in other user's collections)
         contentDao.removeUserContent(user);
         userDao.removeUser(user);

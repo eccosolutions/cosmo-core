@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,6 @@ import org.osaf.cosmo.model.HomeCollectionItem;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.ModificationUid;
 import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.Preference;
 import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.service.ContentService;
@@ -121,7 +120,7 @@ public class StandardTargetResolver
                 return createNewCollectionTarget(context, match);
             return createServiceTarget(context, match);
         }
-        
+
         match = TEMPLATE_IMPORT_COLLECTION.match(uri);
         if (match != null)
             return createNewCollectionTarget(context, match);
@@ -146,7 +145,7 @@ public class StandardTargetResolver
                                     match.get("projection"),
                                     match.get("format"));
     }
-    
+
     /**
      * Creates a target representing a collection of tickets
      */
@@ -160,7 +159,7 @@ public class StandardTargetResolver
         return new TicketsTarget(context, (CollectionItem) item);
 
     }
-    
+
     /**
      * Creates a target representing a ticket
      */
@@ -175,7 +174,7 @@ public class StandardTargetResolver
         if (ticket == null)
             return null;
         return new TicketTarget(context, (CollectionItem) item, ticket);
-        
+
     }
 
     /**
@@ -280,13 +279,7 @@ public class StandardTargetResolver
      */
     protected Target createPreferenceTarget(RequestContext context,
                                             UriTemplate.Match match) {
-        User user = userService.getUser(match.get("username"));
-        if (user == null)
-            return null;
-        Preference pref = user.getPreference(match.get("name"));
-        if (pref == null)
-            return null;
-        return new PreferenceTarget(context, user, pref);
+            return null; // Prefs REMOVED
     }
 
     /**

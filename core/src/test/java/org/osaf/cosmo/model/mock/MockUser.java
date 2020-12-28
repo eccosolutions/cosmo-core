@@ -24,7 +24,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.ModelValidationException;
-import org.osaf.cosmo.model.Preference;
 import org.osaf.cosmo.model.User;
 
 /**
@@ -34,7 +33,7 @@ public class MockUser extends MockAuditableObject implements User {
     /**
      */
     private static final long serialVersionUID = -5401963358519490736L;
-   
+
     /**
      */
     public static final int USERNAME_LEN_MIN = 3;
@@ -45,7 +44,7 @@ public class MockUser extends MockAuditableObject implements User {
      */
     public static final Pattern USERNAME_PATTERN =
         Pattern.compile("^[\\u0020-\\ud7ff\\ue000-\\ufffd&&[^\\u007f\\u003a;/\\\\]]+$");
-    
+
     /**
      */
     public static final int FIRSTNAME_LEN_MIN = 1;
@@ -65,34 +64,32 @@ public class MockUser extends MockAuditableObject implements User {
      */
     public static final int EMAIL_LEN_MAX = 128;
 
-    
+
     private String uid;
-    
+
     private String username;
-    
+
     private transient String oldUsername;
-    
+
     private String password;
-    
+
     private String firstName;
-    
+
     private String lastName;
-    
+
     private String email;
-    
+
     private transient String oldEmail;
-   
+
     private String activationId;
-  
+
     private Boolean admin;
-    
+
     private transient Boolean oldAdmin;
-    
+
     private Boolean locked;
-    
-    private Set<Preference> preferences = new HashSet<Preference>(0);
-    
-    private Set<CollectionSubscription> subscriptions = 
+
+    private Set<CollectionSubscription> subscriptions =
         new HashSet<CollectionSubscription>(0);
 
     /**
@@ -222,7 +219,7 @@ public class MockUser extends MockAuditableObject implements User {
     public Boolean getAdmin() {
         return admin;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#getOldAdmin()
      */
@@ -286,7 +283,7 @@ public class MockUser extends MockAuditableObject implements User {
     public Boolean isLocked() {
         return locked;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#setLocked(java.lang.Boolean)
      */
@@ -295,7 +292,7 @@ public class MockUser extends MockAuditableObject implements User {
     }
 
     /**
-     * Username determines equality 
+     * Username determines equality
      */
     @Override
     public boolean equals(Object obj) {
@@ -303,7 +300,7 @@ public class MockUser extends MockAuditableObject implements User {
             return false;
         if (! (obj instanceof User))
             return false;
-        
+
         return username.equals(((User) obj).getUsername());
     }
 
@@ -426,47 +423,6 @@ public class MockUser extends MockAuditableObject implements User {
     }
 
     /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#getPreferences()
-     */
-    public Set<Preference> getPreferences() {
-        return preferences;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#addPreference(org.osaf.cosmo.model.copy.Preference)
-     */
-    public void addPreference(Preference preference) {
-        preference.setUser(this);
-        preferences.add(preference);
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#getPreference(java.lang.String)
-     */
-    public Preference getPreference(String key) {
-        for (Preference pref : preferences) {
-            if (pref.getKey().equals(key))
-                return pref;
-        }
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#removePreference(java.lang.String)
-     */
-    public void removePreference(String key) {
-        removePreference(getPreference(key));
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#removePreference(org.osaf.cosmo.model.copy.Preference)
-     */
-    public void removePreference(Preference preference) {
-        if (preference != null)
-            preferences.remove(preference);
-    }
-    
-    /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#getCollectionSubscriptions()
      */
     public Set<CollectionSubscription> getCollectionSubscriptions() {
@@ -493,7 +449,7 @@ public class MockUser extends MockAuditableObject implements User {
 
         return null;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#getSubscription(java.lang.String, java.lang.String)
      */
@@ -508,14 +464,14 @@ public class MockUser extends MockAuditableObject implements User {
         return null;
     }
 
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#removeSubscription(java.lang.String, java.lang.String)
      */
     public void removeSubscription(String collectionUid, String ticketKey){
         removeSubscription(getSubscription(collectionUid, ticketKey));
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#removeSubscription(java.lang.String)
      */
@@ -541,7 +497,7 @@ public class MockUser extends MockAuditableObject implements User {
         return false;
     }
 
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceUser#calculateEntityTag()
      */

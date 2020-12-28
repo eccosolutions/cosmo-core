@@ -32,7 +32,6 @@ import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
 import org.osaf.cosmo.model.PasswordRecovery;
-import org.osaf.cosmo.model.Preference;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.mock.MockAuditableObject;
 import org.osaf.cosmo.model.mock.MockUser;
@@ -55,7 +54,7 @@ public class MockUserDao implements UserDao {
     private HashMap<String, PasswordRecovery> passwordRecoveryIdx;
 
     private MockDaoStorage storage = null;
-    
+
     private VersionFourGenerator idGenerator = new VersionFourGenerator();
 
     /**
@@ -115,7 +114,7 @@ public class MockUserDao implements UserDao {
     /**
      */
     public User getUserByUid(String uid) {
-        if (uid == null) 
+        if (uid == null)
             return null;
         return (User) uidIdx.get(uid);
     }
@@ -144,28 +143,21 @@ public class MockUserDao implements UserDao {
         }
 
         user.setUid(idGenerator.nextIdentifier().toString());
-        
+
         // Set create/modified date, etag for User and associated subscriptions
         // and perferences.
         ((MockAuditableObject) user).setModifiedDate(new Date());
         ((MockAuditableObject) user).setCreationDate(new Date());
         ((MockAuditableObject) user).setEntityTag(((MockAuditableObject) user)
                 .calculateEntityTag());
-        
+
         for(CollectionSubscription cs: user.getCollectionSubscriptions()) {
             ((MockAuditableObject) cs).setEntityTag(((MockAuditableObject) cs)
                     .calculateEntityTag());
             ((MockAuditableObject) cs).setModifiedDate(new Date());
             ((MockAuditableObject) cs).setCreationDate(new Date());
         }
-        
-        for(Preference p: user.getPreferences()) {
-            ((MockAuditableObject) p).setEntityTag(((MockAuditableObject) p)
-                    .calculateEntityTag());
-            ((MockAuditableObject) p).setModifiedDate(new Date());
-            ((MockAuditableObject) p).setCreationDate(new Date());
-        }
-            
+
         ((MockUser) user).validate();
         if (usernameIdx.containsKey(user.getUsername())) {
             throw new DuplicateUsernameException(user);
@@ -173,7 +165,7 @@ public class MockUserDao implements UserDao {
         if (emailIdx.containsKey(user.getEmail())) {
             throw new DuplicateEmailException(user);
         }
-        
+
         usernameIdx.put(user.getUsername(), user);
         emailIdx.put(user.getEmail(), user);
         uidIdx.put(user.getUid(), user);
@@ -187,13 +179,13 @@ public class MockUserDao implements UserDao {
         if (user == null) {
             throw new IllegalArgumentException("null user");
         }
-        
+
         // Update modified date, etag for User and associated subscriptions
         // and preferences.
         ((MockAuditableObject) user).setModifiedDate(new Date());
         ((MockAuditableObject) user).setEntityTag(((MockAuditableObject) user)
                 .calculateEntityTag());
-        
+
         for(CollectionSubscription cs: user.getCollectionSubscriptions()) {
             ((MockAuditableObject) cs).setEntityTag(((MockAuditableObject) cs)
                     .calculateEntityTag());
@@ -201,15 +193,7 @@ public class MockUserDao implements UserDao {
             if(cs.getCreationDate()==null)
                 ((MockAuditableObject) cs).setCreationDate(new Date());
         }
-        
-        for(Preference p: user.getPreferences()) {
-            ((MockAuditableObject) p).setEntityTag(((MockAuditableObject) p)
-                    .calculateEntityTag());
-            ((MockAuditableObject) p).setModifiedDate(new Date());
-            if(p.getCreationDate()==null)
-                ((MockAuditableObject) p).setCreationDate(new Date());
-        }
-        
+
         ((MockUser) user).validate();
         String key = user.isUsernameChanged() ?
             user.getOldUsername() :
@@ -276,26 +260,16 @@ public class MockUserDao implements UserDao {
 
     public void createPasswordRecovery(PasswordRecovery passwordRecovery) {
         passwordRecoveryIdx.put(passwordRecovery.getKey(), passwordRecovery);
-        
+
     }
 
     public void deletePasswordRecovery(PasswordRecovery passwordRecovery) {
         passwordRecoveryIdx.remove(passwordRecovery.getKey());
-        
+
     }
 
     public PasswordRecovery getPasswordRecovery(String key) {
         return passwordRecoveryIdx.get(key);
-    }
-
-    public Set<User> findUsersByPreference(String key, String value) {
-        HashSet<User> results = new HashSet<User>();
-        for(User user : (Collection<User>) usernameIdx.values())
-            for(Preference pref: user.getPreferences())
-                if(pref.getKey().equals(key) && pref.getValue().equals(value))
-                    results.add(user);
-        
-        return results;
     }
 
 }

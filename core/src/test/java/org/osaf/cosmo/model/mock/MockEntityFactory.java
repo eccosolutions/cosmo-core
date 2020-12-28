@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,6 @@ import org.osaf.cosmo.model.IntegerAttribute;
 import org.osaf.cosmo.model.MessageStamp;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.PasswordRecovery;
-import org.osaf.cosmo.model.Preference;
 import org.osaf.cosmo.model.QName;
 import org.osaf.cosmo.model.StringAttribute;
 import org.osaf.cosmo.model.TaskStamp;
@@ -56,7 +55,7 @@ import org.w3c.dom.Element;
 public class MockEntityFactory implements EntityFactory {
 
     private IdentifierGenerator idGenerator = new VersionFourGenerator();
-    
+
     public CollectionItem createCollection() {
         return new MockCollectionItem();
     }
@@ -92,7 +91,7 @@ public class MockEntityFactory implements EntityFactory {
     public DecimalAttribute createDecimalAttribute(QName qname, BigDecimal bd) {
         return new MockDecimalAttribute(qname, bd);
     }
-    
+
     public XmlAttribute createXMLAttribute(QName qname, Element e) {
         return new MockXmlAttribute(qname, e);
     }
@@ -123,14 +122,6 @@ public class MockEntityFactory implements EntityFactory {
 
     public PasswordRecovery createPasswordRecovery(User user, String key) {
         return new MockPasswordRecovery(user, key);
-    }
-
-    public Preference createPreference() {
-        return new MockPreference();
-    }
-
-    public Preference createPreference(String key, String value) {
-        return new MockPreference(key, value);
     }
 
     public QName createQName(String namespace, String localname) {
