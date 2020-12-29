@@ -15,49 +15,19 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Index;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Length;
-import org.osaf.cosmo.model.Attribute;
-import org.osaf.cosmo.model.AttributeTombstone;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionItemDetails;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.Stamp;
-import org.osaf.cosmo.model.StampTombstone;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.Tombstone;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 /**
@@ -112,9 +82,9 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     //@Fetch(FetchMode.SUBSELECT)
     @BatchSize(size=50)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
+
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Map<HibQName, Attribute> attributes = new HashMap<>(0);
-
     @OneToMany(targetEntity=HibStamp.class, mappedBy = "item", fetch=FetchType.LAZY)
     // turns out this creates a query that is unoptimized for MySQL
     //@Fetch(FetchMode.SUBSELECT)
@@ -122,18 +92,15 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Stamp> stamps = new HashSet<>(0);
-
     @OneToMany(targetEntity=HibTombstone.class, mappedBy="item", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     protected Set<Tombstone> tombstones = new HashSet<>(0);
-
     private transient Map<String, Stamp> stampMap = null;
 
     @OneToMany(targetEntity=HibCollectionItemDetails.class, mappedBy="primaryKey.item", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<CollectionItemDetails> parentDetails = new HashSet<>(0);
-
     private transient Set<CollectionItem> parents = null;
 
     @ManyToOne(targetEntity=HibUser.class, fetch=FetchType.LAZY)
@@ -225,6 +192,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     public Map<QName, Attribute> getAttributes() {
         return Collections.<QName, Attribute>unmodifiableMap(attributes);
     }
+
 
 
     /* (non-Javadoc)
@@ -541,15 +509,6 @@ public abstract class HibItem extends HibAuditableObject implements Item {
             return super.hashCode();
         else
             return uid.hashCode();
-    }
-
-    @Override
-    public String calculateEntityTag() {
-        String uid = getUid() != null ? getUid() : "-";
-        String modTime = getModifiedDate() != null ?
-                Long.toString(getModifiedDate().getTime()) : "-";
-        String etag = uid + ":" + modTime;
-        return encodeEntityTag(etag.getBytes());
     }
 
     protected void copyToItem(Item item) {

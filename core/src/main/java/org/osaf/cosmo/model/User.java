@@ -270,6 +270,4 @@ public interface User extends AuditableObject{
      */
     boolean isSubscribedTo(CollectionItem collection);
 
-    String calculateEntityTag();
-
 }

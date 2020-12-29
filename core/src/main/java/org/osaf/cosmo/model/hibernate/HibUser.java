@@ -15,30 +15,25 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Index;
-import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.ModelValidationException;
 import org.osaf.cosmo.model.User;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Hibernate persistent User.
@@ -445,14 +440,5 @@ public class HibUser extends HibAuditableObject implements User {
             if (collection.getUid().equals(sub.getCollectionUid())) return true;
         }
         return false;
-    }
-
-    @Override
-	public String calculateEntityTag() {
-        String username = getUsername() != null ? getUsername() : "-";
-        String modTime = getModifiedDate() != null ?
-                Long.toString(getModifiedDate().getTime()) : "-";
-        String etag = username + ":" + modTime;
-        return encodeEntityTag(etag.getBytes());
     }
 }

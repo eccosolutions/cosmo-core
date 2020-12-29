@@ -21,13 +21,4 @@ package org.osaf.cosmo.model;
  */
 public interface Ticket extends AuditableObject {
 
-    /** */
-    String TIMEOUT_INFINITE = "Infinite";
-    /** */
-    String PRIVILEGE_READ = "read";
-    /** */
-    String PRIVILEGE_WRITE = "write";
-    /** */
-    String PRIVILEGE_FREEBUSY = "freebusy";
-
 }

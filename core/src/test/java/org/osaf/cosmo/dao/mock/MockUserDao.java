@@ -15,29 +15,18 @@
  */
 package org.osaf.cosmo.dao.mock;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.id.uuid.VersionFourGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.UserDao;
-import org.osaf.cosmo.model.CollectionSubscription;
-import org.osaf.cosmo.model.DuplicateEmailException;
-import org.osaf.cosmo.model.DuplicateUsernameException;
-import org.osaf.cosmo.model.PasswordRecovery;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.mock.MockAuditableObject;
 import org.osaf.cosmo.model.mock.MockUser;
 import org.osaf.cosmo.util.ArrayPagedList;
 import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
+
+import java.util.*;
 
 /**
  * Mock implementation of {@link UserDao} useful for testing.
@@ -148,12 +137,8 @@ public class MockUserDao implements UserDao {
         // and perferences.
         ((MockAuditableObject) user).setModifiedDate(new Date());
         ((MockAuditableObject) user).setCreationDate(new Date());
-        ((MockAuditableObject) user).setEntityTag(((MockAuditableObject) user)
-                .calculateEntityTag());
 
         for(CollectionSubscription cs: user.getCollectionSubscriptions()) {
-            ((MockAuditableObject) cs).setEntityTag(((MockAuditableObject) cs)
-                    .calculateEntityTag());
             ((MockAuditableObject) cs).setModifiedDate(new Date());
             ((MockAuditableObject) cs).setCreationDate(new Date());
         }
@@ -183,12 +168,8 @@ public class MockUserDao implements UserDao {
         // Update modified date, etag for User and associated subscriptions
         // and preferences.
         ((MockAuditableObject) user).setModifiedDate(new Date());
-        ((MockAuditableObject) user).setEntityTag(((MockAuditableObject) user)
-                .calculateEntityTag());
 
         for(CollectionSubscription cs: user.getCollectionSubscriptions()) {
-            ((MockAuditableObject) cs).setEntityTag(((MockAuditableObject) cs)
-                    .calculateEntityTag());
             ((MockAuditableObject) cs).setModifiedDate(new Date());
             if(cs.getCreationDate()==null)
                 ((MockAuditableObject) cs).setCreationDate(new Date());

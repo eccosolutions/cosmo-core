@@ -15,27 +15,10 @@
  */
 package org.osaf.cosmo.model.mock;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import org.osaf.cosmo.model.*;
 
-import org.osaf.cosmo.model.Attribute;
-import org.osaf.cosmo.model.AttributeTombstone;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionItemDetails;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.Stamp;
-import org.osaf.cosmo.model.StampTombstone;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.Tombstone;
-import org.osaf.cosmo.model.User;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 /**
@@ -64,20 +47,16 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     private transient Boolean isActive = Boolean.TRUE;
 
 
-    private Map<QName, Attribute> attributes = new HashMap<QName, Attribute>(0);
+    private Map<QName, Attribute> attributes = new HashMap<>(0);
+
+    private Set<Stamp> stamps = new HashSet<>(0);
 
 
-    private Set<Ticket> tickets = new HashSet<Ticket>(0);
-
-
-    private Set<Stamp> stamps = new HashSet<Stamp>(0);
-
-
-    private Set<Tombstone> tombstones = new HashSet<Tombstone>(0);
+    private Set<Tombstone> tombstones = new HashSet<>(0);
 
     private transient Map<String, Stamp> stampMap = null;
 
-    private Set<CollectionItemDetails> parentDetails = new HashSet<CollectionItemDetails>(0);
+    private Set<CollectionItemDetails> parentDetails = new HashSet<>(0);
 
     private User owner;
 
@@ -102,7 +81,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
      */
     public Map<String, Stamp> getStampMap() {
         if(stampMap==null) {
-            stampMap = new HashMap<String, Stamp>();
+            stampMap = new HashMap<>();
             for(Stamp stamp : stamps)
                 stampMap.put(stamp.getType(), stamp);
         }
@@ -175,6 +154,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     }
 
 
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceItem#addAttribute(org.osaf.cosmo.model.copy.Attribute)
      */
@@ -216,7 +196,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
      * @see org.osaf.cosmo.model.copy.InterfaceItem#removeAttributes(java.lang.String)
      */
     public void removeAttributes(String namespace) {
-        ArrayList<QName> toRemove = new ArrayList<QName>();
+        ArrayList<QName> toRemove = new ArrayList<>();
         for (QName qname: attributes.keySet()) {
             if (qname.getNamespace().equals(namespace))
                 toRemove.add(qname);
@@ -283,7 +263,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
      * @see org.osaf.cosmo.model.copy.InterfaceItem#getAttributes(java.lang.String)
      */
     public Map<String, Attribute> getAttributes(String namespace) {
-        HashMap<String, Attribute> attrs = new HashMap<String, Attribute>();
+        HashMap<String, Attribute> attrs = new HashMap<>();
         for(Entry<QName, Attribute> e: attributes.entrySet()) {
             if(e.getKey().getNamespace().equals(namespace))
                 attrs.put(e.getKey().getLocalName(), e.getValue());
@@ -400,7 +380,7 @@ public abstract class MockItem extends MockAuditableObject implements Item {
      */
     public Set<CollectionItem> getParents() {
 
-        Set<CollectionItem> parents = new HashSet<CollectionItem>();
+        Set<CollectionItem> parents = new HashSet<>();
         for(CollectionItemDetails cid: parentDetails)
             parents.add(cid.getCollection());
 
@@ -483,16 +463,6 @@ public abstract class MockItem extends MockAuditableObject implements Item {
      * @see org.osaf.cosmo.model.copy.InterfaceItem#copy()
      */
     public abstract Item copy();
-
-
-    @Override
-    public String calculateEntityTag() {
-        String uid = getUid() != null ? getUid() : "-";
-        String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
-        String etag = uid + ":" + modTime;
-        return encodeEntityTag(etag.getBytes());
-    }
 
     protected void copyToItem(Item item) {
         item.setOwner(getOwner());

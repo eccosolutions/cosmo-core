@@ -37,8 +37,6 @@ public class MockCollectionSubscription extends MockAuditableObject implements C
 
     private String displayName;
 
-    private String ticketKey;
-
     private String collectionUid;
 
     /**
@@ -93,16 +91,5 @@ public class MockCollectionSubscription extends MockAuditableObject implements C
      */
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public String calculateEntityTag() {
-        // subscription is unique by name for its owner
-        String uid = (getOwner() != null && getOwner().getUid() != null) ?
-            getOwner().getUid() : "-";
-        String name = getDisplayName() != null ? getDisplayName() : "-";
-        String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
-        String etag = uid + ":" + name + ":" + modTime;
-        return encodeEntityTag(etag.getBytes());
     }
 }

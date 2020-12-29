@@ -15,21 +15,14 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Hibernate persistent CollectionSubscription.
@@ -56,6 +49,7 @@ public class HibCollectionSubscription extends HibAuditableObject implements Col
     @Column(name = "displayname", nullable = false, length = 255)
     @NotNull
     private String displayName;
+
 
     @Column(name = "collectionuid", nullable = false, length = 255)
     @NotNull
@@ -113,16 +107,5 @@ public class HibCollectionSubscription extends HibAuditableObject implements Col
      */
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public String calculateEntityTag() {
-        // subscription is unique by name for its owner
-        String uid = (getOwner() != null && getOwner().getUid() != null) ?
-            getOwner().getUid() : "-";
-        String name = getDisplayName() != null ? getDisplayName() : "-";
-        String modTime = getModifiedDate() != null ?
-                Long.toString(getModifiedDate().getTime()) : "-";
-        String etag = uid + ":" + name + ":" + modTime;
-        return encodeEntityTag(etag.getBytes());
     }
 }

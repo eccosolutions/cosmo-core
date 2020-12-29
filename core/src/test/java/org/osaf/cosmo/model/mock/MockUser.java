@@ -475,16 +475,4 @@ public class MockUser extends MockAuditableObject implements User {
         }
         return false;
     }
-
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceUser#calculateEntityTag()
-     */
-    public String calculateEntityTag() {
-        String username = getUsername() != null ? getUsername() : "-";
-        String modTime = getModifiedDate() != null ?
-            new Long(getModifiedDate().getTime()).toString() : "-";
-        String etag = username + ":" + modTime;
-        return encodeEntityTag(etag.getBytes());
-    }
 }

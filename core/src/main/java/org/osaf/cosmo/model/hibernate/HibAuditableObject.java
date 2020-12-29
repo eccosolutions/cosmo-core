@@ -15,18 +15,13 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import java.security.MessageDigest;
-import java.util.Base64.Encoder;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-
 import org.hibernate.annotations.Type;
 import org.osaf.cosmo.model.AuditableObject;
 import org.osaf.cosmo.model.EntityFactory;
 
-import static java.util.Base64.getEncoder;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import java.util.Date;
 
 /**
  * Hibernate persistent AuditableObject.
@@ -34,8 +29,6 @@ import static java.util.Base64.getEncoder;
 @MappedSuperclass
 public abstract class HibAuditableObject extends BaseModelObject implements AuditableObject {
 
-    private static final ThreadLocal<MessageDigest> etagDigestLocal = new ThreadLocal<>();
-    private static final Encoder etagEncoder = getEncoder();
     private static final EntityFactory FACTORY = new HibEntityFactory();
 
     @Column(name = "createdate")
@@ -46,8 +39,6 @@ public abstract class HibAuditableObject extends BaseModelObject implements Audi
     @Type(type="long_timestamp")
     private Date modifiedDate;
 
-    @Column(name="etag")
-    private String etag = "";
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.AuditableObject#getCreationDate()
@@ -77,48 +68,6 @@ public abstract class HibAuditableObject extends BaseModelObject implements Audi
      */
     public void updateTimestamp() {
         modifiedDate = new Date();
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.AuditableObject#getEntityTag()
-     */
-    public String getEntityTag() {
-        return etag;
-    }
-
-    public void setEntityTag(String etag) {
-        this.etag = etag;
-    }
-
-    /**
-     * Calculates object's entity tag. Returns the empty string. Subclasses should override this.
-     */
-    public String calculateEntityTag() {
-        return "";
-    }
-
-    /**
-     * <p>
-     * Returns a Base64-encoded SHA-1 digest of the provided bytes.
-     * </p>
-     */
-    protected static String encodeEntityTag(byte[] bytes) {
-
-        // Use MessageDigest stored in threadlocal so that each
-        // thread has its own instance.
-        MessageDigest md = etagDigestLocal.get();
-
-        if(md==null) {
-            try {
-                // initialize threadlocal
-                md = MessageDigest.getInstance("sha1");
-                etagDigestLocal.set(md);
-            } catch (Exception e) {
-                throw new RuntimeException("Platform does not support sha1?", e);
-            }
-        }
-
-        return etagEncoder.encodeToString(md.digest(bytes));
     }
 
     public EntityFactory getFactory() {

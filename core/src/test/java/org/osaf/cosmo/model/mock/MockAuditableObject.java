@@ -15,14 +15,10 @@
  */
 package org.osaf.cosmo.model.mock;
 
-import java.security.MessageDigest;
-import java.util.Base64;
-import java.util.Date;
-
 import org.osaf.cosmo.model.AuditableObject;
 import org.osaf.cosmo.model.EntityFactory;
 
-import static java.util.Base64.getEncoder;
+import java.util.Date;
 
 /**
  * Extends BaseModelObject and adds creationDate, modifiedDate
@@ -30,8 +26,6 @@ import static java.util.Base64.getEncoder;
  */
 public abstract class MockAuditableObject implements AuditableObject {
 
-    private static final ThreadLocal<MessageDigest> etagDigestLocal = new ThreadLocal<MessageDigest>();
-    private static final Base64.Encoder etagEncoder = getEncoder();
     private static final EntityFactory FACTORY = new MockEntityFactory();
 
     private Date creationDate;
@@ -71,61 +65,6 @@ public abstract class MockAuditableObject implements AuditableObject {
      */
     public void updateTimestamp() {
         modifiedDate = new Date();
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceAuditableObject#getEntityTag()
-     */
-    public String getEntityTag() {
-        return etag;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceAuditableObject#setEntityTag(java.lang.String)
-     */
-    public void setEntityTag(String etag) {
-        this.etag = etag;
-    }
-
-    /**
-     * <p>
-     * Calculates updates object's entity tag.
-     * Returns calculated entity tag.
-     * </p>
-     * <p>
-     * This implementation simply returns the empty string. Subclasses should
-     * override it when necessary.
-     * </p>
-     *
-     * Subclasses should override
-     * this.
-     */
-    public String calculateEntityTag() {
-        return "";
-    }
-
-    /**
-     * <p>
-     * Returns a Base64-encoded SHA-1 digest of the provided bytes.
-     * </p>
-     */
-    protected static String encodeEntityTag(byte[] bytes) {
-
-        // Use MessageDigest stored in threadlocal so that each
-        // thread has its own instance.
-        MessageDigest md = etagDigestLocal.get();
-
-        if(md==null) {
-            try {
-                // initialize threadlocal
-                md = MessageDigest.getInstance("sha1");
-                etagDigestLocal.set(md);
-            } catch (Exception e) {
-                throw new RuntimeException("Platform does not support sha1?", e);
-            }
-        }
-
-        return new String(etagEncoder.encode(md.digest(bytes)));
     }
 
     public EntityFactory getFactory() {
