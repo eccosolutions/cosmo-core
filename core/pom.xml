@@ -181,13 +181,6 @@
             <artifactId>ical4j</artifactId>
             <version>1.0.4</version>
         </dependency>
-        <!-- required by jcr-server -->
-        <!-- XXX: should be 1.0 release version -->
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-jcr-commons</artifactId>
-            <version>1.0-osaf-20060508</version>
-        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -218,16 +211,6 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-jcr-server</artifactId>
-            <version>1.0-osaf-20061023</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-server</artifactId>
-            <version>1.0-osaf-20061023</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
