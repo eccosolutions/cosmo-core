@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,22 +15,16 @@
  */
 package org.osaf.cosmo.calendar;
 
-import java.text.ParseException;
-import java.util.Map.Entry;
-
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.DateList;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.TimeZone;
+import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.parameter.TzId;
 import net.fortuna.ical4j.model.parameter.Value;
-
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osaf.cosmo.eim.schema.EimConversionException;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
+
+import java.text.ParseException;
+import java.util.Map.Entry;
 
 /**
  * Represents an iCalendar date or datetime property value, or a list
@@ -48,7 +42,7 @@ public class ICalDate implements ICalendarConstants {
     private TimeZone tz;
     private Date date;
     private DateList dates;
-   
+
     /**
      * Constructs an <code>ICalDate</code> by parsing an EIM text
      * value containing a serialized iCalendar property value with
@@ -62,7 +56,6 @@ public class ICalDate implements ICalendarConstants {
      * <li><code>TZID</code></li>
      * <li><code>X-OSAF-ANYTIME</code></li>
      *
-     * @throws EimConversionException
      * </ul>
      */
     public ICalDate(String text)
@@ -84,7 +77,7 @@ public class ICalDate implements ICalendarConstants {
 
         if (value == null)
             value = Value.DATE_TIME;
-        
+
         // requires parameters to be set
         parseDates(text);
     }
@@ -217,7 +210,7 @@ public class ICalDate implements ICalendarConstants {
         tz = tzTranslator.translateToOlsonTz(str);
         if (tz == null)
             throw new UnknownTimeZoneException(str);
-        
+
         // If the timezone ids don't match, give an indication of the
         // correct timezone
         if(!tz.getID().equals(str))
@@ -230,7 +223,7 @@ public class ICalDate implements ICalendarConstants {
 
     private void parseDates(String str)
         throws ParseException {
-        
+
         if (str.indexOf(',')==-1) {
             date = isDate() ? new Date(str) : new DateTime(str, tz);
             if(isDate() && tz != null)
