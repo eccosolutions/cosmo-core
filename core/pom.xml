@@ -121,7 +121,7 @@
             <version>1.1</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Dependencies now needed to be supplied by us, as Java 9 onwards don't ahve them by default.
+        <!-- Dependencies now needed to be supplied by us, as Java 9 onwards don't have them by default.
      see https://stackoverflow.com/a/43574427/1998186 -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -192,13 +192,6 @@
             <artifactId>jstl-api</artifactId>
             <version>1.2</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <!-- NOTE: should be transitive from above but there seem to be 2 diff versions of the above -->
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <scope>provided</scope>
-            <version>2.2.5</version>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>

@@ -63,14 +63,6 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     @Column(name = "displayname", length=1024)
     private String displayName;
 
-    @Column(name = "clientcreatedate")
-    @Type(type="long_timestamp")
-    private Date clientCreationDate;
-
-    @Column(name = "clientmodifieddate")
-    @Type(type="long_timestamp")
-    private Date clientModifiedDate;
-
     @Version
     @Column(name="version", nullable = false)
     private Integer version;
@@ -310,35 +302,6 @@ public abstract class HibItem extends HibAuditableObject implements Item {
         }
 
         return attrs;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.Item#getClientCreationDate()
-     */
-    public Date getClientCreationDate() {
-        return clientCreationDate;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.Item#setClientCreationDate(java.util.Date)
-     */
-    public void setClientCreationDate(Date clientCreationDate) {
-        this.clientCreationDate = clientCreationDate;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.Item#getClientModifiedDate()
-     */
-    public Date getClientModifiedDate() {
-        return clientModifiedDate;
-    }
-
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.Item#setClientModifiedDate(java.util.Date)
-     */
-    public void setClientModifiedDate(Date clientModifiedDate) {
-        this.clientModifiedDate = clientModifiedDate;
     }
 
     /* (non-Javadoc)

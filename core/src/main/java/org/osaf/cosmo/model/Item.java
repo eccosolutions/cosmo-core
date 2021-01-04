@@ -15,7 +15,6 @@
  */
 package org.osaf.cosmo.model;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,93 +29,93 @@ public interface Item extends AuditableObject{
      * addStamp() and removeStamp() to manipulate set.
      * @return set of stamps associated with Item
      */
-    public Set<Stamp> getStamps();
+    Set<Stamp> getStamps();
 
     /**
      * @return Map of Stamps indexed by Stamp type.
      */
-    public Map<String, Stamp> getStampMap();
+    Map<String, Stamp> getStampMap();
 
     /**
      * Add stamp to Item
      * @param stamp stamp to add
      */
-    public void addStamp(Stamp stamp);
+    void addStamp(Stamp stamp);
 
     /**
      * Remove stamp from Item.
      * @param stamp stamp to remove
      */
-    public void removeStamp(Stamp stamp);
+    void removeStamp(Stamp stamp);
 
     /**
      * Get the stamp that corresponds to the specified type
      * @param type stamp type to return
      * @return stamp
      */
-    public Stamp getStamp(String type);
+    Stamp getStamp(String type);
 
     /**
      * Get the stamp that corresponds to the specified class
      * @param clazz class of stamp to return
      * @return stamp
      */
-    public Stamp getStamp(Class clazz);
+    Stamp getStamp(Class clazz);
 
     /**
      * Get all Attributes of Item.  Use addAttribute() and
      * removeAttribute() to manipulate map.
      * @return
      */
-    public Map<QName, Attribute> getAttributes();
+    Map<QName, Attribute> getAttributes();
 
-    public void addAttribute(Attribute attribute);
+    void addAttribute(Attribute attribute);
 
     /**
      * Remove attribute in default namespace with local name.
      * @param name local name of attribute to remove
      */
-    public void removeAttribute(String name);
+    void removeAttribute(String name);
 
     /**
      * Remove attribute.
      * @param qname qualifed name of attribute to remove.
      */
-    public void removeAttribute(QName qname);
+    void removeAttribute(QName qname);
 
     /**
      * Remove all attributes in a namespace.
      * @param namespace namespace of attributes to remove
      */
-    public void removeAttributes(String namespace);
+    void removeAttributes(String namespace);
 
     /**
      * Get attribute in default namespace with local name.
      * @param name local name of attribute
      * @return attribute in default namespace with given name
      */
-    public Attribute getAttribute(String name);
+    Attribute getAttribute(String name);
 
     /**
      * Get attribute with qualified name.
      * @param qname qualified name of attribute to retrieve
      * @return attribute with qualified name.
      */
-    public Attribute getAttribute(QName qname);
+    Attribute getAttribute(QName qname);
 
     /**
      * Get attribute value with local name in default namespace
      * @param name local name of attribute
      * @return attribute value
      */
-    public Object getAttributeValue(String name);
+    Object getAttributeValue(String name);
 
     /**
      * Get attribute value with qualified name
      * @param qname qualified name of attribute
      * @return attribute value
      */
-    public Object getAttributeValue(QName qname);
+    Object getAttributeValue(QName qname);
 
     /**
      * Set attribute value of attribute with local name in default
@@ -124,7 +123,7 @@ public interface Item extends AuditableObject{
      * @param name local name of attribute
      * @param value value to update attribute
      */
-    public void setAttribute(String name, Object value);
+    void setAttribute(String name, Object value);
 
     /**
      * Set attribute value attribute with qualified name
@@ -132,7 +131,7 @@ public interface Item extends AuditableObject{
      * @param value value to update attribute
      */
     @SuppressWarnings("unchecked")
-    public void setAttribute(QName key, Object value);
+    void setAttribute(QName key, Object value);
 
     /**
      * Return Attributes for a given namespace.  Attributes are returned
@@ -140,39 +139,31 @@ public interface Item extends AuditableObject{
      * @param namespace namespace of the Attributes to return
      * @return map of Attributes indexed by the name of the attribute
      */
-    public Map<String, Attribute> getAttributes(String namespace);
+    Map<String, Attribute> getAttributes(String namespace);
 
-    public Date getClientCreationDate();
+    String getName();
 
-    public void setClientCreationDate(Date clientCreationDate);
-
-    public Date getClientModifiedDate();
-
-    public void setClientModifiedDate(Date clientModifiedDate);
-
-    public String getName();
-
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * @return Item's human readable name
      */
-    public String getDisplayName();
+    String getDisplayName();
 
     /**
      * @param displayName Item's human readable name
      */
-    public void setDisplayName(String displayName);
+    void setDisplayName(String displayName);
 
-    public User getOwner();
+    User getOwner();
 
-    public void setOwner(User owner);
+    void setOwner(User owner);
 
-    public String getUid();
+    String getUid();
 
-    public void setUid(String uid);
+    void setUid(String uid);
 
-    public Set<CollectionItem> getParents();
+    Set<CollectionItem> getParents();
 
     /**
      * Each collection an item belongs to contains additional
@@ -180,28 +171,28 @@ public interface Item extends AuditableObject{
      * @param parent parent collection
      * @return details about parent<-->child relationship
      */
-    public CollectionItemDetails getParentDetails(CollectionItem parent);
+    CollectionItemDetails getParentDetails(CollectionItem parent);
 
     /**
      * Return a single parent.
      * @deprecated
      */
-    public CollectionItem getParent();
+    CollectionItem getParent();
 
     /**
      * Transient attribute used to mark item for deletion.
      * @return true if item should be deleted
      */
-    public Boolean getIsActive();
+    Boolean getIsActive();
 
     /**
      * Transient attribute used to mark item for deletion.
      * @param isActive true if item should be deleted
      */
-    public void setIsActive(Boolean isActive);
+    void setIsActive(Boolean isActive);
 
-    public Set<Tombstone> getTombstones();
+    Set<Tombstone> getTombstones();
 
-    public Item copy();
+    Item copy();
 
 }

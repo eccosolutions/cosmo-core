@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 package org.osaf.cosmo.eim.schema.contentitem;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.logging.Log;
@@ -31,6 +26,11 @@ import org.osaf.cosmo.eim.schema.BaseItemGenerator;
 import org.osaf.cosmo.eim.schema.text.TriageStatusFormat;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.Item;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Generates EIM records from content items.
@@ -67,32 +67,32 @@ public class ContentItemGenerator extends BaseItemGenerator
                     contentItem.getDisplayName()));
         }
 
-        
+
         String ts = TriageStatusFormat.getInstance(getItem().getFactory()).
             format(contentItem.getTriageStatus());
-        
+
         // missing TriageStatus ends up as empty string instead of null
         if(isModification() && ts != null && ts.isEmpty()) {
             record.addField(generateMissingField(new TextField(FIELD_TRIAGE, null)));
         } else {
             record.addField(new TextField(FIELD_TRIAGE, ts));
         }
-        
+
         if(isMissingAttribute("sent")) {
             record.addField(generateMissingField(new IntegerField(FIELD_HAS_BEEN_SENT, null)));
         } else {
             boolean sent = BooleanUtils.isTrue(contentItem.getSent());
-            record.addField(new IntegerField(FIELD_HAS_BEEN_SENT, sent)); 
+            record.addField(new IntegerField(FIELD_HAS_BEEN_SENT, sent));
         }
-        
+
         if(isMissingAttribute("needsReply")) {
             record.addField(generateMissingField(new IntegerField(FIELD_NEEDS_REPLY, null)));
         } else {
             boolean needsReply = BooleanUtils.isTrue(contentItem.getNeedsReply());
             record.addField(new IntegerField(FIELD_NEEDS_REPLY, needsReply));
         }
-        
-        Date d = contentItem.getClientCreationDate();
+
+        Date d = contentItem.getCreationDate(); // was ClientCreationDate();
         BigDecimal createdOn = d != null ?
             new BigDecimal(d.getTime() / 1000) :
             null;

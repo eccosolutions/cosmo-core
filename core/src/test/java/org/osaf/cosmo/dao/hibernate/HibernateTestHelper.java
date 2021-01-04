@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,18 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import junit.framework.Assert;
 import net.fortuna.ical4j.model.Calendar;
-
 import org.apache.commons.io.IOUtils;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.ContentDao;
@@ -36,6 +26,11 @@ import org.osaf.cosmo.model.QName;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibUser;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.*;
 
 public class HibernateTestHelper {
     public User createDummyUser(UserDao userDao, int index) {
@@ -52,8 +47,6 @@ public class HibernateTestHelper {
     public void verifyItem(Item item1, Item item2) throws Exception {
         Assert.assertEquals(item1.getName(), item2.getName());
         Assert.assertEquals(item1.getCreationDate(), item2.getCreationDate());
-        Assert.assertEquals(item1.getClientCreationDate(), item2.getClientCreationDate());
-        Assert.assertEquals(item1.getClientModifiedDate(), item2.getClientModifiedDate());
         Assert.assertEquals(item1.getModifiedDate(), item2.getModifiedDate());
         Assert.assertEquals(item1.getDisplayName(), item2.getDisplayName());
         Assert.assertEquals(getHibItem(item1).getId(), getHibItem(item2).getId());
@@ -122,7 +115,7 @@ public class HibernateTestHelper {
         IOUtils.copy(in, bos);
         return bos.toByteArray();
     }
-    
+
     public InputStream getInputStream(String name) throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream(name);
         if (in == null) {
@@ -130,7 +123,7 @@ public class HibernateTestHelper {
         }
         return in;
     }
-    
+
     public Calendar getCalendar(String name) throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream(name);
         return CalendarUtils.parseCalendar(in);
@@ -180,7 +173,7 @@ public class HibernateTestHelper {
         }
         return user;
     }
-    
+
     private HibItem getHibItem(Item item) {
         return (HibItem) item;
     }

@@ -15,72 +15,22 @@
  */
 package org.osaf.cosmo.calendar;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Vector;
-
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Parameter;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.TimeZoneRegistry;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
-import net.fortuna.ical4j.model.component.VAlarm;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.component.VFreeBusy;
-import net.fortuna.ical4j.model.component.VJournal;
-import net.fortuna.ical4j.model.component.VTimeZone;
-import net.fortuna.ical4j.model.component.VToDo;
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.parameter.XParameter;
-import net.fortuna.ical4j.model.property.Action;
-import net.fortuna.ical4j.model.property.CalScale;
-import net.fortuna.ical4j.model.property.Completed;
-import net.fortuna.ical4j.model.property.DateListProperty;
-import net.fortuna.ical4j.model.property.DateProperty;
-import net.fortuna.ical4j.model.property.DtStamp;
-import net.fortuna.ical4j.model.property.DtStart;
-import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.RecurrenceId;
-import net.fortuna.ical4j.model.property.Status;
-import net.fortuna.ical4j.model.property.Trigger;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
-
+import net.fortuna.ical4j.model.property.*;
 import org.apache.commons.lang.StringUtils;
 import org.osaf.cosmo.CosmoConstants;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
-import org.osaf.cosmo.model.AvailabilityItem;
-import org.osaf.cosmo.model.CalendarCollectionStamp;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.ContentItem;
-import org.osaf.cosmo.model.EntityFactory;
-import org.osaf.cosmo.model.EventExceptionStamp;
-import org.osaf.cosmo.model.EventStamp;
-import org.osaf.cosmo.model.FreeBusyItem;
-import org.osaf.cosmo.model.ICalendarItem;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.ModelValidationException;
-import org.osaf.cosmo.model.ModificationUid;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.NoteOccurrence;
-import org.osaf.cosmo.model.StampUtils;
-import org.osaf.cosmo.model.TaskStamp;
-import org.osaf.cosmo.model.TriageStatus;
-import org.osaf.cosmo.model.TriageStatusUtil;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.hibernate.HibEventExceptionStamp;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * A component that converts iCalendar objects to entities and vice versa.
@@ -252,7 +202,7 @@ public class EntityConverter {
 
     /**
      * Convert calendar containing single VFREEBUSY into FreeBusyItem
-     * @param freebusy freebusy to update
+     * @param freeBusy freebusy to update
      * @param calendar calendar containing VFREEBUSY
      * @return FreeBusyItem representation of VFREEBUSY
      */
@@ -329,10 +279,7 @@ public class EntityConverter {
     /**
      * Returns a calendar representing the item.
      * <p>
-     * If the item is a {@link NoteItem}, delegates to
-     * {@link #convertNote(NoteItem)}. If the item is a {@link ICalendarItem},
-     * delegates to {@link ICalendarItem#getFullCalendar()}. Otherwise,
-     * returns null.
+ *     If item cannot be represented (is not ICalendarItem) then returns null.
      * </p>
      */
     public Calendar convertContent(ContentItem item) {
@@ -541,12 +488,9 @@ public class EntityConverter {
         String icalUid = note.getIcalUid();
         if(icalUid==null)
             icalUid = note.getUid();
-        
-        if(note.getClientModifiedDate()!=null)
-            ICalendarUtils.setDtStamp(note.getClientModifiedDate(), journal);
-        else
-            ICalendarUtils.setDtStamp(note.getModifiedDate(), journal);
-        
+
+        ICalendarUtils.setDtStamp(note.getModifiedDate(), journal);
+
         ICalendarUtils.setUid(icalUid, journal);
         ICalendarUtils.setSummary(note.getDisplayName(), journal);
         ICalendarUtils.setDescription(note.getBody(), journal);
@@ -574,13 +518,9 @@ public class EntityConverter {
             ICalendarUtils.setDescription(note.getModifies().getBody(), event);
         else
             ICalendarUtils.setDescription(note.getBody(), event);
-       
-       
-        if(note.getClientModifiedDate()!=null)
-            ICalendarUtils.setDtStamp(note.getClientModifiedDate(), event);
-        else
-            ICalendarUtils.setDtStamp(note.getModifiedDate(), event);
-        
+
+        ICalendarUtils.setDtStamp(note.getModifiedDate(), event);
+
         if (StampUtils.getTaskStamp(note) != null)
             ICalendarUtils.setXProperty(X_OSAF_STARRED, "TRUE", event);
         else
@@ -597,12 +537,9 @@ public class EntityConverter {
         String icalUid = note.getIcalUid();
         if(icalUid==null)
             icalUid = note.getUid();
-        
-        if(note.getClientModifiedDate()!=null)
-            ICalendarUtils.setDtStamp(note.getClientModifiedDate(), task);
-        else
-            ICalendarUtils.setDtStamp(note.getModifiedDate(), task);
-        
+
+        ICalendarUtils.setDtStamp(note.getModifiedDate(), task);
+
         ICalendarUtils.setUid(icalUid, task);
         ICalendarUtils.setSummary(note.getDisplayName(), task);
         ICalendarUtils.setDescription(note.getBody(), task);
@@ -800,8 +737,7 @@ public class EntityConverter {
                 .getEventCalendar().getComponents(Component.VTIMEZONE);
         for(Iterator<Component> it = vtimezones.iterator(); it.hasNext();)
             exceptionStamp.getEventCalendar().getComponents().add(0, it.next());
-        
-        noteMod.setClientModifiedDate(new Date());
+
         noteMod.setLastModifiedBy(noteMod.getModifies().getLastModifiedBy());
         noteMod.setLastModification(ContentItem.Action.EDITED);
 
@@ -813,8 +749,6 @@ public class EntityConverter {
         TriageStatus ts = entityFactory.createTriageStatus();
         TriageStatusUtil.initialize(ts);
 
-        item.setClientCreationDate(new Date());
-        item.setClientModifiedDate(item.getClientCreationDate());
         item.setTriageStatus(ts);
         item.setLastModification(ContentItem.Action.CREATED);
 
@@ -839,9 +773,9 @@ public class EntityConverter {
             note.setBody(event.getDescription().getValue());
 
         // look for DTSTAMP
-        if(event.getDateStamp()!=null)
-            note.setClientModifiedDate(event.getDateStamp().getDate());
-        
+//        if(event.getDateStamp()!=null)
+//            note.setClientModifiedDate(event.getDateStamp().getDate());
+
         // look for absolute VALARM
         VAlarm va = ICalendarUtils.getDisplayAlarm(event);
         if (va != null && va.getTrigger()!=null) {
@@ -890,8 +824,8 @@ public class EntityConverter {
             note.setBody(task.getDescription().getValue());
 
         // look for DTSTAMP
-        if (task.getDateStamp() != null)
-            note.setClientModifiedDate(task.getDateStamp().getDate());
+//        if (task.getDateStamp() != null)
+//            note.setClientModifiedDate(task.getDateStamp().getDate());
 
         // look for absolute VALARM
         VAlarm va = ICalendarUtils.getDisplayAlarm(task);
@@ -950,8 +884,8 @@ public class EntityConverter {
             note.setBody(journal.getDescription().getValue());
 
         // look for DTSTAMP
-        if (journal.getDateStamp() != null)
-            note.setClientModifiedDate(journal.getDateStamp().getDate());
+//        if (journal.getDateStamp() != null)
+//            note.setClientModifiedDate(journal.getDateStamp().getDate());
     }
 
     private void setCalendarAttributes(FreeBusyItem freeBusy, VFreeBusy vfb) {
@@ -960,8 +894,8 @@ public class EntityConverter {
             freeBusy.setIcalUid(vfb.getUid().getValue());
 
         // look for DTSTAMP
-        if (vfb.getDateStamp() != null)
-            freeBusy.setClientModifiedDate(vfb.getDateStamp().getDate());
+//        if (vfb.getDateStamp() != null)
+//            freeBusy.setClientModifiedDate(vfb.getDateStamp().getDate());
     }
 
     private Component getMasterComponent(ComponentList components) {
