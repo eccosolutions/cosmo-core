@@ -31,13 +31,16 @@ public class HibEventTimeRangeIndex {
     
     /**
      * The end date of the event.  If the event is recurring, the
-     * value is the earliest start date for the recurring series.
+     * value is the latest end date for the recurring series (e.g. the second day of a 2-day event that occurs weekly)
+     * If the recurring event is infinite, the value will be a
+     * String that represents infinity.
      * If the date has a timezone, the date will be converted
-     * to UTC.  The format is one of:
+     * to UTC.  The format must be one of:
      * <p>
      * 20070101<br/>
      * 20070101T100000<br/>
      * 20070101T100000Z<br/>
+     * Z-TIME-INFINITY<br/>
      * @return start date of the event
      */
     public String getEndDate() {
@@ -47,8 +50,8 @@ public class HibEventTimeRangeIndex {
   
     /**
      * The end date of the event.  If the event is recurring, the
-     * value is the latest end date for the recurring series.
-     * If the recurring event is infinite, the value will be a 
+     * value is the latest end date for the recurring series (e.g. the second day of a 2-day event that occurs weekly)
+     * If the recurring event is infinite, the value will be a
      * String that represents infinity.
      * If the date has a timezone, the date will be converted
      * to UTC.  The format must be one of:
