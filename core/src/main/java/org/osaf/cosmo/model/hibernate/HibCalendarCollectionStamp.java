@@ -1,12 +1,12 @@
 /*
  * Copyright 2006-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,29 +15,23 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.VTimeZone;
-
+import net.fortuna.ical4j.model.property.TzId;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.osaf.cosmo.hibernate.validator.Timezone;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
-import org.osaf.cosmo.model.CalendarCollectionStamp;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.EventStamp;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.Stamp;
+import org.osaf.cosmo.model.*;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 
 /**
@@ -48,28 +42,28 @@ import org.osaf.cosmo.model.Stamp;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibCalendarCollectionStamp extends HibStamp implements
         java.io.Serializable, ICalendarConstants, CalendarCollectionStamp {
-    
+
     // CalendarCollection specific attributes
     public static final QName ATTR_CALENDAR_TIMEZONE = new HibQName(
             CalendarCollectionStamp.class, "timezone");
-    
+
     public static final QName ATTR_CALENDAR_DESCRIPTION = new HibQName(
             CalendarCollectionStamp.class, "description");
-    
+
     public static final QName ATTR_CALENDAR_LANGUAGE = new HibQName(
             CalendarCollectionStamp.class, "language");
-   
+
     /** default constructor */
     public HibCalendarCollectionStamp() {
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Stamp#getType()
      */
     public String getType() {
         return "calendar";
     }
-    
+
     public HibCalendarCollectionStamp(CollectionItem collection) {
         this();
         setItem(collection);
@@ -79,7 +73,7 @@ public class HibCalendarCollectionStamp extends HibStamp implements
         CalendarCollectionStamp stamp = new HibCalendarCollectionStamp();
         return stamp;
     }
-        
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.CalendarCollectionStamp#getDescription()
      */
@@ -131,7 +125,7 @@ public class HibCalendarCollectionStamp extends HibStamp implements
         VTimeZone vtz = (VTimeZone) timezone.getComponents().getComponent(Component.VTIMEZONE);
         return new TimeZone(vtz);
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.CalendarCollectionStamp#getTimezoneName()
      */
@@ -140,7 +134,7 @@ public class HibCalendarCollectionStamp extends HibStamp implements
         if (timezone == null)
             return null;
         return timezone.getComponents().getComponent(Component.VTIMEZONE).
-            getProperties().getProperty(Property.TZID).getValue();
+            getProperties().<TzId>getProperty(Property.TZID).getValue();
     }
 
     /* (non-Javadoc)
@@ -150,7 +144,7 @@ public class HibCalendarCollectionStamp extends HibStamp implements
         // timezone stored as ICalendarAttribute on Item
         HibICalendarAttribute.setValue(getItem(), ATTR_CALENDAR_TIMEZONE, timezone);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.CalendarCollectionStamp#getEventStamps()
      */
@@ -165,7 +159,7 @@ public class HibCalendarCollectionStamp extends HibStamp implements
         return events;
     }
 
-    
+
     /**
      * Return CalendarCollectionStamp from Item
      * @param item

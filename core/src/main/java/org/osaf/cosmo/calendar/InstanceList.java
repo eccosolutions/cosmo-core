@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,37 +15,21 @@
  */
 package org.osaf.cosmo.calendar;
 
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.parameter.Range;
+import net.fortuna.ical4j.model.parameter.Value;
+import net.fortuna.ical4j.model.property.*;
+import net.fortuna.ical4j.util.Dates;
+
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.DateList;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.Parameter;
-import net.fortuna.ical4j.model.Period;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.PropertyList;
-import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.parameter.Range;
-import net.fortuna.ical4j.model.parameter.Value;
-import net.fortuna.ical4j.model.property.DtEnd;
-import net.fortuna.ical4j.model.property.DtStart;
-import net.fortuna.ical4j.model.property.Duration;
-import net.fortuna.ical4j.model.property.ExDate;
-import net.fortuna.ical4j.model.property.ExRule;
-import net.fortuna.ical4j.model.property.RDate;
-import net.fortuna.ical4j.model.property.RRule;
-import net.fortuna.ical4j.model.property.RecurrenceId;
-import net.fortuna.ical4j.util.Dates;
-
 /**
  * @author cyrusdaboo
- * 
+ *
  * A list of instances . Instances are created by adding a component, either the
  * master recurrence component or an overridden instance of one. Its is the
  * responsibility of the caller to ensure all the components added are for the
@@ -58,7 +42,7 @@ public class InstanceList extends TreeMap {
     private static final long serialVersionUID = 1838360990532590681L;
     private boolean isUTC = false;
     private TimeZone timezone = null;
-    
+
     public InstanceList() {
         super();
     }
@@ -66,7 +50,7 @@ public class InstanceList extends TreeMap {
     /**
      * Add a component (either master or override instance) if it falls within
      * the specified time range.
-     * 
+     *
      * @param comp
      * @param rangeStart
      * @param rangeEnd
@@ -80,7 +64,7 @@ public class InstanceList extends TreeMap {
             addOverride(comp, rangeStart, rangeEnd);
         }
     }
-    
+
     /**
      * @return if the InstanceList generates instances in UTC format.
      */
@@ -97,7 +81,7 @@ public class InstanceList extends TreeMap {
     public void setUTC(boolean isUTC) {
         this.isUTC = isUTC;
     }
-    
+
     /**
      * @return timezone used to convert floating times to UTC.  Only
      * used if isUTC is set to true.
@@ -117,7 +101,7 @@ public class InstanceList extends TreeMap {
 
     /**
      * Add a master component if it falls within the specified time range.
-     * 
+     *
      * @param comp
      * @param rangeStart
      * @param rangeEnd
@@ -125,20 +109,20 @@ public class InstanceList extends TreeMap {
     protected void addMaster(Component comp, Date rangeStart, Date rangeEnd) {
 
         Date start = getStartDate(comp);
-        
+
         if (start == null) {
             return;
         }
- 
+
         Value startValue = start instanceof DateTime ? Value.DATE_TIME : Value.DATE;
-        
+
         start = convertToUTCIfNecessary(start);
-        
+
         if(start instanceof DateTime) {
             // adjust floating time if timezone is present
             start = adjustFloatingDateIfNecessary(start);
         }
-        
+
         Dur duration = null;
         Date end = getEndDate(comp);
         if (end == null) {
@@ -171,16 +155,16 @@ public class InstanceList extends TreeMap {
             }
             duration = new Dur(start, end);
         }
-        
+
         // Always add first instance if included in range..
-        if (dateBefore(start, rangeEnd) && 
-                (dateAfter(end, rangeStart)|| 
+        if (dateBefore(start, rangeEnd) &&
+                (dateAfter(end, rangeStart)||
                  dateEquals(end,  rangeStart))) {
             Instance instance = new Instance(comp, start, end);
             put(instance.getRid().toString(), instance);
         }
-        
-        
+
+
         // recurrence dates..
         PropertyList rDates = comp.getProperties()
                 .getProperties(Property.RDATE);
@@ -219,25 +203,25 @@ public class InstanceList extends TreeMap {
         // recurrence rules..
         PropertyList rRules = comp.getProperties()
                 .getProperties(Property.RRULE);
-        
+
         // Adjust startRange to account for instances that occur before
         // the startRange, and end after it
         Date adjustedRangeStart = null;
         Date ajustedRangeEnd = null;
-        
+
         if(!rRules.isEmpty()) {
             adjustedRangeStart = adjustStartRangeIfNecessary(rangeStart, start, duration);
             ajustedRangeEnd = adjustEndRangeIfNecessary(rangeEnd, start);
         }
-        
+
         for (Iterator i = rRules.iterator(); i.hasNext();) {
             RRule rrule = (RRule) i.next();
-            
+
             DateList startDates = rrule.getRecur().getDates(start, adjustedRangeStart,
                     ajustedRangeEnd,
                     (start instanceof DateTime) ? Value.DATE_TIME : Value.DATE);
             for (int j = 0; j < startDates.size(); j++) {
-                Date sd = (Date) startDates.get(j);
+                Date sd = startDates.get(j);
                 Date startDate = org.osaf.cosmo.calendar.util.Dates.getInstance(sd, start);
                 Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getTime(sd), start);
                 Instance instance = new Instance(comp, startDate, endDate);
@@ -264,7 +248,7 @@ public class InstanceList extends TreeMap {
             adjustedRangeStart = adjustStartRangeIfNecessary(rangeStart, start, duration);
             ajustedRangeEnd = adjustEndRangeIfNecessary(rangeEnd, start);
         }
-           
+
         for (Iterator i = exRules.iterator(); i.hasNext();) {
             ExRule exrule = (ExRule) i.next();
             DateList startDates = exrule.getRecur().getDates(start, adjustedRangeStart,
@@ -280,7 +264,7 @@ public class InstanceList extends TreeMap {
 
     /**
      * Add an override component if it falls within the specified time range.
-     * 
+     *
      * @param comp
      * @param rangeStart
      * @param rangeEnd
@@ -294,7 +278,7 @@ public class InstanceList extends TreeMap {
         // Verify if component is an override
         if (comp.getProperties().getProperty(Property.RECURRENCE_ID) == null)
             return false;
-        
+
         // First check to see that the appropriate properties are present.
 
         // We need a DTSTART.
@@ -303,14 +287,14 @@ public class InstanceList extends TreeMap {
             return false;
 
         Value startValue = dtstart instanceof DateTime ? Value.DATE_TIME : Value.DATE;
-        
+
         dtstart = convertToUTCIfNecessary(dtstart);
-        
+
         if(dtstart instanceof DateTime) {
             // adjust floating time if timezone is present
             dtstart = adjustFloatingDateIfNecessary(dtstart);
         }
-        
+
         // We need either DTEND or DURATION.
         Date dtend = getEndDate(comp);
         if (dtend == null) {
@@ -350,7 +334,7 @@ public class InstanceList extends TreeMap {
         riddt = convertToUTCIfNecessary(riddt);
         if(riddt instanceof DateTime)
             riddt = adjustFloatingDateIfNecessary(riddt);
-        
+
         boolean future = getRange(comp);
 
         Instance instance = new Instance(comp, dtstart, dtend, riddt, true,
@@ -362,7 +346,7 @@ public class InstanceList extends TreeMap {
             remove(key);
             modified = true;
         }
-        
+
         // Add modification instance if its in the range
         if (dtstart.before(rangeEnd)
                 && dtend.after(rangeStart)) {
@@ -371,9 +355,8 @@ public class InstanceList extends TreeMap {
         }
 
         // Handle THISANDFUTURE if present
-        Range range = (Range) comp.getProperties().getProperty(
-                Property.RECURRENCE_ID).getParameters().getParameter(
-                Parameter.RANGE);
+        Range range = comp.getProperties().<RecurrenceId>getProperty(Property.RECURRENCE_ID)
+                .getParameters().getParameter(Parameter.RANGE);
 
         // TODO Ignoring THISANDPRIOR
         if ((range != null) && Range.THISANDFUTURE.equals(range)) {
@@ -397,16 +380,16 @@ public class InstanceList extends TreeMap {
             for (Iterator iter = sortedKeys.iterator(); iter.hasNext();) {
                 String ikey = (String) iter.next();
                 if (ikey.equals(key) || (!containsKey && ikey.compareTo(key)>0)) {
-                    
+
                     if(containsKey && !iter.hasNext())
                         continue;
                     else if(containsKey)
                         ikey = (String) iter.next();
-                    
+
                     boolean moreKeys = true;
                     boolean firstMatch = true;
                     while(moreKeys==true) {
-                        
+
                         // The target key is already set for the first
                         // iteration, so for all other iterations
                         // get the next target key.
@@ -414,7 +397,7 @@ public class InstanceList extends TreeMap {
                             firstMatch = false;
                         else
                             ikey = (String) iter.next();
-                        
+
                         Instance oldinstance = (Instance) get(ikey);
 
                         // Do not override an already overridden instance
@@ -456,53 +439,53 @@ public class InstanceList extends TreeMap {
                         remove(ikey);
                         put(newinstance.getRid().toString(), newinstance);
                         modified = true;
-                        
+
                         if(!iter.hasNext())
                             moreKeys = false;
                     }
                 }
             }
         }
-        
+
         return modified;
     }
 
     private Date getStartDate(Component comp) {
-        DtStart prop = (DtStart) comp.getProperties().getProperty(
+        DtStart prop = comp.getProperties().getProperty(
                 Property.DTSTART);
         return (prop != null) ? prop.getDate() : null;
     }
 
     private Date getEndDate(Component comp) {
-        DtEnd dtEnd = (DtEnd) comp.getProperties().getProperty(Property.DTEND);
+        DtEnd dtEnd = comp.getProperties().getProperty(Property.DTEND);
         // No DTEND? No problem, we'll use the DURATION if present.
         if (dtEnd == null) {
             Date dtStart = getStartDate(comp);
-            Duration duration = (Duration) comp.getProperties().getProperty(
-                    Property.DURATION);
+            Duration duration = comp.getProperties().getProperty(Property.DURATION);
             if (duration != null) {
-                dtEnd = new DtEnd(org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getDuration()
-                        .getTime(dtStart), dtStart));
+                return org.osaf.cosmo.calendar.util.Dates.getInstance(
+                        new Date(dtStart.toInstant().plus(duration.getDuration()).toEpochMilli()),
+                        dtStart);
             }
         }
         return (dtEnd != null) ? dtEnd.getDate() : null;
     }
 
     private final Date getRecurrenceId(Component comp) {
-        RecurrenceId rid = (RecurrenceId) comp.getProperties().getProperty(
+        RecurrenceId rid = comp.getProperties().getProperty(
                 Property.RECURRENCE_ID);
         return (rid != null) ? rid.getDate() : null;
     }
 
     private final boolean getRange(Component comp) {
-        RecurrenceId rid = (RecurrenceId) comp.getProperties().getProperty(
+        RecurrenceId rid = comp.getProperties().getProperty(
                 Property.RECURRENCE_ID);
         if (rid == null)
             return false;
         Parameter range = rid.getParameters().getParameter(Parameter.RANGE);
         return (range != null) && "THISANDFUTURE".equals(range.getValue());
     }
-    
+
     /**
      * If the InstanceList is configured to convert all date/times to UTC,
      * then convert the given Date instance into a UTC DateTime.
@@ -510,65 +493,65 @@ public class InstanceList extends TreeMap {
     private Date convertToUTCIfNecessary(Date date) {
         if(!isUTC)
             return date;
-        
+
         return ICalendarUtils.convertToUTC(date, timezone);
     }
-    
+
     /**
      * Adjust startRange to account for instances that begin before the given
      * startRange, but end after. For example if you have a daily recurring event
-     * at 8am lasting for an hour and your startRange is 8:01am, then you 
+     * at 8am lasting for an hour and your startRange is 8:01am, then you
      * want to adjust the range back an hour to catch the instance that is
      * already occurring.
      */
     private Date adjustStartRangeIfNecessary(Date startRange, Date start, Dur dur) {
-        
+
         // If start is a Date, then we need to convert startRange to
         // a Date using the timezone present
         if ((!(start instanceof DateTime)) && timezone != null) {
             return ICalendarUtils.normalizeUTCDateTimeToDate(
                     (DateTime) startRange, timezone);
         }
-        
+
         // Otherwise start is a DateTime
-        
+
         // If startRange is not the event start, no adjustment necessary
         if(!startRange.after(start))
             return startRange;
-        
+
         // Need to adjust startRange back one duration to account for instances
         // that occur before the startRange, but end after the startRange
         Dur negatedDur = dur.negate();
-       
+
         Calendar cal = Dates.getCalendarInstance(startRange);
         cal.setTime(negatedDur.getTime(startRange));
-        
-        // Return new startRange only if it is before the original startRange 
+
+        // Return new startRange only if it is before the original startRange
         if(cal.getTime().before(startRange))
             return org.osaf.cosmo.calendar.util.Dates.getInstance(cal.getTime(), startRange);
-        
+
         return startRange;
     }
-    
+
     /**
      * Adjust endRange for Date instances.  First convert the UTC endRange
      * into a Date instance, then add a second
      */
     private Date adjustEndRangeIfNecessary(Date endRange, Date start) {
-        
+
         // If instance is DateTime or timezone is not present, then
         // do nothing
         if (start instanceof DateTime || timezone == null)
             return endRange;
-        
-        
+
+
         endRange = ICalendarUtils.normalizeUTCDateTimeToDefaultOffset(
                 (DateTime) endRange, timezone);
-        
-       
+
+
         return endRange;
     }
-    
+
     /**
      * Adjust a floating time if a timezone is present.  A floating time
      * is initially created with the default system timezone.  If a timezone
@@ -577,44 +560,44 @@ public class InstanceList extends TreeMap {
      * a query made by someone whos timezone is in Australia.  If no timezone is
      * set for the InstanceList, then the system default timezone will be
      * used in floating time calculations.
-     * 
-     * What happens is a floating time will get converted into a 
+     *
+     * What happens is a floating time will get converted into a
      * date/time with a timezone.  This is ok for comparison and recurrence
      * generation purposes.  Note that Instances will get indexed as a UTC
-     * date/time and for floating DateTimes, the the recurrenceId associated 
+     * date/time and for floating DateTimes, the the recurrenceId associated
      * with the Instance loses its "floating" property.
      */
     private Date adjustFloatingDateIfNecessary(Date date) {
         if(timezone==null || ! (date instanceof DateTime))
             return date;
-        
+
         DateTime dtDate = (DateTime) date;
         if(dtDate.isUtc() || dtDate.getTimeZone()!=null)
             return date;
-        
+
         try {
             return new DateTime(dtDate.toString(), timezone);
         } catch (ParseException e) {
             throw new RuntimeException("error parsing date");
         }
-        
+
     }
-    
+
     private boolean dateBefore(Date date1, Date date2) {
         return ICalendarUtils.beforeDate(date1, date2, timezone);
     }
-    
+
     private boolean dateAfter(Date date1, Date date2) {
         return ICalendarUtils.afterDate(date1, date2, timezone);
     }
-    
+
     private boolean dateEquals(Date date1, Date date2) {
         return ICalendarUtils.equalsDate(date1, date2, timezone);
     }
-    
+
     private boolean inRange(Date dateStart, Date dateEnd, Date rangeStart, Date rangeEnd) {
         return  dateBefore(dateStart, rangeEnd)
                 && dateAfter(dateEnd, rangeStart);
     }
-    
+
 }

@@ -1,12 +1,12 @@
 /*
  * Copyright 2006-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,24 +15,18 @@
  */
 package org.osaf.cosmo.model.mock;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.VTimeZone;
-
+import net.fortuna.ical4j.model.property.TzId;
 import org.osaf.cosmo.hibernate.validator.Timezone;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
-import org.osaf.cosmo.model.CalendarCollectionStamp;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.EventStamp;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.QName;
-import org.osaf.cosmo.model.Stamp;
+import org.osaf.cosmo.model.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -40,30 +34,30 @@ import org.osaf.cosmo.model.Stamp;
  */
 public class MockCalendarCollectionStamp extends MockStamp implements
         java.io.Serializable, ICalendarConstants, CalendarCollectionStamp {
-    
+
     // CalendarCollection specific attributes
     public static final QName ATTR_CALENDAR_TIMEZONE = new MockQName(
             CalendarCollectionStamp.class, "timezone");
-    
+
     public static final QName ATTR_CALENDAR_DESCRIPTION = new MockQName(
             CalendarCollectionStamp.class, "description");
-    
+
     public static final QName ATTR_CALENDAR_LANGUAGE = new MockQName(
             CalendarCollectionStamp.class, "language");
-    
+
     private transient Calendar calendar;
-    
+
     /** default constructor */
     public MockCalendarCollectionStamp() {
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceCalendarCollectionStamp#getType()
      */
     public String getType() {
         return "calendar";
     }
-    
+
     public MockCalendarCollectionStamp(CollectionItem collection) {
         this();
         setItem(collection);
@@ -73,7 +67,7 @@ public class MockCalendarCollectionStamp extends MockStamp implements
         CalendarCollectionStamp stamp = new MockCalendarCollectionStamp();
         return stamp;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceCalendarCollectionStamp#getDescription()
      */
@@ -125,7 +119,7 @@ public class MockCalendarCollectionStamp extends MockStamp implements
         VTimeZone vtz = (VTimeZone) timezone.getComponents().getComponent(Component.VTIMEZONE);
         return new TimeZone(vtz);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceCalendarCollectionStamp#getTimezoneName()
      */
@@ -134,7 +128,7 @@ public class MockCalendarCollectionStamp extends MockStamp implements
         if (timezone == null)
             return null;
         return timezone.getComponents().getComponent(Component.VTIMEZONE).
-            getProperties().getProperty(Property.TZID).getValue();
+            getProperties().<TzId>getProperty(Property.TZID).getValue();
     }
 
     /* (non-Javadoc)
@@ -150,15 +144,14 @@ public class MockCalendarCollectionStamp extends MockStamp implements
      */
     public Set<EventStamp> getEventStamps() {
         Set<EventStamp> events = new HashSet<EventStamp>();
-        for (Iterator<Item> i= ((CollectionItem) getItem()).getChildren().iterator(); i.hasNext();) {
-            Item child = i.next();
+        for (Item child : ((CollectionItem) getItem()).getChildren()) {
             Stamp stamp = child.getStamp(EventStamp.class);
-            if(stamp!=null)
+            if (stamp != null)
                 events.add((EventStamp) stamp);
         }
         return events;
     }
-    
+
     /**
      * Return CalendarCollectionStamp from Item
      * @param item

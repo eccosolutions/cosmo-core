@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,37 +15,18 @@
  */
 package org.osaf.cosmo.calendar.data;
 
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.component.*;
+import net.fortuna.ical4j.model.parameter.Range;
+import net.fortuna.ical4j.model.property.*;
+import org.osaf.cosmo.calendar.ICalendarUtils;
+import org.osaf.cosmo.calendar.Instance;
+import org.osaf.cosmo.calendar.InstanceList;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
-
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.ComponentList;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.Parameter;
-import net.fortuna.ical4j.model.Period;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.PropertyList;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.component.VJournal;
-import net.fortuna.ical4j.model.component.VTimeZone;
-import net.fortuna.ical4j.model.component.VToDo;
-import net.fortuna.ical4j.model.parameter.Range;
-import net.fortuna.ical4j.model.property.DateProperty;
-import net.fortuna.ical4j.model.property.DtEnd;
-import net.fortuna.ical4j.model.property.DtStart;
-import net.fortuna.ical4j.model.property.ExDate;
-import net.fortuna.ical4j.model.property.ExRule;
-import net.fortuna.ical4j.model.property.RDate;
-import net.fortuna.ical4j.model.property.RRule;
-import net.fortuna.ical4j.model.property.RecurrenceId;
-
-import org.osaf.cosmo.calendar.ICalendarUtils;
-import org.osaf.cosmo.calendar.Instance;
-import org.osaf.cosmo.calendar.InstanceList;
 
 /**
  * This is a filter object that allows filtering a {@link Calendar} by
@@ -105,15 +86,15 @@ public class OutputFilter {
         // Create a new calendar with the same top-level properties as current
         Calendar newCal = new Calendar();
         newCal.getProperties().addAll(calendar.getProperties());
-       
+
         InstanceList instances = new InstanceList();
         ComponentList overrides = new ComponentList();
-        
+
         // Limit range
         Period period = getLimit();
-        
+
         // Filter override components based on limit range
-        for (Component comp : (List<Component>) calendar.getComponents()) {
+        for (CalendarComponent comp : calendar.getComponents()) {
             // Only care about VEVENT, VJOURNAL, VTODO
             if ((comp instanceof VEvent) ||
                 (comp instanceof VJournal) ||
@@ -133,18 +114,18 @@ public class OutputFilter {
                 newCal.getComponents().add(comp);
             }
         }
-        
+
         // Add override components to InstanceList.
         // Only add override if it changes anything about the InstanceList.
-        for (Component comp : (List<Component>) overrides) {
+        for (CalendarComponent comp : (List<CalendarComponent>) overrides) {
             if (instances.addOverride(comp, period.getStart(),
                     period.getEnd()))
                 newCal.getComponents().add(comp);
         }
-        
+
         return newCal;
     }
-    
+
     private Calendar createExpanded(Calendar calendar) {
         // Create a new calendar with the same top-level properties as this one
         Calendar newCal = new Calendar();
@@ -154,8 +135,8 @@ public class OutputFilter {
         // required
         InstanceList instances = new InstanceList();
         ComponentList overrides = new ComponentList();
-        Component master = null;
-        for (Component comp : (List<Component>) calendar.getComponents()) {
+        CalendarComponent master = null;
+        for (CalendarComponent comp : calendar.getComponents()) {
             if ((comp instanceof VEvent) ||
                 (comp instanceof VJournal) ||
                 (comp instanceof VToDo)) {
@@ -173,7 +154,7 @@ public class OutputFilter {
             } else {
                 // Create new component and convert properties to UTC
                 try {
-                    Component newcomp = comp.copy();
+                    CalendarComponent newcomp = (CalendarComponent) comp.copy();
                     componentToUTC(newcomp);
                     newCal.getComponents().add(newcomp);
                 } catch (Exception e) {
@@ -182,7 +163,7 @@ public class OutputFilter {
             }
         }
 
-        for (Component comp : (List<Component>) overrides)
+        for (CalendarComponent comp : (List<CalendarComponent>) overrides)
             instances.addComponent(comp, getExpand().getStart(),
                     getExpand().getEnd());
 
@@ -217,13 +198,13 @@ public class OutputFilter {
             if ((getExpand().getStart().compareTo(instance.getEnd()) >= 0) ||
                 (getExpand().getEnd().compareTo(instance.getStart()) <= 0))
                 continue;
-            
+
             // Create appropriate copy
-            Component copy = null;
+            CalendarComponent copy = null;
             try {
-                copy = instance.getComp() == master ?
-                    masterCopy.copy() :
-                    instance.getComp().copy();
+                copy = (CalendarComponent) (instance.getComp() == master ?
+                                    masterCopy.copy() :
+                                    instance.getComp().copy());
                 componentToUTC(copy);
             } catch (Exception e) {
                 throw new RuntimeException("Error copying component", e);
@@ -232,7 +213,7 @@ public class OutputFilter {
             // Adjust the copy to match the actual instance info
             if (isRecurring) {
                 // Add RECURRENCE-ID, replacing existing if present
-                RecurrenceId rid = (RecurrenceId) copy.getProperties()
+                RecurrenceId rid = copy.getProperties()
                     .getProperty(Property.RECURRENCE_ID);
                 if (rid != null)
                     copy.getProperties().remove(rid);
@@ -240,8 +221,7 @@ public class OutputFilter {
                 copy.getProperties().add(rid);
 
                 // Adjust DTSTART (in UTC)
-                DtStart olddtstart = (DtStart)
-                    copy.getProperties().getProperty(Property.DTSTART);
+                DtStart olddtstart = copy.getProperties().getProperty(Property.DTSTART);
                 if (olddtstart != null)
                     copy.getProperties().remove(olddtstart);
                 DtStart newdtstart = new DtStart(instance.getStart());
@@ -252,8 +232,7 @@ public class OutputFilter {
                 copy.getProperties().add(newdtstart);
 
                 // If DTEND present, replace it (in UTC)
-                DtEnd olddtend = (DtEnd)
-                    copy.getProperties().getProperty(Property.DTEND);
+                DtEnd olddtend = copy.getProperties().getProperty(Property.DTEND);
                 if (olddtend != null) {
                     copy.getProperties().remove(olddtend);
                     DtEnd newdtend = new DtEnd(instance.getEnd());
@@ -274,7 +253,7 @@ public class OutputFilter {
 
     private void componentToUTC(Component comp) {
         // Do to each top-level property
-        for (Property prop : (List<Property>) comp.getProperties()) {
+        for (Property prop : comp.getProperties()) {
             if (prop instanceof DateProperty) {
                 DateProperty dprop = (DateProperty) prop;
                 if ((dprop.getDate() instanceof DateTime) &&
@@ -366,7 +345,7 @@ public class OutputFilter {
         if (rid == null)
             return true;
 
-        Range range = (Range) rid.getParameter(Parameter.RANGE);
+        Range range = rid.getParameter(Parameter.RANGE);
         DtStart dtstart = event.getStartDate();
         DtEnd dtend = event.getEndDate();
         DateTime start = new DateTime(dtstart.getDate());
@@ -400,7 +379,7 @@ public class OutputFilter {
                         return false;
                 } else
                     return false;
-            } 
+            }
         }
 
         return true;

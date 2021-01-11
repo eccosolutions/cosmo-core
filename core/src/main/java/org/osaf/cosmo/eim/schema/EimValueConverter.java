@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,26 +15,20 @@
  */
 package org.osaf.cosmo.eim.schema;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.DateList;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.Parameter;
-import net.fortuna.ical4j.model.Recur;
+import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.parameter.Related;
 import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.property.Trigger;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.ICalDate;
 import org.osaf.cosmo.calendar.UnknownTimeZoneException;
-import org.osaf.cosmo.eim.schema.text.DurationFormat;
+
+import java.text.ParseException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Converts between EIM field values and model values (mainly
@@ -154,17 +148,17 @@ public class EimValueConverter implements EimSchemaConstants {
     public static String fromIcalTrigger(Trigger trigger) {
         if(trigger==null)
             return null;
-        
+
         if(trigger.getDateTime()!=null)
             return ";VALUE=DATE-TIME:" + trigger.getDateTime().toString();
-        
+
         Related related = (Related) trigger.getParameters().getParameter(Parameter.RELATED);
         if(related != null)
             return ";" + related.toString() + ":" + trigger.getDuration().toString();
         else
             return trigger.getDuration().toString();
     }
-    
+
     /**
      * Generate an icalendar TRIGGER value representation for an absolute trigger
      * with the given absolute trigger time.
@@ -215,19 +209,19 @@ public class EimValueConverter implements EimSchemaConstants {
         } else {
             propVal = text;
         }
-        
+
         Trigger trigger;
         try {
             trigger = new Trigger();
             if(Related.END.equals(related)) {
                 trigger.getParameters().add(Related.END);
-                Dur dur = DurationFormat.getInstance().parse(propVal);
+                Duration dur = Duration.parse(propVal);
                 trigger.setDuration(dur);
             } else if(Value.DATE_TIME.equals(value)) {
                 trigger.getParameters().add(Value.DATE_TIME);
                 trigger.setDateTime(new DateTime(propVal));
             } else {
-                Dur dur = DurationFormat.getInstance().parse(propVal);
+                Duration dur = Duration.parse(propVal);
                 trigger.setDuration(dur);
             }
             trigger.validate();
@@ -235,6 +229,6 @@ public class EimValueConverter implements EimSchemaConstants {
         } catch (Exception e) {
             throw new EimConversionException("invalid trigger: " + text);
         }
-        
+
     }
 }

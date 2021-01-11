@@ -32,6 +32,7 @@ import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.mock.*;
 
 import java.io.FileInputStream;
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -348,7 +349,7 @@ public class EntityConverterTest extends TestCase {
         EventStamp eventStamp = new MockEventStamp(master);
         eventStamp.createCalendar();
         eventStamp.setStartDate(new DateTime("20070212T074500"));
-        eventStamp.setDuration(new Dur("PT1H"));
+        eventStamp.setDuration(Duration.parse("PT1H"));
         eventStamp.setLocation("master location");
         DateList dates = new ICalDate(";VALUE=DATE-TIME:20070212T074500,20070213T074500").getDateList();
         eventStamp.setRecurrenceDates(dates);

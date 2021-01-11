@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@ package org.osaf.cosmo.calendar.util;
 
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -26,15 +25,18 @@ import org.apache.commons.logging.LogFactory;
  *
  */
 public class Dates {
-    
+
     private static final Log log =
         LogFactory.getLog(Dates.class);
-    
-    
+
+    public static Date getInstance(final java.time.Instant date, final Date type) {
+        return getInstance(new Date(date.toEpochMilli()), type);
+    }
+
     /**
      * Returns a new date instance matching the type and timezone of the other
      * date. If no type is specified a DateTime instance is returned.
-     * 
+     *
      * @param date
      *            a seed Java date instance
      * @param type
