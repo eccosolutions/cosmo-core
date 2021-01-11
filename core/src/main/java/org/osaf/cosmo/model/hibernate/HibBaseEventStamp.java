@@ -200,7 +200,7 @@ public abstract class HibBaseEventStamp extends HibStamp
      * @see org.osaf.cosmo.model.BaseEventStamp#setEndDate(net.fortuna.ical4j.model.Date)
      */
     public void setEndDate(Date date) {
-        DtEnd dtEnd = getEvent().getEndDate();
+        DtEnd dtEnd = getEvent().getEndDate(false); // Don't derive - we just want the property when setting
         if (dtEnd != null && date != null)
             dtEnd.setDate(date);
         else  if(dtEnd !=null && date == null) {
@@ -228,7 +228,7 @@ public abstract class HibBaseEventStamp extends HibStamp
             prop.getParameters().remove(value);
 
         // Add VALUE=DATE for Date values, otherwise
-        // leave out VALUE=DATE-TIME because it is redundant
+        // leave out VALUE=DATE-TIME because it is redundant (presumably with  with getEvent().getProperties().add(dtEnd);
         if(! (date instanceof DateTime))
             prop.getParameters().add(Value.DATE);
     }
