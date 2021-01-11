@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,11 @@ package org.osaf.cosmo.model.util;
 
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Dur;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.property.Trigger;
-
 import org.osaf.cosmo.calendar.ICalendarUtils;
 import org.osaf.cosmo.calendar.util.Dates;
-import org.osaf.cosmo.model.BaseEventStamp;
-import org.osaf.cosmo.model.EventExceptionStamp;
-import org.osaf.cosmo.model.EventStamp;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.NoteOccurrence;
-import org.osaf.cosmo.model.StampUtils;
+import org.osaf.cosmo.model.*;
 
 /**
  * Utility functions for NoteItems
@@ -56,11 +49,11 @@ public class NoteUtils {
         if (note instanceof NoteOccurrence) {
             NoteOccurrence no = (NoteOccurrence) note;
             Date startDate = no.getOccurrenceDate();
-            Dur dur = StampUtils.getBaseEventStamp(note).getDuration();
+            var dur = StampUtils.getBaseEventStamp(note).getDuration();
             if (dur == null)
                 return startDate;
 
-            return Dates.getInstance(dur.getTime(startDate), startDate);
+            return Dates.getInstance(startDate.toInstant().plus(dur), startDate);
         }
 
         BaseEventStamp es = StampUtils.getBaseEventStamp(note);
@@ -74,11 +67,11 @@ public class NoteUtils {
         // handle mod with missing duration
         if (note.getModifies() != null) {
             Date startDate = es.getStartDate();
-            Dur dur = ((EventExceptionStamp) es).getMasterStamp().getDuration();
+            var dur = ((EventExceptionStamp) es).getMasterStamp().getDuration();
             if (dur == null)
                 return startDate;
             else
-                return Dates.getInstance(dur.getTime(startDate), startDate);
+                return Dates.getInstance(startDate.toInstant().plus(dur), startDate);
         }
 
         // return startDate if all else fails

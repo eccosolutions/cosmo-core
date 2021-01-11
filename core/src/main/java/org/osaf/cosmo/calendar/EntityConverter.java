@@ -116,8 +116,7 @@ public class EntityConverter {
         items.add(note);
 
         // add modifications to set of items
-        for(Iterator<NoteItem> it = note.getModifications().iterator(); it.hasNext();) {
-            NoteItem mod = it.next();
+        for (NoteItem mod : note.getModifications()) {
             items.add(mod);
         }
 
@@ -241,7 +240,7 @@ public class EntityConverter {
         // different tz definitions for a tzid, *shrug* last one wins
         // for this same reason, we use a single calendar builder/time
         // zone registry.
-        HashMap tzIdx = new HashMap();
+        HashMap<String, CalendarComponent> tzIdx = new HashMap<>();
 
         for(Item item: collection.getChildren()) {
            if(!(item instanceof ContentItem))
@@ -255,22 +254,20 @@ public class EntityConverter {
                continue;
 
            // index VTIMEZONE and add all other components
-           for (Iterator j=childCalendar.getComponents().iterator();
-               j.hasNext();) {
-               Component comp = (Component) j.next();
-               if(Component.VTIMEZONE.equals(comp.getName())) {
-                   Property tzId = comp.getProperties().getProperty(Property.TZID);
-                   if (! tzIdx.containsKey(tzId.getValue()))
-                       tzIdx.put(tzId.getValue(), comp);
-               } else {
-                   calendar.getComponents().add(comp);
-               }
-           }
+            for (CalendarComponent comp : childCalendar.getComponents()) {
+                if (Component.VTIMEZONE.equals(comp.getName())) {
+                    Property tzId = comp.getProperties().getProperty(Property.TZID);
+                    if (!tzIdx.containsKey(tzId.getValue()))
+                        tzIdx.put(tzId.getValue(), comp);
+                } else {
+                    calendar.getComponents().add(comp);
+                }
+            }
         }
 
         // add VTIMEZONEs
-        for (Iterator<Component> i=tzIdx.values().iterator(); i.hasNext();) {
-            calendar.getComponents().add(0,i.next());
+        for (CalendarComponent calendarComponent : tzIdx.values()) {
+            calendar.getComponents().add(0, calendarComponent);
         }
 
         return calendar;
@@ -359,8 +356,8 @@ public class EntityConverter {
         // build timezone map that includes all timezones in master calendar
         ComponentList timezones = masterCal.getComponents(Component.VTIMEZONE);
         HashMap<String, VTimeZone> tzMap = new HashMap<String, VTimeZone>();
-        for(Iterator it = timezones.iterator(); it.hasNext();) {
-            VTimeZone vtz = (VTimeZone) it.next();
+        for (Object timezone : timezones) {
+            VTimeZone vtz = (VTimeZone) timezone;
             tzMap.put(vtz.getTimeZoneId().getValue(), vtz);
         }
 
@@ -562,8 +559,7 @@ public class EntityConverter {
     }
 
     private VAlarm getDisplayAlarm(VEvent event) {
-        for(Iterator it = event.getAlarms().iterator();it.hasNext();) {
-            VAlarm alarm = (VAlarm) it.next();
+        for (VAlarm alarm : event.getAlarms()) {
             if (alarm.getProperties().getProperty(Property.ACTION).equals(
                     Action.DISPLAY))
                 return alarm;
@@ -597,10 +593,9 @@ public class EntityConverter {
         EventStamp eventStamp = StampUtils.getEventStamp(masterNote);
 
         // get list of exceptions (VEVENT with RECURRENCEID)
-        for (Iterator<VEvent> i = vevents.iterator(); i.hasNext();) {
-            VEvent event = i.next();
+        for (VEvent event : (Iterable<VEvent>) vevents) {
             // make sure event has DTSTAMP, otherwise validation will fail
-            if(event.getDateStamp()==null)
+            if (event.getDateStamp() == null)
                 event.getProperties().add(new DtStamp(new DateTime()));
             if (event.getRecurrenceId() != null) {
                 Date recurrenceIdDate = event.getRecurrenceId().getDate();
@@ -641,13 +636,13 @@ public class EntityConverter {
         // by the getCalendar() api.
         ComponentList timezones = calendar.getComponents(Component.VTIMEZONE);
         ArrayList toRemove = new ArrayList();
-        for(Iterator it = timezones.iterator();it.hasNext();) {
-            VTimeZone vtz = (VTimeZone) it.next();
+        for (Object timezone : timezones) {
+            VTimeZone vtz = (VTimeZone) timezone;
             String tzid = vtz.getTimeZoneId().getValue();
             TimeZone tz = TIMEZONE_REGISTRY.getTimeZone(tzid);
             //  Remove timezone iff it matches the one in the registry
-            if(tz!=null) {
-                if(vtz.equals(tz.getVTimeZone()))
+            if (tz != null) {
+                if (vtz.equals(tz.getVTimeZone()))
                     toRemove.add(vtz);
             }
         }
@@ -714,9 +709,9 @@ public class EntityConverter {
 
         // copy VTIMEZONEs to front if present
         EventStamp es = StampUtils.getEventStamp(masterNote);
-        ComponentList vtimezones = es.getEventCalendar().getComponents(Component.VTIMEZONE);
-        for(Iterator<Component> it = vtimezones.iterator(); it.hasNext();)
-            exceptionStamp.getEventCalendar().getComponents().add(0, it.next());
+        ComponentList<CalendarComponent> vtimezones = es.getEventCalendar().getComponents(Component.VTIMEZONE);
+        for (CalendarComponent vtimezone : vtimezones)
+            exceptionStamp.getEventCalendar().getComponents().add(0, vtimezone);
 
         setBaseContentAttributes(noteMod);
         noteMod.setLastModifiedBy(masterNote.getLastModifiedBy());
@@ -733,10 +728,10 @@ public class EntityConverter {
         exceptionStamp.setExceptionEvent(event);
 
         // copy VTIMEZONEs to front if present
-        ComponentList vtimezones = exceptionStamp.getMasterStamp()
+        ComponentList<CalendarComponent> vtimezones = exceptionStamp.getMasterStamp()
                 .getEventCalendar().getComponents(Component.VTIMEZONE);
-        for(Iterator<Component> it = vtimezones.iterator(); it.hasNext();)
-            exceptionStamp.getEventCalendar().getComponents().add(0, it.next());
+        for (CalendarComponent vtimezone : vtimezones)
+            exceptionStamp.getEventCalendar().getComponents().add(0, vtimezone);
 
         noteMod.setLastModifiedBy(noteMod.getModifies().getLastModifiedBy());
         noteMod.setLastModification(ContentItem.Action.EDITED);
@@ -917,21 +912,19 @@ public class EntityConverter {
         ComponentList comps = calendar.getComponents();
         Set<VTimeZone> timezones = new HashSet<VTimeZone>();
 
-        for(Iterator<Component> it = comps.iterator();it.hasNext();) {
-            Component comp = it.next();
+        for (Component comp : (Iterable<Component>) comps) {
             PropertyList props = comp.getProperties();
-            for(Iterator<Property> it2 = props.iterator();it2.hasNext();) {
-                Property prop = it2.next();
-                if(prop instanceof DateProperty) {
+            for (Property prop : (Iterable<Property>) props) {
+                if (prop instanceof DateProperty) {
                     DateProperty dateProp = (DateProperty) prop;
-                    if(dateProp.getDate() instanceof DateTime) {
+                    if (dateProp.getDate() instanceof DateTime) {
                         DateTime dt = (DateTime) dateProp.getDate();
-                        if(dt.getTimeZone()!=null)
+                        if (dt.getTimeZone() != null)
                             timezones.add(dt.getTimeZone().getVTimeZone());
                     }
-                } else if(prop instanceof DateListProperty) {
+                } else if (prop instanceof DateListProperty) {
                     DateListProperty dateProp = (DateListProperty) prop;
-                    if(dateProp.getDates().getTimeZone()!=null)
+                    if (dateProp.getDates().getTimeZone() != null)
                         timezones.add(dateProp.getDates().getTimeZone().getVTimeZone());
                 }
             }
@@ -952,28 +945,27 @@ public class EntityConverter {
         Map<String, ComponentList> componentMap = new HashMap<String, ComponentList>();
 
         ComponentList comps = calendar.getComponents();
-        for(Iterator<Component> it = comps.iterator(); it.hasNext();) {
-            Component comp = it.next();
+        for (Component comp : (Iterable<Component>) comps) {
             // ignore vtimezones for now
-            if(comp instanceof VTimeZone)
+            if (comp instanceof VTimeZone)
                 continue;
 
             Uid uid = (Uid) comp.getProperty(Property.UID);
             RecurrenceId rid = (RecurrenceId) comp.getProperty(Property.RECURRENCE_ID);
 
             String key = uid.getValue();
-            if(rid!=null)
-                key+=rid.toString();
+            if (rid != null)
+                key += rid.toString();
 
             // ignore duplicates
-            if(allComponents.contains(key))
+            if (allComponents.contains(key))
                 continue;
 
             allComponents.add(key);
 
             ComponentList cl = componentMap.get(uid.getValue());
 
-            if(cl==null) {
+            if (cl == null) {
                 cl = new ComponentList();
                 componentMap.put(uid.getValue(), cl);
             }

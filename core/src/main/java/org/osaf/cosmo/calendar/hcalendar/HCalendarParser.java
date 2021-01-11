@@ -15,6 +15,24 @@
  */
 package org.osaf.cosmo.calendar.hcalendar;
 
+import net.fortuna.ical4j.data.CalendarParser;
+import net.fortuna.ical4j.data.ContentHandler;
+import net.fortuna.ical4j.data.ParserException;
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.parameter.Value;
+import net.fortuna.ical4j.model.property.Version;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -23,38 +41,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathException;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
-
-import net.fortuna.ical4j.data.CalendarParser;
-import net.fortuna.ical4j.data.ContentHandler;
-import net.fortuna.ical4j.data.ParserException;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Parameter;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.parameter.Value;
-import net.fortuna.ical4j.model.property.Version;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * A {@link CalendarParser} that parses XHTML documents that include
@@ -214,6 +200,8 @@ public class HCalendarParser implements CalendarParser {
                 throw new ParserException("Could not parse XML", pe.getLineNumber(), e);
             }
             throw new ParserException(e.getMessage(), -1, e);
+        } catch (ParseException | URISyntaxException e) {
+            throw new ParserException(e.getMessage(), -1, e);
         }
     }
 
@@ -270,7 +258,7 @@ public class HCalendarParser implements CalendarParser {
 
     private void buildCalendar(Document d,
                                ContentHandler handler)
-        throws ParserException {
+            throws ParserException, IOException, URISyntaxException, ParseException {
         // "The root class name for hCalendar is "vcalendar". An element with a
         // class name of "vcalendar" is itself called an hCalendar.
         //
@@ -439,8 +427,12 @@ public class HCalendarParser implements CalendarParser {
         } catch (IOException e) {
             throw new RuntimeException("Unknown error setting property value for element '" + className + "'", e);
         }
+        try {
+            handler.endProperty(propName);
+        } catch (URISyntaxException | ParseException | IOException e) {
+            throw new RuntimeException("Error ending property  '" + propName + "'", e);
+        }
 
-        handler.endProperty(propName);
     }
 
     // "The basic format of hCalendar is to use iCalendar object/property

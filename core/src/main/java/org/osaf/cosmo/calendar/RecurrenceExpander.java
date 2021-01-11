@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,41 +15,25 @@
  */
 package org.osaf.cosmo.calendar;
 
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.parameter.Value;
+import net.fortuna.ical4j.model.property.*;
+import net.fortuna.ical4j.util.Dates;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.ComponentList;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.DateList;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.Parameter;
-import net.fortuna.ical4j.model.Period;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.PropertyList;
-import net.fortuna.ical4j.model.Recur;
-import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.parameter.Value;
-import net.fortuna.ical4j.model.property.DtEnd;
-import net.fortuna.ical4j.model.property.DtStart;
-import net.fortuna.ical4j.model.property.Duration;
-import net.fortuna.ical4j.model.property.RDate;
-import net.fortuna.ical4j.model.property.RRule;
-import net.fortuna.ical4j.util.Dates;
 
 /**
  * Utility class that contains apis that that involve
  * expanding recurring components.
  */
 public class RecurrenceExpander {
-    
+
     private static Date MAX_EXPAND_DATE = null;
-   
+
     static {
         try {
             // Expand out to 2030 for those recurrence rules
@@ -58,13 +42,13 @@ public class RecurrenceExpander {
             MAX_EXPAND_DATE = new Date("20300101");
         } catch (ParseException e) {}
     }
-    
+
     public RecurrenceExpander() {
         super();
     }
-    
+
     /**
-     * Return start and end Date that represent the start of the first 
+     * Return start and end Date that represent the start of the first
      * occurrence of a recurring component and the end of the last
      * occurence.  If the recurring component has no end(infinite recurring event),
      * then no end date will be returned.
@@ -75,10 +59,10 @@ public class RecurrenceExpander {
     public Date[] calculateRecurrenceRange(Calendar calendar) {
         ComponentList vevents = calendar.getComponents().getComponents(
                 Component.VEVENT);
-        
+
         List<Component> exceptions = new ArrayList<Component>();
         Component masterComp = null;
-        
+
         // get list of exceptions (VEVENT with RECURRENCEID)
         for (Iterator<VEvent> i = vevents.iterator(); i.hasNext();) {
             VEvent event = i.next();
@@ -86,9 +70,9 @@ public class RecurrenceExpander {
                 exceptions.add(event);
             else
                 masterComp = event;
-            
+
         }
-        
+
         return calculateRecurrenceRange(masterComp, exceptions);
     }
 
@@ -97,21 +81,21 @@ public class RecurrenceExpander {
      * occurence of a recurring component and the end of the last occurence.  If
      * the recurring component has no end(infinite recurring event),
      * then no end date will be returned.
-     * 
+     *
      * @param comp Component to analyze
      * @return array containing start (located at index 0) and end (index 1) of
      *         recurring component.
      */
     public Date[] calculateRecurrenceRange(Component comp) {
         return calculateRecurrenceRange(comp, new ArrayList<Component>(0));
-        
-    }    
+
+    }
     /**
      * Return a start and end Date that represents the start of the first
      * occurence of a recurring component and the end of the last occurence.  If
      * the recurring component has no end(infinite recurring event),
      * then no end date will be returned.
-     * 
+     *
      * @param comp Component to analyze
      * @param modifications modifications to component
      * @return array containing start (located at index 0) and end (index 1) of
@@ -121,12 +105,12 @@ public class RecurrenceExpander {
 
         Date[] dateRange = new Date[2];
         Date start = getStartDate(comp);
-        
+
         // must have start date
         if (start == null) {
             return null;
         }
-        
+
         Dur duration = null;
         Date end = getEndDate(comp);
         if (end == null) {
@@ -156,15 +140,15 @@ public class RecurrenceExpander {
             }
             duration = new Dur(start, end);
         }
-        
+
         // Always add master's occurence
         dateRange[0] = start;
         dateRange[1] = end;
-        
+
         // Now tweak range based on RDATE, RRULE, and component modifications
-        // For now, ignore EXDATE and EXRULE because RDATE and RRULE will 
+        // For now, ignore EXDATE and EXRULE because RDATE and RRULE will
         // give us the broader range.
-        
+
         // recurrence dates..
         PropertyList rDates = comp.getProperties()
                 .getProperties(Property.RDATE);
@@ -179,7 +163,7 @@ public class RecurrenceExpander {
                         dateRange[0] = period.getStart();
                     if (period.getEnd().after(dateRange[1]))
                         dateRange[1] = period.getEnd();
-                    
+
                 }
             } else {
                 for (Iterator j = rdate.getDates().iterator(); j.hasNext();) {
@@ -200,32 +184,32 @@ public class RecurrenceExpander {
         for (Iterator i = rRules.iterator(); i.hasNext();) {
             RRule rrule = (RRule) i.next();
             Recur recur = rrule.getRecur();
-            
+
             // If this is an infinite recurring event, we are done processing
             // the rules
             if(recur.getCount()==-1 && recur.getUntil()==null) {
                 dateRange[1] = null;
                 break;
             }
-            
+
             // DateList startDates = rrule.getRecur().getDates(start.getDate(),
             // adjustedRangeStart, rangeEnd, (Value)
             // start.getParameters().getParameter(Parameter.VALUE));
             DateList startDates = rrule.getRecur().getDates(start, start,
                     MAX_EXPAND_DATE,
                     (start instanceof DateTime) ? Value.DATE_TIME : Value.DATE);
-            
+
             // Dates are sorted, so get the last occurence, and calculate the end
             // date and update dateRange if necessary
             if(!startDates.isEmpty()) {
-                Date lastStart = (Date) startDates.get(startDates.size()-1);
+                Date lastStart = startDates.get(startDates.size()-1);
                 Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getTime(lastStart), start);
-                
+
                 if (endDate.after(dateRange[1]))
                     dateRange[1] = endDate;
             }
         }
-        
+
         // event modifications....
         for(Component modComp : modifications) {
             Date startMod = getStartDate(modComp);
@@ -235,20 +219,20 @@ public class RecurrenceExpander {
             if (dateRange[1] != null && endMod != null &&
                 endMod.after(dateRange[1]))
                 dateRange[1] = endMod;
-            
+
             // TODO: handle THISANDFUTURE/THISANDPRIOR edge cases
         }
-        
+
         // make sure timezones are consistent with original timezone
         if(start instanceof DateTime) {
             ((DateTime) dateRange[0]).setTimeZone(((DateTime) start).getTimeZone());
             if(dateRange[1]!=null)
             ((DateTime) dateRange[0]).setTimeZone(((DateTime) start).getTimeZone());
         }
-        
+
         return dateRange;
     }
-    
+
     /**
      * Expand recurring event for given time-range.
      * @param calendar calendar containing recurring event and modifications
@@ -262,10 +246,10 @@ public class RecurrenceExpander {
     public InstanceList getOcurrences(Calendar calendar, Date rangeStart, Date rangeEnd, TimeZone timezone) {
         ComponentList vevents = calendar.getComponents().getComponents(
                 Component.VEVENT);
-        
+
         List<Component> exceptions = new ArrayList<Component>();
         Component masterComp = null;
-        
+
         // get list of exceptions (VEVENT with RECURRENCEID)
         for (Iterator<VEvent> i = vevents.iterator(); i.hasNext();) {
             VEvent event = i.next();
@@ -273,12 +257,12 @@ public class RecurrenceExpander {
                 exceptions.add(event);
             else
                 masterComp = event;
-            
+
         }
-        
+
         return getOcurrences(masterComp, exceptions, rangeStart, rangeEnd, timezone);
     }
-    
+
     /**
      * Expand recurring compnent for given time-range.
      * @param component recurring component to expand
@@ -292,7 +276,7 @@ public class RecurrenceExpander {
     public InstanceList getOcurrences(Component component, Date rangeStart, Date rangeEnd, TimeZone timezone) {
         return getOcurrences(component, new ArrayList<Component>(0), rangeStart, rangeEnd, timezone);
     }
-    
+
     /**
      * Expand recurring compnent for given time-range.
      * @param component recurring component to expand
@@ -302,7 +286,7 @@ public class RecurrenceExpander {
      * @param timezone Optional timezone to use for floating dates.  If null, the
      *        system default is used.
      * @return InstanceList containing all occurences of recurring event during
-     *         time range 
+     *         time range
      */
     public InstanceList getOcurrences(Component component, List<Component> modifications, Date rangeStart, Date rangeEnd, TimeZone timezone) {
         InstanceList instances = new InstanceList();
@@ -310,11 +294,11 @@ public class RecurrenceExpander {
         instances.addMaster(component, rangeStart, rangeEnd);
         for(Component mod: modifications)
             instances.addOverride(mod, rangeStart, rangeEnd);
-        
+
         return instances;
     }
-    
-    
+
+
     /**
      * Determine if date is a valid occurence in recurring calendar component
      * @param calendar recurring calendar component
@@ -324,46 +308,47 @@ public class RecurrenceExpander {
     public boolean isOccurrence(Calendar calendar, Date occurrence) {
         java.util.Calendar cal = Dates.getCalendarInstance(occurrence);
         cal.setTime(occurrence);
-       
+
         // Add a second or day (one unit forward) so we can set a range for
         // finding instances.  This is required because ical4j's Recur apis
-        // only calculate recurring dates up until but not including the 
+        // only calculate recurring dates up until but not including the
         // end date of the range.
         if(occurrence instanceof DateTime)
             cal.add(java.util.Calendar.SECOND, 1);
         else
             cal.add(java.util.Calendar.DAY_OF_WEEK, 1);
-        
-        Date rangeEnd = 
+
+        Date rangeEnd =
             org.osaf.cosmo.calendar.util.Dates.getInstance(cal.getTime(), occurrence);
-        
+
         InstanceList instances = getOcurrences(calendar, occurrence, rangeEnd, null);
-        
+
         for(Iterator<Instance> it = instances.values().iterator(); it.hasNext();) {
             Instance instance = it.next();
             if(instance.getRid().getTime()==occurrence.getTime())
                 return true;
         }
-        
+
         return false;
     }
-    
+
     private Date getStartDate(Component comp) {
-        DtStart prop = (DtStart) comp.getProperties().getProperty(
+        DtStart prop = comp.getProperties().getProperty(
                 Property.DTSTART);
         return (prop != null) ? prop.getDate() : null;
     }
 
     private Date getEndDate(Component comp) {
-        DtEnd dtEnd = (DtEnd) comp.getProperties().getProperty(Property.DTEND);
+        DtEnd dtEnd = comp.getProperties().getProperty(Property.DTEND);
         // No DTEND? No problem, we'll use the DURATION if present.
         if (dtEnd == null) {
             Date dtStart = getStartDate(comp);
-            Duration duration = (Duration) comp.getProperties().getProperty(
+            Duration duration = comp.getProperties().getProperty(
                     Property.DURATION);
             if (duration != null) {
-                dtEnd = new DtEnd(org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getDuration()
-                        .getTime(dtStart), dtStart));
+                return org.osaf.cosmo.calendar.util.Dates.getInstance(
+                        new Date(dtStart.toInstant().plus(duration.getDuration()).toEpochMilli()),
+                        dtStart);
             }
         }
         return (dtEnd != null) ? dtEnd.getDate() : null;

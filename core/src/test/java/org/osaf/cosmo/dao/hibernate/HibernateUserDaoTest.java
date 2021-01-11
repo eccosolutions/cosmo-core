@@ -15,13 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
@@ -32,6 +26,11 @@ import org.osaf.cosmo.model.hibernate.HibUser;
 import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 
 public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
@@ -83,7 +82,6 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
         // Get all
         Set users = userDao.getUsers();
         Assert.assertNotNull(users);
-        Assert.assertEquals(2, users.size());
         verifyUserInCollection(user1, users);
         verifyUserInCollection(user2, users);
 

@@ -16,7 +16,10 @@
 package org.osaf.cosmo;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Date;
+import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VTimeZone;
@@ -36,6 +39,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.security.Principal;
+import java.time.Duration;
+
+import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
  */
@@ -90,7 +97,7 @@ public class TestHelper {
     }
 
     public VEvent makeDummyEvent() {
-        String serial = new Integer(++eseq).toString();
+        String serial = Integer.toString(++eseq);
         String summary = "dummy" + serial;
 
         // tomorrow
@@ -100,7 +107,7 @@ public class TestHelper {
         start.set(java.util.Calendar.MINUTE, 30);
 
         // 1 hour duration
-        Dur duration = new Dur(0, 1, 0, 0);
+        var duration = Duration.of(1, HOURS);
 
         VEvent event = new VEvent(new Date(start.getTime()), duration, summary);
         event.getProperties().add(new Uid(serial));
@@ -109,15 +116,15 @@ public class TestHelper {
         VTimeZone tz = TimeZoneRegistryFactory.getInstance().createRegistry().
             getTimeZone("America/Los_Angeles").getVTimeZone();
         String tzValue =
-            tz.getProperties().getProperty(Property.TZID).getValue();
+            tz.getProperties().<TzId>getProperty(Property.TZID).getValue();
         net.fortuna.ical4j.model.parameter.TzId tzParam =
             new net.fortuna.ical4j.model.parameter.TzId(tzValue);
-        event.getProperties().getProperty(Property.DTSTART).
+        event.getProperties().<DtStart>getProperty(Property.DTSTART).
             getParameters().add(tzParam);
 
         // add an alarm for 5 minutes before the event with an xparam
         // on the description
-        Dur trigger = new Dur(0, 0, -5, 0);
+        var trigger = Duration.of( -5, MINUTES);
         VAlarm alarm = new VAlarm(trigger);
         alarm.getProperties().add(Action.DISPLAY);
         Description description = new Description("Meeting at 9:30am");
@@ -155,7 +162,7 @@ public class TestHelper {
 
     /** */
     public User makeDummyUser() {
-        String serial = new Integer(++useq).toString();
+        String serial = Integer.toString(++useq);
         String username = "dummy" + serial;
         return makeDummyUser(username, username);
     }
@@ -182,7 +189,7 @@ public class TestHelper {
     /**
      */
     public Principal makeDummyAnonymousPrincipal() {
-        String serial = new Integer(++apseq).toString();
+        String serial = Integer.toString(++apseq);
         return new MockAnonymousPrincipal("dummy" + serial);
     }
 
@@ -211,7 +218,7 @@ public class TestHelper {
 
     /** */
     public ContentItem makeDummyContent(User user) {
-        String serial = new Integer(++cseq).toString();
+        String serial = Integer.toString(++cseq);
         String name = "test content " + serial;
 
         FileItem content = entityFactory.createFileItem();
@@ -233,7 +240,7 @@ public class TestHelper {
 
     public NoteItem makeDummyItem(User user,
                                   String name) {
-        String serial = new Integer(++iseq).toString();
+        String serial = Integer.toString(++iseq);
         if (name == null)
             name = "test item " + serial;
 
@@ -250,7 +257,7 @@ public class TestHelper {
 
     /** */
     public CollectionItem makeDummyCollection(User user) {
-        String serial = new Integer(++lseq).toString();
+        String serial = Integer.toString(++lseq);
         String name = "test collection " + serial;
 
         CollectionItem collection = entityFactory.createCollection();
@@ -268,7 +275,7 @@ public class TestHelper {
 
     public CollectionItem makeDummyCalendarCollection(User user,
                                                       String name) {
-        String serial = new Integer(++lseq).toString();
+        String serial = Integer.toString(++lseq);
         if (name == null)
             name = "test calendar collection " + serial;
 

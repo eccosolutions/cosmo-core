@@ -60,9 +60,9 @@ public class OutOfTheBoxHelper {
         Locale locale = context.getLocale();
         User user = context.getUser();
 
-        String name = _("Ootb.Collection.Name", locale, user.getFirstName(),
+        String name = formatMessage("Ootb.Collection.Name", locale, user.getFirstName(),
                         user.getLastName(), user.getUsername());
-        String displayName = _("Ootb.Collection.DisplayName",
+        String displayName = formatMessage("Ootb.Collection.DisplayName",
                                locale, user.getFirstName(),
                                user.getLastName(), user.getUsername());
 
@@ -111,15 +111,15 @@ public class OutOfTheBoxHelper {
         this.messageSource = messageSource;
     }
 
-    private String _(String key,
-                     Locale locale,
-                     Object... params) {
+    private String formatMessage(String key,
+                                 Locale locale,
+                                 Object... params) {
         return messageSource.getMessage(key, params, locale);
     }
 
-    private String _(String key,
-                     Locale locale) {
-        return _(key, locale, new Object[] {});
+    private String formatMessage(String key,
+                                 Locale locale) {
+        return formatMessage(key, locale, new Object[] {});
     }
 
     private net.fortuna.ical4j.model.TimeZone vtz(String tzid) {
