@@ -136,7 +136,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
 
         event = (HibEventStamp) queryItem.getStamp(EventStamp.class);
         Assert.assertEquals("20070101", event.getTimeRangeIndex().getStartDate());
-        Assert.assertEquals("20070101",event.getTimeRangeIndex().getEndDate());
+        Assert.assertEquals("20070102",event.getTimeRangeIndex().getEndDate()); // The event is exactly 1 day when no duration or end specified https://stackoverflow.com/a/15308766/1998186
         Assert.assertTrue(event.getTimeRangeIndex().getIsFloating().booleanValue());
     }
 
