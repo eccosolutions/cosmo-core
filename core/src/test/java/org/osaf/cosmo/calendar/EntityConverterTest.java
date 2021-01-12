@@ -349,6 +349,7 @@ public class EntityConverterTest extends TestCase {
         EventStamp eventStamp = new MockEventStamp(master);
         eventStamp.createCalendar();
         eventStamp.setStartDate(new DateTime("20070212T074500"));
+        // stamp PT1H for dates 20070212T074500,20070213T074500
         eventStamp.setDuration(Duration.parse("PT1H"));
         eventStamp.setLocation("master location");
         DateList dates = new ICalDate(";VALUE=DATE-TIME:20070212T074500,20070213T074500").getDateList();
@@ -362,14 +363,21 @@ public class EntityConverterTest extends TestCase {
         mod.setBody("modBody");
         mod.setModifies(master);
         master.addModification(mod);
+        // exceptionstamp date for 20070212T074500 - just modifies displayname?
         EventExceptionStamp exceptionStamp = new MockEventExceptionStamp(mod);
         mod.addStamp(exceptionStamp);
         exceptionStamp.createCalendar();
         exceptionStamp.setStartDate(eventStamp.getStartDate());
         exceptionStamp.setRecurrenceId(eventStamp.getStartDate());
+        // re-add
         mod.addStamp(exceptionStamp);
 
         // test modification VEVENT gets added properly
+        // convertNote ends up at EntityConverter which determines from ICalendarUtils.getDuration that duration is NOT blank.
+        // This would have been blank, and therefore set the duration on the exceptionstamp, except now duration is deemed
+        // to be ZERO (not null) because ical 3 VEvent now has:
+        //      // If "DTSTART" is a DATE-TIME, then the event's duration is zero (see: RFC 5545, 3.6.1 Event Component)
+        //      see https://github.com/ical4j/ical4j/blame/ical4j-3.0.21/src/main/java/net/fortuna/ical4j/model/component/VEvent.java
         Calendar cal = converter.convertNote(master);
         ComponentList comps = cal.getComponents(Component.VEVENT);
         Assert.assertEquals(2, comps.size());
@@ -381,9 +389,8 @@ public class EntityConverterTest extends TestCase {
         Assert.assertEquals("modBody", modEvent.getDescription().getValue());
         Assert.assertEquals("icaluid", modEvent.getUid().getValue());
 
-        // test duration got added to modfication
-        Assert.assertNotNull(modEvent.getDuration());
-        Assert.assertEquals("PT1H", modEvent.getDuration().getDuration().toString());
+        // test duration did not get added to modification
+        Assert.assertNull(modEvent.getDuration());
 
         // test inherited description/location/body
         mod.setDisplayName(null);
