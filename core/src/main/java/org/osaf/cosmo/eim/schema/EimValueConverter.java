@@ -26,7 +26,6 @@ import org.osaf.cosmo.calendar.ICalDate;
 import org.osaf.cosmo.calendar.UnknownTimeZoneException;
 
 import java.text.ParseException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -215,14 +214,14 @@ public class EimValueConverter implements EimSchemaConstants {
             trigger = new Trigger();
             if(Related.END.equals(related)) {
                 trigger.getParameters().add(Related.END);
-                Duration dur = Duration.parse(propVal);
-                trigger.setDuration(dur);
+                var dur = TemporalAmountAdapter.parse(propVal);
+                trigger.setDuration(dur.getDuration());
             } else if(Value.DATE_TIME.equals(value)) {
                 trigger.getParameters().add(Value.DATE_TIME);
                 trigger.setDateTime(new DateTime(propVal));
             } else {
-                Duration dur = Duration.parse(propVal);
-                trigger.setDuration(dur);
+                var dur = TemporalAmountAdapter.parse(propVal);
+                trigger.setDuration(dur.getDuration());
             }
             trigger.validate();
             return trigger;

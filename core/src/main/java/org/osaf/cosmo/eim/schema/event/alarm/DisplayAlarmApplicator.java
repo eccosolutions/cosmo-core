@@ -18,6 +18,7 @@ package org.osaf.cosmo.eim.schema.event.alarm;
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
+import net.fortuna.ical4j.model.TemporalAmountAdapter;
 import net.fortuna.ical4j.model.property.Trigger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -133,8 +134,8 @@ public class DisplayAlarmApplicator extends BaseStampApplicator
                 else {
                     String value = EimFieldValidator.validateText(field, MAXLEN_DURATION);
                     try {
-                        Duration dur = Duration.parse(value);
-                        eventStamp.setDisplayAlarmDuration(dur);
+                        var dur = TemporalAmountAdapter.parse(value);
+                        eventStamp.setDisplayAlarmDuration(dur.getDuration());
                     } catch (DateTimeParseException e) {
                         throw new EimValidationException(
                                 "Illegal duration for item "
@@ -148,7 +149,7 @@ public class DisplayAlarmApplicator extends BaseStampApplicator
                 }
                 else {
                     Integer value = EimFieldValidator.validateInteger(field);
-                    if(value!=null && value.intValue()==0)
+                    if(value!=null && value ==0)
                         value = null;
                     eventStamp.setDisplayAlarmRepeat(value);
                 }
