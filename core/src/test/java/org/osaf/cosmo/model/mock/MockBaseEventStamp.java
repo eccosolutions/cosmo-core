@@ -170,7 +170,7 @@ public abstract class MockBaseEventStamp extends MockStamp
      * @see org.osaf.cosmo.model.copy.InterfaceBaseEventStamp#setEndDate(net.fortuna.ical4j.model.Date)
      */
     public void setEndDate(Date date) {
-        DtEnd dtEnd = getEvent().getEndDate();
+        DtEnd dtEnd = getEvent().getEndDate(false);
         if (dtEnd != null && date != null)
             dtEnd.setDate(date);
         else  if(dtEnd !=null && date == null) {
