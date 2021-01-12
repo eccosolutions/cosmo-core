@@ -523,7 +523,7 @@ public class ICalendarUtils {
 
         Date nextTriggerDate = initialTriggerDate;
         for(int i=0;i<repeat.getCount();i++) {
-            nextTriggerDate = Dates.getInstance(nextTriggerDate.toInstant().plus(dur.getDuration()), nextTriggerDate);
+            nextTriggerDate = Dates.getDateFromDuration(nextTriggerDate, dur.getDuration());
             dates.add(nextTriggerDate);
         }
 
@@ -560,7 +560,7 @@ public class ICalendarUtils {
                 return null;
 
             // relative to start
-            return Dates.getInstance(start.getDate().toInstant().plus(trigger.getDuration()), start.getDate());
+            return Dates.getDateFromDuration(start.getDate(), trigger.getDuration());
         } else {
             // relative to end
             Date endDate = null;
@@ -573,7 +573,7 @@ public class ICalendarUtils {
             if(endDate==null) {
                 Duration dur = parent.getProperty(Property.DURATION);
                 if (dur!=null && start!=null) {
-                    endDate = Dates.getInstance(start.getDate().toInstant().plus(dur.getDuration()), start.getDate());
+                    endDate = Dates.getDateFromDuration(start.getDate(), dur.getDuration());
                 }
             }
 
@@ -587,7 +587,7 @@ public class ICalendarUtils {
             if(endDate==null)
                 return null;
 
-            return Dates.getInstance(endDate.toInstant().plus(trigger.getDuration()), endDate);
+            return Dates.getDateFromDuration(endDate, trigger.getDuration());
         }
     }
 

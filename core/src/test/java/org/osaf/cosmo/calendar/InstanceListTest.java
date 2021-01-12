@@ -100,8 +100,10 @@ public class InstanceListTest extends TestCase {
         InstanceList instances = new InstanceList();
         instances.setUTC(true);
         instances.setTimezone(tz);
-        
+
+        // start 1st Jan, this is before 6th Jan in floating_recurr_event.ics
         DateTime start = new DateTime("20060101T190000Z");
+        // end 8th Jan
         DateTime end = new DateTime("20060108T190000Z");
         
         addToInstanceList(calendar, instances, start, end);
@@ -118,7 +120,7 @@ public class InstanceListTest extends TestCase {
         
         Assert.assertEquals("20060102T190000Z", key);
         Assert.assertEquals("20060102T190000Z", instance.getStart().toString());
-        Assert.assertEquals("20060102T200000Z", instance.getEnd().toString());
+        Assert.assertEquals("20060102T200000Z", instance.getEnd().toString()); // getting 20060102T190000Z
         
         key = keys.next();
         instance = (Instance) instances.get(key);
@@ -271,7 +273,7 @@ public class InstanceListTest extends TestCase {
         DateTime end = new DateTime("20070511T090000Z");
         
         addToInstanceList(calendar, instances, start, end);
-        
+
         Assert.assertEquals(3, instances.size() );
         
         Iterator<String> keys = instances.keySet().iterator();
@@ -381,7 +383,7 @@ public class InstanceListTest extends TestCase {
         Assert.assertEquals("20070529T101500Z", key);
         Assert.assertEquals("20070529T051500", instance.getStart().toString());
         Assert.assertEquals("20070529T061500", instance.getEnd().toString());
-        
+
         key = keys.next();
         instance = (Instance) instances.get(key);
         
@@ -739,7 +741,7 @@ public class InstanceListTest extends TestCase {
         DateTime end = new DateTime("20070530T051500Z");
         
         addToInstanceList(calendar, instances, start, end);
-        
+
         Assert.assertEquals(1, instances.size() );
         
         Iterator<String> keys = instances.keySet().iterator();

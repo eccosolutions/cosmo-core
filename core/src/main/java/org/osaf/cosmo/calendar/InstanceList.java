@@ -463,9 +463,7 @@ public class InstanceList extends TreeMap {
             Date dtStart = getStartDate(comp);
             Duration duration = comp.getProperties().getProperty(Property.DURATION);
             if (duration != null) {
-                return org.osaf.cosmo.calendar.util.Dates.getInstance(
-                        new Date(dtStart.toInstant().plus(duration.getDuration()).toEpochMilli()),
-                        dtStart);
+                dtEnd = new DtEnd(org.osaf.cosmo.calendar.util.Dates.getDateFromDuration(dtStart, duration.getDuration()));
             }
         }
         return (dtEnd != null) ? dtEnd.getDate() : null;
