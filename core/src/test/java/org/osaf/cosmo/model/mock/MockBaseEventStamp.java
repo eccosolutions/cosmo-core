@@ -23,6 +23,7 @@ import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.parameter.XParameter;
 import net.fortuna.ical4j.model.property.*;
 import org.osaf.cosmo.calendar.ICalendarUtils;
+import org.osaf.cosmo.calendar.util.Dates;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
 import org.osaf.cosmo.model.BaseEventStamp;
 import org.osaf.cosmo.model.Item;
@@ -159,7 +160,7 @@ public abstract class MockBaseEventStamp extends MockStamp
             else
                 endDate = new Date(startDate);
 
-            endDate.setTime(startDate.toInstant().plus(duration).toEpochMilli());
+            endDate = Dates.getDateFromDuration(startDate, duration);
             return endDate;
         }
 
