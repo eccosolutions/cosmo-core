@@ -35,8 +35,6 @@ import org.osaf.cosmo.model.mock.MockEventExceptionStamp;
 import org.osaf.cosmo.model.mock.MockEventStamp;
 import org.osaf.cosmo.model.mock.MockNoteItem;
 
-import java.time.Duration;
-
 /**
  * Test Case for {@link DisplayAlarmApplicator}.
  */
@@ -120,7 +118,7 @@ public class DisplayAlarmApplicatorTest extends BaseApplicatorTestCase
         masterEvent.createCalendar();
         masterEvent.creatDisplayAlarm();
         masterEvent.setDisplayAlarmDescription("My alarm");
-        masterEvent.setDisplayAlarmDuration(Duration.parse("P1W"));
+        masterEvent.setDisplayAlarmDuration(java.time.Period.parse("P1W"));
         masterEvent.setDisplayAlarmTrigger(EimValueConverter.toIcalTrigger("-PT15M"));
         masterEvent.setDisplayAlarmRepeat(1);
 
