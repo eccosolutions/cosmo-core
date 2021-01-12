@@ -30,6 +30,7 @@ import org.osaf.cosmo.model.mock.MockEventStamp;
 import org.osaf.cosmo.model.mock.MockNoteItem;
 
 import java.time.Duration;
+import java.time.Period;
 import java.util.Date;
 import java.util.List;
 
@@ -180,7 +181,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         masterEvent.createCalendar();
         masterEvent.creatDisplayAlarm();
         masterEvent.setDisplayAlarmDescription("My alarm");
-        masterEvent.setDisplayAlarmDuration(Duration.parse("P1W"));
+        masterEvent.setDisplayAlarmDuration(Period.parse("P1W"));
         masterEvent.setDisplayAlarmTrigger(EimValueConverter.toIcalTrigger("-PT15M"));
         masterEvent.setDisplayAlarmRepeat(1);
 
