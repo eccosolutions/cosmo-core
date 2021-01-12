@@ -27,10 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
+import javax.persistence.OptimisticLockException;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -154,7 +154,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread3.join();
 
         // results should be OptimisticLockingFailureException
-        Assert.assertTrue(txThread3.getRunnableResults("2") instanceof OptimisticLockingFailureException);
+        Assert.assertTrue(txThread3.getRunnableResults("2") instanceof OptimisticLockException);
 
         cleanupDb();
     }
