@@ -16,6 +16,8 @@
 package org.osaf.cosmo.dao.hibernate;
 
 import junit.framework.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
@@ -32,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
 public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
 
     @Autowired
@@ -40,6 +41,15 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
 
     public HibernateUserDaoTest() {
         super();
+    }
+
+    static boolean cleaned = false;
+    @Before
+    public void setUp() throws Exception {
+        if (!cleaned) {
+            super.cleanupDb();
+            cleaned = true;
+        }
     }
 
     @Test

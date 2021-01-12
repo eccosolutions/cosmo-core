@@ -59,7 +59,6 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
 
     @Autowired protected UserDaoImpl userDao;
     @Autowired protected ContentDaoImpl contentDao;
-    @Autowired protected DataSource jdbcDataSource;
     @Autowired PlatformTransactionManager transactionManager;
 
     public HibernateContentDaoConcurrencyTest() {
@@ -289,22 +288,6 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
 
     private HibItem getHibItem(Item item) {
         return (HibItem) item;
-    }
-
-    protected void cleanupDb () throws Exception {
-        Connection conn = jdbcDataSource.getConnection();
-
-        Statement stmt = conn.createStatement();
-        stmt.executeUpdate("delete from cosmo_event_stamp");
-        stmt.executeUpdate("delete from cosmo_stamp");
-        stmt.executeUpdate("delete from cosmo_attribute");
-        stmt.executeUpdate("delete from cosmo_collection_item");
-        stmt.executeUpdate("delete from cosmo_tombstones");
-        stmt.executeUpdate("delete from cosmo_item");
-        stmt.executeUpdate("delete from cosmo_content_data");
-        stmt.executeUpdate("delete from cosmo_users");
-
-        conn.commit();
     }
 
     static class TransactionThread extends Thread {
