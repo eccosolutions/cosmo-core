@@ -19,12 +19,18 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.Statement;
+
 public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTestCase {
 
     protected HibernateTestHelper helper;
 
     @Autowired
     protected SessionFactory sessionFactory;
+
+    @Autowired protected DataSource jdbcDataSource;
 
     public AbstractHibernateDaoTestCase() {
         super();
@@ -34,6 +40,22 @@ public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTest
     protected void clearSession() {
         getSession().flush();
         getSession().clear();
+    }
+
+    protected void cleanupDb () throws Exception {
+        Connection conn = jdbcDataSource.getConnection();
+
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate("delete from cosmo_event_stamp");
+        stmt.executeUpdate("delete from cosmo_stamp");
+        stmt.executeUpdate("delete from cosmo_attribute");
+        stmt.executeUpdate("delete from cosmo_collection_item");
+        stmt.executeUpdate("delete from cosmo_tombstones");
+        stmt.executeUpdate("delete from cosmo_item");
+        stmt.executeUpdate("delete from cosmo_content_data");
+        stmt.executeUpdate("delete from cosmo_users");
+
+        conn.commit();
     }
 
     protected Session getSession() {
