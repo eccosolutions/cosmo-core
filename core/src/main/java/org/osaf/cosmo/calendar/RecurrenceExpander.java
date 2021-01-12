@@ -346,9 +346,7 @@ public class RecurrenceExpander {
             Duration duration = comp.getProperties().getProperty(
                     Property.DURATION);
             if (duration != null) {
-                return org.osaf.cosmo.calendar.util.Dates.getInstance(
-                        new Date(dtStart.toInstant().plus(duration.getDuration()).toEpochMilli()),
-                        dtStart);
+                return org.osaf.cosmo.calendar.util.Dates.getDateFromDuration(dtStart, duration.getDuration());
             }
         }
         return (dtEnd != null) ? dtEnd.getDate() : null;

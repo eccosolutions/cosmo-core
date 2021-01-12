@@ -17,8 +17,11 @@ package org.osaf.cosmo.calendar.util;
 
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Dur;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.time.temporal.TemporalAmount;
 
 /**
  * Utility methods for dealing with dates.
@@ -29,8 +32,25 @@ public class Dates {
     private static final Log log =
         LogFactory.getLog(Dates.class);
 
-    public static Date getInstance(final java.time.Instant date, final Date type) {
-        return getInstance(new Date(date.toEpochMilli()), type);
+    /**
+     * Calculate the end date using the start date with a duration change.
+     * This is re-using deprecated code since there were issues with timezones.
+     * The duration.Old.getTime handles returns a date with the correct timezone.
+     *
+     * was:
+     *  dtEnd = new DtEnd(
+     *      org.osaf.cosmo.calendar.util.Dates.getInstance(
+     *          duration.getDuration()      # returned a Dur (now java TemporalAmount)
+     *                  .getTime(dtStart)   # getTime(java Date) returned a java Date from the start with Dur
+     *          , dtStart)
+     *  );
+     * see v1 https://github.com/ical4j/ical4j/blob/ical4j-1.0.4/src/main/java/net/fortuna/ical4j/model/Dur.java
+     */
+    public static Date getDateFromDuration(net.fortuna.ical4j.model.Date date, TemporalAmount duration) {
+        Dur durationOld = new Dur(duration.toString());
+        return Dates.getInstance(
+                durationOld.getTime(date)
+                , date);
     }
 
     /**

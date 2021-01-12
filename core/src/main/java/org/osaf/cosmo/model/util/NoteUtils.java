@@ -53,7 +53,7 @@ public class NoteUtils {
             if (dur == null)
                 return startDate;
 
-            return Dates.getInstance(startDate.toInstant().plus(dur), startDate);
+            return Dates.getDateFromDuration(startDate, dur);
         }
 
         BaseEventStamp es = StampUtils.getBaseEventStamp(note);
@@ -71,7 +71,7 @@ public class NoteUtils {
             if (dur == null)
                 return startDate;
             else
-                return Dates.getInstance(startDate.toInstant().plus(dur), startDate);
+                return Dates.getDateFromDuration(startDate, dur);
         }
 
         // return startDate if all else fails

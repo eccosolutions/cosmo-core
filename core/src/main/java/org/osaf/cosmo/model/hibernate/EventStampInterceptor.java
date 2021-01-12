@@ -99,7 +99,7 @@ public class EventStampInterceptor extends EmptyInterceptor {
             if(masterStamp!=null) {
                 var duration = masterStamp.getDuration();
                 if(duration!=null)
-                    endDate = Dates.getInstance(startDate.toInstant().plus(duration), startDate);
+                    endDate = Dates.getDateFromDuration(startDate, duration);
             }
         }
 
