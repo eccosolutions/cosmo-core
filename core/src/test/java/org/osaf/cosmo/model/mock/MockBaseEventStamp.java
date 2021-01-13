@@ -29,6 +29,7 @@ import org.osaf.cosmo.model.BaseEventStamp;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.NoteItem;
 
+import javax.annotation.Nullable;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.List;
@@ -230,6 +231,7 @@ public abstract class MockBaseEventStamp extends MockStamp
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceBaseEventStamp#getDuration()
      */
+    @Nullable
     public TemporalAmount getDuration() {
         return ICalendarUtils.getDuration(getEvent());
     }
