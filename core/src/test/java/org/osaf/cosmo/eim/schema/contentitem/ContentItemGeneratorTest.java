@@ -51,7 +51,6 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
         Boolean autoTriage = Boolean.TRUE;
         Boolean sent = Boolean.TRUE;
         Boolean needsReply = Boolean.TRUE;
-        Date clientCreationDate = Calendar.getInstance().getTime();
 
         TriageStatus ts = new MockTriageStatus();
         ts.setCode(triageStatusCode);
@@ -95,10 +94,6 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
 
         EimRecordField needsReplyField = fields.get(3);
         checkBooleanField(needsReplyField, FIELD_NEEDS_REPLY, needsReply);
-
-        EimRecordField createdOnField = fields.get(4);
-        checkTimeStampField(createdOnField, FIELD_CREATED_ON,
-                            clientCreationDate);
 
         EimRecordField unknownField = fields.get(5);
         checkTextField(unknownField, unknownAttr.getName(),
