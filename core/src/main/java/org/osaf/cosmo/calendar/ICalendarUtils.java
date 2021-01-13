@@ -22,6 +22,7 @@ import net.fortuna.ical4j.model.property.*;
 import org.osaf.cosmo.CosmoConstants;
 import org.osaf.cosmo.calendar.util.Dates;
 
+import javax.annotation.Nullable;
 import java.text.ParseException;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
@@ -252,6 +253,7 @@ public class ICalendarUtils {
      * @param event
      * @return duration for event
      */
+    @Nullable
     public static TemporalAmount getDuration(VEvent event) {
         Duration duration = event.getProperties().getProperty(Property.DURATION);
         if (duration != null)

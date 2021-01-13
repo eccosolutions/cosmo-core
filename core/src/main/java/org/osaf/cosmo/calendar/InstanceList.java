@@ -37,6 +37,7 @@ import java.util.TreeSet;
  * added first.
  */
 
+@SuppressWarnings({"JavaDoc", "rawtypes"})
 public class InstanceList extends TreeMap {
 
     private static final long serialVersionUID = 1838360990532590681L;

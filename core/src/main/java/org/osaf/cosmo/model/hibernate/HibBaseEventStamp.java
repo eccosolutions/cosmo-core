@@ -30,6 +30,7 @@ import org.osaf.cosmo.model.BaseEventStamp;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.NoteItem;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.temporal.TemporalAmount;
@@ -260,6 +261,7 @@ public abstract class HibBaseEventStamp extends HibStamp
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.BaseEventStamp#getDuration()
      */
+    @Nullable
     public TemporalAmount getDuration() {
         return ICalendarUtils.getDuration(getEvent());
     }

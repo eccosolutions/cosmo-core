@@ -20,6 +20,7 @@ import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Trigger;
 
+import javax.annotation.Nullable;
 import java.time.temporal.TemporalAmount;
 import java.util.List;
 
@@ -106,6 +107,7 @@ public interface BaseEventStamp extends Stamp {
      * DTSTART.
      * @return
      */
+    @Nullable
     TemporalAmount getDuration();
 
     /**
