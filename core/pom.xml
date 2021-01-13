@@ -170,6 +170,23 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Dependencies now needed to be supplied by us, as Java 9 onwards don't ahve them by default.
+     see https://stackoverflow.com/a/43574427/1998186 -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.2.11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.2.11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.2.11</version>
+		</dependency>
 		<dependency>
 			<groupId>javax.resource</groupId>
 			<artifactId>connector-api</artifactId>
