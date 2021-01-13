@@ -58,10 +58,11 @@ public class DisplayAlarmApplicatorTest extends BaseApplicatorTestCase
 
         Period period = new Period((DateTime) eventStamp.getStartDate(), new Dur("PT15M"));
 
-        Assert.assertEquals(eventStamp.getDisplayAlarmDescription(), "My alarm");
-        Assert.assertEquals(eventStamp.getDisplayAlarmTrigger().getValue(), "PT15M");
-        Assert.assertEquals(eventStamp.getDisplayAlarmDuration().toString(), "P1W");
-        Assert.assertEquals(eventStamp.getDisplayAlarmRepeat(), new Integer(1));
+        Assert.assertEquals("My alarm", eventStamp.getDisplayAlarmDescription());
+        Assert.assertEquals("PT15M", eventStamp.getDisplayAlarmTrigger().getValue());
+        // 1W = 7D
+        Assert.assertEquals("P7D", eventStamp.getDisplayAlarmDuration().toString());
+        Assert.assertEquals(Integer.valueOf("1"), eventStamp.getDisplayAlarmRepeat());
 
         // verify that NoteItem.reminderTime was updated
         Assert.assertNotNull(noteItem.getReminderTime());

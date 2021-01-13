@@ -19,10 +19,12 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.time.temporal.TemporalAmount;
 import java.util.regex.Pattern;
 
 import net.fortuna.ical4j.model.Dur;
 
+import net.fortuna.ical4j.model.TemporalAmountAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -46,7 +48,7 @@ public class DurationFormat extends Format {
     private DurationFormat() {
     }
 
-    public final String format(Dur dur) {
+    public final String format(TemporalAmount dur) {
         return super.format(dur);
     }
 
@@ -55,22 +57,22 @@ public class DurationFormat extends Format {
                                FieldPosition pos) {
         if (obj == null)
             return toAppendTo;
-        if (! (obj instanceof Dur))
-            throw new IllegalArgumentException("object not a Dur");
-        Dur dur = (Dur) obj;
+        if (! (obj instanceof TemporalAmount))
+            throw new IllegalArgumentException("object not a TemporalAmount");
+        TemporalAmount dur = (TemporalAmount) obj;
 
         toAppendTo.append(dur.toString());
 
         return toAppendTo;
     }
 
-    public Dur parse(String source)
+    public TemporalAmount parse(String source)
         throws ParseException {
-        if(source==null || source != null && source.isEmpty())
+        if(source==null || source.isEmpty())
             return null;
-        Dur dur = (Dur) super.parseObject(source);
+        TemporalAmountAdapter dur = (TemporalAmountAdapter) super.parseObject(source);
         if (dur != null)
-            return dur;
+            return dur.getDuration();
         if (parseException != null)
             throw parseException;
         if (log.isDebugEnabled())
@@ -90,14 +92,14 @@ public class DurationFormat extends Format {
             return null;
         }
 
-        Dur dur = new Dur(source);
+        TemporalAmountAdapter dur = TemporalAmountAdapter.parse(source);
 
         pos.setIndex(source.length());
 
         return dur;
     }
 
-    public static final DurationFormat getInstance() {
+    public static DurationFormat getInstance() {
         return new DurationFormat();
     }
 }

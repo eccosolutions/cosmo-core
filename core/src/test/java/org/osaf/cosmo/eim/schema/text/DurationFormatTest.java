@@ -16,6 +16,7 @@
 package org.osaf.cosmo.eim.schema.text;
 
 import java.text.ParseException;
+import java.time.temporal.TemporalAmount;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -23,6 +24,7 @@ import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
 
+import net.fortuna.ical4j.model.TemporalAmountAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,7 +33,7 @@ public class DurationFormatTest extends TestCase {
 
     public void testFormat() throws Exception {
         DurationFormat df = DurationFormat.getInstance();
-        Dur dur = null;
+        TemporalAmount dur = null;
 
         dur = makeDur("20070512", "20070513");
         assertEquals("P1D", df.format(dur));
@@ -55,10 +57,10 @@ public class DurationFormatTest extends TestCase {
     public void testParse() throws Exception {
         DurationFormat df = DurationFormat.getInstance();
         
-        Assert.assertEquals(df.parse("P5W").toString(), "P5W");
+        Assert.assertEquals(df.parse("P5W").toString(), "P35D");
         Assert.assertEquals(df.parse("P5D").toString(), "P5D");
         Assert.assertEquals(df.parse("PT5H").toString(), "PT5H");
-        Assert.assertEquals(df.parse("P5DT5H").toString(), "P5DT5H");
+        Assert.assertEquals(df.parse("P5DT5H").toString(), "PT125H");
         Assert.assertEquals(df.parse("PT5H5M").toString(), "PT5H5M");
         Assert.assertEquals(df.parse("PT5M").toString(), "PT5M");
         Assert.assertEquals(df.parse("PT5M5S").toString(), "PT5M5S");
@@ -89,11 +91,11 @@ public class DurationFormatTest extends TestCase {
         }
     }
 
-    private Dur makeDur(String start,
-                        String end)
+    private TemporalAmount makeDur(String start,
+                                   String end)
         throws Exception {
         if (start.indexOf("T") > 0)
-            return new Dur(new DateTime(start), new DateTime(end));
-        return new Dur(new Date(start), new Date(end));
+            return TemporalAmountAdapter.fromDateRange(new DateTime(start), new DateTime(end)).getDuration();
+        return TemporalAmountAdapter.fromDateRange(new Date(start), new Date(end)).getDuration();
     }
 }
