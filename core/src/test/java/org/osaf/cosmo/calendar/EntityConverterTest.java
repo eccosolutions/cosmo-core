@@ -389,8 +389,9 @@ public class EntityConverterTest extends TestCase {
         Assert.assertEquals("modBody", modEvent.getDescription().getValue());
         Assert.assertEquals("icaluid", modEvent.getUid().getValue());
 
-        // test duration did not get added to modification
-        Assert.assertNull(modEvent.getDuration());
+        // test duration got added to modfication
+        Assert.assertNotNull(modEvent.getDuration());
+        Assert.assertEquals("PT1H", modEvent.getDuration().getDuration().toString());
 
         // test inherited description/location/body
         mod.setDisplayName(null);

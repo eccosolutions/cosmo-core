@@ -260,7 +260,9 @@ public class ICalendarUtils {
         if (dtstart == null)
             return null;
         DtEnd dtend = event.getEndDate();
-        if (dtend == null)
+        // dtEnd is never null now from getEndDate since Duration can't - we get ZERO duration (= start date)
+        // therefore we compare the start=end and if they are the same, reinstate original behaviour - return no duration
+        if (dtend == null || dtstart.getValue().equals(dtend.getValue()))
             return null;
         return new Duration(dtstart.getDate(), dtend.getDate()).getDuration();
     }
