@@ -624,8 +624,8 @@ public class StandardTriageStatusQueryProcessor implements
         
         // If rule is yearly or monthly then expand a year,
         // otherwise only expand a month
-        if(Recur.YEARLY.equals(recur.getFrequency()) ||
-           Recur.MONTHLY.equals(recur.getFrequency()))
+        if(Recur.Frequency.YEARLY.equals(recur.getFrequency()) ||
+           Recur.Frequency.MONTHLY.equals(recur.getFrequency()))
             return later ? yearLaterDur : yearDoneDur;
         else
             return later ? monthLaterDur : monthDoneDur;
