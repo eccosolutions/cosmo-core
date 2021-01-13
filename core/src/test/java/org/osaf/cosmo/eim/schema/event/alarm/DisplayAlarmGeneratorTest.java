@@ -17,6 +17,7 @@ package org.osaf.cosmo.eim.schema.event.alarm;
 
 import junit.framework.Assert;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.TemporalAmountAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.EimRecord;
@@ -53,8 +54,8 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         eventStamp.createCalendar();
         eventStamp.creatDisplayAlarm();
         eventStamp.setDisplayAlarmDescription("description");
-        eventStamp.setDisplayAlarmDuration(Duration.parse("P1W"));
-        eventStamp.setDisplayAlarmTrigger(EimValueConverter.toIcalTrigger("-PT15M"));
+        eventStamp.setDisplayAlarmDuration(TemporalAmountAdapter.parse("P1W").getDuration());
+        eventStamp.setDisplayAlarmTrigger(EimValueConverter.toIcalTrigger("-PT15M")); // using PT-15M gets converted here into -PT15M
         eventStamp.setDisplayAlarmRepeat(1);
         noteItem.addStamp(eventStamp);
 
@@ -75,8 +76,8 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         checkTextField(descriptionField, FIELD_DESCRIPTION, "description");
 
         EimRecordField triggerField = fields.get(1);
-        checkTextField(triggerField, FIELD_TRIGGER,
-                       eventStamp.getDisplayAlarmTrigger().getValue());
+        checkTextField(triggerField, FIELD_TRIGGER, "PT-15M");
+                       // eventStamp.getDisplayAlarmTrigger().getValue());
 
         EimRecordField durationField = fields.get(2);
         checkTextField(durationField, FIELD_DURATION,

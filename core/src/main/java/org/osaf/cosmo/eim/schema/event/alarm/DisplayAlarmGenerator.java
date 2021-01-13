@@ -118,6 +118,7 @@ public class DisplayAlarmGenerator extends BaseStampGenerator
         if(isMissingAttribute("displayAlarmTrigger")) {
             record.addField(generateMissingField(new TextField(FIELD_TRIGGER, null)));
         } else {
+            // converts to the newer Duration/Period format, eg -PT15M is now PT-15M
             String value = EimValueConverter.fromIcalTrigger(stamp.getDisplayAlarmTrigger());
             record.addField(new TextField(FIELD_TRIGGER, value));
         }
