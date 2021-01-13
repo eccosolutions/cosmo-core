@@ -49,6 +49,10 @@
     <level value="DEBUG" />
   </logger>
 
+  <logger name="org.hibernate.event.internal.DefaultFlushEntityEventListener">
+    <level value="TRACE" />
+  </logger>
+
   <logger name="org.osaf">
     <level value="ERROR"/>
   </logger>
