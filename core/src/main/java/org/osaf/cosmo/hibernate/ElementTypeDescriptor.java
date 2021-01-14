@@ -21,12 +21,19 @@ import java.io.StringReader;
 import java.sql.Clob;
 import java.sql.SQLException;
 
-// Good breakpoint is JavaTypeDescriptorRegistry and find: log.unknownJavaTypeNoEqualsHashCode( javaType );
-// ?? MaterializedClobType
-// see ClobTypeDescriptor - extend that?
-// can avoid registration by using service-provider - see https://stackoverflow.com/a/21518400
-// by using package-info: JavaTypeDescriptorRegistry.INSTANCE.addDescriptor(new ElementTypeDescriptor());
-// NB dirty checking - go from the log!! the class listed does the calculation - DefaultFlushEntityEventListener (and possibly breakpoint on isAssisnable to object)
+/**
+ * The dirty properties logger showed that HibXmlAttribute has an Element (as in w3 Node) value which is being changed. I then found this:
+ *   "HHH000481: Encountered Java type for which we could not locate a JavaTypeDescriptor and which does not appear to implement equals and/or hashCode. This can lead to significant performance problems when performing equality/dirty checking involving this Java type. Consider registering a custom JavaTypeDescriptor or at least implementing equals/hashCode."
+ * This also appears on our logs. So, basically the interface Element on HibXmlAttribute can't be interrogated easily so its always dirty.
+ * It might be okay, but the default equals hibernate applies on Element always returns false (Element doesn't have Serializable, equals or hashCode).
+ * NB For dirty checking use the log entry. The class listed does the calculation - DefaultFlushEntityEventListener (breakpoint on isAssignable to object)
+ *
+ * We reinstated a @TypeDef (as per 4e282bb7) just to override the equals.
+ * The suggested approaches are here: https://stackoverflow.com/a/41813127
+ *  We could register (using service-provider - see https://stackoverflow.com/a/21518400)
+ *  but we can avoid registering by using @TypeDef (exists in package-info)
+ *  other items of interest: MaterializedClobType / ClobTypeDescriptor
+ */
 public class ElementTypeDescriptor extends AbstractTypeDescriptor<Element> {
 
     private static final Log log = LogFactory.getLog(ElementTypeDescriptor.class);
