@@ -31,6 +31,15 @@ import org.apache.commons.logging.LogFactory;
 public class DurationFormatTest extends TestCase {
     private static final Log log = LogFactory.getLog(DurationFormatTest.class);
 
+    public void testGetValue() throws Exception {
+        // iCal's Duration() internally sets a TemporalAmountAdapter, which getValue() calls toString() on.
+        // The toString() is flawed in earlier iCal versions, so we do a quick test.
+        // NB iCal ends up calling getValue from usual deepCopy work (Property class in this case)
+
+        // Test something with days and minutes - the minutes get dropped in the previous iCal version.
+        assertEquals("P1DT3H40M", TemporalAmountAdapter.parse("P1DT3H40M").toString());
+    }
+
     public void testFormat() throws Exception {
         DurationFormat df = DurationFormat.getInstance();
         TemporalAmount dur = null;
@@ -53,10 +62,10 @@ public class DurationFormatTest extends TestCase {
         dur = makeDur("20070512T103000", "20070512T103030");
         assertEquals("PT30S", df.format(dur));
     }
-    
+
     public void testParse() throws Exception {
         DurationFormat df = DurationFormat.getInstance();
-        
+
         Assert.assertEquals(df.parse("P5W").toString(), "P35D");
         Assert.assertEquals(df.parse("P5D").toString(), "P5D");
         Assert.assertEquals(df.parse("PT5H").toString(), "PT5H");
