@@ -15,39 +15,21 @@
  */
 package org.osaf.cosmo.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.SortedSet;
-
 import net.fortuna.ical4j.model.DateTime;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.RecurrenceExpander;
 import org.osaf.cosmo.dao.CalendarDao;
 import org.osaf.cosmo.dao.ContentDao;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionLockedException;
-import org.osaf.cosmo.model.ContentItem;
-import org.osaf.cosmo.model.DuplicateItemNameException;
-import org.osaf.cosmo.model.EventStamp;
-import org.osaf.cosmo.model.HomeCollectionItem;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.ModelValidationException;
-import org.osaf.cosmo.model.ModificationUid;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.NoteOccurrence;
-import org.osaf.cosmo.model.NoteOccurrenceUtil;
-import org.osaf.cosmo.model.StampUtils;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.service.ContentService;
 import org.osaf.cosmo.service.lock.LockManager;
-import org.osaf.cosmo.service.triage.TriageStatusQueryContext;
-import org.osaf.cosmo.service.triage.TriageStatusQueryProcessor;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Standard implementation of <code>ContentService</code>.
@@ -62,7 +44,6 @@ public class StandardContentService implements ContentService {
     private CalendarDao calendarDao;
     private ContentDao contentDao;
     private LockManager lockManager;
-    private TriageStatusQueryProcessor triageStatusQueryProcessor;
 
     private long lockTimeout = 0;
 
@@ -715,33 +696,6 @@ public class StandardContentService implements ContentService {
         return calendarDao.findEvents(collection, rangeStart, rangeEnd, expandRecurringEvents);
     }
 
-
-    /**
-     * Find note items by triage status that belong to a collection.
-     * @param collection collection
-     * @param context the query context
-     * @return set of notes that match the specified triage status label and
-     *         belong to the specified collection
-     */
-    public SortedSet<NoteItem> findNotesByTriageStatus(CollectionItem collection,
-            TriageStatusQueryContext context) {
-        return triageStatusQueryProcessor.processTriageStatusQuery(collection,
-                context);
-    }
-
-    /**
-     * Find note items by triage status that belong to a recurring note series.
-     * @param note recurring note
-     * @param context the query context
-     * @return set of notes that match the specified triage status label and belong
-     *         to the specified recurring note series
-     */
-    public SortedSet<NoteItem> findNotesByTriageStatus(NoteItem note,
-            TriageStatusQueryContext context) {
-        return triageStatusQueryProcessor.processTriageStatusQuery(note,
-                context);
-    }
-
     /**
      * Find items by filter.
      *
@@ -767,8 +721,6 @@ public class StandardContentService implements ContentService {
             throw new IllegalStateException("contentDao must not be null");
         if (lockManager == null)
             throw new IllegalStateException("lockManager must not be null");
-        if(triageStatusQueryProcessor == null)
-            throw new IllegalStateException("triageStatusQueryProcessor must not be null");
     }
 
     /**
@@ -799,11 +751,6 @@ public class StandardContentService implements ContentService {
     /** */
     public void setContentDao(ContentDao dao) {
         contentDao = dao;
-    }
-
-	public void setTriageStatusQueryProcessor(
-            TriageStatusQueryProcessor triageStatusQueryProcessor) {
-        this.triageStatusQueryProcessor = triageStatusQueryProcessor;
     }
 
     /** */

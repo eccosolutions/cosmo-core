@@ -1197,51 +1197,6 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem);
     }
 
-    @Test
-    public void testContentDaoTriageStatus() throws Exception {
-        User user = getUser(userDao, "testuser");
-        CollectionItem root = contentDao.getRootItem(user);
-
-        ContentItem item = generateTestContent();
-        item.setName("test");
-        TriageStatus initialTriageStatus = new HibTriageStatus();
-        TriageStatusUtil.initialize(initialTriageStatus);
-        item.setTriageStatus(initialTriageStatus);
-
-        ContentItem newItem = contentDao.createContent(root, item);
-
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertTrue(newItem.getUid() != null);
-
-        clearSession();
-
-        ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        TriageStatus triageStatus = queryItem.getTriageStatus();
-        Assert.assertEquals(initialTriageStatus, triageStatus);
-
-        triageStatus.setCode(TriageStatus.CODE_LATER);
-        triageStatus.setAutoTriage(false);
-        BigDecimal rank = new BigDecimal("-98765.43");
-        triageStatus.setRank(rank);
-
-        contentDao.updateContent(queryItem);
-        clearSession();
-
-        queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        triageStatus = queryItem.getTriageStatus();
-        Assert.assertEquals(triageStatus.getAutoTriage(), Boolean.FALSE);
-        Assert.assertEquals(triageStatus.getCode(),
-                            new Integer(TriageStatus.CODE_LATER));
-        Assert.assertEquals(triageStatus.getRank(), rank);
-
-        queryItem.setTriageStatus(null);
-        contentDao.updateContent(queryItem);
-        clearSession();
-        // should be null triagestatus
-        queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        triageStatus = queryItem.getTriageStatus();
-        Assert.assertNull(triageStatus);
-    }
 
     @Test
     public void testContentDaoCreateFreeBusy() throws Exception {

@@ -21,16 +21,13 @@ import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.EimRecordField;
 import org.osaf.cosmo.eim.schema.BaseGeneratorTestCase;
-import org.osaf.cosmo.eim.schema.text.TriageStatusFormat;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.StringAttribute;
-import org.osaf.cosmo.model.TriageStatus;
-import org.osaf.cosmo.model.mock.*;
+import org.osaf.cosmo.model.mock.MockNoteItem;
+import org.osaf.cosmo.model.mock.MockQName;
+import org.osaf.cosmo.model.mock.MockStringAttribute;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,27 +38,17 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
     private static final Log log =
         LogFactory.getLog(ContentItemGeneratorTest.class);
 
-    public void testGenerateRecord() throws Exception {
+    public void testGenerateRecord() {
         String uid = "deadbeef";
         String name = "3inchesofblood";
         String displayName = "3 Inches of Blood";
-        String triageStatusLabel = TriageStatus.LABEL_DONE;
-        int triageStatusCode = TriageStatus.CODE_DONE;
-        BigDecimal triageStatusRank = new BigDecimal("-12345.67");
-        Boolean autoTriage = Boolean.TRUE;
         Boolean sent = Boolean.TRUE;
         Boolean needsReply = Boolean.TRUE;
-
-        TriageStatus ts = new MockTriageStatus();
-        ts.setCode(triageStatusCode);
-        ts.setRank(triageStatusRank);
-        ts.setAutoTriage(autoTriage);
 
         ContentItem contentItem = new MockNoteItem();
         contentItem.setUid(uid);
         contentItem.setName(name);
         contentItem.setDisplayName(displayName);
-        contentItem.setTriageStatus(ts);
         contentItem.setSent(sent);
         contentItem.setNeedsReply(needsReply);
 //        contentItem.setClientCreationDate(clientCreationDate);
@@ -80,22 +67,18 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
         checkUuidKey(record.getKey(), uid);
 
         List<EimRecordField> fields = record.getFields();
-        assertEquals("unexpected number of fields", 6, fields.size());
+        assertEquals("unexpected number of fields", 5, fields.size());
 
         EimRecordField titleField = fields.get(0);
         checkTextField(titleField, FIELD_TITLE, displayName);
 
-        EimRecordField triageStatusField = fields.get(1);
-        checkTextField(triageStatusField, FIELD_TRIAGE,
-                       TriageStatusFormat.getInstance(new MockEntityFactory()).format(ts));
-
-        EimRecordField sentField = fields.get(2);
+        EimRecordField sentField = fields.get(1);
         checkBooleanField(sentField, FIELD_HAS_BEEN_SENT, sent);
 
-        EimRecordField needsReplyField = fields.get(3);
+        EimRecordField needsReplyField = fields.get(2);
         checkBooleanField(needsReplyField, FIELD_NEEDS_REPLY, needsReply);
 
-        EimRecordField unknownField = fields.get(5);
+        EimRecordField unknownField = fields.get(4);
         checkTextField(unknownField, unknownAttr.getName(),
                        unknownAttr.getValue());
     }
@@ -130,7 +113,7 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
         checkUuidKey(record.getKey(), modification.getUid());
 
         List<EimRecordField> fields = record.getFields();
-        assertEquals("unexpected number of fields", 5, fields.size());
+        assertEquals("unexpected number of fields", 4, fields.size());
 
         EimRecordField titleField = fields.get(0);
         Assert.assertTrue(titleField.isMissing());
