@@ -52,7 +52,6 @@
                 <value>org.osaf.cosmo.model.hibernate.HibTombstone</value>
                 <value>org.osaf.cosmo.model.hibernate.HibUser</value>
                 <value>org.osaf.cosmo.model.hibernate.HibXmlAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.JpaConverters</value>
             </list>
         </property>
         <property name="entityInterceptor" ref="cosmoHibernateInterceptor"/>
