@@ -55,8 +55,6 @@ public class EntityConverterTest extends TestCase {
 
         NoteItem note = converter.convertTaskCalendar(calendar);
 
-        Assert.assertTrue(TriageStatus.CODE_NOW==note.getTriageStatus().getCode());
-
         // add COMPLETED
         DateTime completeDate = new DateTime("20080122T100000Z");
 
@@ -64,24 +62,10 @@ public class EntityConverterTest extends TestCase {
         ICalendarUtils.setCompleted(completeDate, vtodo);
         note = converter.convertTaskCalendar(calendar);
 
-        TriageStatus ts = note.getTriageStatus();
-        Assert.assertTrue(TriageStatus.CODE_DONE==ts.getCode());
-        Assert.assertTrue(TriageStatusUtil.getDateFromRank(ts.getRank()).getTime()==completeDate.getTime());
-
-        note.setTriageStatus(null);
         ICalendarUtils.setCompleted(null, vtodo);
         Assert.assertNull(vtodo.getDateCompleted());
         ICalendarUtils.setStatus(Status.VTODO_COMPLETED, vtodo);
 
-        // verify that TriageStatus.rank is set ot current time when
-        // STATUS:COMPLETED is present and COMPLETED is not present
-        long begin = (System.currentTimeMillis() / 1000) * 1000;
-        note = converter.convertTaskCalendar(calendar);
-        long end = (System.currentTimeMillis() / 1000) * 1000;
-        ts = note.getTriageStatus();
-        Assert.assertTrue(TriageStatus.CODE_DONE==ts.getCode());
-        long rankTime = TriageStatusUtil.getDateFromRank(ts.getRank()).getTime();
-        Assert.assertTrue(rankTime<=end && rankTime>=begin);
     }
 
     public void testEntityConverterEvent() throws Exception {
@@ -104,10 +88,6 @@ public class EntityConverterTest extends TestCase {
 //        Assert.assertNotNull(masterEvent);
 //        DateTime testStart = new DateTime("20060102T140000", TimeZoneUtils.getTimeZone("US/Eastern_mod"));
 //        Assert.assertTrue(masterEvent.getStartDate().equals(testStart));
-        // Triage status
-        TriageStatus ts = master.getTriageStatus();
-        // the event is in the past, it should be DONE
-        Assert.assertTrue(TriageStatus.CODE_DONE==ts.getCode());
         // DTSTAMP
 //        Assert.assertEquals(master.getClientModifiedDate().getTime(), new DateTime("20051222T210507Z").getTime());
         // UID
@@ -253,7 +233,6 @@ public class EntityConverterTest extends TestCase {
         master.setBody("body");
         master.setIcalUid("icaluid");
 //        master.setClientModifiedDate(new DateTime("20070101T100000Z"));
-        master.setTriageStatus(TriageStatusUtil.initialize(new MockTriageStatus()));
 
         Calendar cal = converter.convertNote(master);
         cal.validate();
@@ -264,21 +243,16 @@ public class EntityConverterTest extends TestCase {
         Assert.assertEquals(1, comps.size());
         VToDo task = (VToDo) comps.get(0);
 
-        Assert.assertNull(task.getDateCompleted());
+//        Assert.assertNull(task.getDateCompleted());
         Assert.assertNull(ICalendarUtils.getXProperty("X-OSAF-STARRED", task));
 
         DateTime completeDate = new DateTime("20080122T100000Z");
 
-        master.getTriageStatus().setCode(TriageStatus.CODE_DONE);
-        master.getTriageStatus().setRank(TriageStatusUtil.getRank(completeDate.getTime()));
         master.addStamp(new MockTaskStamp());
 
         cal = converter.convertNote(master);
         task = (VToDo) cal.getComponents().get(0);
 
-        Completed completed = task.getDateCompleted();
-        Assert.assertNotNull(completed);
-        Assert.assertEquals(completeDate.getTime(), completed.getDate().getTime());
         Assert.assertEquals("TRUE", ICalendarUtils.getXProperty("X-OSAF-STARRED", task));
 
     }

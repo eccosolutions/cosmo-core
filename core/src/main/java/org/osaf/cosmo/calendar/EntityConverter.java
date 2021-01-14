@@ -541,17 +541,6 @@ public class EntityConverter {
         ICalendarUtils.setSummary(note.getDisplayName(), task);
         ICalendarUtils.setDescription(note.getBody(), task);
 
-        // Set COMPLETED/STATUS if triagestatus is DONE
-        TriageStatus ts = note.getTriageStatus();
-        DateTime completeDate = null;
-        if(ts!=null && ts.getCode()==TriageStatus.CODE_DONE) {
-            ICalendarUtils.setStatus(Status.VTODO_COMPLETED, task);
-            if(ts.getRank()!=null)
-                completeDate =  new DateTime(TriageStatusUtil.getDateFromRank(ts.getRank()));
-        }
-
-        ICalendarUtils.setCompleted(completeDate, task);
-
         if (StampUtils.getTaskStamp(note) != null)
             ICalendarUtils.setXProperty(X_OSAF_STARRED, "TRUE", task);
         else
@@ -741,10 +730,6 @@ public class EntityConverter {
 
     private void setBaseContentAttributes(ContentItem item) {
 
-        TriageStatus ts = entityFactory.createTriageStatus();
-        TriageStatusUtil.initialize(ts);
-
-        item.setTriageStatus(ts);
         item.setLastModification(ContentItem.Action.CREATED);
 
         item.setSent(Boolean.FALSE);
@@ -780,21 +765,6 @@ public class EntityConverter {
                 note.setReminderTime(reminderTime);
         }
 
-        // calculate triage status based on start date
-        java.util.Date now =java.util.Calendar.getInstance().getTime();
-        boolean later = event.getStartDate().getDate().after(now);
-        int code = (later) ? TriageStatus.CODE_LATER : TriageStatus.CODE_DONE;
-
-        TriageStatus triageStatus = note.getTriageStatus();
-
-        // initialize TriageStatus if not present
-        if (triageStatus == null) {
-            triageStatus = TriageStatusUtil.initialize(entityFactory
-                    .createTriageStatus());
-            note.setTriageStatus(triageStatus);
-        }
-
-        triageStatus.setCode(code);
 
         // check for X-OSAF-STARRED
         if ("TRUE".equals(ICalendarUtils.getXProperty(X_OSAF_STARRED, event))) {
@@ -829,32 +799,6 @@ public class EntityConverter {
             Date reminderTime = trigger.getDateTime();
             if (reminderTime != null)
                 note.setReminderTime(reminderTime);
-        }
-
-        // look for COMPLETED or STATUS:COMPLETED
-        Completed completed = task.getDateCompleted();
-        Status status = task.getStatus();
-        TriageStatus ts = note.getTriageStatus();
-
-        // Initialize TriageStatus if necessary
-        if(completed!=null || Status.VTODO_COMPLETED.equals(status)) {
-            if (ts == null) {
-                ts = TriageStatusUtil.initialize(entityFactory
-                        .createTriageStatus());
-                note.setTriageStatus(ts);
-            }
-
-            // TriageStatus.code will be DONE
-            note.getTriageStatus().setCode(TriageStatus.CODE_DONE);
-
-            // TriageStatus.rank will be the COMPLETED date if present
-            // or currentTime
-            if(completed!=null)
-                note.getTriageStatus().setRank(
-                        TriageStatusUtil.getRank(completed.getDate().getTime()));
-            else
-                note.getTriageStatus().setRank(
-                        TriageStatusUtil.getRank(System.currentTimeMillis()));
         }
 
         // check for X-OSAF-STARRED

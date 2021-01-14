@@ -288,11 +288,6 @@
     <property name="entityFactory" ref="cosmoEntityFactory"/>
   </bean>
 
-  <bean id="triageStatusQueryProcessor"
-      class="org.osaf.cosmo.service.impl.StandardTriageStatusQueryProcessor">
-    <property name="contentDao" ref="contentDao"/>
-  </bean>
-
 
   <bean id="userService"
         class="org.osaf.cosmo.service.impl.StandardUserService"
@@ -313,7 +308,6 @@
     <property name="calendarDao" ref="calendarDao"/>
     <property name="contentDao" ref="contentDao"/>
     <property name="lockManager" ref="contentLockManager"/>
-    <property name="triageStatusQueryProcessor" ref="triageStatusQueryProcessor"/>
   </bean>
 
   <bean id="serverPropertyService"

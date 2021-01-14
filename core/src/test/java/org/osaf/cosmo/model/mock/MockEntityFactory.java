@@ -116,10 +116,6 @@ public class MockEntityFactory implements EntityFactory {
         return new MockTextAttribute(qname, reader);
     }
 
-    public TriageStatus createTriageStatus() {
-        return new MockTriageStatus();
-    }
-
     public User createUser() {
         return new MockUser();
     }

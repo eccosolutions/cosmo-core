@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,11 +60,11 @@ import org.osaf.cosmo.model.hibernate.HibNoteItem;
  * query and processes the results.
  */
 public class StandardItemFilterProcessor implements ItemFilterProcessor {
-    
+
     private static final Log log = LogFactory.getLog(StandardItemFilterProcessor.class);
-    
+
     public StandardItemFilterProcessor() {}
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor#processFilter(org.hibernate.Session, org.osaf.cosmo.model.filter.ItemFilter)
      */
@@ -73,14 +73,14 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         List<Item> queryResults = hibQuery.list();
         return processResults(queryResults, filter);
     }
-    
+
     /**
      * Build Hibernate Query from ItemFilter using HQL.
      * The query returned is essentially the first pass at
      * retrieving the matched items.  A second pass is required in
      * order determine if any recurring events match a timeRange
      * in the filter.  This is due to the fact that recurring events
-     * may have complicated recurrence rules that are extremely 
+     * may have complicated recurrence rules that are extremely
      * hard to match using HQL.
      * @param session session
      * @param filter item filter
@@ -90,75 +90,75 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         StringBuffer selectBuf = new StringBuffer();
         StringBuffer whereBuf = new StringBuffer();
         StringBuffer orderBuf = new StringBuffer();
-        
+
         HashMap<String, Object> params = new HashMap<String, Object>();
-        
+
         if(filter instanceof NoteItemFilter)
             handleNoteItemFilter(selectBuf, whereBuf, orderBuf, params, (NoteItemFilter) filter);
         else if(filter instanceof ContentItemFilter)
             handleContentItemFilter(selectBuf, whereBuf, orderBuf, params, (ContentItemFilter) filter);
-        else    
+        else
             handleItemFilter(selectBuf, whereBuf, params, filter);
-        
+
         selectBuf.append(whereBuf);
-        
+
         for(FilterOrder fo: filter.getOrders()) {
             if(orderBuf.length()==0)
                 orderBuf.append(" order by ");
             else
                 orderBuf.append(", ");
-            
+
             orderBuf.append("i.").append(fo.getName());
-            
+
             if(fo.getOrder().equals(Order.DESC))
                 orderBuf.append(" desc");
         }
-        
+
         selectBuf.append(orderBuf);
-        
+
         if(log.isDebugEnabled()) {
             log.debug(selectBuf.toString());
         }
-        
+
         Query hqlQuery = session.createQuery(selectBuf.toString());
-        
+
         for(Entry<String, Object> param: params.entrySet())
             hqlQuery.setParameter(param.getKey(), param.getValue());
-        
+
         if(filter.getMaxResults()!=null)
             hqlQuery.setMaxResults(filter.getMaxResults());
-        
+
         return hqlQuery;
     }
-    
+
     private void handleItemFilter(StringBuffer selectBuf,
             StringBuffer whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
-        
+
         if(selectBuf.toString() != null && selectBuf.toString().isEmpty())
             selectBuf.append("select i from HibItem i");
-        
+
         // filter on uid
         if(filter.getUid()!=null)
             formatExpression(whereBuf, params, "i.uid", filter.getUid());
-            
-        
+
+
         // filter on parent
         if(filter.getParent()!=null) {
             selectBuf.append(" join i.parentDetails pd");
             appendWhere(whereBuf, "pd.primaryKey.collection=:parent");
             params.put("parent", filter.getParent());
         }
-        
+
         if(filter.getDisplayName()!=null)
             formatExpression(whereBuf, params, "i.displayName", filter.getDisplayName());
-        
-        
+
+
         handleAttributeFilters(selectBuf, whereBuf, params, filter);
         handleStampFilters(selectBuf, whereBuf, params, filter);
-        
+
     }
-    
+
     private void handleAttributeFilters(StringBuffer selectBuf,
             StringBuffer whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
@@ -169,18 +169,18 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                 handleAttributeFilter(selectBuf, whereBuf, params, attrFilter);
         }
     }
-    
+
     private void handleTextAttributeFilter(StringBuffer selectBuf,
             StringBuffer whereBuf, HashMap<String, Object> params,
             TextAttributeFilter filter) {
-        
+
         String alias = "ta" + params.size();
         selectBuf.append(", HibTextAttribute ").append(alias);
         appendWhere(whereBuf, alias + ".item=i and " + alias +".qname=:" + alias + "qname");
         params.put(alias + "qname", filter.getQname());
         formatExpression(whereBuf, params, alias + ".value", filter.getValue());
     }
-    
+
     private void handleStampFilters(StringBuffer selectBuf,
             StringBuffer whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
@@ -191,11 +191,11 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                 handleStampFilter(selectBuf, whereBuf, params, stampFilter);
         }
     }
-    
+
     private void handleStampFilter(StringBuffer selectBuf,
             StringBuffer whereBuf, HashMap<String, Object> params,
             StampFilter filter) {
-        
+
         String toAppend = "";
         if(filter.isMissing())
             toAppend += "not ";
@@ -203,29 +203,29 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                     + filter.getStampClass().getSimpleName() + ")";
         appendWhere(whereBuf, toAppend);
     }
-    
+
     private void handleAttributeFilter(StringBuffer selectBuf,
             StringBuffer whereBuf, HashMap<String, Object> params,
             AttributeFilter filter) {
-        
+
         String param = "param" + params.size();
         String toAppend = "";
         if(filter.isMissing())
             toAppend += "not ";
-        
+
         toAppend += "exists (select a.id from HibAttribute a where a.item=i and a.qname=:"
                 + param + ")";
         appendWhere(whereBuf, toAppend);
         params.put(param, filter.getQname());
     }
-    
+
     private void handleEventStampFilter(StringBuffer selectBuf,
             StringBuffer whereBuf, HashMap<String, Object> params,
             EventStampFilter filter) {
-        
+
         selectBuf.append(", HibBaseEventStamp es");
         appendWhere(whereBuf, "es.item=i");
-        
+
         // handle recurring event filter
         if(filter.getIsRecurring()!=null) {
             if(filter.getIsRecurring().booleanValue()==true)
@@ -233,34 +233,34 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             else
                 appendWhere(whereBuf, "(es.timeRangeIndex.isRecurring=false and i.modifies is null)");
         }
-        
+
         // handle time range
         if(filter.getPeriod()!=null) {
            whereBuf.append(" and ( ");
            whereBuf.append("(es.timeRangeIndex.isFloating=true and es.timeRangeIndex.startDate < '").append(filter.getFloatEnd()).append("'");
            whereBuf.append(" and es.timeRangeIndex.endDate > '").append(filter.getFloatStart()).append("')");
-           
+
            whereBuf.append(" or (es.timeRangeIndex.isFloating=false and es.timeRangeIndex.startDate < '").append(filter.getUTCEnd()).append("'");
            whereBuf.append(" and es.timeRangeIndex.endDate > '").append(filter.getUTCStart()).append("')");
-           
+
            // edge case where start==end
            whereBuf.append(" or (es.timeRangeIndex.startDate=es.timeRangeIndex.endDate and (es.timeRangeIndex.startDate='").append(filter.getFloatStart()).append("' or es.timeRangeIndex.startDate='").append(filter.getUTCStart()).append("'))");
-                   
+
            whereBuf.append(")");
         }
     }
-    
+
     private void handleNoteItemFilter(StringBuffer selectBuf,
             StringBuffer whereBuf, StringBuffer orderBuf,  HashMap<String, Object> params,
             NoteItemFilter filter) {
         selectBuf.append("select i from HibNoteItem i");
         handleItemFilter(selectBuf, whereBuf, params, filter);
         handleContentItemFilter(selectBuf, whereBuf, orderBuf, params, filter);
-        
+
         // filter by icaluid
         if(filter.getIcalUid()!=null)
             formatExpression(whereBuf, params, "i.icalUid", filter.getIcalUid());
-        
+
         // filter by body
         if(filter.getBody()!=null) {
             String alias = "ta" + params.size();
@@ -269,7 +269,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             params.put(alias + "qname", HibNoteItem.ATTR_NOTE_BODY);
             formatExpression(whereBuf, params, alias + ".value", filter.getBody());
         }
-        
+
         // filter by reminderTime
         if(filter.getReminderTime()!=null) {
             String alias = "tsa" + params.size();
@@ -278,13 +278,13 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             params.put(alias + "qname", HibNoteItem.ATTR_REMINDER_TIME);
             formatExpression(whereBuf, params, alias + ".value", filter.getReminderTime());
         }
-        
+
         //filter by master NoteItem
         if(filter.getMasterNoteItem()!=null) {
             appendWhere(whereBuf, "(i=:masterItem or i.modifies=:masterItem)");
             params.put("masterItem", filter.getMasterNoteItem());
         }
-        
+
         // filter modifications
         if(filter.getIsModification()!=null) {
             if(filter.getIsModification().booleanValue()==true)
@@ -292,7 +292,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             else
                 appendWhere(whereBuf,"i.modifies is null");
         }
-        
+
         if(filter.getHasModifications()!=null) {
             if(filter.getHasModifications().booleanValue()==true)
                 appendWhere(whereBuf,"size(i.modifications) > 0");
@@ -300,43 +300,39 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                 appendWhere(whereBuf,"size(i.modifications) = 0");
         }
     }
-    
+
     private void handleContentItemFilter(StringBuffer selectBuf,
             StringBuffer whereBuf, StringBuffer orderBuf, HashMap<String, Object> params,
             ContentItemFilter filter) {
-        
+
         if(selectBuf.toString() != null && selectBuf.toString().isEmpty()) {
             selectBuf.append("select i from HibContentItem i");
             handleItemFilter(selectBuf, whereBuf, params, filter);
         }
-        
-        // handle triageStatus filter
-        if(filter.getTriageStatusCode()!=null)
-            formatExpression(whereBuf, params, "i.triageStatus.code", filter.getTriageStatusCode());
     }
-    
-    
+
+
     private void appendWhere(StringBuffer whereBuf, String toAppend) {
         if(whereBuf.toString() != null && whereBuf.toString().isEmpty())
             whereBuf.append(" where ").append(toAppend);
         else
             whereBuf.append(" and ").append(toAppend);
     }
-    
+
     private void appendOrder(StringBuffer orderBuf, String toAppend) {
         if(orderBuf.toString() != null && orderBuf.toString().isEmpty())
             orderBuf.append(" order by ").append(toAppend);
         else
             orderBuf.append(", ").append(toAppend);
     }
-    
+
     private String formatForLike(String toFormat) {
         return "%" + toFormat + "%";
     }
-    
+
     /**
      * Because a timeRange query requires two passes: one to get the list
-     * of possible events that occur in the range, and one 
+     * of possible events that occur in the range, and one
      * to expand recurring events if necessary.
      * This is required because we only index a start and end
      * for the entire recurrence series, and expansion is required to determine
@@ -346,46 +342,46 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         boolean hasTimeRangeFilter = false;
         boolean includeMasterInResults = true;
         boolean doTimeRangeSecondPass = true;
-        
+
         HashSet<Item> processedResults = new HashSet<Item>();
         EventStampFilter eventFilter = (EventStampFilter) itemFilter.getStampFilter(EventStampFilter.class);
-        
-        
+
+
         if(eventFilter!=null) {
             // does eventFilter have timeRange filter?
             hasTimeRangeFilter = (eventFilter.getPeriod() != null);
         }
-        
-        // When expanding recurring events do we include the master item in 
+
+        // When expanding recurring events do we include the master item in
         // the results, or just the expanded occurrences/modifications
         if(hasTimeRangeFilter && "false".equalsIgnoreCase(itemFilter
                 .getFilterProperty(EventStampFilter.PROPERTY_INCLUDE_MASTER_ITEMS)))
             includeMasterInResults = false;
-        
+
         // Should we do a second pass to expand recurring events to determine
         // if a recurring event actually occurs in the time-range specified,
         // or should we just return the recurring event without double-checking.
         if (hasTimeRangeFilter && "false".equalsIgnoreCase(itemFilter
                  .getFilterProperty(EventStampFilter.PROPERTY_DO_TIMERANGE_SECOND_PASS)))
             doTimeRangeSecondPass = false;
-        
+
         for(Item item: results) {
-            
+
             // If item is not a note, then nothing to do
             if(!(item instanceof NoteItem)) {
                 processedResults.add(item);
                 continue;
             }
-            
+
             NoteItem note = (NoteItem) item;
-            
-            // If note is a modification then add both the modification and the 
+
+            // If note is a modification then add both the modification and the
             // master.
             if(note.getModifies()!=null) {
                 processedResults.add(note);
                 if(includeMasterInResults)
                     processedResults.add(note.getModifies());
-            } 
+            }
             // If filter doesn't have a timeRange, then we are done
             else if(!hasTimeRangeFilter)
                 processedResults.add(note);
@@ -394,10 +390,10 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                         includeMasterInResults, doTimeRangeSecondPass));
             }
         }
-        
+
         return processedResults;
     }
-    
+
     private Collection<ContentItem> processMasterNote(NoteItem note,
             EventStampFilter filter, boolean includeMasterInResults,
             boolean doTimeRangeSecondPass) {
@@ -422,11 +418,11 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         // is configured to not return the master
         if (!instances.isEmpty() && includeMasterInResults)
             results.add(note);
-        
+
         // If were aren't expanding, then return
         if(filter.isExpandRecurringEvents() == false)
             return results;
-        
+
         // Otherwise, add an occurence item for each occurrence
         for (Iterator<Entry<String, Instance>> it = instances.entrySet()
                 .iterator(); it.hasNext();) {
@@ -441,15 +437,15 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
 
         return results;
     }
-    
+
     private void formatExpression(StringBuffer whereBuf,
             HashMap<String, Object> params, String propName,
             FilterCriteria fc) {
 
         StringBuilder expBuf = new StringBuilder();
-        
+
         FilterExpression exp = (FilterExpression) fc;
-        
+
         if (exp instanceof NullExpression) {
             expBuf.append(propName);
             if (exp.isNegated())
@@ -461,14 +457,14 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             expBuf.append(propName);
             if(exp.isNegated())
                 expBuf.append(" not");
-            
+
             String param = "param" + params.size();
             expBuf.append(" between :").append(param);
             params.put(param, be.getValue1());
             param = "param" + params.size();
             expBuf.append(" and :").append(param);
             params.put(param, be.getValue2());
-        } 
+        }
         else {
             String param = "param" + params.size();
             if (exp instanceof EqualsExpression) {
@@ -496,11 +492,11 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                     expBuf.append(" like ");
 
                 params.put(param, formatForLike(exp.getValue().toString().toLowerCase()));
-            } 
+            }
 
             expBuf.append(":").append(param);
         }
-        
+
         appendWhere(whereBuf, expBuf.toString());
     }
 

@@ -18,11 +18,9 @@ package org.osaf.cosmo.service;
 import net.fortuna.ical4j.model.DateTime;
 import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.filter.ItemFilter;
-import org.osaf.cosmo.service.triage.TriageStatusQueryContext;
 
 import java.util.Date;
 import java.util.Set;
-import java.util.SortedSet;
 
 /**
  * Interface for services that manage access to user content.
@@ -291,26 +289,5 @@ public interface ContentService extends Service {
     Set<ContentItem> findEvents(CollectionItem collection,
                                 DateTime rangeStart, DateTime rangeEnd,
                                 boolean expandRecurringEvents);
-
-
-    /**
-     * Find note items by triage status that belong to a collection.
-     * @param collection collection
-     * @param context the query context
-     * @return set of notes that match the specified triage status label and
-     *         belong to the specified collection
-     */
-    SortedSet<NoteItem> findNotesByTriageStatus(CollectionItem collection,
-                                                TriageStatusQueryContext context);
-
-    /**
-     * Find note items by triage status that belong to a recurring note series.
-     * @param note recurring note
-     * @param context the query context
-     * @return set of notes that match the specified triage status label and belong
-     *         to the specified recurring note series
-     */
-    SortedSet<NoteItem> findNotesByTriageStatus(NoteItem note,
-                                                TriageStatusQueryContext context);
 
 }

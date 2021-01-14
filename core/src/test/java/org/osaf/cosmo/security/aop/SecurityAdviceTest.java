@@ -35,7 +35,6 @@ import org.osaf.cosmo.security.mock.MockSecurityManager;
 import org.osaf.cosmo.security.mock.MockUserPrincipal;
 import org.osaf.cosmo.service.ContentService;
 import org.osaf.cosmo.service.impl.StandardContentService;
-import org.osaf.cosmo.service.impl.StandardTriageStatusQueryProcessor;
 import org.osaf.cosmo.service.lock.SingleVMLockManager;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
@@ -70,7 +69,6 @@ public class SecurityAdviceTest extends TestCase {
         service.setCalendarDao(calendarDao);
         service.setContentDao(contentDao);
         service.setLockManager(lockManager);
-        service.setTriageStatusQueryProcessor(new StandardTriageStatusQueryProcessor());
         service.init();
 
         // create a factory that can generate a proxy for the given target object

@@ -23,7 +23,6 @@ import org.osaf.cosmo.eim.EimRecord;
 import org.osaf.cosmo.eim.IntegerField;
 import org.osaf.cosmo.eim.TextField;
 import org.osaf.cosmo.eim.schema.BaseItemGenerator;
-import org.osaf.cosmo.eim.schema.text.TriageStatusFormat;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.Item;
 
@@ -67,16 +66,6 @@ public class ContentItemGenerator extends BaseItemGenerator
                     contentItem.getDisplayName()));
         }
 
-
-        String ts = TriageStatusFormat.getInstance(getItem().getFactory()).
-            format(contentItem.getTriageStatus());
-
-        // missing TriageStatus ends up as empty string instead of null
-        if(isModification() && ts != null && ts.isEmpty()) {
-            record.addField(generateMissingField(new TextField(FIELD_TRIAGE, null)));
-        } else {
-            record.addField(new TextField(FIELD_TRIAGE, ts));
-        }
 
         if(isMissingAttribute("sent")) {
             record.addField(generateMissingField(new IntegerField(FIELD_HAS_BEEN_SENT, null)));

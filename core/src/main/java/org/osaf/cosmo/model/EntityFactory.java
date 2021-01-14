@@ -88,13 +88,6 @@ public interface EntityFactory {
 
 
     /**
-     * Create new TriageStatus
-     * @return new TriageStatus
-     */
-    TriageStatus createTriageStatus();
-
-
-    /**
      * Create new EventStamp
      * @param note associated NoteItem
      * @return new EventStamp

@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@ package org.osaf.cosmo.model.mock;
 
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.TriageStatus;
 
 /**
  * Extends {@link Item} to represent an abstract
@@ -26,25 +25,23 @@ import org.osaf.cosmo.model.TriageStatus;
 public abstract class MockContentItem extends MockItem implements ContentItem {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 4904755977871771389L;
-  
+
     private String lastModifiedBy = null;
-  
+
     private Integer lastModification = null;
-    
-   
-    private TriageStatus triageStatus = new MockTriageStatus();
-    
+
+
     private Boolean sent = null;
-    
-   
+
+
     private Boolean needsReply = null;
-    
+
     public MockContentItem() {
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceContentItem#getLastModifiedBy()
      */
@@ -73,19 +70,6 @@ public abstract class MockContentItem extends MockItem implements ContentItem {
         this.lastModification = lastModification;
     }
 
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceContentItem#getTriageStatus()
-     */
-    public TriageStatus getTriageStatus() {
-        return triageStatus;
-    }
-  
-    /* (non-Javadoc)
-     * @see org.osaf.cosmo.model.copy.InterfaceContentItem#setTriageStatus(org.osaf.cosmo.model.copy.TriageStatus)
-     */
-    public void setTriageStatus(TriageStatus ts) {
-        triageStatus = ts;
-    }
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceContentItem#getSent()
@@ -114,19 +98,18 @@ public abstract class MockContentItem extends MockItem implements ContentItem {
     public void setNeedsReply(Boolean needsReply) {
         this.needsReply = needsReply;
     }
-    
+
     @Override
     protected void copyToItem(Item item) {
         if(!(item instanceof ContentItem))
             return;
-        
+
         super.copyToItem(item);
-        
+
         ContentItem contentItem = (ContentItem) item;
-        
+
         contentItem.setLastModifiedBy(getLastModifiedBy());
         contentItem.setLastModification(getLastModification());
-        contentItem.setTriageStatus(getTriageStatus());
         contentItem.setSent(getSent());
         contentItem.setNeedsReply(getNeedsReply());
     }
