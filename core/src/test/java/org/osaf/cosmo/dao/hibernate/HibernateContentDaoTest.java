@@ -377,7 +377,6 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertTrue(dateVal.equals(val));
     }
 
-    @Ignore("FIXME: fails since updateContent(queryItem) updates modifiedDate")
     @Test
     public void testXmlAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
@@ -403,20 +402,19 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         Attribute attr = queryItem.getAttribute(new HibQName("xmlattribute"));
-        /*Assert.assertNotNull(attr);
+        Assert.assertNotNull(attr);
         Assert.assertTrue(attr instanceof XmlAttribute);
 
         org.w3c.dom.Element element = (org.w3c.dom.Element) attr.getValue();
 
-        Assert.assertEquals(DomWriter.write(testElement),DomWriter.write(element));*/
+        Assert.assertEquals(DomWriter.write(testElement),DomWriter.write(element));
 
         Date modifyDate = attr.getModifiedDate();
 
         // Sleep a couple millis to make sure modifyDate doesn't change
         Thread.sleep(1000);
 
-        // this updates the modifiedDate
-        //contentDao.updateContent(queryItem);
+        contentDao.updateContent(queryItem);
 
         // DIRTIES the session - therefore updates modifiedDate and the test still fails
         // it appears to be the 'value' on HibXmlAttribute, which is backed up by this:
@@ -434,7 +432,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // Attribute shouldn't have been updated
         Assert.assertEquals(modifyDate, attr.getModifiedDate());
 
-        /*attr.setValue(testElement2);
+        attr.setValue(testElement2);
 
         // Sleep a couple millis to make sure modifyDate doesn't change
         Thread.sleep(2);
@@ -454,7 +452,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         element = (org.w3c.dom.Element) attr.getValue();
 
-        Assert.assertEquals(DomWriter.write(testElement2),DomWriter.write(element));*/
+        Assert.assertEquals(DomWriter.write(testElement2),DomWriter.write(element));
     }
 
     @Test
