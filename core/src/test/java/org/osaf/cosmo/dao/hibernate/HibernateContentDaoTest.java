@@ -15,20 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.property.ProdId;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -38,58 +26,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
-import org.osaf.cosmo.model.Attribute;
-import org.osaf.cosmo.model.AvailabilityItem;
-import org.osaf.cosmo.model.BooleanAttribute;
-import org.osaf.cosmo.model.CalendarAttribute;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.ContentItem;
-import org.osaf.cosmo.model.DecimalAttribute;
-import org.osaf.cosmo.model.DictionaryAttribute;
-import org.osaf.cosmo.model.DuplicateItemNameException;
-import org.osaf.cosmo.model.FileItem;
-import org.osaf.cosmo.model.FreeBusyItem;
-import org.osaf.cosmo.model.HomeCollectionItem;
-import org.osaf.cosmo.model.ICalendarAttribute;
-import org.osaf.cosmo.model.IcalUidInUseException;
-import org.osaf.cosmo.model.IntegerAttribute;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.ItemNotFoundException;
-import org.osaf.cosmo.model.ItemTombstone;
-import org.osaf.cosmo.model.ModelValidationException;
-import org.osaf.cosmo.model.MultiValueStringAttribute;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.Ticket;
-import org.osaf.cosmo.model.TimestampAttribute;
-import org.osaf.cosmo.model.Tombstone;
-import org.osaf.cosmo.model.TriageStatus;
-import org.osaf.cosmo.model.TriageStatusUtil;
-import org.osaf.cosmo.model.UidInUseException;
-import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.model.XmlAttribute;
-import org.osaf.cosmo.model.hibernate.HibAvailabilityItem;
-import org.osaf.cosmo.model.hibernate.HibBooleanAttribute;
-import org.osaf.cosmo.model.hibernate.HibCalendarAttribute;
-import org.osaf.cosmo.model.hibernate.HibCollectionItem;
-import org.osaf.cosmo.model.hibernate.HibContentItem;
-import org.osaf.cosmo.model.hibernate.HibDecimalAttribute;
-import org.osaf.cosmo.model.hibernate.HibDictionaryAttribute;
-import org.osaf.cosmo.model.hibernate.HibFileItem;
-import org.osaf.cosmo.model.hibernate.HibFreeBusyItem;
-import org.osaf.cosmo.model.hibernate.HibICalendarAttribute;
-import org.osaf.cosmo.model.hibernate.HibIntegerAttribute;
-import org.osaf.cosmo.model.hibernate.HibItem;
-import org.osaf.cosmo.model.hibernate.HibMultiValueStringAttribute;
-import org.osaf.cosmo.model.hibernate.HibNoteItem;
-import org.osaf.cosmo.model.hibernate.HibQName;
-import org.osaf.cosmo.model.hibernate.HibStringAttribute;
-import org.osaf.cosmo.model.hibernate.HibTimestampAttribute;
-import org.osaf.cosmo.model.hibernate.HibTriageStatus;
-import org.osaf.cosmo.model.hibernate.HibXmlAttribute;
+import org.osaf.cosmo.model.*;
+import org.osaf.cosmo.model.hibernate.*;
 import org.osaf.cosmo.xml.DomWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
@@ -377,6 +321,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertTrue(dateVal.equals(val));
     }
 
+//    @Ignore("FIXME: fails since updateContent(queryItem) updates modifiedDate")
     @Test
     public void testXmlAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
@@ -407,7 +352,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         org.w3c.dom.Element element = (org.w3c.dom.Element) attr.getValue();
 
-        Assert.assertEquals(DomWriter.write(testElement),DomWriter.write(element));
+        Assert.assertEquals(DomWriter.write(testElement), DomWriter.write(element));
 
         Date modifyDate = attr.getModifiedDate();
 
