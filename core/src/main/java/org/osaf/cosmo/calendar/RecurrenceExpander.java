@@ -21,7 +21,8 @@ import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.property.*;
 import net.fortuna.ical4j.util.Dates;
 
-import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,16 +33,11 @@ import java.util.List;
  */
 public class RecurrenceExpander {
 
-    private static Date MAX_EXPAND_DATE = null;
+    // By default expand to 1 year in future. Anything more should require that we provide a date range of interest
+    private static Date MAX_EXPAND_DATE = new Date(LocalDateTime.now()
+            .plusMonths(Integer.getInteger("cosmo.RecurrenceExpander.monthsFromToday", 12))
+            .toInstant(ZoneOffset.UTC).toEpochMilli());
 
-    static {
-        try {
-            // Expand out to 2030 for those recurrence rules
-            // that have an end.  Recurring events with no end
-            // will be indexed as infinite.
-            MAX_EXPAND_DATE = new Date("20300101");
-        } catch (ParseException e) {}
-    }
 
     public RecurrenceExpander() {
         super();
@@ -57,15 +53,14 @@ public class RecurrenceExpander {
      *         recurring component.
      */
     public Date[] calculateRecurrenceRange(Calendar calendar) {
-        ComponentList vevents = calendar.getComponents().getComponents(
+        ComponentList<VEvent> vevents = calendar.getComponents().getComponents(
                 Component.VEVENT);
 
         List<Component> exceptions = new ArrayList<Component>();
         Component masterComp = null;
 
         // get list of exceptions (VEVENT with RECURRENCEID)
-        for (Iterator<VEvent> i = vevents.iterator(); i.hasNext();) {
-            VEvent event = i.next();
+        for (VEvent event : vevents) {
             if (event.getRecurrenceId() != null)
                 exceptions.add(event);
             else
@@ -111,7 +106,7 @@ public class RecurrenceExpander {
             return null;
         }
 
-        Dur duration = null;
+        Dur duration;
         Date end = getEndDate(comp);
         if (end == null) {
             if (start instanceof DateTime) {
