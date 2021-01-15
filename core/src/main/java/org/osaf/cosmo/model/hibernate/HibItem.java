@@ -22,6 +22,7 @@ import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.*;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
@@ -60,6 +61,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     @Index(name="idx_itemname")
     private String name;
 
+    @Nullable
     @Column(name = "displayname", length=1024)
     private String displayName;
 
@@ -279,7 +281,6 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#setAttribute(org.osaf.cosmo.model.QName, java.lang.Object)
      */
-    @SuppressWarnings("unchecked")
     public void setAttribute(QName key, Object value) {
         HibAttribute attr = (HibAttribute) attributes.get(key);
 
@@ -321,6 +322,7 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Item#getDisplayName()
      */
+    @Nullable
     public String getDisplayName() {
         return displayName;
     }
