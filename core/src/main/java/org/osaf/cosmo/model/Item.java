@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.model;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
@@ -148,12 +149,13 @@ public interface Item extends AuditableObject{
     /**
      * @return Item's human readable name
      */
+    @Nullable
     String getDisplayName();
 
     /**
      * @param displayName Item's human readable name
      */
-    void setDisplayName(String displayName);
+    void setDisplayName(@Nullable String displayName);
 
     User getOwner();
 
