@@ -38,7 +38,7 @@ import java.util.TreeSet;
  */
 
 @SuppressWarnings({"JavaDoc", "rawtypes"})
-public class InstanceList extends TreeMap {
+public class InstanceList extends TreeMap<String, Instance> {
 
     private static final long serialVersionUID = 1838360990532590681L;
     private boolean isUTC = false;
@@ -360,7 +360,7 @@ public class InstanceList extends TreeMap {
                 .getParameters().getParameter(Parameter.RANGE);
 
         // TODO Ignoring THISANDPRIOR
-        if ((range != null) && Range.THISANDFUTURE.equals(range)) {
+        if (Range.THISANDFUTURE.equals(range)) {
 
             // Policy - iterate over all the instances after this one, replacing
             // the original instance withg a version adjusted to match the
