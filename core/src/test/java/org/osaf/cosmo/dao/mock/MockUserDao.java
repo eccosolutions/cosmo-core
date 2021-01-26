@@ -100,6 +100,10 @@ public class MockUserDao implements UserDao {
         return (User) usernameIdx.get(username);
     }
 
+    public User getUserById(long userId) {
+        return null;
+    }
+
     /**
      */
     public User getUserByUid(String uid) {
