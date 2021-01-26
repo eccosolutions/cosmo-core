@@ -57,6 +57,16 @@ public interface UserService extends Service {
             PageCriteria<User.SortType> pageCriteria);
 
     /**
+     * Returns the user account identified by the given id.
+     *
+     * @param userId the id of the account to return
+     *
+     * @throws DataRetrievalFailureException if the account does not
+     * exist
+     */
+    User getUserById(long userId);
+
+    /**
      * Returns the user account identified by the given email address.
      *
      * @param email the email address of the account to return

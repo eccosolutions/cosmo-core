@@ -93,6 +93,12 @@ public class StandardUserService extends BaseService implements UserService {
         return userDao.getUser(username);
     }
 
+    public User getUserById(long userId) {
+        if (log.isDebugEnabled())
+            log.debug("getting user " + userId);
+        return userDao.getUserById(userId);
+    }
+
     /**
      * Returns the user account identified by the given email address.
      *

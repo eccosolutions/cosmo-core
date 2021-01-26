@@ -98,6 +98,15 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         }
     }
 
+    public User getUserById(long userId) {
+        try {
+            return findUserById(userId);
+        } catch (HibernateException e) {
+            currentSession().clear();
+            throw SessionFactoryUtils.convertHibernateAccessException(e);
+        }
+    }
+
     public User getUserByUid(String uid) {
         if(uid==null)
             throw new IllegalArgumentException("uid required");
@@ -323,6 +332,19 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         Session session = currentSession();
         Query hibQuery = session.getNamedQuery("user.byEmail.ignorecase").setParameter(
                 "email", email);
+        hibQuery.setCacheable(true);
+        hibQuery.setFlushMode(FlushMode.MANUAL);
+        List users = hibQuery.list();
+        if (!users.isEmpty())
+            return (User) users.get(0);
+        else
+            return null;
+    }
+
+    private User findUserById(long userId) {
+        Session session = currentSession();
+        Query hibQuery = session.getNamedQuery(
+                "user.byId").setParameter("userId", userId);
         hibQuery.setCacheable(true);
         hibQuery.setFlushMode(FlushMode.MANUAL);
         List users = hibQuery.list();

@@ -76,6 +76,7 @@
     @NamedQuery(name="user.byEmail", query="from HibUser where email=:email"),
     @NamedQuery(name="user.byEmail.ignorecase", query="from HibUser where lower(email)=lower(:email)"),
     @NamedQuery(name="user.byUsernameOrEmail.ignorecase.ingoreId", query="from HibUser where id!=:userid and (lower(username)=lower(:username) or lower(email)=lower(:email))"),
+    @NamedQuery(name="user.byId", query="from HibUser where id=:userId"),
     @NamedQuery(name="user.byUid", query="from HibUser where uid=:uid"),
     @NamedQuery(name="user.byActivationId", query="from HibUser where activationid=:activationId"),
     @NamedQuery(name="user.all", query="from HibUser"),

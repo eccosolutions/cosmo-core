@@ -169,6 +169,7 @@ public class StandardContentServiceTest extends TestCase {
         assertNull(item);
     }
 
+
     public void testCreateCollectionWithChildren() throws Exception {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);

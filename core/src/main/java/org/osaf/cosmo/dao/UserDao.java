@@ -68,6 +68,8 @@ public interface UserDao extends Dao {
      */
     User getUserByUid(String uid);
 
+    User getUserById(long id);
+
     /**
      * Returns the user account identified by the given activation id.
      *
