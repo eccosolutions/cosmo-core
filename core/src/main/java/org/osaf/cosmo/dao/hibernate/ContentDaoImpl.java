@@ -15,13 +15,6 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.FlushMode;
@@ -29,20 +22,14 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.osaf.cosmo.dao.ContentDao;
-import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.ContentItem;
-import org.osaf.cosmo.model.ICalendarItem;
-import org.osaf.cosmo.model.IcalUidInUseException;
-import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.ModelValidationException;
-import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.User;
+import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import javax.validation.ConstraintViolationException;
+import java.util.*;
 
 /**
  * Implementation of ContentDao using hibernate persistence objects
@@ -51,6 +38,8 @@ import javax.validation.ConstraintViolationException;
 public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
     private static final Log log = LogFactory.getLog(ContentDaoImpl.class);
+
+    private boolean shouldUpdateCollectionTimestamp = Boolean.getBoolean("cosmo.updateCollectionTimestamp");
 
     /*
      * (non-Javadoc)
@@ -228,6 +217,10 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
      * @see org.osaf.cosmo.dao.ContentDao#updateCollectionTimestamp(org.osaf.cosmo.model.CollectionItem)
      */
     public CollectionItem updateCollectionTimestamp(CollectionItem collection) {
+        if (!shouldUpdateCollectionTimestamp) {
+            return collection;
+        }
+
         try {
             if(!currentSession().contains(collection))
                 collection = (CollectionItem) currentSession().merge(collection);
@@ -456,6 +449,14 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         }
 
         currentSession().delete(content);
+    }
+
+    /**
+     * NOTE: We now default this to off to avoid perf impacts on modifying a "collection" join table.
+     * We don't use the timestamps but the update causes a conditional merge, update and flush
+     */
+    public void setShouldUpdateCollectionTimestamp(boolean shouldUpdateCollectionTimestamp) {
+        this.shouldUpdateCollectionTimestamp = shouldUpdateCollectionTimestamp;
     }
 
     private void removeContentCommon(ContentItem content) {

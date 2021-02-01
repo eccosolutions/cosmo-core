@@ -727,6 +727,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
     @Test
     public void testContentDaoUpdateCollectionTimestamp() throws Exception {
+        contentDao.setShouldUpdateCollectionTimestamp(true); // See javadoc
+
         User user = getUser(userDao, "testuser2");
         CollectionItem root = contentDao.getRootItem(user);
 
