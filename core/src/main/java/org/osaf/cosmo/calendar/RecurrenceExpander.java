@@ -30,6 +30,42 @@ import java.util.List;
 /**
  * Utility class that contains apis that that involve
  * expanding recurring components.
+ *
+ *
+ * Expanding recurrences shouldn't be used to solve every quirk...
+ *
+ * truncate solution over changing a recurring day (better than RANGE):
+ *      https://tools.ietf.org/html/rfc5545#section-3.8.4.4
+ *          Assuming an unbounded recurring calendar
+ *          component scheduled to occur on Mondays and Wednesdays, the
+ *          "RANGE" parameter could not be used to reschedule only the
+ *          future Monday instances to occur on Tuesday instead.  In such
+ *          cases, the calendar application could simply truncate the
+ *          unbounded recurring calendar component (i.e., with the "COUNT"
+ *          or "UNTIL" rule parts), and create two new unbounded recurring
+ *          calendar components for the future instances.
+ *
+ * truncate solution over THISANDFUTURE (better than RANGE):
+ *      https://stackoverflow.com/questions/11456406/recurrence-id-in-icalendar-rfc-5545
+ *          the difficulty of rescheduling using THISANDFUTURE and interoperability has been documented in calconnect interop oct 2010.
+ *          If you can, it would propably be easier / safer for interop to follow the note in the RFC5545 § 3.8.4.4.
+ *          The "RANGE" parameter may not be appropriate to reschedule specific subsequent instances [...] . In such cases, the calendar application could simply truncate the unbounded recurring calendar component (i.e., with the "COUNT" or "UNTIL" rule parts), and create two new unbounded recurring calendar components for the future instances.
+ *
+ * truncate solution over THISANDFUTURE - bring in a SERIES ID:
+ *      https://www.calconnect.org/pubdocs/CD1014%20October%202010%20CalConnect%20Interoperability%20Test%20Event%20Report.pdf
+ *      A series is split, with a new UID being sent for a second half of the series: Truncation/Expansion
+ *      (essentially capturing THISANDFUTURE behavior)
+ *      We would like to explore the concept of adding a SERIES ID to the iCalendar spec so that multiple
+ *      UIDs could still be considered part of the same series. This would help in the implementation of
+ *      THISANDFUTURE. Currently, the only ways to truly represent THISANDFUTURE changes are:
+ *       -Modification of each effected instance as an exception
+ *       -Dynamic processing of data
+ *       -Splitting the meeting into multiple UIDs for each split. At this point, a subsequent
+ *      THISANDFUTURE call across the two modified sets becomes problematic and there remains
+ *      problems linking the two separate UIDs as they are actually representing the same meeting.
+ *
+ *      series-id to link uid's together
+ *          https://www.ietf.org/id/draft-ietf-calext-icalendar-series-02.html#name-series-id
  */
 public class RecurrenceExpander {
 
@@ -206,6 +242,7 @@ public class RecurrenceExpander {
         }
 
         // event modifications....
+        // NB Modifications only obey start/end, not recur rules
         for(Component modComp : modifications) {
             Date startMod = getStartDate(modComp);
             Date endMod = getEndDate(modComp);
@@ -235,7 +272,7 @@ public class RecurrenceExpander {
      * @param rangeEnd expand end
      * @param timezone Optional timezone to use for floating dates.  If null, the
      *        system default is used.
-     * @return InstanceList containing all occurences of recurring event during
+     * @return InstanceList containing all occurrences of recurring event during
      *         time range
      */
     public InstanceList getOcurrences(Calendar calendar, Date rangeStart, Date rangeEnd, TimeZone timezone) {
