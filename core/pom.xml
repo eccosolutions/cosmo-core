@@ -21,7 +21,7 @@
             <id>osafoundation.org</id>
             <name>OSAF's repository</name>
             <layout>default</layout>
-            <url>http://eccosolutions.github.io/cosmo/maven</url>
+            <url>https://eccosolutions.github.io/cosmo/maven</url>
         </repository>
     </repositories>
 

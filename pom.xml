@@ -17,7 +17,7 @@
 
 	<name>Cosmo Core Aggregator</name>
 
-	<url>http://github.com/eccosolutions/cosmo-core</url>
+	<url>https://github.com/eccosolutions/cosmo-core</url>
 
 	<description>
 		A derivation of the back-end parts of cosmo from http://chandlerproject.org.
@@ -39,7 +39,7 @@
 	</licenses>
 
 	<scm>
-		<url>http://github.com/eccosolutions/cosmo-core</url>
+		<url>https://github.com/eccosolutions/cosmo-core</url>
 		<connection>scm:git:git@github.com:eccosolutions/cosmo-core.git</connection>
 		<developerConnection>scm:git:git@github.com:eccosolutions/cosmo-core.git</developerConnection>
 	  <tag>release-3.0.0.M1</tag>
