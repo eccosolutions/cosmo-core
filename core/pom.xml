@@ -186,12 +186,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-jcr-webdav</artifactId>
             <version>1.0-osaf-20061023</version>

@@ -29,8 +29,6 @@
 
   <!-- we don't need these, but we have to override the bean definition
        from applicationContext.xml -->
-  <bean id="mailSession"
-        class="java.lang.String"/>  
   <bean id="exporter"
         class="java.lang.String"/>
   <bean id="dbInitializer"
@@ -40,20 +38,8 @@
   <bean id="schedulerManager"
 	  class="java.lang.String"/>
 
-  <bean id="mailSender"
-        class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="protocol">
-      <value>smtp</value>
-    </property>
-    <property name="host">
-      <value>localhost</value>
-    </property>
-  </bean>
-
   <bean id="accountActivator"
          class="org.osaf.cosmo.service.account.AutomaticAccountActivator"/>
 
-  <bean id="passwordRecoverer"
-         class="org.osaf.cosmo.service.account.MockPasswordRecoverer"/>
 
 </beans>

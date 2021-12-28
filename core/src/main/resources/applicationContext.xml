@@ -44,13 +44,6 @@
     </property>
   </bean>
 
-  <!-- resources needed to send mail -->
-  <jee:jndi-lookup id="mailSession" jndi-name="java:comp/env/mail/cosmo"/>
-
-  <bean id="mailSender"
-        class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="session" ref="mailSession"/>
-  </bean>
 
     <!-- TODO: We did have a ValidatePreUpdateEventListener and ValidatePreInsertEventListener configured too -->
 
@@ -262,24 +255,6 @@
   <!-- services -->
   <bean id="passwordGenerator"
         class="org.apache.commons.id.random.SessionIdGenerator"/>
-
-  <bean id="accountActivator"
-        class="org.osaf.cosmo.service.account.EmailAccountActivator">
-    <property name="idGenerator" ref="idGenerator"/>
-    <property name="mailSender" ref="mailSender"/>
-    <property name="messageSource" ref="messageSource"/>
-    <property name="required">
-        <value>${cosmo.service.account.requireActivation}</value>
-    </property>
-  </bean>
-
-  <bean id="passwordRecoverer"
-          class="org.osaf.cosmo.service.account.EmailPasswordRecoverer">
-
-    <property name="idGenerator" ref="idGenerator"/>
-    <property name="mailSender" ref="mailSender"/>
-    <property name="messageSource" ref="messageSource"/>
-  </bean>
 
   <bean id="ootbHelper"
         class="org.osaf.cosmo.service.account.OutOfTheBoxHelper">
