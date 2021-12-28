@@ -17,10 +17,6 @@ package org.osaf.cosmo.dao.hibernate;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.property.ProdId;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.DOMWriter;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,8 +26,10 @@ import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.hibernate.*;
 import org.osaf.cosmo.xml.DomWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.w3c.dom.Element;
 
 import javax.validation.ConstraintViolationException;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -329,8 +327,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         ContentItem item = generateTestContent();
 
-        org.w3c.dom.Element testElement = createTestElement();
-        org.w3c.dom.Element testElement2 = createTestElement();
+        Element testElement = createTestElement();
+        Element testElement2 = createTestElement();
 
         testElement2.setAttribute("foo", "bar");
 
@@ -350,7 +348,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNotNull(attr);
         Assert.assertTrue(attr instanceof XmlAttribute);
 
-        org.w3c.dom.Element element = (org.w3c.dom.Element) attr.getValue();
+        Element element = (Element) attr.getValue();
 
         Assert.assertEquals(DomWriter.write(testElement), DomWriter.write(element));
 
@@ -395,7 +393,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // Attribute should have been updated
         Assert.assertTrue(modifyDate.before(attr.getModifiedDate()));
 
-        element = (org.w3c.dom.Element) attr.getValue();
+        element = (Element) attr.getValue();
 
         Assert.assertEquals(DomWriter.write(testElement2),DomWriter.write(element));
     }
@@ -1458,21 +1456,27 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         return content;
     }
 
-    private org.w3c.dom.Element createTestElement() throws Exception {
-        Document document = DocumentHelper.createDocument();
-        Element root = document.addElement( "root" );
+    private Element createTestElement() throws Exception {
+        org.w3c.dom.Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 
-        root.addElement( "author" )
-            .addAttribute( "name", "James" )
-            .addAttribute( "location", "UK" )
-            .addText( "James Strachan" );
+        Element root = document.createElement( "root" );
+        document.appendChild(root);
+        {
+            Element author = document.createElement("author");
+            author.setAttribute("name", "James");
+            author.setAttribute("location", "UK");
+            author.setTextContent("James Strachan");
+            root.appendChild(author);
+        }
+        {
+            Element author = document.createElement("author");
+            author.setAttribute("name", "Bob");
+            author.setAttribute("location", "US");
+            author.setTextContent("Bob McWhirter");
+            root.appendChild(author);
+        }
 
-        root.addElement( "author" )
-            .addAttribute( "name", "Bob" )
-            .addAttribute( "location", "US" )
-            .addText( "Bob McWhirter" );
-
-        return new DOMWriter().write(document).getDocumentElement();
+        return document.getDocumentElement();
     }
 
     private HibItem getHibItem(Item item) {
