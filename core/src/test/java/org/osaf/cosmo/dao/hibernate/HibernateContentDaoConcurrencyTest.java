@@ -15,7 +15,6 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import junit.framework.Assert;
 import org.hibernate.SessionFactory;
 import org.junit.Assume;
@@ -31,13 +30,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
 import javax.persistence.OptimisticLockException;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.Matchers.instanceOf;
 
