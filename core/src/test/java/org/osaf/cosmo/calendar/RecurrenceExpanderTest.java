@@ -99,7 +99,7 @@ public class RecurrenceExpanderTest extends TestCase {
     public void testRecurrenceExpanderLongEvent() throws Exception {
         RecurrenceExpander expander = new RecurrenceExpander();
         Calendar calendar = getCalendar("tz_recurring3.ics");
-        
+
         Date[] range = expander.calculateRecurrenceRange(calendar);
         
         Assert.assertEquals("20070101T100000", range[0].toString());
@@ -124,8 +124,17 @@ public class RecurrenceExpanderTest extends TestCase {
         
         Assert.assertEquals(1, instances.size());
     }
-    
-    
+
+    public void testRecurrenceExpanderRuleWithDays() throws Exception {
+        RecurrenceExpander expander = new RecurrenceExpander();
+        Calendar calendar = getCalendar("floating_recurring5.ics");
+
+        Date[] range = expander.calculateRecurrenceRange(calendar);
+
+        Assert.assertEquals("20220104T100000", range[0].toString());
+        Assert.assertEquals("20220121T101000", range[1].toString());
+    }
+
     public void testIsOccurrence() throws Exception {
         RecurrenceExpander expander = new RecurrenceExpander();
         Calendar calendar = getCalendar("floating_recurring3.ics");
