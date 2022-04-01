@@ -17,7 +17,7 @@
 
 	<name>Cosmo Core Aggregator</name>
 
-	<url>http://github.com/eccosolutions/cosmo-core</url>
+	<url>https://github.com/eccosolutions/cosmo-core</url>
 
 	<description>
 		A derivation of the back-end parts of cosmo from http://chandlerproject.org.
@@ -33,13 +33,13 @@
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
 	<scm>
-		<url>http://github.com/eccosolutions/cosmo-core</url>
+		<url>https://github.com/eccosolutions/cosmo-core</url>
 		<connection>scm:git:git@github.com:eccosolutions/cosmo-core.git</connection>
 		<developerConnection>scm:git:git@github.com:eccosolutions/cosmo-core.git</developerConnection>
 	  <tag>release-3.0.0.M1</tag>
