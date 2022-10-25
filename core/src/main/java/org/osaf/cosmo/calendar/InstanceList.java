@@ -220,7 +220,10 @@ public class InstanceList extends TreeMap<String, Instance> {
                 Date startDate = org.osaf.cosmo.calendar.util.Dates.getInstance(sd, start);
                 Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getTime(sd), start);
                 Instance instance = new Instance(comp, startDate, endDate);
-                put(instance.getRid().toString(), instance);
+                // Workaround for https://github.com/ical4j/ical4j/issues/603
+                if (instance.getStart().before(ajustedRangeEnd)) {
+                    put(instance.getRid().toString(), instance);
+                }
             }
         }
         // exception dates..
