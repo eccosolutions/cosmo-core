@@ -24,18 +24,16 @@ import net.fortuna.ical4j.util.Dates;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Utility class that contains apis that that involve
  * expanding recurring components.
- *
- *
+ * <p>
  * Expanding recurrences shouldn't be used to solve every quirk...
- *
+ * <p>
  * truncate solution over changing a recurring day (better than RANGE):
- *      https://tools.ietf.org/html/rfc5545#section-3.8.4.4
+ *      <a href="https://tools.ietf.org/html/rfc5545#section-3.8.4.4">rfc5545#section-3.8.4.4</a>
  *          Assuming an unbounded recurring calendar
  *          component scheduled to occur on Mondays and Wednesdays, the
  *          "RANGE" parameter could not be used to reschedule only the
@@ -44,15 +42,15 @@ import java.util.List;
  *          unbounded recurring calendar component (i.e., with the "COUNT"
  *          or "UNTIL" rule parts), and create two new unbounded recurring
  *          calendar components for the future instances.
- *
+ * <p>
  * truncate solution over THISANDFUTURE (better than RANGE):
- *      https://stackoverflow.com/questions/11456406/recurrence-id-in-icalendar-rfc-5545
+ *      <a href="https://stackoverflow.com/questions/11456406/recurrence-id-in-icalendar-rfc-5545">...</a>
  *          the difficulty of rescheduling using THISANDFUTURE and interoperability has been documented in calconnect interop oct 2010.
  *          If you can, it would propably be easier / safer for interop to follow the note in the RFC5545 § 3.8.4.4.
  *          The "RANGE" parameter may not be appropriate to reschedule specific subsequent instances [...] . In such cases, the calendar application could simply truncate the unbounded recurring calendar component (i.e., with the "COUNT" or "UNTIL" rule parts), and create two new unbounded recurring calendar components for the future instances.
- *
+ * <p>
  * truncate solution over THISANDFUTURE - bring in a SERIES ID:
- *      https://www.calconnect.org/pubdocs/CD1014%20October%202010%20CalConnect%20Interoperability%20Test%20Event%20Report.pdf
+ *      <a href="https://www.calconnect.org/pubdocs/CD1014%20October%202010%20CalConnect%20Interoperability%20Test%20Event%20Report.pdf">...</a>
  *      A series is split, with a new UID being sent for a second half of the series: Truncation/Expansion
  *      (essentially capturing THISANDFUTURE behavior)
  *      We would like to explore the concept of adding a SERIES ID to the iCalendar spec so that multiple
@@ -63,14 +61,14 @@ import java.util.List;
  *       -Splitting the meeting into multiple UIDs for each split. At this point, a subsequent
  *      THISANDFUTURE call across the two modified sets becomes problematic and there remains
  *      problems linking the two separate UIDs as they are actually representing the same meeting.
- *
+ * <p>
  *      series-id to link uid's together
- *          https://www.ietf.org/id/draft-ietf-calext-icalendar-series-02.html#name-series-id
+ *          <a href="https://www.ietf.org/id/draft-ietf-calext-icalendar-series-02.html#name-series-id">...</a>
  */
 public class RecurrenceExpander {
 
-    // By default expand to 1 year in future. Anything more should require that we provide a date range of interest
-    private static Date MAX_EXPAND_DATE = new Date(LocalDateTime.now()
+    // By default, expand to 1 year in the future. Anything more should require that we provide a date range of interest
+    private static final Date MAX_EXPAND_DATE = new Date(LocalDateTime.now()
             .plusMonths(Integer.getInteger("cosmo.RecurrenceExpander.monthsFromToday", 12))
             .toInstant(ZoneOffset.UTC).toEpochMilli());
 
@@ -92,7 +90,7 @@ public class RecurrenceExpander {
         ComponentList<VEvent> vevents = calendar.getComponents().getComponents(
                 Component.VEVENT);
 
-        List<Component> exceptions = new ArrayList<Component>();
+        List<Component> exceptions = new ArrayList<>();
         Component masterComp = null;
 
         // get list of exceptions (VEVENT with RECURRENCEID)
@@ -118,7 +116,7 @@ public class RecurrenceExpander {
      *         recurring component.
      */
     public Date[] calculateRecurrenceRange(Component comp) {
-        return calculateRecurrenceRange(comp, new ArrayList<Component>(0));
+        return calculateRecurrenceRange(comp, new ArrayList<>(0));
 
     }
     /**
@@ -181,15 +179,13 @@ public class RecurrenceExpander {
         // give us the broader range.
 
         // recurrence dates..
-        PropertyList rDates = comp.getProperties()
+        PropertyList<RDate> rDates = comp.getProperties()
                 .getProperties(Property.RDATE);
-        for (Iterator i = rDates.iterator(); i.hasNext();) {
-            RDate rdate = (RDate) i.next();
+        for (RDate rdate : rDates) {
             // Both PERIOD and DATE/DATE-TIME values allowed
             if (Value.PERIOD.equals(rdate.getParameters().getParameter(
                     Parameter.VALUE))) {
-                for (Iterator j = rdate.getPeriods().iterator(); j.hasNext();) {
-                    Period period = (Period) j.next();
+                for (Period period : rdate.getPeriods()) {
                     if (period.getStart().before(dateRange[0]))
                         dateRange[0] = period.getStart();
                     if (period.getEnd().after(dateRange[1]))
@@ -197,8 +193,7 @@ public class RecurrenceExpander {
 
                 }
             } else {
-                for (Iterator j = rdate.getDates().iterator(); j.hasNext();) {
-                    Date startDate = (Date) j.next();
+                for (Date startDate : rdate.getDates()) {
                     Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration
                             .getTime(startDate), startDate);
                     if (startDate.before(dateRange[0]))
@@ -210,15 +205,14 @@ public class RecurrenceExpander {
         }
 
         // recurrence rules..
-        PropertyList rRules = comp.getProperties()
+        PropertyList<RRule> rRules = comp.getProperties()
                 .getProperties(Property.RRULE);
-        for (Iterator i = rRules.iterator(); i.hasNext();) {
-            RRule rrule = (RRule) i.next();
+        for (RRule rrule : rRules) {
             Recur recur = rrule.getRecur();
 
             // If this is an infinite recurring event, we are done processing
             // the rules
-            if(recur.getCount()==-1 && recur.getUntil()==null) {
+            if (recur.getCount() == -1 && recur.getUntil() == null) {
                 dateRange[1] = null;
                 break;
             }
@@ -232,8 +226,8 @@ public class RecurrenceExpander {
 
             // Dates are sorted, so get the last occurence, and calculate the end
             // date and update dateRange if necessary
-            if(!startDates.isEmpty()) {
-                Date lastStart = startDates.get(startDates.size()-1);
+            if (!startDates.isEmpty()) {
+                Date lastStart = startDates.get(startDates.size() - 1);
                 Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getTime(lastStart), start);
 
                 if (endDate.after(dateRange[1]))
@@ -259,7 +253,7 @@ public class RecurrenceExpander {
         if(start instanceof DateTime) {
             ((DateTime) dateRange[0]).setTimeZone(((DateTime) start).getTimeZone());
             if(dateRange[1]!=null)
-            ((DateTime) dateRange[0]).setTimeZone(((DateTime) start).getTimeZone());
+                ((DateTime) dateRange[0]).setTimeZone(((DateTime) start).getTimeZone());
         }
 
         return dateRange;
@@ -276,15 +270,14 @@ public class RecurrenceExpander {
      *         time range
      */
     public InstanceList getOcurrences(Calendar calendar, Date rangeStart, Date rangeEnd, TimeZone timezone) {
-        ComponentList vevents = calendar.getComponents().getComponents(
+        ComponentList<VEvent> vevents = calendar.getComponents().getComponents(
                 Component.VEVENT);
 
-        List<Component> exceptions = new ArrayList<Component>();
+        List<Component> exceptions = new ArrayList<>();
         Component masterComp = null;
 
         // get list of exceptions (VEVENT with RECURRENCEID)
-        for (Iterator<VEvent> i = vevents.iterator(); i.hasNext();) {
-            VEvent event = i.next();
+        for (VEvent event : vevents) {
             if (event.getRecurrenceId() != null)
                 exceptions.add(event);
             else
@@ -306,7 +299,7 @@ public class RecurrenceExpander {
      *         time range
      */
     public InstanceList getOcurrences(Component component, Date rangeStart, Date rangeEnd, TimeZone timezone) {
-        return getOcurrences(component, new ArrayList<Component>(0), rangeStart, rangeEnd, timezone);
+        return getOcurrences(component, new ArrayList<>(0), rangeStart, rangeEnd, timezone);
     }
 
     /**
@@ -355,9 +348,8 @@ public class RecurrenceExpander {
 
         InstanceList instances = getOcurrences(calendar, occurrence, rangeEnd, null);
 
-        for(Iterator<Instance> it = instances.values().iterator(); it.hasNext();) {
-            Instance instance = it.next();
-            if(instance.getRid().getTime()==occurrence.getTime())
+        for (Instance instance : instances.values()) {
+            if (instance.getRid().getTime() == occurrence.getTime())
                 return true;
         }
 
