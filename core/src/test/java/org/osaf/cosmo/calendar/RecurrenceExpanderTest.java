@@ -24,6 +24,11 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.InputStream;
 
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.osaf.cosmo.calendar.util.TimeZoneUtils.getTimeZone;
+
 /**
  * Test RecurrenceExpander.
  *
@@ -33,6 +38,24 @@ public class RecurrenceExpanderTest extends TestCase {
     private static final Log log = LogFactory.getLog(RecurrenceExpanderTest.class);
     private static final TimeZoneRegistry TIMEZONE_REGISTRY =
         TimeZoneRegistryFactory.getInstance().createRegistry();
+
+    public void testRecurrenceExpanderMidnight() throws Exception {
+        RecurrenceExpander expander = new RecurrenceExpander();
+
+        Calendar calendar = getCalendar("midnight_recurring1.ics");
+
+        // Do we get the right total range
+        Date[] range = expander.calculateRecurrenceRange(calendar);
+        Assert.assertEquals("20070101T000000", range[0].toString());
+        Assert.assertEquals("20070110T004500", range[1].toString());
+
+        // rangeEnd is exclusive , so we should get two occurrences for a 48-hour period midnight to midnight
+        var occurrences = expander.getOcurrences(calendar,
+                new DateTime("20070104T000000"), new DateTime("20070106T000000"),
+                getTimeZone("Europe/London"));
+        assertThat(occurrences.values().stream().map(it -> it.getStart().toString()).collect(toList()),
+                contains("20070104T000000", "20070105T000000"));
+    }
 
     public void testRecurrenceExpanderAllDay() throws Exception {
         RecurrenceExpander expander = new RecurrenceExpander();
