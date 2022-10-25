@@ -37,7 +37,7 @@ import java.util.TreeSet;
  * added first.
  */
 
-@SuppressWarnings({"JavaDoc", "rawtypes"})
+@SuppressWarnings({"JavaDoc"})
 public class InstanceList extends TreeMap<String, Instance> {
 
     private static final long serialVersionUID = 1838360990532590681L;
@@ -124,7 +124,7 @@ public class InstanceList extends TreeMap<String, Instance> {
             start = adjustFloatingDateIfNecessary(start);
         }
 
-        Dur duration = null;
+        Dur duration;
         Date end = getEndDate(comp);
         if (end == null) {
             if (startValue.equals(Value.DATE_TIME)) {
@@ -167,15 +167,13 @@ public class InstanceList extends TreeMap<String, Instance> {
 
 
         // recurrence dates..
-        PropertyList rDates = comp.getProperties()
+        PropertyList<RDate> rDates = comp.getProperties()
                 .getProperties(Property.RDATE);
-        for (Iterator i = rDates.iterator(); i.hasNext();) {
-            RDate rdate = (RDate) i.next();
+        for (RDate rdate : rDates) {
             // Both PERIOD and DATE/DATE-TIME values allowed
             if (Value.PERIOD.equals(rdate.getParameters().getParameter(
                     Parameter.VALUE))) {
-                for (Iterator j = rdate.getPeriods().iterator(); j.hasNext();) {
-                    Period period = (Period) j.next();
+                for (Period period : rdate.getPeriods()) {
                     Date periodStart = adjustFloatingDateIfNecessary(period.getStart());
                     Date periodEnd = adjustFloatingDateIfNecessary(period.getEnd());
                     // Add period if it overlaps rage
@@ -186,14 +184,13 @@ public class InstanceList extends TreeMap<String, Instance> {
                     }
                 }
             } else {
-                for (Iterator j = rdate.getDates().iterator(); j.hasNext();) {
-                    Date startDate = (Date) j.next();
+                for (Date startDate : rdate.getDates()) {
                     startDate = convertToUTCIfNecessary(startDate);
                     startDate = adjustFloatingDateIfNecessary(startDate);
                     Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration
                             .getTime(startDate), startDate);
                     // Add RDATE if it overlaps range
-                    if(inRange(startDate,endDate,rangeStart,rangeEnd)) {
+                    if (inRange(startDate, endDate, rangeStart, rangeEnd)) {
                         Instance instance = new Instance(comp, startDate, endDate);
                         put(instance.getRid().toString(), instance);
                     }
@@ -202,7 +199,7 @@ public class InstanceList extends TreeMap<String, Instance> {
         }
 
         // recurrence rules..
-        PropertyList rRules = comp.getProperties()
+        PropertyList<RRule> rRules = comp.getProperties()
                 .getProperties(Property.RRULE);
 
         // Adjust startRange to account for instances that occur before
@@ -215,14 +212,11 @@ public class InstanceList extends TreeMap<String, Instance> {
             ajustedRangeEnd = adjustEndRangeIfNecessary(rangeEnd, start);
         }
 
-        for (Iterator i = rRules.iterator(); i.hasNext();) {
-            RRule rrule = (RRule) i.next();
-
+        for (RRule rrule : rRules) {
             DateList startDates = rrule.getRecur().getDates(start, adjustedRangeStart,
                     ajustedRangeEnd,
                     (start instanceof DateTime) ? Value.DATE_TIME : Value.DATE);
-            for (int j = 0; j < startDates.size(); j++) {
-                Date sd = startDates.get(j);
+            for (Date sd : startDates) {
                 Date startDate = org.osaf.cosmo.calendar.util.Dates.getInstance(sd, start);
                 Date endDate = org.osaf.cosmo.calendar.util.Dates.getInstance(duration.getTime(sd), start);
                 Instance instance = new Instance(comp, startDate, endDate);
@@ -230,12 +224,10 @@ public class InstanceList extends TreeMap<String, Instance> {
             }
         }
         // exception dates..
-        PropertyList exDates = comp.getProperties().getProperties(
+        PropertyList<ExDate> exDates = comp.getProperties().getProperties(
                 Property.EXDATE);
-        for (Iterator i = exDates.iterator(); i.hasNext();) {
-            ExDate exDate = (ExDate) i.next();
-            for (Iterator j = exDate.getDates().iterator(); j.hasNext();) {
-                Date sd = (Date) j.next();
+        for (ExDate exDate : exDates) {
+            for (Date sd : exDate.getDates()) {
                 sd = convertToUTCIfNecessary(sd);
                 sd = adjustFloatingDateIfNecessary(sd);
                 Instance instance = new Instance(comp, sd, sd);
@@ -243,20 +235,18 @@ public class InstanceList extends TreeMap<String, Instance> {
             }
         }
         // exception rules..
-        PropertyList exRules = comp.getProperties().getProperties(
+        PropertyList<ExRule> exRules = comp.getProperties().getProperties(
                 Property.EXRULE);
         if(!exRules.isEmpty() && adjustedRangeStart==null) {
             adjustedRangeStart = adjustStartRangeIfNecessary(rangeStart, start, duration);
             ajustedRangeEnd = adjustEndRangeIfNecessary(rangeEnd, start);
         }
 
-        for (Iterator i = exRules.iterator(); i.hasNext();) {
-            ExRule exrule = (ExRule) i.next();
+        for (ExRule exrule : exRules) {
             DateList startDates = exrule.getRecur().getDates(start, adjustedRangeStart,
                     ajustedRangeEnd,
                     (start instanceof DateTime) ? Value.DATE_TIME : Value.DATE);
-            for (Iterator j = startDates.iterator(); j.hasNext();) {
-                Date sd = (Date) j.next();
+            for (Date sd : startDates) {
                 Instance instance = new Instance(comp, sd, sd);
                 remove(instance.getRid().toString());
             }
@@ -377,19 +367,19 @@ public class InstanceList extends TreeMap<String, Instance> {
             // the current rid, or in the case of no matching rid, the first
             // rid that is greater than the current rid.
             boolean containsKey = containsKey(key);
-            TreeSet sortedKeys = new TreeSet(keySet());
-            for (Iterator iter = sortedKeys.iterator(); iter.hasNext();) {
-                String ikey = (String) iter.next();
+            TreeSet<String> sortedKeys = new TreeSet<>(keySet());
+            for (Iterator<String> iter = sortedKeys.iterator(); iter.hasNext();) {
+                String ikey = iter.next();
                 if (ikey.equals(key) || (!containsKey && ikey.compareTo(key)>0)) {
 
                     if(containsKey && !iter.hasNext())
                         continue;
                     else if(containsKey)
-                        ikey = (String) iter.next();
+                        ikey = iter.next();
 
                     boolean moreKeys = true;
                     boolean firstMatch = true;
-                    while(moreKeys==true) {
+                    while(moreKeys) {
 
                         // The target key is already set for the first
                         // iteration, so for all other iterations
@@ -397,9 +387,9 @@ public class InstanceList extends TreeMap<String, Instance> {
                         if(firstMatch)
                             firstMatch = false;
                         else
-                            ikey = (String) iter.next();
+                            ikey = iter.next();
 
-                        Instance oldinstance = (Instance) get(ikey);
+                        Instance oldinstance = get(ikey);
 
                         // Do not override an already overridden instance
                         if (oldinstance.isOverridden())
@@ -470,13 +460,13 @@ public class InstanceList extends TreeMap<String, Instance> {
         return (dtEnd != null) ? dtEnd.getDate() : null;
     }
 
-    private final Date getRecurrenceId(Component comp) {
+    private Date getRecurrenceId(Component comp) {
         RecurrenceId rid = comp.getProperties().getProperty(
                 Property.RECURRENCE_ID);
         return (rid != null) ? rid.getDate() : null;
     }
 
-    private final boolean getRange(Component comp) {
+    private boolean getRange(Component comp) {
         RecurrenceId rid = comp.getProperties().getProperty(
                 Property.RECURRENCE_ID);
         if (rid == null)
@@ -559,7 +549,7 @@ public class InstanceList extends TreeMap<String, Instance> {
      * a query made by someone whos timezone is in Australia.  If no timezone is
      * set for the InstanceList, then the system default timezone will be
      * used in floating time calculations.
-     *
+     * <p>
      * What happens is a floating time will get converted into a
      * date/time with a timezone.  This is ok for comparison and recurrence
      * generation purposes.  Note that Instances will get indexed as a UTC
