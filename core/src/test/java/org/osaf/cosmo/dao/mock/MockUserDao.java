@@ -15,18 +15,27 @@
  */
 package org.osaf.cosmo.dao.mock;
 
-import org.apache.commons.id.uuid.VersionFourGenerator;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.UserDao;
-import org.osaf.cosmo.model.*;
+import org.osaf.cosmo.model.CollectionSubscription;
+import org.osaf.cosmo.model.DuplicateEmailException;
+import org.osaf.cosmo.model.DuplicateUsernameException;
+import org.osaf.cosmo.model.PasswordRecovery;
+import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.mock.MockAuditableObject;
 import org.osaf.cosmo.model.mock.MockUser;
 import org.osaf.cosmo.util.ArrayPagedList;
 import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
-
-import java.util.*;
 
 /**
  * Mock implementation of {@link UserDao} useful for testing.
@@ -43,8 +52,6 @@ public class MockUserDao implements UserDao {
     private HashMap<String, PasswordRecovery> passwordRecoveryIdx;
 
     private MockDaoStorage storage = null;
-
-    private VersionFourGenerator idGenerator = new VersionFourGenerator();
 
     /**
      */
@@ -135,7 +142,7 @@ public class MockUserDao implements UserDao {
             throw new IllegalArgumentException("null user");
         }
 
-        user.setUid(idGenerator.nextIdentifier().toString());
+        user.setUid(UUID.randomUUID().toString());
 
         // Set create/modified date, etag for User and associated subscriptions
         // and perferences.

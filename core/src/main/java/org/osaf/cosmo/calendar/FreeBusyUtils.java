@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,7 @@ package org.osaf.cosmo.calendar;
 
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.UUID;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Period;
 import net.fortuna.ical4j.model.PeriodList;
@@ -31,13 +31,8 @@ import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.FreeBusy;
 import net.fortuna.ical4j.model.property.Uid;
 
-import org.apache.commons.id.uuid.VersionFourGenerator;
-
 public class FreeBusyUtils {
-    
-    private static final VersionFourGenerator uuidGenerator =
-        new VersionFourGenerator();
-    
+
     /**
         A VFREEBUSY component overlaps a given time range if the condition
         for the corresponding component state specified in the table below
@@ -46,13 +41,13 @@ public class FreeBusyUtils {
         FREEBUSY properties in the absence of DTSTART and DTEND.  Any
         DURATION property is ignored, as it has a special meaning when
         used in a VFREEBUSY component.
-    
+
         When only FREEBUSY properties are used, each period in each
         FREEBUSY property is compared against the time range, irrespective
         of the type of free busy information (free, busy, busy-tentative,
         busy-unavailable) represented by the property.
-    
-    
+
+
         +------------------------------------------------------+
         | VFREEBUSY has both the DTSTART and DTEND properties? |
         |   +--------------------------------------------------+
@@ -74,21 +69,21 @@ public class FreeBusyUtils {
      * @return true if component overlaps specified range, false otherwise
      */
     public static boolean overlapsPeriod(VFreeBusy freeBusy, Period period, TimeZone tz){
-        
+
         DtStart start = freeBusy.getStartDate();
         DtEnd end = freeBusy.getEndDate();
-         
+
         if (start != null && end != null) {
             InstanceList instances = new InstanceList();
             instances.setTimezone(tz);
             instances.addComponent(freeBusy, period.getStart(),period.getEnd());
             return !instances.isEmpty();
         }
-        
+
         PropertyList props = freeBusy.getProperties(Property.FREEBUSY);
         if(props.isEmpty())
             return false;
-        
+
         Iterator<FreeBusy> it = props.iterator();
         while(it.hasNext()) {
             FreeBusy fb = it.next();
@@ -100,10 +95,10 @@ public class FreeBusyUtils {
                     return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Merge multiple VFREEBUSY components into a single VFREEBUSY
      * component.
@@ -121,7 +116,7 @@ public class FreeBusyUtils {
         PeriodList busyPeriods = new PeriodList();
         PeriodList busyTentativePeriods = new PeriodList();
         PeriodList busyUnavailablePeriods = new PeriodList();
-        
+
         for(VFreeBusy vfb: components) {
             PropertyList props = vfb.getProperties(Property.FREEBUSY);
             for(Iterator it = props.iterator();it.hasNext();) {
@@ -137,18 +132,18 @@ public class FreeBusyUtils {
                 }
             }
         }
-        
+
         // Merge periods
         busyPeriods = busyPeriods.normalise();
         busyTentativePeriods = busyTentativePeriods.normalise();
         busyUnavailablePeriods = busyUnavailablePeriods.normalise();
-        
+
         // Construct new VFREEBUSY
         VFreeBusy vfb =
             new VFreeBusy(range.getStart(), range.getEnd());
-        String uid = uuidGenerator.nextIdentifier().toString();
+        String uid = UUID.randomUUID().toString();
         vfb.getProperties().add(new Uid(uid));
-       
+
         // Add all periods to the VFREEBUSY
         if (!busyPeriods.isEmpty()) {
             FreeBusy fb = new FreeBusy(busyPeriods);
@@ -164,8 +159,8 @@ public class FreeBusyUtils {
             fb.getParameters().add(FbType.BUSY_UNAVAILABLE);
             vfb.getProperties().add(fb);
         }
-        
+
         return vfb;
     }
-    
+
 }

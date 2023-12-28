@@ -15,7 +15,19 @@
  */
 package org.osaf.cosmo.calendar.query.impl;
 
-import net.fortuna.ical4j.model.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.ComponentList;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Parameter;
+import net.fortuna.ical4j.model.Period;
+import net.fortuna.ical4j.model.PeriodList;
+import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VFreeBusy;
@@ -24,19 +36,26 @@ import net.fortuna.ical4j.model.property.FreeBusy;
 import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
-import org.apache.commons.id.uuid.VersionFourGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.EntityConverter;
 import org.osaf.cosmo.calendar.Instance;
 import org.osaf.cosmo.calendar.InstanceList;
-import org.osaf.cosmo.calendar.query.*;
+import org.osaf.cosmo.calendar.query.CalendarFilter;
+import org.osaf.cosmo.calendar.query.CalendarFilterEvaluater;
+import org.osaf.cosmo.calendar.query.CalendarQueryProcessor;
+import org.osaf.cosmo.calendar.query.ComponentFilter;
+import org.osaf.cosmo.calendar.query.TimeRangeFilter;
 import org.osaf.cosmo.dao.CalendarDao;
 import org.osaf.cosmo.dao.ContentDao;
-import org.osaf.cosmo.model.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.osaf.cosmo.model.CalendarCollectionStamp;
+import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.ContentItem;
+import org.osaf.cosmo.model.HomeCollectionItem;
+import org.osaf.cosmo.model.ICalendarItem;
+import org.osaf.cosmo.model.Item;
+import org.osaf.cosmo.model.StampUtils;
+import org.osaf.cosmo.model.User;
 
 /**
  * CalendarQueryProcessor implementation that uses CalendarDao.
@@ -46,8 +65,6 @@ public class StandardCalendarQueryProcessor implements CalendarQueryProcessor {
     private static final Log log =
         LogFactory.getLog(StandardCalendarQueryProcessor.class);
 
-    protected static final VersionFourGenerator uuidGenerator =
-        new VersionFourGenerator();
 
     private CalendarDao calendarDao = null;
     private ContentDao contentDao = null;
@@ -339,7 +356,7 @@ public class StandardCalendarQueryProcessor implements CalendarQueryProcessor {
 
         // Now create a VFREEBUSY
         VFreeBusy vfb = new VFreeBusy(period.getStart(), period.getEnd());
-        String uid = uuidGenerator.nextIdentifier().toString();
+        String uid = UUID.randomUUID().toString();
         vfb.getProperties().add(new Uid(uid));
 
         // Add all periods to the VFREEBUSY
