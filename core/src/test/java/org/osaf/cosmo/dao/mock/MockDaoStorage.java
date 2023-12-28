@@ -224,7 +224,7 @@ public class MockDaoStorage {
 
         // hierarchy
         for (String part : hierarchy)
-            path.append("/" + part);
+            path.append('/').append(part);
 
         return path.toString();
     }
