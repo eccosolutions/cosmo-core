@@ -87,9 +87,9 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
      * @return hibernate query built using HQL
      */
     public Query buildQuery(Session session, ItemFilter filter) {
-        StringBuffer selectBuf = new StringBuffer();
-        StringBuffer whereBuf = new StringBuffer();
-        StringBuffer orderBuf = new StringBuffer();
+        StringBuilder selectBuf = new StringBuilder();
+        StringBuilder whereBuf = new StringBuilder();
+        StringBuilder orderBuf = new StringBuilder();
 
         HashMap<String, Object> params = new HashMap<String, Object>();
 
@@ -131,8 +131,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         return hqlQuery;
     }
 
-    private void handleItemFilter(StringBuffer selectBuf,
-            StringBuffer whereBuf, HashMap<String, Object> params,
+    private void handleItemFilter(StringBuilder selectBuf,
+            StringBuilder whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
 
         if(selectBuf.toString() != null && selectBuf.toString().isEmpty())
@@ -159,8 +159,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
 
     }
 
-    private void handleAttributeFilters(StringBuffer selectBuf,
-            StringBuffer whereBuf, HashMap<String, Object> params,
+    private void handleAttributeFilters(StringBuilder selectBuf,
+            StringBuilder whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
         for(AttributeFilter attrFilter: filter.getAttributeFilters()) {
             if(attrFilter instanceof TextAttributeFilter)
@@ -170,8 +170,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         }
     }
 
-    private void handleTextAttributeFilter(StringBuffer selectBuf,
-            StringBuffer whereBuf, HashMap<String, Object> params,
+    private void handleTextAttributeFilter(StringBuilder selectBuf,
+            StringBuilder whereBuf, HashMap<String, Object> params,
             TextAttributeFilter filter) {
 
         String alias = "ta" + params.size();
@@ -181,8 +181,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         formatExpression(whereBuf, params, alias + ".value", filter.getValue());
     }
 
-    private void handleStampFilters(StringBuffer selectBuf,
-            StringBuffer whereBuf, HashMap<String, Object> params,
+    private void handleStampFilters(StringBuilder selectBuf,
+            StringBuilder whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
         for(StampFilter stampFilter: filter.getStampFilters()) {
             if(stampFilter instanceof EventStampFilter)
@@ -192,8 +192,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         }
     }
 
-    private void handleStampFilter(StringBuffer selectBuf,
-            StringBuffer whereBuf, HashMap<String, Object> params,
+    private void handleStampFilter(StringBuilder selectBuf,
+            StringBuilder whereBuf, HashMap<String, Object> params,
             StampFilter filter) {
 
         String toAppend = "";
@@ -204,8 +204,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         appendWhere(whereBuf, toAppend);
     }
 
-    private void handleAttributeFilter(StringBuffer selectBuf,
-            StringBuffer whereBuf, HashMap<String, Object> params,
+    private void handleAttributeFilter(StringBuilder selectBuf,
+            StringBuilder whereBuf, HashMap<String, Object> params,
             AttributeFilter filter) {
 
         String param = "param" + params.size();
@@ -219,8 +219,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         params.put(param, filter.getQname());
     }
 
-    private void handleEventStampFilter(StringBuffer selectBuf,
-            StringBuffer whereBuf, HashMap<String, Object> params,
+    private void handleEventStampFilter(StringBuilder selectBuf,
+            StringBuilder whereBuf, HashMap<String, Object> params,
             EventStampFilter filter) {
 
         selectBuf.append(", HibBaseEventStamp es");
@@ -250,8 +250,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         }
     }
 
-    private void handleNoteItemFilter(StringBuffer selectBuf,
-            StringBuffer whereBuf, StringBuffer orderBuf,  HashMap<String, Object> params,
+    private void handleNoteItemFilter(StringBuilder selectBuf,
+            StringBuilder whereBuf, StringBuilder orderBuf,  HashMap<String, Object> params,
             NoteItemFilter filter) {
         selectBuf.append("select i from HibNoteItem i");
         handleItemFilter(selectBuf, whereBuf, params, filter);
@@ -301,8 +301,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         }
     }
 
-    private void handleContentItemFilter(StringBuffer selectBuf,
-            StringBuffer whereBuf, StringBuffer orderBuf, HashMap<String, Object> params,
+    private void handleContentItemFilter(StringBuilder selectBuf,
+            StringBuilder whereBuf, StringBuilder orderBuf, HashMap<String, Object> params,
             ContentItemFilter filter) {
 
         if(selectBuf.toString() != null && selectBuf.toString().isEmpty()) {
@@ -312,14 +312,14 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
     }
 
 
-    private void appendWhere(StringBuffer whereBuf, String toAppend) {
+    private void appendWhere(StringBuilder whereBuf, String toAppend) {
         if(whereBuf.toString() != null && whereBuf.toString().isEmpty())
             whereBuf.append(" where ").append(toAppend);
         else
             whereBuf.append(" and ").append(toAppend);
     }
 
-    private void appendOrder(StringBuffer orderBuf, String toAppend) {
+    private void appendOrder(StringBuilder orderBuf, String toAppend) {
         if(orderBuf.toString() != null && orderBuf.toString().isEmpty())
             orderBuf.append(" order by ").append(toAppend);
         else
@@ -438,7 +438,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         return results;
     }
 
-    private void formatExpression(StringBuffer whereBuf,
+    private void formatExpression(StringBuilder whereBuf,
             HashMap<String, Object> params, String propName,
             FilterCriteria fc) {
 

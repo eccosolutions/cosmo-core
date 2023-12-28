@@ -54,7 +54,7 @@ public class OutputFilter {
     }
 
     public void filter(Calendar calendar,
-                       StringBuffer buffer) {
+                       StringBuilder buffer) {
         // If expansion of recurrence is required what we have to do
         // is create a whole new calendar object with the new expanded
         // components in it and then write that one out.
@@ -276,7 +276,7 @@ public class OutputFilter {
     }
 
     private void filterProperties(PropertyList properties,
-                                  StringBuffer buffer) {
+                                  StringBuilder buffer) {
         if (isAllProperties()) {
             buffer.append(properties.toString());
             return;
@@ -297,7 +297,7 @@ public class OutputFilter {
     }
 
     private void chompPropertyValue(Property property,
-                                    StringBuffer buffer) {
+                                    StringBuilder buffer) {
         buffer.append(property.getName()).
             append(property.getParameters()).
             append(':').
@@ -305,7 +305,7 @@ public class OutputFilter {
     }
 
     private void filterSubComponents(ComponentList subComponents,
-                                     StringBuffer buffer) {
+                                     StringBuilder buffer) {
         if (isAllSubComponents() && getLimit() != null) {
             buffer.append(subComponents.toString());
             return;
@@ -386,7 +386,7 @@ public class OutputFilter {
     }
 
     private void filterSubComponent(Component subComponent,
-                                    StringBuffer buffer) {
+                                    StringBuilder buffer) {
         buffer.append(Component.BEGIN).
             append(':').
             append(subComponent.getName()).

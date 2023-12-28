@@ -121,7 +121,7 @@ public class MockQName implements QName {
 
     /** */
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("{").
             append(namespace).
             append("}").

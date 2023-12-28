@@ -212,7 +212,7 @@ public class MockDaoStorage {
 
     /** */
     public String getItemPath(Item item) {
-        StringBuffer path = new StringBuffer();
+        StringBuilder path = new StringBuilder();
         LinkedList<String> hierarchy = new LinkedList<>();
         hierarchy.addFirst(item.getName());
 
