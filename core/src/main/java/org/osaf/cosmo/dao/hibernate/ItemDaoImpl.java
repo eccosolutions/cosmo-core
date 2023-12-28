@@ -15,6 +15,12 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.apache.commons.id.IdentifierGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +32,6 @@ import org.hibernate.ObjectDeletedException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.UnresolvableObjectException;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.proxy.HibernateProxy;
 import org.osaf.cosmo.dao.ItemDao;
 import org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor;
@@ -39,7 +44,6 @@ import org.osaf.cosmo.model.ICalendarItem;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.ItemNotFoundException;
 import org.osaf.cosmo.model.ModelValidationException;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.UidInUseException;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.filter.ItemFilter;
@@ -51,13 +55,6 @@ import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
 /**
  * Implementation of ItemDao using Hibernate persistent objects.
  *
@@ -66,7 +63,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
     private static final Log log = LogFactory.getLog(ItemDaoImpl.class);
 
-    private IdentifierGenerator idGenerator = null;
     private IdentifierGenerator ticketKeyGenerator = null;
     private ItemPathTranslator itemPathTranslator = null;
     private ItemFilterProcessor itemFilterProcessor = null;
@@ -425,20 +421,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      * manipulate an item's UID before creating the item.
      */
     public String generateUid() {
-        return idGenerator.nextIdentifier().toString();
-    }
-
-    /**
-     * Set the unique ID generator for new items
-     *
-     * @param idGenerator
-     */
-    public void setIdGenerator(IdentifierGenerator idGenerator) {
-        this.idGenerator = idGenerator;
-    }
-
-    public IdentifierGenerator getIdGenerator() {
-        return idGenerator;
+        return UUID.randomUUID().toString();
     }
 
     /**
@@ -477,27 +460,12 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         this.itemFilterProcessor = itemFilterProcessor;
     }
 
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.osaf.cosmo.dao.Dao#destroy()
-     */
-    public void destroy() {
-        // TODO Auto-generated method stub
-
-    }
-
     /*
      * (non-Javadoc)
      *
      * @see org.osaf.cosmo.dao.Dao#init()
      */
     public void init() {
-        if (idGenerator == null) {
-            throw new IllegalStateException("idGenerator is required");
-        }
-
         if (ticketKeyGenerator == null) {
             throw new IllegalStateException("ticketKeyGenerator is required");
         }
@@ -596,7 +564,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     // Set server generated item properties
     protected void setBaseItemProps(Item item) {
         if (item.getUid() == null)
-            item.setUid(idGenerator.nextIdentifier().toString());
+            item.setUid(UUID.randomUUID().toString());
         if (item.getName() == null)
             item.setName(item.getUid());
         if (item instanceof ICalendarItem) {

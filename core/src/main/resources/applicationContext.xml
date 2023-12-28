@@ -208,9 +208,6 @@
         class="org.osaf.cosmo.dao.hibernate.DefaultItemPathTranslator">
   </bean>
 
-  <bean id="idGenerator"
-        class="org.apache.commons.id.uuid.VersionFourGenerator" />
-
   <bean id="ticketKeyGenerator"
         class="org.apache.commons.id.random.SessionIdGenerator" />
 
@@ -234,7 +231,6 @@
         init-method="init"
         destroy-method="destroy">
     <property name="itemPathTranslator" ref="itemPathTranslator"/>
-    <property name="idGenerator" ref="idGenerator"/>
     <property name="ticketKeyGenerator" ref="ticketKeyGenerator"/>
     <property name="itemFilterProcessor" ref="standardItemFilterProcessor"/>
   </bean>
@@ -243,7 +239,6 @@
         class="org.osaf.cosmo.dao.hibernate.UserDaoImpl"
         init-method="init"
         destroy-method="destroy">
-    <property name="idGenerator" ref="idGenerator"/>
   </bean>
 
   <bean id="calendarDao"

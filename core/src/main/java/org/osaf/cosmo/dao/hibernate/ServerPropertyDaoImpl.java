@@ -74,13 +74,4 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-
-    public void destroy() {
-        // nothing
-    }
-
-    public void init() {
-        // nothing
-    }
-
 }

@@ -15,20 +15,26 @@
  */
 package org.osaf.cosmo.dao.mock;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.ItemDao;
-import org.osaf.cosmo.model.*;
+import org.osaf.cosmo.model.Attribute;
+import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.HomeCollectionItem;
+import org.osaf.cosmo.model.Item;
+import org.osaf.cosmo.model.ItemNotFoundException;
+import org.osaf.cosmo.model.NoteItem;
+import org.osaf.cosmo.model.QName;
+import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.ItemFilterEvaluater;
 import org.osaf.cosmo.model.filter.ItemFilterPostProcessor;
 import org.osaf.cosmo.model.mock.MockCollectionItem;
 import org.osaf.cosmo.model.mock.MockItem;
 import org.osaf.cosmo.util.PathUtil;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Mock implementation of <code>ItemDao</code> useful for testing.
@@ -315,21 +321,6 @@ public class MockItemDao implements ItemDao {
 
     public String generateUid() {
         return storage.calculateUid();
-    }
-
-    // Dao methods
-    /**
-     * Initializes the DAO, sanity checking required properties
-     * and defaulting optional properties.
-     */
-    public void init() {
-    }
-
-    /**
-     * Readies the DAO for garbage collection, shutting down any
-     * resources used.
-     */
-    public void destroy() {
     }
 
     // our methods

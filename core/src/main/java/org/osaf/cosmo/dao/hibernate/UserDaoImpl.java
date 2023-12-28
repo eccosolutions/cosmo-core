@@ -20,18 +20,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.id.IdentifierGenerator;
+import java.util.UUID;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
@@ -44,17 +43,12 @@ import org.osaf.cosmo.util.PageCriteria;
 import org.osaf.cosmo.util.PagedList;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
 /**
  * Implemtation of UserDao using Hibernate persistence objects.
  */
 public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private static final Log log = LogFactory.getLog(UserDaoImpl.class);
-
-    private IdentifierGenerator idGenerator;
 
     private static final QueryCriteriaBuilder<User.SortType> queryCriteriaBuilder = new UserQueryCriteriaBuilder<User.SortType>();
 
@@ -74,7 +68,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
                 throw new DuplicateEmailException(user);
 
             if (user.getUid() == null || user.getUid() != null && user.getUid().isEmpty())
-                user.setUid(getIdGenerator().nextIdentifier().toString());
+                user.setUid(UUID.randomUUID().toString());
 
             currentSession().save(user);
             currentSession().flush();
@@ -260,25 +254,6 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
-    }
-
-    public void destroy() {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void init() {
-        if (idGenerator == null) {
-            throw new IllegalStateException("idGenerator is required");
-        }
-    }
-
-    public IdentifierGenerator getIdGenerator() {
-        return idGenerator;
-    }
-
-    public void setIdGenerator(IdentifierGenerator idGenerator) {
-        this.idGenerator = idGenerator;
     }
 
     private User findUserByUsername(String username) {

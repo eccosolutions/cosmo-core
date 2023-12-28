@@ -18,7 +18,6 @@ package org.osaf.cosmo.dao.mock;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.EventLogDao;
@@ -41,7 +40,7 @@ public class MockEventLogDao implements EventLogDao {
     private static final Log log = LogFactory.getLog(MockEventLogDao.class);
 
     ArrayList<EventLogEntry> allEntries = new ArrayList<EventLogEntry>();
-    
+
     public void addEventLogEntries(List<EventLogEntry> entries) {
         for(EventLogEntry entry: entries)
             addEventLogEntry(entry);
@@ -56,24 +55,24 @@ public class MockEventLogDao implements EventLogDao {
     public List<ItemChangeRecord> findChangesForCollection(
             CollectionItem collection, Date start, Date end) {
        ArrayList<ItemChangeRecord> records = new ArrayList<ItemChangeRecord>();
-       
+
        for(EventLogEntry entry: allEntries) {
-           
+
            // match date
            if(entry.getDate().before(start) ||
                    entry.getDate().after(end))
                continue;
-           
+
            ItemEntry itemEntry = (ItemEntry) entry;
-           
+
            // match collection
            if(!collection.equals(itemEntry.getCollection()))
                continue;
-           
-           
+
+
            ItemChangeRecord record = new ItemChangeRecord();
            record.setDate(entry.getDate());
-           
+
            if(entry instanceof ItemAddedEntry) {
                record.setAction(Action.ITEM_ADDED);
            } else if(entry instanceof ItemRemovedEntry) {
@@ -83,13 +82,13 @@ public class MockEventLogDao implements EventLogDao {
            } else {
                throw new IllegalStateException("unrecognized entry type");
            }
-           
+
            record.setItemUuid(itemEntry.getItem().getUid());
            record.setItemDisplayName(itemEntry.getItem().getDisplayName());
            setModifiedBy(record, itemEntry);
            records.add(record);
        }
-       
+
        return records;
     }
 
@@ -97,7 +96,7 @@ public class MockEventLogDao implements EventLogDao {
         Item item = entry.getItem();
         if(item instanceof ContentItem)
             record.setModifiedBy(((ContentItem) item).getLastModifiedBy());
-        
+
         if(record.getModifiedBy()==null) {
             if(entry.getUser()!=null)
                 record.setModifiedBy(entry.getUser().getEmail());
@@ -105,17 +104,4 @@ public class MockEventLogDao implements EventLogDao {
                 record.setModifiedBy("ticket: anonymous");
         }
     }
-    
-    public void destroy() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void init() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    
-
 }
