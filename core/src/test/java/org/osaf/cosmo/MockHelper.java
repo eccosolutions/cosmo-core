@@ -15,7 +15,6 @@
  */
 package org.osaf.cosmo;
 
-import org.apache.commons.id.random.SessionIdGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.query.CalendarQueryProcessor;
@@ -25,7 +24,13 @@ import org.osaf.cosmo.dao.mock.MockContentDao;
 import org.osaf.cosmo.dao.mock.MockDaoStorage;
 import org.osaf.cosmo.dao.mock.MockUserDao;
 import org.osaf.cosmo.icalendar.ICalendarClientFilterManager;
-import org.osaf.cosmo.model.*;
+import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.CollectionSubscription;
+import org.osaf.cosmo.model.ContentItem;
+import org.osaf.cosmo.model.EntityFactory;
+import org.osaf.cosmo.model.HomeCollectionItem;
+import org.osaf.cosmo.model.NoteItem;
+import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.mock.MockEntityFactory;
 import org.osaf.cosmo.security.CosmoSecurityManager;
 import org.osaf.cosmo.security.mock.MockSecurityManager;
@@ -90,7 +95,6 @@ public class MockHelper extends TestHelper {
         userService = new StandardUserService();
         userService.setContentDao(contentDao);
         userService.setUserDao(userDao);
-        userService.setPasswordGenerator(new SessionIdGenerator());
         userService.init();
 
         user = userService.getUser("test");

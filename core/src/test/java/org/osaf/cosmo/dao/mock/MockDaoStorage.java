@@ -15,15 +15,25 @@
  */
 package org.osaf.cosmo.dao.mock;
 
-import org.apache.commons.id.random.SessionIdGenerator;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osaf.cosmo.model.*;
+import org.osaf.cosmo.model.CollectionItem;
+import org.osaf.cosmo.model.DuplicateItemNameException;
+import org.osaf.cosmo.model.HomeCollectionItem;
+import org.osaf.cosmo.model.Item;
+import org.osaf.cosmo.model.NoteItem;
+import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.mock.MockCollectionItem;
 import org.osaf.cosmo.model.mock.MockHomeCollectionItem;
 import org.osaf.cosmo.model.mock.MockItem;
-
-import java.util.*;
 
 /**
  * Simple in-memory storage system for mock data access objects.
@@ -36,7 +46,6 @@ public class MockDaoStorage {
     private HashMap<String, Item> itemsByUid;
     private HashMap<String, String> rootUidsByUsername;
     private HashMap<String, Set> tickets;
-    private SessionIdGenerator idGenerator;
 
     /** */
     public MockDaoStorage() {
@@ -44,7 +53,6 @@ public class MockDaoStorage {
         itemsByUid = new HashMap<>();
         rootUidsByUsername = new HashMap<>();
         tickets = new HashMap<>();
-        idGenerator = new SessionIdGenerator();
     }
 
     /** */
@@ -227,11 +235,11 @@ public class MockDaoStorage {
     }
 
     public String calculateUid() {
-        return idGenerator.nextStringIdentifier();
+        return RandomStringUtils.randomGraph(15);
     }
 
     private String calculateTicketKey() {
-        return idGenerator.nextStringIdentifier();
+        return RandomStringUtils.randomGraph(15);
     }
 
     private MockItem getMockItem(Item item) {

@@ -17,9 +17,8 @@ package org.osaf.cosmo.service.impl;
 
 import java.security.MessageDigest;
 import java.util.Set;
-
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.id.StringIdentifierGenerator;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.dao.ContentDao;
@@ -52,7 +51,6 @@ public class StandardUserService extends BaseService implements UserService {
 
     private MessageDigest digest;
     private String digestAlgorithm;
-    private StringIdentifierGenerator passwordGenerator;
     private ContentDao contentDao;
     private UserDao userDao;
 
@@ -302,7 +300,7 @@ public class StandardUserService extends BaseService implements UserService {
      * presentation as an authentication credential.
      */
     public String generatePassword() {
-        String password = passwordGenerator.nextStringIdentifier();
+        String password = RandomStringUtils.randomGraph(15);
         return password.length() <= User.PASSWORD_LEN_MAX ?
             password :
             password.substring(0, User.PASSWORD_LEN_MAX - 1);
@@ -320,9 +318,6 @@ public class StandardUserService extends BaseService implements UserService {
         }
         if (userDao == null) {
             throw new IllegalStateException("userDao is required");
-        }
-        if (passwordGenerator == null) {
-            throw new IllegalStateException("passwordGenerator is required");
         }
         if (digestAlgorithm == null) {
             digestAlgorithm = DEFAULT_DIGEST_ALGORITHM;
@@ -373,18 +368,6 @@ public class StandardUserService extends BaseService implements UserService {
      */
     public void setDigestAlgorithm(String digestAlgorithm) {
         this.digestAlgorithm = digestAlgorithm;
-    }
-
-    /**
-     */
-    public StringIdentifierGenerator getPasswordGenerator() {
-        return this.passwordGenerator;
-    }
-
-    /**
-     */
-    public void setPasswordGenerator(StringIdentifierGenerator generator) {
-        this.passwordGenerator = generator;
     }
 
     /**

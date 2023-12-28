@@ -16,10 +16,7 @@
 package org.osaf.cosmo.service.impl;
 
 import java.util.Set;
-
 import junit.framework.TestCase;
-
-import org.apache.commons.id.random.SessionIdGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.TestHelper;
@@ -54,7 +51,6 @@ public class StandardUserServiceTest extends TestCase {
         service = new StandardUserService();
         service.setContentDao(contentDao);
         service.setUserDao(userDao);
-        service.setPasswordGenerator(new SessionIdGenerator());
         service.init();
     }
 
@@ -117,7 +113,7 @@ public class StandardUserServiceTest extends TestCase {
         User u1 = testHelper.makeDummyUser();
         u1.setPassword(service.digestPassword(u1.getPassword()));
         String digestedPassword = u1.getPassword();
-        
+
         userDao.createUser(u1);
 
         // change password
@@ -194,18 +190,6 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testNullPasswordGenerator() throws Exception {
-        service.setPasswordGenerator(null);
-        try {
-            service.init();
-            fail("Should not be able to initialize service without passwordGenerator");
-        } catch (IllegalStateException e) {
-            // expected
-        }
-    }
-
-    /**
-     */
     public void testDefaultDigestAlgorithm() throws Exception {
         assertEquals(service.getDigestAlgorithm(), "MD5");
     }
@@ -223,60 +207,60 @@ public class StandardUserServiceTest extends TestCase {
         // tests hex
         assertTrue("Digest not hex encoded", digested.matches("^[0-9a-f]+$"));
     }
-    
+
     public void testCreatePasswordRecovery(){
         User user = testHelper.makeDummyUser();
         user = userDao.createUser(user);
-        
-        PasswordRecovery passwordRecovery = 
+
+        PasswordRecovery passwordRecovery =
             new HibPasswordRecovery(user, "pwrecovery1");
-        
+
         passwordRecovery = service.createPasswordRecovery(passwordRecovery);
 
-        PasswordRecovery storedPasswordRecovery = 
+        PasswordRecovery storedPasswordRecovery =
             service.getPasswordRecovery(passwordRecovery.getKey());
 
         assertEquals(passwordRecovery, storedPasswordRecovery);
-        
+
         service.deletePasswordRecovery(storedPasswordRecovery);
-        
-        storedPasswordRecovery = 
+
+        storedPasswordRecovery =
             service.getPasswordRecovery(storedPasswordRecovery.getKey());
-        
+
         assertNull(storedPasswordRecovery);
     }
-    
+
     public void testRecoverPassword(){
         User user = testHelper.makeDummyUser();
-        
+
         userDao.createUser(user);
 
         PasswordRecovery passwordRecovery = new HibPasswordRecovery(user, "pwrecovery2");
-        
+
         passwordRecovery = service.createPasswordRecovery(passwordRecovery);
-        
+
         assertEquals(user, passwordRecovery.getUser());
-        
+
         // Recover password
-        
-        PasswordRecovery storedPasswordRecovery = 
+
+        PasswordRecovery storedPasswordRecovery =
             service.getPasswordRecovery(passwordRecovery.getKey());
-        
+
         User changingUser = storedPasswordRecovery.getUser();
-        
+
         String newPassword = service.generatePassword();
 
         changingUser.setPassword(newPassword);
-        
+
         changingUser = service.updateUser(changingUser);
-        
+
         String changedPassword = changingUser.getPassword();
-        
+
         User changedUser = service.getUser(changingUser.getUsername());
-        
+
         assertEquals(changedUser, changingUser);
-        
+
         assertEquals(changedPassword, changedUser.getPassword());
-       
+
     }
 }

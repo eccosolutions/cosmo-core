@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.apache.commons.id.IdentifierGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.FlushMode;
@@ -63,7 +62,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
     private static final Log log = LogFactory.getLog(ItemDaoImpl.class);
 
-    private IdentifierGenerator ticketKeyGenerator = null;
     private ItemPathTranslator itemPathTranslator = null;
     private ItemFilterProcessor itemFilterProcessor = null;
 
@@ -424,19 +422,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         return UUID.randomUUID().toString();
     }
 
-    /**
-     * Set the unique key generator for new tickets
-     *
-     * @param ticketKeyGenerator
-     */
-    public void setTicketKeyGenerator(IdentifierGenerator ticketKeyGenerator) {
-        this.ticketKeyGenerator = ticketKeyGenerator;
-    }
-
-    public IdentifierGenerator getTicketKeyGenerator() {
-        return ticketKeyGenerator;
-    }
-
     public ItemPathTranslator getItemPathTranslator() {
         return itemPathTranslator;
     }
@@ -466,10 +451,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      * @see org.osaf.cosmo.dao.Dao#init()
      */
     public void init() {
-        if (ticketKeyGenerator == null) {
-            throw new IllegalStateException("ticketKeyGenerator is required");
-        }
-
         if (itemPathTranslator == null) {
             throw new IllegalStateException("itemPathTranslator is required");
         }

@@ -208,9 +208,6 @@
         class="org.osaf.cosmo.dao.hibernate.DefaultItemPathTranslator">
   </bean>
 
-  <bean id="ticketKeyGenerator"
-        class="org.apache.commons.id.random.SessionIdGenerator" />
-
   <bean id="serverPropertyDao"
         class="org.osaf.cosmo.dao.hibernate.ServerPropertyDaoImpl"
         init-method="init"
@@ -231,7 +228,6 @@
         init-method="init"
         destroy-method="destroy">
     <property name="itemPathTranslator" ref="itemPathTranslator"/>
-    <property name="ticketKeyGenerator" ref="ticketKeyGenerator"/>
     <property name="itemFilterProcessor" ref="standardItemFilterProcessor"/>
   </bean>
 
@@ -248,9 +244,6 @@
   </bean>
 
   <!-- services -->
-  <bean id="passwordGenerator"
-        class="org.apache.commons.id.random.SessionIdGenerator"/>
-
   <bean id="ootbHelper"
         class="org.osaf.cosmo.service.account.OutOfTheBoxHelper">
     <property name="contentDao" ref="contentDao"/>
@@ -265,7 +258,6 @@
         destroy-method="destroy">
     <property name="contentDao" ref="contentDao"/>
     <property name="userDao" ref="userDao"/>
-    <property name="passwordGenerator" ref="passwordGenerator"/>
   </bean>
 
   <bean id="contentLockManager"
