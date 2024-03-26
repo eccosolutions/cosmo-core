@@ -23,11 +23,6 @@
             <layout>default</layout>
             <url>https://eccosolutions.github.io/cosmo/maven</url>
         </repository>
-        <repository>
-            <!-- For ical4j -->
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -166,13 +161,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.mnode.ical4j</groupId>
             <artifactId>ical4j</artifactId>
-<!--            <groupId>org.mnode.ical4j</groupId>-->
-<!--            <version>3.0.21</version>-->
-            <!-- via jitpack.io -->
-            <groupId>com.github.eccosolutions</groupId>
-            <version>ef48c49256</version>
-
+            <version>3.2.14</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
