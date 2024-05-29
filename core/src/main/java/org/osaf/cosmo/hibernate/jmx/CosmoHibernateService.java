@@ -16,9 +16,11 @@
 package org.osaf.cosmo.hibernate.jmx;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.stat.CacheRegionStatistics;
 import org.hibernate.stat.CollectionStatistics;
 import org.hibernate.stat.EntityStatistics;
 import org.hibernate.stat.NaturalIdCacheStatistics;
+import org.hibernate.stat.NaturalIdStatistics;
 import org.hibernate.stat.QueryStatistics;
 import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
@@ -64,7 +66,12 @@ public class CosmoHibernateService implements CosmoHibernateServiceMBean {
         return statistics.getCollectionStatistics(role);
     }
 
-    @Override
+  @Override
+  public NaturalIdStatistics getNaturalIdStatistics(String s) {
+    return statistics.getNaturalIdStatistics(s);
+  }
+
+  @Override
     public SecondLevelCacheStatistics getSecondLevelCacheStatistics(String regionName) {
         return statistics.getSecondLevelCacheStatistics(regionName);
     }
@@ -79,7 +86,22 @@ public class CosmoHibernateService implements CosmoHibernateServiceMBean {
         return statistics.getQueryStatistics(queryString);
     }
 
-    @Override
+  @Override
+  public CacheRegionStatistics getDomainDataRegionStatistics(String s) {
+    return statistics.getDomainDataRegionStatistics(s);
+  }
+
+  @Override
+  public CacheRegionStatistics getQueryRegionStatistics(String s) {
+    return statistics.getQueryRegionStatistics(s);
+  }
+
+  @Override
+  public CacheRegionStatistics getCacheRegionStatistics(String s) {
+    return statistics.getCacheRegionStatistics(s);
+  }
+
+  @Override
     public long getEntityDeleteCount() {
         return statistics.getEntityDeleteCount();
     }
@@ -149,7 +171,12 @@ public class CosmoHibernateService implements CosmoHibernateServiceMBean {
         return statistics.getNaturalIdQueryExecutionMaxTimeRegion();
     }
 
-    @Override
+  @Override
+  public String getNaturalIdQueryExecutionMaxTimeEntity() {
+    return statistics.getNaturalIdQueryExecutionMaxTimeEntity();
+  }
+
+  @Override
     public long getNaturalIdCacheHitCount() {
         return statistics.getNaturalIdCacheHitCount();
     }
