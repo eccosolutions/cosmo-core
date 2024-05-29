@@ -156,7 +156,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         CollectionItem root = contentDao.getRootItem(user);
 
         ContentItem item = generateTestContent();
-        IntegerAttribute ia = new HibIntegerAttribute(new HibQName("intattribute"), new Long(22));
+        IntegerAttribute ia = new HibIntegerAttribute(new HibQName("intattribute"), 22L);
         item.addAttribute(ia);
         BooleanAttribute ba = new HibBooleanAttribute(new HibQName("booleanattribute"), Boolean.TRUE);
         item.addAttribute(ba);
@@ -681,7 +681,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         CollectionItem a = new HibCollectionItem();
         a.setName("a");
         a.setOwner(user);
-        a.setHue(new Long(1));
+        a.setHue(1L);
 
         a = contentDao.createCollection(root, a);
 
@@ -691,7 +691,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         CollectionItem queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
-        Assert.assertEquals(new Long(1), queryItem.getHue());
+        Assert.assertEquals(1L, queryItem.getHue());
         helper.verifyItem(a, queryItem);
     }
 

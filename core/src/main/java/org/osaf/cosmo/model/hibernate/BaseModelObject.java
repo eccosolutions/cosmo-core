@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,8 +39,8 @@ public abstract class BaseModelObject implements Serializable {
     @GeneratedValue(generator="generatorNameCosmo")
     @GenericGenerator(name="generatorNameCosmo", strategy="org.hibernate.id.enhanced.TableGenerator", parameters={@Parameter(name="increment_size", value="1"), @Parameter(name="optimizer", value="none"), @Parameter(name="initial_value", value="50")})
     @Column(name="id", nullable=false) // oracle doesn't like using unique=true
-    private Long id = new Long(-1);
-    
+    private Long id = -1L;
+
     /**
      */
     public String toString() {

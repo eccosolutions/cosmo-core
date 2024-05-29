@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,7 +68,7 @@ public abstract class BaseApplicator implements EimSchemaConstants {
      * namespace.
      *
      * @throws EimSchemaException if the field is improperly
-     * cannot be applied to the item 
+     * cannot be applied to the item
      */
     protected void applyUnknownField(EimRecordField field)
         throws EimSchemaException {
@@ -76,7 +76,7 @@ public abstract class BaseApplicator implements EimSchemaConstants {
             item.getFactory().createQName(field.getRecord().getNamespace(), field.getName());
         if (log.isDebugEnabled())
             log.debug("applying unknown field " + qn);
-        
+
         // get existing attribute
         Attribute attribute = item.getAttribute(qn);
 
@@ -115,7 +115,7 @@ public abstract class BaseApplicator implements EimSchemaConstants {
             if(attribute!=null)
                 attribute.setValue(value);
             else
-                item.addAttribute(item.getFactory().createIntegerAttribute(qn, new Long(value.longValue())));
+                item.addAttribute(item.getFactory().createIntegerAttribute(qn, value.longValue()));
         } else if (field instanceof TextField) {
             String value = ((TextField)field).getText();
             if(attribute!=null)
@@ -142,10 +142,10 @@ public abstract class BaseApplicator implements EimSchemaConstants {
     public Item getItem() {
         return item;
     }
-    
+
     /**
      * Determine if current item is a NoteItem that modifies another NoteItem
-     * 
+     *
      * @return true if item is a NoteItem and modifies another NoteItem
      */
     protected boolean isModification() {
@@ -154,12 +154,12 @@ public abstract class BaseApplicator implements EimSchemaConstants {
             if(note.getModifies()!=null)
                 return true;
         }
-        
+
         return false;
     }
-    
+
     /**
-     * Verify that current item is a modification item.  If not, 
+     * Verify that current item is a modification item.  If not,
      * throw EimSchemaException.
      * @throws EimSchemaException
      */
@@ -168,11 +168,11 @@ public abstract class BaseApplicator implements EimSchemaConstants {
             throw new EimSchemaException(
                     "missing attributes not support on non-modification items");
     }
-    
+
     /**
      * Handle a missing attribute for a modification by setting
      * the value to null.
-     * 
+     *
      * @param attribute attribute to copy
      * @param modification object to copy attribute to
      */
@@ -188,11 +188,11 @@ public abstract class BaseApplicator implements EimSchemaConstants {
             throw new RuntimeException("error copying attribute " + attribute);
         }
     }
-    
+
     /**
-     * Handle missing attribute for a NoteItem.  This involves setting the 
+     * Handle missing attribute for a NoteItem.  This involves setting the
      * attribute value to null if the NoteItem is a modification.
-     * 
+     *
      * @param attribute atttribute to copy
      * @throws EimSchemaException
      */
@@ -202,7 +202,7 @@ public abstract class BaseApplicator implements EimSchemaConstants {
         checkIsModification();
 
         NoteItem modification = (NoteItem) getItem();
-        
+
         handleMissingAttribute(attribute, modification);
     }
 }
