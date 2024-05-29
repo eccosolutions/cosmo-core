@@ -128,9 +128,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                     // if its parent is not also being removed.  This is because
                     // when a master item is removed, all its modifications are
                     // removed.
-                    if(item instanceof NoteItem) {
-                        NoteItem note = (NoteItem) item;
-                        if(note.getModifies()!=null && note.getModifies().getIsActive()==false)
+                    if(item instanceof NoteItem note) {
+                        if(note.getModifies()!=null && !note.getModifies().getIsActive())
                             continue;
                     }
                     removeItemFromCollectionInternal(item, collection);
@@ -374,8 +373,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
         // Initialize master NoteItem if applicable
         try {
-           if(item instanceof NoteItem) {
-               NoteItem note = (NoteItem) item;
+           if(item instanceof NoteItem note) {
                if(note.getModifies()!=null) {
                    Hibernate.initialize(note.getModifies());
                    initializeItem(note.getModifies());
@@ -434,8 +432,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         removeContentCommon(content);
 
         // Remove modifications
-        if(content instanceof NoteItem) {
-            NoteItem note = (NoteItem) content;
+        if(content instanceof NoteItem note) {
             if(note.getModifies()!=null) {
                 // remove mod from master's collection
                 note.getModifies().removeModification(note);
@@ -687,25 +684,24 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         super.addItemToCollectionInternal(item, collection);
 
         // Add all modifications
-        if(item instanceof NoteItem) {
-            for(NoteItem mod: ((NoteItem) item).getModifications())
+        if(item instanceof NoteItem noteItem) {
+            for(NoteItem mod: noteItem.getModifications())
                 super.addItemToCollectionInternal(mod, collection);
         }
     }
 
     @Override
     protected void removeItemFromCollectionInternal(Item item, CollectionItem collection) {
-        if(item instanceof NoteItem) {
+        if(item instanceof NoteItem note) {
             // When a note modification is removed, it is really removed from
             // all collections because a modification can't live in one collection
             // and not another.  It is tied to the collections that the master
             // note is in.  Therefore you can't just remove a modification from
             // a single collection when the master note is in multiple collections.
-            NoteItem note = (NoteItem) item;
-            if(note.getModifies()!=null)
+            if(note.getModifies() != null)
                 removeContentRecursive((ContentItem) item);
             else
-                removeNoteItemFromCollectionInternal((NoteItem) item, collection);
+                removeNoteItemFromCollectionInternal(note, collection);
         }
         else
             super.removeItemFromCollectionInternal(item, collection);
@@ -772,9 +768,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
     }
 
     private boolean isNoteModification(Item item) {
-        if(!(item instanceof NoteItem))
-            return false;
+        return item instanceof NoteItem noteItem && noteItem.getModifies() != null;
 
-        return (((NoteItem) item).getModifies()!=null);
     }
 }

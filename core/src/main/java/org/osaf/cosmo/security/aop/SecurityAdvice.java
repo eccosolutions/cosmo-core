@@ -522,9 +522,8 @@ public class SecurityAdvice extends OrderedAdvice {
     }
 
     private boolean isNoteMod(Item item) {
-        if(item instanceof NoteItem) {
-            NoteItem note = (NoteItem) item;
-            return note.getModifies()!=null;
+        if(item instanceof NoteItem note) {
+            return note.getModifies() != null;
         }
 
         return false;

@@ -359,9 +359,7 @@ public class StandardContentService implements ContentService {
 
             // Either create or update each item
             for (Item item : children) {
-                if (item instanceof NoteItem) {
-
-                    NoteItem note = (NoteItem) item;
+                if (item instanceof NoteItem note) {
 
                     // If item is a modification and the master note
                     // hasn't been created, then we need to process
@@ -460,9 +458,7 @@ public class StandardContentService implements ContentService {
 
             // Either create or update each item
             for (Item item : updates) {
-                if (item instanceof NoteItem) {
-
-                    NoteItem note = (NoteItem) item;
+                if (item instanceof NoteItem note) {
 
                     // If item is a modification and the master note
                     // hasn't been created, then we need to process
@@ -848,8 +844,7 @@ public class StandardContentService implements ContentService {
 
         // Acquire locks on master item's parents, as an addition/deletion
         // of a modifications item affects all the parents of the master item.
-        if(item instanceof NoteItem) {
-            NoteItem note = (NoteItem) item;
+        if(item instanceof NoteItem note) {
             if(note.getModifies()!=null)
                 acquireLocks(locks, note.getModifies());
         }

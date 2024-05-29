@@ -148,12 +148,9 @@ public abstract class BaseApplicator implements EimSchemaConstants {
      * @return true if item is a NoteItem and modifies another NoteItem
      */
     protected boolean isModification() {
-        if(getItem() instanceof NoteItem) {
-            NoteItem note = (NoteItem) getItem();
-            if(note.getModifies()!=null)
-                return true;
+        if(getItem() instanceof NoteItem note) {
+            return note.getModifies() != null;
         }
-
         return false;
     }
 

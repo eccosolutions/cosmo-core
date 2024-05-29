@@ -179,9 +179,8 @@ public class EventLogDaoImpl extends HibernateSessionSupport implements EventLog
 
         // handle case of "missing" displayName
         if(displayName==null) {
-            if(item instanceof NoteItem) {
-                NoteItem note = (NoteItem) item;
-                if(note.getModifies()!=null)
+            if(item instanceof NoteItem note) {
+                if(note.getModifies() != null)
                    displayName = note.getModifies().getDisplayName();
             }
         }
