@@ -34,8 +34,6 @@ import org.osaf.cosmo.eim.TextField;
  */
 public class EimmlStreamWriterTest extends TestCase
     implements EimmlConstants {
-    private static final Log log =
-        LogFactory.getLog(EimmlStreamWriterTest.class);
 
     private TestHelper testHelper;
 

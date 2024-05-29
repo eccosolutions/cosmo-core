@@ -39,7 +39,6 @@ import org.osaf.cosmo.model.QName;
 
 /**
  * Base class for classes that apply EIM records to items and stamps.
- *
  * An applicator uses a fixed record type schema (event, task, note)
  * to validate EIM record data and map it to item or stamp properties
  * and attributes.
@@ -48,9 +47,9 @@ public abstract class BaseApplicator implements EimSchemaConstants {
     private static final Log log =
         LogFactory.getLog(BaseApplicator.class);
 
-    private String prefix;
-    private String namespace;
-    private Item item;
+    private final String prefix;
+    private final String namespace;
+    private final Item item;
 
     /**
      * This class should not be instantiated directly.
@@ -180,11 +179,7 @@ public abstract class BaseApplicator implements EimSchemaConstants {
             Object modification) {
         try {
             PropertyUtils.setProperty(modification, attribute, null);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("error copying attribute " + attribute);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException("error copying attribute " + attribute);
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("error copying attribute " + attribute);
         }
     }

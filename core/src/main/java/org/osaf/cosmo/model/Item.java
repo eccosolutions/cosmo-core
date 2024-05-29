@@ -179,6 +179,7 @@ public interface Item extends AuditableObject{
      * Return a single parent.
      * @deprecated
      */
+    @Deprecated
     CollectionItem getParent();
 
     /**

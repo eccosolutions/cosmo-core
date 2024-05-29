@@ -57,7 +57,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem newItem = contentDao.createContent(root, item);
 
         Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertTrue(newItem.getUid() != null);
+        Assert.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -77,7 +77,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem newItem = contentDao.createContent(root, item);
 
         Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertTrue(newItem.getUid() != null);
+        Assert.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -110,12 +110,12 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
             contentDao.createContent(root, item2);
             clearSession();
             Assert.fail("able to create duplicate uid");
-        } catch (UidInUseException e) {
+        } catch (UidInUseException ignored) {
         }
     }
 
     @Test
-    public void testContentDaoCreateNoteDuplicateIcalUid() throws Exception {
+    public void testContentDaoCreateNoteDuplicateIcalUid() {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
 
@@ -131,7 +131,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         try {
             contentDao.createContent(root, note2);
             Assert.fail("able to create duplicate icaluid");
-        } catch (IcalUidInUseException e) {}
+        } catch (IcalUidInUseException ignored) {}
 
     }
 
@@ -170,13 +170,13 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // issues with accuracy
         // item.addAttribute(new DateAttribute("dateattribute", new Date()));
 
-        HashSet<String> values = new HashSet<String>();
+        HashSet<String> values = new HashSet<>();
         values.add("value1");
         values.add("value2");
         MultiValueStringAttribute mvs = new HibMultiValueStringAttribute(new HibQName("multistringattribute"), values);
         item.addAttribute(mvs);
 
-        HashMap<String, String> dictionary = new HashMap<String, String>();
+        HashMap<String, String> dictionary = new HashMap<>();
         dictionary.put("key1", "value1");
         dictionary.put("key2", "value2");
         DictionaryAttribute da = new HibDictionaryAttribute(new HibQName("dictionaryattribute"), dictionary);
@@ -185,7 +185,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem newItem = contentDao.createContent(root, item);
 
         Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertTrue(newItem.getUid() != null);
+        Assert.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -302,7 +302,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertTrue(attr instanceof TimestampAttribute);
 
         Date val = (Date) attr.getValue();
-        Assert.assertTrue(dateVal.equals(val));
+        Assert.assertEquals(dateVal, val);
 
         dateVal.setTime(dateVal.getTime() + 101);
         attr.setValue(dateVal);
@@ -317,7 +317,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertTrue(queryAttr instanceof TimestampAttribute);
 
         val = (Date) queryAttr.getValue();
-        Assert.assertTrue(dateVal.equals(val));
+        Assert.assertEquals(dateVal, val);
     }
 
 //    @Ignore("FIXME: fails since updateContent(queryItem) updates modifiedDate")
@@ -437,16 +437,16 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         ICalendarAttribute ica = (ICalendarAttribute) queryItem.getAttribute(new HibQName("icalattribute"));
-        Assert.assertFalse(expected.toString().equals(ica.getValue().toString()));
+        Assert.assertNotEquals(expected.toString(), ica.getValue().toString());
     }
 
     @Test
-    public void testCreateDuplicateRootItem() throws Exception {
+    public void testCreateDuplicateRootItem() {
         User testuser = getUser(userDao, "testuser");
         try {
             contentDao.createRootItem(testuser);
             Assert.fail("able to create duplicate root item");
-        } catch (RuntimeException re) {
+        } catch (RuntimeException ignored) {
         }
     }
 
@@ -522,7 +522,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
         Thread.sleep(200);
         HibContentItem queryItem2 = (HibContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertTrue(queryItem2.getVersion().intValue() > 0);
+        Assert.assertTrue(queryItem2.getVersion() > 0);
 
         helper.verifyItem(queryItem, queryItem2);
 
@@ -554,7 +554,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         root = contentDao.getRootItem(user);
-        Assert.assertTrue(root.getChildren().size()==0);
+        Assert.assertEquals(0, root.getChildren().size());
 
     }
 
@@ -642,7 +642,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
         helper.verifyItem(newItem, queryItem);
 
-        Assert.assertTrue(((HibItem)queryItem).getVersion().equals(0));
+        Assert.assertEquals(0, (int) ((HibItem) queryItem).getVersion());
 
         contentDao.removeContent(queryItem);
 
@@ -743,12 +743,12 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Thread.sleep(1);
 
         a = contentDao.updateCollectionTimestamp(a);
-        Assert.assertTrue(((HibItem) a).getVersion()==ver + 1);
+        Assert.assertEquals((int) ((HibItem) a).getVersion(), ver + 1);
         Assert.assertTrue(timestamp.before(a.getModifiedDate()));
     }
 
     @Test
-    public void testContentDaoDeleteCollection() throws Exception {
+    public void testContentDaoDeleteCollection() {
         User user = getUser(userDao, "testuser2");
         CollectionItem root = contentDao.getRootItem(user);
 
@@ -853,7 +853,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
 
     @Test
-    public void testHomeCollection() throws Exception {
+    public void testHomeCollection() {
         User testuser2 = getUser(userDao, "testuser2");
         HomeCollectionItem root = contentDao.getRootItem(testuser2);
 
@@ -907,21 +907,21 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         try {
             contentDao.moveItem("/testuser2", "/testuser2/a/blah");
             Assert.fail("able to move root collection");
-        } catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException ignored) {
         }
 
         // verify can't move to root collection
         try {
             contentDao.moveItem("/testuser2/a/e", "/testuser2");
             Assert.fail("able to move to root collection");
-        } catch (ItemNotFoundException infe) {
+        } catch (ItemNotFoundException ignored) {
         }
 
         // verify can't create loop
         try {
             contentDao.moveItem("/testuser2/a/b", "/testuser2/a/b/c/new");
             Assert.fail("able to create loop");
-        } catch (ModelValidationException iae) {
+        } catch (ModelValidationException ignored) {
         }
 
         clearSession();
@@ -993,21 +993,21 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         try {
             contentDao.copyItem(root, "/testuser2/a/blah", true);
             Assert.fail("able to copy root collection");
-        } catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException ignored) {
         }
 
         // verify can't move to root collection
         try {
             contentDao.copyItem(e, "/testuser2", true);
             Assert.fail("able to move to root collection");
-        } catch (ItemNotFoundException infe) {
+        } catch (ItemNotFoundException ignored) {
         }
 
         // verify can't create loop
         try {
             contentDao.copyItem(b, "/testuser2/a/b/c/new", true);
             Assert.fail("able to create loop");
-        } catch (ModelValidationException iae) {
+        } catch (ModelValidationException ignored) {
         }
 
         clearSession();
@@ -1142,7 +1142,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         try {
             contentDao.addItemToCollection(queryItem, b);
             Assert.fail("able to add item with same name to collection");
-        } catch (DuplicateItemNameException e) {
+        } catch (DuplicateItemNameException ignored) {
         }
     }
 
@@ -1217,7 +1217,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         newItem = (FreeBusyItem) contentDao.createContent(root, newItem);
 
         Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertTrue(newItem.getUid() != null);
+        Assert.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -1244,7 +1244,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         newItem = (AvailabilityItem) contentDao.createContent(root, newItem);
 
         Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertTrue(newItem.getUid() != null);
+        Assert.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -1254,7 +1254,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testContentDaoUpdateCollection2() throws Exception {
+    public void testContentDaoUpdateCollection2() {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
 
@@ -1264,7 +1264,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         note1.setUid("1");
         note2.setUid("2");
 
-        Set<ContentItem> items = new HashSet<ContentItem>();
+        Set<ContentItem> items = new HashSet<>();
         items.add(note1);
         items.add(note2);
 
@@ -1295,7 +1295,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testContentDaoUpdateCollectionWithMods() throws Exception {
+    public void testContentDaoUpdateCollectionWithMods() {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
 
@@ -1307,7 +1307,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         note2.setModifies(note1);
 
-        Set<ContentItem> items = new LinkedHashSet<ContentItem>();
+        Set<ContentItem> items = new LinkedHashSet<>();
         items.add(note2);
         items.add(note1);
 
@@ -1316,7 +1316,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         try {
             contentDao.updateCollection(root, items);
             Assert.fail("able to create invalid mod");
-        } catch (ModelValidationException e) {
+        } catch (ModelValidationException ignored) {
         }
 
         items.clear();
@@ -1329,7 +1329,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         note1 = (NoteItem) contentDao.findItemByUid("1");
         Assert.assertNotNull(note1);
-        Assert.assertTrue(1==note1.getModifications().size());
+        Assert.assertEquals(1, note1.getModifications().size());
         note2 = (NoteItem) contentDao.findItemByUid("1:20070101");
         Assert.assertNotNull(note2);
         Assert.assertNotNull(note2.getModifies());
@@ -1350,7 +1350,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         try {
             contentDao.updateCollection(a, items);
             Assert.fail("able to add mod before master");
-        } catch (ModelValidationException e) {
+        } catch (ModelValidationException ignored) {
         }
 
         items.clear();
@@ -1381,7 +1381,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testContentDaoUpdateCollectionWithDuplicateIcalUids() throws Exception {
+    public void testContentDaoUpdateCollectionWithDuplicateIcalUids() {
         User user = getUser(userDao, "testuser");
         CollectionItem root = contentDao.getRootItem(user);
 
@@ -1393,33 +1393,33 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         note2.setUid("2");
         note2.setIcalUid("1");
 
-        Set<ContentItem> items = new HashSet<ContentItem>();
+        Set<ContentItem> items = new HashSet<>();
         items.add(note1);
         items.add(note2);
 
         try {
             contentDao.updateCollection(root, items);
             Assert.fail("able to create duplicate icaluids!");
-        } catch (IcalUidInUseException e) {
+        } catch (IcalUidInUseException ignored) {
         }
     }
 
 
     private void verifyContains(Collection items, CollectionItem collection) {
-        for (Iterator it = items.iterator(); it.hasNext();) {
-            Item item = (Item) it.next();
+        for (Object o : items) {
+            Item item = (Item) o;
             if (item instanceof CollectionItem
-                    && item.getName().equals(collection.getName()))
+                && item.getName().equals(collection.getName()))
                 return;
         }
         Assert.fail("collection not found");
     }
 
     private void verifyContains(Collection items, ContentItem content) {
-        for (Iterator it = items.iterator(); it.hasNext();) {
-            Item item = (Item) it.next();
+        for (Object o : items) {
+            Item item = (Item) o;
             if (item instanceof ContentItem
-                    && item.getName().equals(content.getName()))
+                && item.getName().equals(content.getName()))
                 return;
         }
         Assert.fail("content not found");
@@ -1448,8 +1448,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         return content;
     }
 
-    private NoteItem generateTestNote(String name, String owner)
-            throws Exception {
+    private NoteItem generateTestNote(String name, String owner) {
         NoteItem content = new HibNoteItem();
         content.setName(name);
         content.setDisplayName(name);

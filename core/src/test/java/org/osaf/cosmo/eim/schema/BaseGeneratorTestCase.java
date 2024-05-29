@@ -41,8 +41,6 @@ import org.osaf.cosmo.eim.TextField;
  */
 public abstract class BaseGeneratorTestCase extends TestCase
     implements EimSchemaConstants {
-    private static final Log log =
-        LogFactory.getLog(BaseGeneratorTestCase.class);
 
     /** */
     protected void checkNamespace(EimRecord record,
