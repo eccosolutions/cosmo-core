@@ -43,7 +43,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    protected void setUp() throws Exception {
+    protected void setUp() {
         testHelper = new TestHelper();
         storage = new MockDaoStorage();
         contentDao = new MockContentDao(storage);
@@ -56,7 +56,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testGetUsers() throws Exception {
+    public void testGetUsers() {
         User u1 = testHelper.makeDummyUser();
         userDao.createUser(u1);
         User u2 = testHelper.makeDummyUser();
@@ -74,7 +74,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testGetUser() throws Exception {
+    public void testGetUser() {
         User u1 = testHelper.makeDummyUser();
         String username1 = u1.getUsername();
         userDao.createUser(u1);
@@ -85,7 +85,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testGetUserByEmail() throws Exception {
+    public void testGetUserByEmail() {
         User u1 = testHelper.makeDummyUser();
         String email1 = u1.getEmail();
         userDao.createUser(u1);
@@ -96,7 +96,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testCreateUser() throws Exception {
+    public void testCreateUser() {
         User u1 = testHelper.makeDummyUser();
         String password = u1.getPassword();
 
@@ -147,7 +147,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testRemoveUser() throws Exception {
+    public void testRemoveUser() {
         User u1 = testHelper.makeDummyUser();
         service.createUser(u1);
 
@@ -158,7 +158,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testRemoveUserByUsername() throws Exception {
+    public void testRemoveUserByUsername() {
         User u1 = testHelper.makeDummyUser();
         service.createUser(u1);
 
@@ -169,7 +169,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testGeneratePassword() throws Exception {
+    public void testGeneratePassword() {
         String pwd = service.generatePassword();
 
         assertTrue("Password too long", pwd.length() <= User.PASSWORD_LEN_MAX);
@@ -178,7 +178,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testNullUserDao() throws Exception {
+    public void testNullUserDao() {
         service.setUserDao(null);
         try {
             service.init();
@@ -190,13 +190,13 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
-    public void testDefaultDigestAlgorithm() throws Exception {
+    public void testDefaultDigestAlgorithm() {
         assertEquals(service.getDigestAlgorithm(), "MD5");
     }
 
     /**
      */
-    public void testDigestPassword() throws Exception {
+    public void testDigestPassword() {
         String password = "deadbeef";
 
         String digested = service.digestPassword(password);

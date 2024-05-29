@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 public class DurationFormatTest extends TestCase {
     private static final Log log = LogFactory.getLog(DurationFormatTest.class);
 
-    public void testGetValue() throws Exception {
+    public void testGetValue() {
         // iCal's Duration() internally sets a TemporalAmountAdapter, which getValue() calls toString() on.
         // The toString() is flawed in earlier iCal versions, so we do a quick test.
         // NB iCal ends up calling getValue from usual deepCopy work (Property class in this case)

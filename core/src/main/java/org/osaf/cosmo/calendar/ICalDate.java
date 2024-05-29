@@ -87,8 +87,7 @@ public class ICalDate implements ICalendarConstants {
     /**
      * Constructs an <code>ICalDate</code> from an iCalendar date.
      */
-    public ICalDate(Date date)
-        throws UnknownTimeZoneException {
+    public ICalDate(Date date) {
         if (date instanceof DateTime) {
             value = Value.DATE_TIME;
             tz = ((DateTime) date).getTimeZone();

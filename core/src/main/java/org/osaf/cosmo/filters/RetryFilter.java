@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,18 +32,18 @@ import org.osaf.cosmo.server.ServerConstants;
 
 /**
  * Filter that searches for known exception types (either caught
- * as runtime exceptions or stored in a request attribute), and 
- * retries the request a number of times before failing.  
- * 
+ * as runtime exceptions or stored in a request attribute), and
+ * retries the request a number of times before failing.
+ *
  * The filter can be configured to watch any HTTP method (PUT,POST,DELETE, etc)
  * and search for any exception type and retry any number of times.
- * 
+ *
  * This filter is useful for catching runtime exceptions such as
- * database deadlocks and other concurrency issues and retrying the 
+ * database deadlocks and other concurrency issues and retrying the
  * request a number of times.
  */
 public class RetryFilter implements Filter, ServerConstants {
-    
+
     private static final Log log = LogFactory.getLog(RetryFilter.class);
     private int maxRetries = 10;
     private int maxMemoryBuffer = 1024*256;
@@ -56,7 +56,7 @@ public class RetryFilter implements Filter, ServerConstants {
 
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String method = httpRequest.getMethod();
 
@@ -66,17 +66,17 @@ public class RetryFilter implements Filter, ServerConstants {
             // it needs to be retried.  If the request isn't buffered,
             // then we can't consume the servlet inputstream again.
             request = new BufferedRequestWrapper((HttpServletRequest) request, maxMemoryBuffer);
-            
+
             // Wrap response so we can trap any 500 responses before they
             // get to the client
             response = new ResponseErrorWrapper((HttpServletResponse) response);
-            
+
             int attempts = 0;
 
             while(attempts <= maxRetries) {
-                
+
                 Exception ex = null;
-                
+
                 try {
                     chain.doFilter(request, response);
                 } catch (RuntimeException e) {
@@ -88,12 +88,12 @@ public class RetryFilter implements Filter, ServerConstants {
                         sendError((ResponseErrorWrapper) response);
                     }
                 }
-                
+
                 // If we didn't catch it, then look for the exception
                 // in the request attributes
                 if(ex==null)
                     ex = findFilterException(httpRequest);
-                
+
                 // If there was an exception that we were looking for
                 // (either caught or found in the request), then prepare
                 // to retry.
@@ -117,7 +117,7 @@ public class RetryFilter implements Filter, ServerConstants {
                         ((BufferedRequestWrapper) request).retryRequest();
                         Thread.yield();
                     }
-                } 
+                }
                 // Otherwise flush the error if necessary and
                 // proceed as normal.
                 else {
@@ -137,7 +137,7 @@ public class RetryFilter implements Filter, ServerConstants {
 
         return false;
     }
-    
+
     private boolean isFilterException(Exception e) {
         for(Class exception: exceptions)
             if(exception.isInstance(e))
@@ -160,21 +160,21 @@ public class RetryFilter implements Filter, ServerConstants {
     }
 
     private void sendError(ResponseErrorWrapper response) throws IOException {
-        
+
         // if error was already queued, flush it
         if(response.flushError())
             return;
-        
+
         // otherwise send a generic error and flush
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
             "the server was unable to complete the request");
         response.flushError();
     }
 
-    public void init(FilterConfig config) throws ServletException {
+    public void init(FilterConfig config) {
        // nothing to do
     }
-    
+
     public void setMaxRetries(int maxRetries) {
         this.maxRetries = maxRetries;
     }

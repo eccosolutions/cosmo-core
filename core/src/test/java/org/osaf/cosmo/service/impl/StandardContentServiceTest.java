@@ -61,7 +61,7 @@ public class StandardContentServiceTest extends TestCase {
     protected String baseDir = "src/test/resources/testdata/";
 
     /** */
-    protected void setUp() throws Exception {
+    protected void setUp() {
         testHelper = new TestHelper();
         storage = new MockDaoStorage();
         calendarDao = new MockCalendarDao(storage);
@@ -75,7 +75,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
-    public void testFindItemByPath() throws Exception {
+    public void testFindItemByPath() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
         ContentItem dummyContent = new MockNoteItem();
@@ -94,7 +94,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
-    public void testInvalidModUid() throws Exception {
+    public void testInvalidModUid() {
 
         Item item = service.findItemByUid("uid" + ModificationUid.RECURRENCEID_DELIMITER + "bogus");
 
@@ -103,7 +103,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
-    public void testFindNonExistentItemByPath() throws Exception {
+    public void testFindNonExistentItemByPath() {
         String path = "/foo/bar/baz";
         Item item = service.findItemByPath(path);
 
@@ -112,7 +112,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
-    public void testRemoveItem() throws Exception {
+    public void testRemoveItem() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
         ContentItem dummyContent = new MockNoteItem();
@@ -137,7 +137,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
-    public void testCreateContent() throws Exception {
+    public void testCreateContent() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
 
@@ -152,7 +152,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
-    public void testRemoveContent() throws Exception {
+    public void testRemoveContent() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
         ContentItem dummyContent = new MockNoteItem();
@@ -170,7 +170,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
 
-    public void testCreateCollectionWithChildren() throws Exception {
+    public void testCreateCollectionWithChildren() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
 
@@ -194,7 +194,7 @@ public class StandardContentServiceTest extends TestCase {
                 dummyCollection.getChildren().iterator().next().getName());
     }
 
-    public void testUpdateCollectionWithChildren() throws Exception {
+    public void testUpdateCollectionWithChildren() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
 
@@ -250,7 +250,7 @@ public class StandardContentServiceTest extends TestCase {
         assertNotNull(bar3);
     }
 
-    public void testCollectionHashGetsUpdated() throws Exception {
+    public void testCollectionHashGetsUpdated() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
 
@@ -351,7 +351,7 @@ public class StandardContentServiceTest extends TestCase {
 
 
     /** */
-    public void testNullContentDao() throws Exception {
+    public void testNullContentDao() {
         service.setContentDao(null);
         try {
             service.init();

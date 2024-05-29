@@ -30,7 +30,7 @@ public class HibernateServerPropertyDaoTest extends
     }
 
     @Test
-    public void testServerProperties() throws Exception {
+    public void testServerProperties() {
         serverPropertyDao.setServerProperty("testprop1", "testvalue1");
         clearSession();
         String propValue = serverPropertyDao.getServerProperty("testprop1");

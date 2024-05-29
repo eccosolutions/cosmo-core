@@ -116,8 +116,7 @@ public class HibernateContentDaoModificationsTest extends AbstractHibernateDaoTe
         return generateTestContent("test", "testuser");
     }
 
-    private NoteItem generateTestContent(String name, String owner)
-            throws Exception {
+    private NoteItem generateTestContent(String name, String owner) {
         NoteItem content = new HibNoteItem();
         content.setName(name);
         content.setDisplayName(name);

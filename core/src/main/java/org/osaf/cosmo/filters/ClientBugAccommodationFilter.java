@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,10 +36,10 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * A filter used to implement various hacks required by broken clients.
- * 
+ *
  * Alternative solutions should be carefully considered before new code is added
  * here. Ideally bugs should be filed against the appropriate clients.
- * 
+ *
  * @author travis
  *
  */
@@ -56,16 +56,16 @@ public class ClientBugAccommodationFilter implements Filter {
         final HttpServletRequest httpRequest = (HttpServletRequest)request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpServletResponse wrappedResponse = httpResponse;
-        
+
         String userAgent = httpRequest.getHeader("User-Agent");
-        
+
         if (userAgent !=null && userAgent.contains("MSIE")){
             log.info("Modifying response to accommodate Internet Explorer.");
             wrappedResponse = new XMLContentTypeWrapper(wrappedResponse);
-            wrappedResponse = new ReplaceTextWrapper(wrappedResponse, 
+            wrappedResponse = new ReplaceTextWrapper(wrappedResponse,
                     "xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" ", "");
             chain.doFilter(request, wrappedResponse);
-            wrappedResponse.getOutputStream().close();  
+            wrappedResponse.getOutputStream().close();
         } else {
             chain.doFilter(request, wrappedResponse);
         }
@@ -73,7 +73,7 @@ public class ClientBugAccommodationFilter implements Filter {
 
     /**
      * This wrapper solves two Internet Explorer compatibility problems:
-     * 1) IE doesn't automatically parse XML unless the content type is 
+     * 1) IE doesn't automatically parse XML unless the content type is
      *    text/xml. This means XML parsing must be done manually by
      *    instantiating an ActiveX object which is unfortunately impossible
      *    in environments with certain security settings. This wrapper
@@ -82,7 +82,7 @@ public class ClientBugAccommodationFilter implements Filter {
      * 2) IE fatally hangs when attempting to parse a Content-Type header
      *    containing the type=entry; parameter. This filter removes this
      *    parameter to avoid this crash.
-     *    
+     *
      * @author travis
      *
      */
@@ -96,7 +96,7 @@ public class ClientBugAccommodationFilter implements Filter {
             type = filterForIE(type);
             super.setContentType(type);
         }
-        
+
         @Override
         public void setHeader(String name, String value) {
             if (name.equals("Content-Type")){
@@ -104,7 +104,7 @@ public class ClientBugAccommodationFilter implements Filter {
             }
             super.setHeader(name, value);
         }
-        
+
         // Internet Explorer doesn't do XML parsing for content types other than text/xml.
         private String filterForIE(String value){
             return value.replaceFirst(".*\\+xml; ?(?:type=entry;)?", "text/xml;");
@@ -116,32 +116,32 @@ public class ClientBugAccommodationFilter implements Filter {
      * <code>replaceString</code>. In this filter we use this capability to
      * remove the default XML namespace declaration because Internet Expolorer
      * refuses to parse XML containing this declaration.
-     * 
+     *
      * This code was written using the following article as a reference:
-     * 
+     *
      * http://www.ibm.com/developerworks/java/library/j-tomcat/
-     * 
+     *
      * @author travis
      *
      */
     class ReplaceTextWrapper extends HttpServletResponseWrapper{
         ReplaceTextStream stream;
         PrintWriter printWriter;
-        public ReplaceTextWrapper(HttpServletResponse response, 
+        public ReplaceTextWrapper(HttpServletResponse response,
                 String findString,
                 String replaceString) throws IOException{
             super(response);
-            stream = new ReplaceTextStream(response.getOutputStream(), 
+            stream = new ReplaceTextStream(response.getOutputStream(),
                     findString, replaceString);
             printWriter = new PrintWriter(stream);
 
         }
         @Override
-        public ServletOutputStream getOutputStream() throws IOException {
+        public ServletOutputStream getOutputStream() {
             return stream;
         }
         @Override
-        public PrintWriter getWriter() throws IOException {
+        public PrintWriter getWriter() {
             return printWriter;
         }
     }
@@ -152,7 +152,7 @@ public class ClientBugAccommodationFilter implements Filter {
         private OutputStream originalStream;
         private ByteArrayOutputStream tempStream;
         private boolean closed;
-        
+
         public ReplaceTextStream(OutputStream originalStream,
                 String findString, String replaceString) {
             this.originalStream = originalStream;
@@ -167,7 +167,7 @@ public class ClientBugAccommodationFilter implements Filter {
                 processStream();
                 originalStream.close();
                 closed = true;
-            } 
+            }
         }
 
         @Override
@@ -181,7 +181,7 @@ public class ClientBugAccommodationFilter implements Filter {
         }
 
         @Override
-        public void write(int i) throws IOException {
+        public void write(int i) {
             tempStream.write(i);
         }
 
@@ -194,8 +194,8 @@ public class ClientBugAccommodationFilter implements Filter {
             replaceAll(findString, replaceString).getBytes();
         }
     }
-    
-    public void init(FilterConfig arg0) throws ServletException {
+
+    public void init(FilterConfig arg0) {
 
     }
 

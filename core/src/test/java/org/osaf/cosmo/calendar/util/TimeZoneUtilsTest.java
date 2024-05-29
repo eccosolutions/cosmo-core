@@ -25,7 +25,7 @@ import net.fortuna.ical4j.model.component.VTimeZone;
  */
 public class TimeZoneUtilsTest extends TestCase {
 
-    public void testLoadTimeZone() throws Exception {
+    public void testLoadTimeZone() {
         VTimeZone vtz = TimeZoneUtils.getVTimeZone("America/Chicago");
         Assert.assertNotNull(vtz);
         Assert.assertEquals("America/Chicago", vtz.getTimeZoneId().getValue());

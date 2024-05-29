@@ -47,7 +47,7 @@ public class SecurityHelperTest extends TestCase {
     private MockUserDao userDao;
 
     /** */
-    protected void setUp() throws Exception {
+    protected void setUp() {
         testHelper = new TestHelper();
         storage = new MockDaoStorage();
         contentDao = new MockContentDao(storage);
@@ -56,7 +56,7 @@ public class SecurityHelperTest extends TestCase {
     }
 
     /** */
-    public void testCollectionUserAccess() throws Exception {
+    public void testCollectionUserAccess() {
         User user1 = testHelper.makeDummyUser("user1","password");
         User user2 = testHelper.makeDummyUser("user2","password");
         User admin = testHelper.makeDummyUser();
@@ -73,7 +73,7 @@ public class SecurityHelperTest extends TestCase {
 
 
     /** */
-    public void testContentUserAccess() throws Exception {
+    public void testContentUserAccess() {
         User user1 = testHelper.makeDummyUser("user1","password");
         User user2 = testHelper.makeDummyUser("user2","password");
         User user3 = testHelper.makeDummyUser("user3","password");

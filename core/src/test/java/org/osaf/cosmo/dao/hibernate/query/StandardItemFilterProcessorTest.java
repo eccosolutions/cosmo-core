@@ -47,7 +47,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testUidQuery() throws Exception {
+    public void testUidQuery() {
         ItemFilter filter = new ItemFilter();
         filter.setUid(Restrictions.eq("abc"));
         Query query =  queryBuilder.buildQuery(getSession(), filter);
@@ -55,7 +55,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testDisplayNameQuery() throws Exception {
+    public void testDisplayNameQuery() {
         ItemFilter filter = new ItemFilter();
         filter.setDisplayName(Restrictions.eq("test"));
         Query query =  queryBuilder.buildQuery(getSession(), filter);
@@ -88,7 +88,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testParentQuery() throws Exception {
+    public void testParentQuery() {
         ItemFilter filter = new ItemFilter();
         CollectionItem parent = new HibCollectionItem();
         filter.setParent(parent);
@@ -97,7 +97,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testDisplayNameAndParentQuery() throws Exception {
+    public void testDisplayNameAndParentQuery() {
         ItemFilter filter = new ItemFilter();
         CollectionItem parent = new HibCollectionItem();
         filter.setParent(parent);
@@ -117,7 +117,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testNoteItemQuery() throws Exception {
+    public void testNoteItemQuery() {
         NoteItemFilter filter = new NoteItemFilter();
         CollectionItem parent = new HibCollectionItem();
         filter.setParent(parent);
@@ -162,7 +162,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testEventStampQuery() throws Exception {
+    public void testEventStampQuery() {
         NoteItemFilter filter = new NoteItemFilter();
         EventStampFilter eventFilter = new EventStampFilter();
         CollectionItem parent = new HibCollectionItem();
@@ -195,7 +195,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testBasicStampQuery() throws Exception {
+    public void testBasicStampQuery() {
         NoteItemFilter filter = new NoteItemFilter();
         StampFilter missingFilter = new StampFilter();
         missingFilter.setStampClass(EventStamp.class);
@@ -208,7 +208,7 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     }
 
     @Test
-    public void testBasicAttributeQuery() throws Exception {
+    public void testBasicAttributeQuery() {
         NoteItemFilter filter = new NoteItemFilter();
         AttributeFilter missingFilter = new AttributeFilter();
         missingFilter.setQname(new HibQName("ns","name"));

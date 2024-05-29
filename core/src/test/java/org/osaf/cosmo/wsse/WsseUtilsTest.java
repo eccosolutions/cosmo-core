@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 public class WsseUtilsTest extends TestCase {
 
-    public void testParseWsseToken() throws Exception {
+    public void testParseWsseToken() {
        String testStr = "UsernameToken Username=\"user\", PasswordDigest=\"pass\", Nonce=\"nonce\", Created=\"created\"";
        UsernameToken token = WsseUtils.parseWsseToken(testStr);
        Assert.assertNotNull(token);

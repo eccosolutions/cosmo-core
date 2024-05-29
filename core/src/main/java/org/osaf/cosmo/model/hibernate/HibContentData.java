@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,10 +46,10 @@ import static org.osaf.cosmo.spring.ConfigurableEntitySupport.configureBean;
 public class HibContentData extends BaseModelObject {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5014854905531456753L;
-    
+
     @Column(name = "content", length=102400000)
     @Lob
     private Blob content = null;
@@ -64,7 +64,7 @@ public class HibContentData extends BaseModelObject {
         configureBean(this);
         return this;
     }
-   
+
     /**
      */
     public String toString() {
@@ -88,17 +88,16 @@ public class HibContentData extends BaseModelObject {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
-     * Set the content using an InputSteam.  Does not close the 
+     * Set the content using an InputSteam.  Does not close the
      * InputStream.
      * @param is content data
-     * @throws IOException
      */
-    public void setContentInputStream(InputStream is, long length) throws IOException {
+    public void setContentInputStream(InputStream is, long length) {
         content = sessionFactory.getCurrentSession().getLobHelper().createBlob(is, length);
     }
-    
+
     /**
      * Set the content using a byte array.
      * @param b content data
@@ -118,5 +117,5 @@ public class HibContentData extends BaseModelObject {
             throw new RuntimeException(e);
         }
         return -1;
-    } 
+    }
 }

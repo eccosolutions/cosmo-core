@@ -25,7 +25,7 @@ public class UriTemplateTest extends TestCase {
 	private final static int MAX_CHARCODE = 0x7e; //ASCII range
 	private Random rnd = new Random();
 
-    public void testUnescapeSpaces() throws Exception {
+    public void testUnescapeSpaces() {
         Assert.assertEquals("test test", UriTemplate.unescapeSegment("test+test"));
     }
 
@@ -45,7 +45,7 @@ public class UriTemplateTest extends TestCase {
     	return result.toString();
     }
 
-    public void testBindAbsolute() throws Exception {
+    public void testBindAbsolute() {
     	String username = getPlaceHolder(10);
         Assert.assertEquals("Error binding template: ", "/" + username + "/Inbox", new UriTemplate("/{username}/Inbox").bindAbsolute(false, "", username));
     }

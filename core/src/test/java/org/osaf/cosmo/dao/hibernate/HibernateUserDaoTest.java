@@ -214,7 +214,7 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testUpdateUser() throws Exception {
+    public void testUpdateUser() {
         User user1 = new HibUser();
         user1.setUsername("user1");
         user1.setFirstName("User");
@@ -241,7 +241,7 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testUpdateUserDuplicate() throws Exception {
+    public void testUpdateUserDuplicate() {
         User user1 = new HibUser();
         user1.setUsername("user1");
         user1.setFirstName("User");
@@ -287,7 +287,7 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testPaginatedUsers() throws Exception {
+    public void testPaginatedUsers() {
         User user1 = helper.createDummyUser(userDao, 1);
         User user2 = helper.createDummyUser(userDao, 2);
         User user3 = helper.createDummyUser(userDao, 3);
@@ -332,7 +332,7 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testDeleteUser() throws Exception {
+    public void testDeleteUser() {
         User user1 = new HibUser();
         user1.setUsername("user1");
         user1.setFirstName("User");
@@ -355,7 +355,7 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testDeleteUserByUsername() throws Exception {
+    public void testDeleteUserByUsername() {
         User user1 = new HibUser();
         user1.setUsername("user1");
         user1.setFirstName("User");
@@ -379,7 +379,7 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testCreatePasswordRecovery() throws Exception {
+    public void testCreatePasswordRecovery() {
         User user1 = new HibUser();
         user1.setUsername("user1");
         user1.setFirstName("User");

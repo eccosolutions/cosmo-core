@@ -244,8 +244,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         return content;
     }
 
-    private NoteItem generateTestNote(String name, String owner)
-            throws Exception {
+    private NoteItem generateTestNote(String name, String owner) {
         NoteItem content = new HibNoteItem();
         content.setName(name);
         content.setDisplayName(name);

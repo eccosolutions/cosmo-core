@@ -50,7 +50,7 @@ public abstract class BaseMockServletTestCase extends TestCase {
     /**
      */
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         securityManager = new MockSecurityManager();
         servletContext = new MockServletContext();
         servletConfig = new MockServletConfig(servletContext);

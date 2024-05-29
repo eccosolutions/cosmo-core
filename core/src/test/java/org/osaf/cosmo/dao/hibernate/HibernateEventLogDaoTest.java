@@ -77,7 +77,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
 
 
     @Test
-    public void testEventLogDaoItemAddedEntry() throws Exception {
+    public void testEventLogDaoItemAddedEntry() {
        ItemAddedEntry entry = new ItemAddedEntry(note, col1);
        entry.setUser(user);
 
@@ -105,7 +105,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
 
 
     @Test
-    public void testEventLogDaoItemRemovedEntry() throws Exception {
+    public void testEventLogDaoItemRemovedEntry() {
         ItemRemovedEntry entry = new ItemRemovedEntry(note, col1);
         entry.setUser(user);
 
@@ -131,7 +131,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
      }
 
     @Test
-    public void testEventLogDaoItemUpdatedEntry() throws Exception {
+    public void testEventLogDaoItemUpdatedEntry() {
         // ensure note has multiple parents
         note.addParent(col1);
         note.addParent(col2);

@@ -218,7 +218,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
-    public void testFromDecimal() throws Exception {
+    public void testFromDecimal() {
         String testString = "3.14159";
         BigDecimal testDecimal = new BigDecimal(testString);
 

@@ -78,7 +78,7 @@ public class HttpRequestContextIntegrationFilter
     // InitializingBean methods
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         if (context == null ||
             ! SecurityContext.class.isAssignableFrom(context)) {
             throw new IllegalArgumentException("context must be defined and implement SecurityContext (typically use org.acegisecurity.context.SecurityContextImpl; existing class is " + context + ")");
@@ -135,8 +135,7 @@ public class HttpRequestContextIntegrationFilter
     }
 
     @Override
-    public void init(FilterConfig filterConfig)
-        throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     // our methods

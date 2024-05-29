@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,13 +55,13 @@ public abstract class BaseStampApplicator extends BaseApplicator {
      * <p>
      * Finally, {@link #applyField(EimRecordField)} is called for each
      * non-key record field.
-     * 
+     *
      * @throws IllegalArgumentException if the record's namespace does
      * not match this translator's namespace
      * @throws EimValidationException if the record contains a field
      * with an invalid value
      * @throws EimSchemaException if the record is improperly
-     * constructed or cannot otherwise be applied to the stamp 
+     * constructed or cannot otherwise be applied to the stamp
      */
     public void applyRecord(EimRecord record)
         throws EimSchemaException {
@@ -98,7 +98,7 @@ public abstract class BaseStampApplicator extends BaseApplicator {
      * stamp record is applied to an item that does not already have
      * that stamp.
      */
-    protected abstract Stamp createStamp(EimRecord record) throws EimSchemaException;
+    protected abstract Stamp createStamp(EimRecord record);
 
     /**
      * Deletes the stamp.
@@ -121,7 +121,7 @@ public abstract class BaseStampApplicator extends BaseApplicator {
      *
      * @throws EimValidationException if the field value is invalid
      * @throws EimSchemaException if the field is improperly
-     * constructed or cannot otherwise be applied to the stamp 
+     * constructed or cannot otherwise be applied to the stamp
      */
     protected abstract void applyField(EimRecordField field)
         throws EimSchemaException;
@@ -136,7 +136,7 @@ public abstract class BaseStampApplicator extends BaseApplicator {
         this.stamp = stamp;
     }
 
-    
+
     /**
      * Need to override to handle copying attribute from stamp to parent stamp.
      */
@@ -147,8 +147,8 @@ public abstract class BaseStampApplicator extends BaseApplicator {
                     "missing attributes not support on non-modification items");
 
         Stamp modStamp = getStamp();
-        
+
         handleMissingAttribute(attribute, modStamp);
     }
-    
+
 }

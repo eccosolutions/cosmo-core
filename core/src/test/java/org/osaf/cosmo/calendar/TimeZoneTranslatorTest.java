@@ -55,7 +55,7 @@ public class TimeZoneTranslatorTest extends TestCase {
         Assert.assertNull(olsonTz);
     }
 
-    public void testTranslateLightningTZID() throws Exception {
+    public void testTranslateLightningTZID() {
         TimeZoneTranslator translator = TimeZoneTranslator.getInstance();
 
         // test Lightning TZID format

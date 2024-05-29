@@ -57,7 +57,7 @@ public class SecurityAdviceTest extends TestCase {
 
 
     /** */
-    protected void setUp() throws Exception {
+    protected void setUp() {
         testHelper = new TestHelper();
         securityManager = new MockSecurityManager();
         storage = new MockDaoStorage();
@@ -88,7 +88,7 @@ public class SecurityAdviceTest extends TestCase {
     }
 
     /** */
-    public void testSecuredApiWithUser() throws Exception {
+    public void testSecuredApiWithUser() {
         User user1 = testHelper.makeDummyUser("user1", "password");
         User user2 = testHelper.makeDummyUser("user2", "password");
         CollectionItem rootCollection = contentDao.createRootItem(user1);

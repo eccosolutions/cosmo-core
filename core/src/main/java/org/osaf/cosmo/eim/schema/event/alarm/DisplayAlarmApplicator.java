@@ -61,7 +61,7 @@ public class DisplayAlarmApplicator extends BaseStampApplicator
         applyDeletionNonEvent(record);
     }
 
-    protected void applyDeletionNonEvent(EimRecord record) throws EimSchemaException {
+    protected void applyDeletionNonEvent(EimRecord record) {
         NoteItem note = (NoteItem) getItem();
         note.setReminderTime(null);
     }
@@ -214,12 +214,12 @@ public class DisplayAlarmApplicator extends BaseStampApplicator
     }
 
     @Override
-    protected void applyField(EimRecordField field) throws EimSchemaException {
+    protected void applyField(EimRecordField field) {
         // do nothing beause we override applyRecord()
     }
 
     @Override
-    protected Stamp createStamp(EimRecord record) throws EimSchemaException {
+    protected Stamp createStamp(EimRecord record) {
         // do nothing as the stamp should already be created
         return null;
     }

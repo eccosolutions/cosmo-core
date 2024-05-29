@@ -32,7 +32,7 @@ public class ModifiedByGeneratorTest extends BaseGeneratorTestCase
     private static final Log log =
         LogFactory.getLog(ModifiedByGeneratorTest.class);
 
-    public void testGenerateRecord() throws Exception {
+    public void testGenerateRecord() {
         String uuid = "deadbeef";
         String lastModifiedBy = "bcm@osafoundation.org";
         Integer lastModification = ContentItem.Action.CREATED;

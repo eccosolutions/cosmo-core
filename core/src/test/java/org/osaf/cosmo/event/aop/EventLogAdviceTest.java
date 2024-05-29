@@ -60,7 +60,7 @@ public class EventLogAdviceTest extends TestCase {
 
 
     /** */
-    protected void setUp() throws Exception {
+    protected void setUp() {
         testHelper = new TestHelper();
         securityManager = new MockSecurityManager();
         storage = new MockDaoStorage();
@@ -90,7 +90,7 @@ public class EventLogAdviceTest extends TestCase {
     }
 
     /** */
-    public void testEventLogAspectWithUser() throws Exception {
+    public void testEventLogAspectWithUser() {
 
         Date startDate = new Date();
 

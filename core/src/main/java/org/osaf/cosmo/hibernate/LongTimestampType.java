@@ -88,7 +88,7 @@ public class LongTimestampType extends AbstractSingleColumnStandardBasicType<Dat
 
 	// implement LiteralType
 	@Override
-	public String objectToSQLString(Date value, Dialect dialect) throws Exception {
+	public String objectToSQLString(Date value, Dialect dialect) {
 		// seems the below could do the trick, but we stick to what cosmo had...
 		return "" + value.getTime();
 		/*

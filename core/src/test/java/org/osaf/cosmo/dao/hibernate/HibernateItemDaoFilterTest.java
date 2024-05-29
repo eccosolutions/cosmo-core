@@ -110,7 +110,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testFilterByUid() throws Exception {
+    public void testFilterByUid() {
         ItemFilter filter = new ItemFilter();
         filter.setUid(Restrictions.eq(CALENDAR_UID_1));
         Set<Item> results = contentDao.findItems(filter);
@@ -119,7 +119,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testNoteFilter() throws Exception {
+    public void testNoteFilter() {
         NoteItemFilter filter = new NoteItemFilter();
         Set<Item> results = contentDao.findItems(filter);
         Assert.assertEquals(11, results.size());
@@ -198,7 +198,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testFilterByNoStamp() throws Exception {
+    public void testFilterByNoStamp() {
         CollectionItem calendar1 = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID_1);
         ItemFilter filter = new NoteItemFilter();
         filter.setParent(calendar1);
@@ -317,7 +317,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
     }
 
     @Test
-    public void testMultipleFilters() throws Exception {
+    public void testMultipleFilters() {
         CollectionItem calendar1 = (CollectionItem) contentDao.findItemByUid(CALENDAR_UID_1);
 
         NoteItemFilter filter1 = new NoteItemFilter();
@@ -375,7 +375,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
     }
 
     private NoteItem generateNote(String name,
-            String owner) throws Exception {
+            String owner) {
         NoteItem event = new HibNoteItem();
         event.setName(name);
         event.setDisplayName(name);

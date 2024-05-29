@@ -107,7 +107,7 @@ public class CalendarFilterConverterTest extends TestCase {
         Assert.assertEquals(sf.getPeriod().getEnd().toString(), "20070201T100000Z");
     }
 
-    public void testGetFirstPassFilter() throws Exception {
+    public void testGetFirstPassFilter() {
         CollectionItem calendar = new HibCollectionItem();
         calendar.setUid("calendar");
         CalendarFilter calFilter = new CalendarFilter();

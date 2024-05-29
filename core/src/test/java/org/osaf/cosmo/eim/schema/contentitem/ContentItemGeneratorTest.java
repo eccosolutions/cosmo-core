@@ -83,7 +83,7 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
                        unknownAttr.getValue());
     }
 
-    public void testInactiveNotDeleted() throws Exception {
+    public void testInactiveNotDeleted() {
         // inactive items are not deleted via item records but via
         // recordset
         ContentItem contentItem = new MockNoteItem();
@@ -94,7 +94,7 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
         checkNotDeleted(generator.generateRecords().get(0));
     }
 
-    public void testGenerateMissingField() throws Exception {
+    public void testGenerateMissingField() {
         NoteItem modification = new MockNoteItem();
         NoteItem parent = new MockNoteItem();
         modification.setUid("1");

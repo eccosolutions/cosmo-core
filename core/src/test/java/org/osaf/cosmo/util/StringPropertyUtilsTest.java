@@ -27,7 +27,7 @@ import junit.framework.TestCase;
  */
 public class StringPropertyUtilsTest extends TestCase {
 
-    public void testGetChildKeys() throws Exception {
+    public void testGetChildKeys() {
         String[] testKeys = {"a.b.c", "a.b.d", "a.b.d.foo", "a.e.f.g.h.i"};
 
         String[] childKeys = StringPropertyUtils.getChildKeys("a", testKeys);
@@ -57,7 +57,7 @@ public class StringPropertyUtilsTest extends TestCase {
 
     }
 
-    public void testGetChildProperties() throws Exception {
+    public void testGetChildProperties() {
         HashMap<String, String> testProps = new HashMap<String, String>();
         testProps.put("a.b.c", "foo1");
         testProps.put("a.b.d", "foo2");

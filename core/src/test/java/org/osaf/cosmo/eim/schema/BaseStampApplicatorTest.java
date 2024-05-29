@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ public class BaseStampApplicatorTest extends BaseApplicatorTestCase {
 
     private TestStampApplicator applicator;
 
-    protected void setUp() throws Exception {
+    protected void setUp() {
         applicator = new TestStampApplicator(PREFIX, NAMESPACE);
     }
 
@@ -94,18 +94,16 @@ public class BaseStampApplicatorTest extends BaseApplicatorTestCase {
             appliedFields = new HashSet<EimRecordField>();
         }
 
-        protected Stamp createStamp(EimRecord record) throws EimSchemaException {
+        protected Stamp createStamp(EimRecord record) {
             stampCreated = true;
             return null;
         }
 
-        protected void applyDeletion(EimRecord record)
-            throws EimSchemaException {
+        protected void applyDeletion(EimRecord record) {
             deletionApplied = true;
         }
 
-        protected void applyField(EimRecordField field)
-            throws EimSchemaException {
+        protected void applyField(EimRecordField field) {
             appliedFields.add(field);
         }
 

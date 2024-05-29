@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,6 @@
  */
 package org.osaf.cosmo.eim.eimml;
 
-import java.io.IOException;
 import java.io.Writer;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -51,7 +50,7 @@ public class EimmlStreamWriter implements EimmlConstants, XMLStreamConstants {
      * Opens the writer. No data is actually written to the stream.
      */
     public EimmlStreamWriter(Writer out)
-        throws IOException, EimmlStreamException {
+        throws EimmlStreamException {
         try {
             xmlWriter = XML_OUTPUT_FACTORY.createXMLStreamWriter(out);
         } catch (XMLStreamException e) {
@@ -89,7 +88,7 @@ public class EimmlStreamWriter implements EimmlConstants, XMLStreamConstants {
 
             if (name != null)
                 xmlWriter.writeAttribute(ATTR_NAME, name);
-            
+
             if(hue != null)
                 xmlWriter.writeAttribute(ATTR_HUE, hue.toString());
         } catch (XMLStreamException e) {
@@ -266,10 +265,10 @@ public class EimmlStreamWriter implements EimmlConstants, XMLStreamConstants {
         xmlWriter.writeAttribute(NS_CORE, ATTR_TYPE, type);
         if (isKey)
             xmlWriter.writeAttribute(NS_CORE, ATTR_KEY, "true");
-        
+
         if(field.isMissing())
             xmlWriter.writeAttribute(ATTR_MISSING, "true");
-        
+
         if (value != null) {
             if (isEmptyableType(type) && value.isEmpty())
                 xmlWriter.writeAttribute(ATTR_EMPTY, "true");

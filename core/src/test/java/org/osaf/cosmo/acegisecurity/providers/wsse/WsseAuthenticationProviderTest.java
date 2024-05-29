@@ -41,7 +41,7 @@ public class WsseAuthenticationProviderTest extends TestCase {
 
     /** */
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         testHelper = new TestHelper();
         storage = new MockDaoStorage();
         userDao = new MockUserDao(storage);

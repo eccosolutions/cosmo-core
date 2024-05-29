@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,12 +32,12 @@ import org.osaf.cosmo.util.BufferedServletOutputStream;
  * before returning an error to the client.
  */
 public class ResponseErrorWrapper extends HttpServletResponseWrapper {
-    
+
     private String errorMsg = null;
     private BufferedServletOutputStream bufferedOutput = null;
     private boolean hasError = false;
-    
-    public ResponseErrorWrapper(HttpServletResponse response) throws IOException {
+
+    public ResponseErrorWrapper(HttpServletResponse response) {
         super(response);
     }
 
@@ -61,7 +61,7 @@ public class ResponseErrorWrapper extends HttpServletResponseWrapper {
             super.sendError(code);
         }
     }
-    
+
     /**
      * If a 500 error was trapped, then flush it.  This can involve invoking
      * sendError() or setStatus() along with writing any data that
@@ -73,21 +73,21 @@ public class ResponseErrorWrapper extends HttpServletResponseWrapper {
         if(hasError) {
             if(bufferedOutput!=null && !bufferedOutput.isEmpty()) {
                 super.setStatus(SC_INTERNAL_SERVER_ERROR);
-                IOUtils.copy(bufferedOutput.getBufferInputStream(), super.getOutputStream()); 
+                IOUtils.copy(bufferedOutput.getBufferInputStream(), super.getOutputStream());
             }
             else if (errorMsg!=null) {
                 super.sendError(SC_INTERNAL_SERVER_ERROR, errorMsg);
             }
             else
                 super.sendError(SC_INTERNAL_SERVER_ERROR);
-            
+
             clearError();
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * Clear error, voiding any 500 response sent.
      */
@@ -99,17 +99,17 @@ public class ResponseErrorWrapper extends HttpServletResponseWrapper {
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        
+
         // If an error was trapped, then return our custom outputstream
         // so that we can buffer any data sent and be able to send
         // it later on.
         if(hasError) {
             if(bufferedOutput==null)
                 bufferedOutput = new BufferedServletOutputStream();
-            
+
             return bufferedOutput;
         }
-        
+
         return super.getOutputStream();
     }
 
@@ -133,7 +133,7 @@ public class ResponseErrorWrapper extends HttpServletResponseWrapper {
             super.setStatus(sc);
         }
     }
-    
+
     /**
      * @return buffered outputstream, only has a value if
      *         an error has been trapped and getOutputStream()

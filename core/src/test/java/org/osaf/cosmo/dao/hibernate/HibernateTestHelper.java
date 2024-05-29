@@ -63,8 +63,7 @@ public class HibernateTestHelper {
 
     }
 
-    public void verifyItemInCollection(Collection items, Item item)
-            throws Exception {
+    public void verifyItemInCollection(Collection items, Item item) {
         for (Iterator it = items.iterator(); it.hasNext();) {
             Item nextItem = (Item) it.next();
             if (nextItem.getUid().equals(item.getUid()))
@@ -116,7 +115,7 @@ public class HibernateTestHelper {
         return bos.toByteArray();
     }
 
-    public InputStream getInputStream(String name) throws Exception {
+    public InputStream getInputStream(String name) {
         InputStream in = getClass().getClassLoader().getResourceAsStream(name);
         if (in == null) {
             throw new IllegalStateException("resource " + name + " not found");

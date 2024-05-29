@@ -48,8 +48,7 @@ public class EimmlTypeConverter implements EimmlConstants {
      * Returns the given value as a byte array, converting it from
      * a Base64 encoded string.
      */
-    public static byte[] toBytes(String value)
-        throws EimmlConversionException {
+    public static byte[] toBytes(String value) {
         if (value == null)
             return null;
         return getDecoder().decode(value);
@@ -58,8 +57,7 @@ public class EimmlTypeConverter implements EimmlConstants {
     /**
      * Returns the value as a Base64 encoded string.
      */
-    public static String fromBytes(byte[] value)
-        throws EimmlConversionException {
+    public static String fromBytes(byte[] value) {
         if (value == null)
             return null;
         return getEncoder().encodeToString(value);
@@ -117,8 +115,7 @@ public class EimmlTypeConverter implements EimmlConstants {
      * Returns the given value as an input stream, converting it from
      * a Base64 encoded string.
      */
-    public static InputStream toBlob(String value)
-        throws EimmlConversionException {
+    public static InputStream toBlob(String value) {
         if (value == null)
             return null;
         return new ByteArrayInputStream(decodeBase64String(value));
@@ -158,8 +155,7 @@ public class EimmlTypeConverter implements EimmlConstants {
     /**
      * Returns the given value as a string.
      */
-    public static String fromInteger(Integer value)
-        throws EimmlConversionException {
+    public static String fromInteger(Integer value) {
         if (value == null)
             return null;
         return value.toString();
@@ -183,8 +179,7 @@ public class EimmlTypeConverter implements EimmlConstants {
     /**
      * Returns the given value as a string.
      */
-    public static String fromDateTime(Calendar value)
-        throws EimmlConversionException {
+    public static String fromDateTime(Calendar value) {
         if (value == null)
             return null;
         return DateUtil.formatRfc3339Calendar(value);

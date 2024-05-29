@@ -105,9 +105,9 @@ public class MockHelper extends TestHelper {
         homeCollection = contentService.getRootItem(user);
     }
 
-    public void setUp() throws Exception {}
+    public void setUp() {}
 
-    public void tearDown() throws Exception {}
+    public void tearDown() {}
 
     public void logIn() {
         logInUser(user);
@@ -154,8 +154,7 @@ public class MockHelper extends TestHelper {
         return makeAndStoreDummyCollection(homeCollection);
     }
 
-    public CollectionItem makeAndStoreDummyCollection(CollectionItem parent)
-        throws Exception {
+    public CollectionItem makeAndStoreDummyCollection(CollectionItem parent) {
         CollectionItem c = makeDummyCollection(user);
         return contentService.createCollection(parent, c);
     }
@@ -165,8 +164,7 @@ public class MockHelper extends TestHelper {
         return makeAndStoreDummyCalendarCollection(null);
     }
 
-    public CollectionItem makeAndStoreDummyCalendarCollection(String name)
-            throws Exception {
+    public CollectionItem makeAndStoreDummyCalendarCollection(String name) {
         CollectionItem c = makeDummyCalendarCollection(user, name);
         return contentService.createCollection(homeCollection, c);
     }
@@ -180,8 +178,7 @@ public class MockHelper extends TestHelper {
         return makeAndStoreDummyContent(homeCollection);
     }
 
-    public ContentItem makeAndStoreDummyContent(CollectionItem parent)
-        throws Exception {
+    public ContentItem makeAndStoreDummyContent(CollectionItem parent) {
         ContentItem c = makeDummyContent(user);
         return contentService.createContent(parent, c);
     }
@@ -197,8 +194,7 @@ public class MockHelper extends TestHelper {
     }
 
     public NoteItem makeAndStoreDummyItem(CollectionItem parent,
-                                          String name)
-        throws Exception {
+                                          String name) {
         NoteItem i = makeDummyItem(user, name);
         return (NoteItem) contentService.createContent(parent, i);
     }

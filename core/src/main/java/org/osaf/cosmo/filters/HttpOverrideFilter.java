@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * A filter that provides the X-Http-Override-Method header. If this header is present,
  * its value will be used as the HTTP method for the current request. This allows
  * HTTP clients with limited HTTP method support to make requests with any method.
- * 
+ *
  * @author travis
  *
  */
@@ -54,13 +54,13 @@ public class HttpOverrideFilter implements Filter {
 
 
         if (httpRequest.getHeader("X-Http-Method-Override") != null){
-            
+
             if (log.isDebugEnabled()){
-                log.debug("Overriding " + httpRequest.getMethod() + " with " 
+                log.debug("Overriding " + httpRequest.getMethod() + " with "
                         + httpRequest.getHeader("X-Http-Method-Override"));
             }
 
-            chain.doFilter(new HttpOverrideRequestWrapper(httpRequest), 
+            chain.doFilter(new HttpOverrideRequestWrapper(httpRequest),
                     response);
             return;
         }
@@ -73,7 +73,7 @@ public class HttpOverrideFilter implements Filter {
 
 
 
-    public void init(FilterConfig arg0) throws ServletException {
+    public void init(FilterConfig arg0) {
         // TODO Auto-generated method stub
 
     }

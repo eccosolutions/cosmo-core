@@ -101,8 +101,7 @@ public class HibernateUserDaoSubscriptionTest
     }
 
     private CollectionItem getCollection(CollectionItem parent,
-                                         String name)
-        throws Exception {
+                                         String name) {
         for (Item child : parent.getChildren()) {
             if (child.getName().equals(name))
                 return (CollectionItem) child;

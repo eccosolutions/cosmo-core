@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
 
     private TestItemApplicator applicator;
 
-    protected void setUp() throws Exception {
+    protected void setUp() {
         applicator = new TestItemApplicator(PREFIX, NAMESPACE);
     }
 
@@ -54,7 +54,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
         } catch (IllegalArgumentException e) {}
     }
 
-    public void testApplyDeletion() throws Exception {
+    public void testApplyDeletion() {
         EimRecord record = new EimRecord(PREFIX, NAMESPACE);
         TextField field = new TextField("foo", "bar");
         record.addField(field);
@@ -68,7 +68,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
                     applicator.isFieldApplied(field));
     }
 
-    public void testApplyRecord() throws Exception {
+    public void testApplyRecord() {
         EimRecord record = new EimRecord(PREFIX, NAMESPACE);
         TextField field = new TextField("foo", "bar");
         record.addField(field);
@@ -91,8 +91,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
             appliedFields = new HashSet<EimRecordField>();
         }
 
-        protected void applyField(EimRecordField field)
-            throws EimSchemaException {
+        protected void applyField(EimRecordField field) {
             appliedFields.add(field);
         }
 

@@ -87,7 +87,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
                        eventStamp.getDisplayAlarmRepeat());
     }
 
-    public void testGenerateRecordNonEvent() throws Exception {
+    public void testGenerateRecordNonEvent() {
 
         MockNoteItem noteItem = new MockNoteItem();
         noteItem.setModifiedDate(new Date());
@@ -123,7 +123,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         checkIntegerField(repeatField, FIELD_REPEAT, null);
     }
 
-    public void testGenerateNoAlarmNonEvent() throws Exception {
+    public void testGenerateNoAlarmNonEvent() {
 
         MockNoteItem noteItem = new MockNoteItem();
         noteItem.setModifiedDate(new Date());
@@ -146,7 +146,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         checkTextField(triggerField, FIELD_TRIGGER, null);
     }
 
-    public void testGenerateNoAlarmEvent() throws Exception {
+    public void testGenerateNoAlarmEvent() {
 
         MockNoteItem noteItem = new MockNoteItem();
         noteItem.setModifiedDate(new Date());

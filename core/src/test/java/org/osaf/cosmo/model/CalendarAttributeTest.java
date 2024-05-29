@@ -29,7 +29,7 @@ import org.osaf.cosmo.model.mock.MockCalendarAttribute;
  */
 public class CalendarAttributeTest extends TestCase {
 
-    public void testDateWithTimezone() throws Exception {
+    public void testDateWithTimezone() {
 
         String test1 = "2002-10-10T00:00:00+05:00";
         String test2 = "2002-10-09T19:00:00Z";

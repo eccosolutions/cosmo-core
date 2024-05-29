@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * {@link WsseAuthenticationToken} if needed.
  */
 public class WsseTokenProcessingFilter implements Filter {
-    
+
     public static final String WSSE_HEADER = "X-WSSE";
     private static final Log log =
         LogFactory.getLog(WsseTokenProcessingFilter.class);
@@ -49,8 +49,7 @@ public class WsseTokenProcessingFilter implements Filter {
     /**
      * Does nothing - we use IoC lifecycle methods instead
      */
-    public void init(FilterConfig filterConfig)
-        throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     /**
@@ -66,9 +65,9 @@ public class WsseTokenProcessingFilter implements Filter {
         if (sc.getAuthentication() == null) {
             if (request instanceof HttpServletRequest) {
                 HttpServletRequest httpRequest = (HttpServletRequest) request;
-                
+
                 UsernameToken userToken = parseWsseToken(httpRequest);
-                
+
                 if(userToken!=null) {
                     Authentication token = new WsseAuthenticationToken(userToken);
                     sc.setAuthentication(token);
@@ -85,12 +84,12 @@ public class WsseTokenProcessingFilter implements Filter {
 
     private UsernameToken parseWsseToken(HttpServletRequest request) {
         String wsseToken = request.getHeader(WSSE_HEADER);
-        
+
         if(wsseToken==null)
             return null;
-        
+
         wsseToken = wsseToken.trim();
-        
+
         return WsseUtils.parseWsseToken(wsseToken);
     }
 
