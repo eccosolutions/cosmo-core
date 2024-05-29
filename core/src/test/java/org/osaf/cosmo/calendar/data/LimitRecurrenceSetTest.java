@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.calendar.data;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.*;

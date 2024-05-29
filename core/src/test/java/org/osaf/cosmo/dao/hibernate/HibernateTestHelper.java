@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import net.fortuna.ical4j.model.Calendar;
 import org.apache.commons.io.IOUtils;
 import org.osaf.cosmo.calendar.util.CalendarUtils;

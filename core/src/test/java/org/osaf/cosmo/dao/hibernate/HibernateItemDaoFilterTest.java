@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 

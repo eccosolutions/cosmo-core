@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.eim.schema.event.alarm;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.TemporalAmountAdapter;
 import org.apache.commons.logging.Log;

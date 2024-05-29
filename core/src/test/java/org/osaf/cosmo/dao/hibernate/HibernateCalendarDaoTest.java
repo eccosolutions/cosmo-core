@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
@@ -76,7 +76,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
     public void testCalendarDaoBasic() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
-        
+
         CollectionItem newItem = contentDao.createCollection(root, calendar);
 
         clearSession();
@@ -86,7 +86,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
         CalendarCollectionStamp ccs = (CalendarCollectionStamp) queryItem
                 .getStamp(CalendarCollectionStamp.class);
-        
+
         Assert.assertNotNull(queryItem);
         Assert.assertEquals("test", queryItem.getName());
         Assert.assertEquals("en", ccs.getLanguage());
@@ -104,7 +104,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
 
         queryItem = (CollectionItem) contentDao.findItemByUid(calendar.getUid());
         ccs = (CalendarCollectionStamp) queryItem.getStamp(CalendarCollectionStamp.class);
-        
+
         Assert.assertEquals("test2", queryItem.getName());
         Assert.assertEquals("es", ccs.getLanguage());
         Assert.assertEquals("test description2", ccs.getDescription());
@@ -112,35 +112,35 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         // test add event
         ContentItem event = generateEvent("test.ics", "cal1.ics",
                 "testuser");
-        
+
         calendar = (CollectionItem) contentDao.findItemByUid(calendar.getUid());
         ContentItem newEvent = contentDao.createContent(calendar, event);
-        
+
         clearSession();
 
         // test query event
         ContentItem queryEvent = (ContentItem) contentDao.findItemByUid(newEvent.getUid());
         EventStamp evs = (EventStamp) queryEvent.getStamp(EventStamp.class);
-        
+
         Assert.assertEquals("test.ics", queryEvent.getName());
         Assert.assertEquals(getCalendar(event).toString(), getCalendar(queryEvent).toString());
 
         // test update event
         queryEvent.setName("test2.ics");
         evs.setEventCalendar(CalendarUtils.parseCalendar(helper.getBytes("cal2.ics")));
-        
+
         queryEvent = contentDao.updateContent(queryEvent);
 
         Calendar cal = evs.getEventCalendar();
-        
+
         clearSession();
 
         queryEvent = (ContentItem) contentDao.findItemByUid(newEvent.getUid());
         evs = (EventStamp) queryEvent.getStamp(EventStamp.class);
-        
+
         Assert.assertEquals("test2.ics", queryEvent.getName());
         Assert.assertEquals(evs.getEventCalendar().toString(), cal.toString());
-        
+
 
         // test delete
         contentDao.removeContent(queryEvent);
@@ -163,7 +163,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
     public void testLongPropertyValue() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
-        
+
         CollectionItem newItem = contentDao.createCollection(root, calendar);
 
         ContentItem event = generateEvent("big.ics", "big.ics",
@@ -177,20 +177,20 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(getCalendar(event).toString(), getCalendar(queryEvent).toString());
     }
 
-    
+
 
     @Test
     public void testFindByEventIcalUid() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
-        
+
         contentDao.createCollection(root, calendar);
 
         NoteItem event = generateEvent("test.ics", "cal1.ics",
                 "testuser");
 
         event = (NoteItem) contentDao.createContent(calendar, event);
-        
+
         clearSession();
 
         calendar = (CollectionItem) contentDao.findItemByUid(calendar.getUid());
@@ -273,7 +273,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
     public void testCalendarQuerying() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
-        
+
         CollectionItem newItem = contentDao.createCollection(root, calendar);
 
         for (int i = 1; i <= 5; i++) {
@@ -292,7 +292,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         eventFilter.getPropFilters().add(propFilter);
 
         clearSession();
-        
+
         calendar = (CollectionItem) contentDao.findItemByUid(calendar.getUid());
 
         // Should match ics.1
@@ -340,7 +340,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         eventFilter.setPropFilters(new ArrayList());
         DateTime start = new DateTime("20050817T115000Z");
         DateTime end = new DateTime("20050818T115000Z");
-        
+
         Period period = new Period(start, end);
         TimeRangeFilter timeRange = new TimeRangeFilter(period);
         eventFilter.setTimeRangeFilter(timeRange);
@@ -381,12 +381,12 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         queryEvents = calendarDao.findCalendarItems(calendar, filter);
         Assert.assertEquals(0, queryEvents.size());
     }
-    
+
     @Test
     public void testCalendarTimeRangeQuerying() throws Exception {
         CollectionItem calendar = generateCalendar("test", "testuser");
         CollectionItem root = contentDao.getRootItem(getUser(userDao, "testuser"));
-        
+
         calendar = contentDao.createCollection(root, calendar);
 
         // create 3 events, 2 of them recurring, one of those infinite
@@ -397,45 +397,45 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         event = generateEvent("test3.ics", "eventwithtimezone3.ics", "testuser");
         event.setUid("test3uid");
         newEvent = (NoteItem) contentDao.createContent(calendar, event);
-        
+
 
         // modification to infinite daily recurring eventwithtimezone3.ics
         event = generateEventException("mod.ics", "eventmodwithtimezone.ics", "testuser");
         event.setModifies(newEvent);
         newEvent = (NoteItem) contentDao.createContent(calendar, event);
-        
+
         clearSession();
 
         // Should match all except modification
         Set<ContentItem> queryEvents = calendarDao.findEvents(calendar, new DateTime("20070501T010000Z"), new DateTime("20070601T010000Z"), false);
         Assert.assertEquals(3, queryEvents.size());
-        
+
         verifyItemNameInSet(queryEvents, "test1.ics");
         verifyItemNameInSet(queryEvents, "test2.ics");
         verifyItemNameInSet(queryEvents, "test3.ics");
-        
+
         // Should match two
         queryEvents = calendarDao.findEvents(calendar, new DateTime("20070515T010000Z"), new DateTime("20070518T010000Z"), false);
         Assert.assertEquals(2, queryEvents.size());
         verifyItemNameInSet(queryEvents, "test1.ics");
         verifyItemNameInSet(queryEvents, "test3.ics");
-        
+
         // Should match one (the infinite recurring event)
         queryEvents = calendarDao.findEvents(calendar, new DateTime("20200517T010000Z"), new DateTime("20200518T010000Z"), false);
         Assert.assertEquals(1, queryEvents.size());
         verifyItemNameInSet(queryEvents, "test3.ics");
-        
-        // Should match the modification, so the results should include the 
+
+        // Should match the modification, so the results should include the
         // modification and the master
         queryEvents = calendarDao.findEvents(calendar, new DateTime("20060501T010000Z"), new DateTime("20060601T010000Z"), false);
         Assert.assertEquals(2, queryEvents.size());
         verifyItemNameInSet(queryEvents, "test3.ics");
         verifyItemNameInSet(queryEvents, "mod.ics");
-        
+
         // Should match none
         queryEvents = calendarDao.findEvents(calendar, new DateTime("20060401T010000Z"), new DateTime("20060501T010000Z"), false);
         Assert.assertEquals(0, queryEvents.size());
-        
+
         // Test expand
         // Should match the modification, so the results should include the modification
         // and the master (but no occurences because the only occurrence is the mod)
@@ -443,7 +443,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(2, queryEvents.size());
         verifyItemNameInSet(queryEvents, "test3.ics");
         verifyItemNameInSet(queryEvents, "mod.ics");
-        
+
         // Should match 10 occurences in the future, so the results should include
         // the master plus 10 occurence items
         queryEvents = calendarDao.findEvents(calendar, new DateTime("20200517T010000Z"), new DateTime("20200527T010000Z"), true);
@@ -469,13 +469,13 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         CollectionItem calendar = new HibCollectionItem();
         calendar.setName(name);
         calendar.setOwner(getUser(userDao, owner));
-        
+
         CalendarCollectionStamp ccs = new HibCalendarCollectionStamp();
         calendar.addStamp(ccs);
-        
+
         ccs.setDescription("test description");
         ccs.setLanguage("en");
-        
+
         return calendar;
     }
 
@@ -484,17 +484,17 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         NoteItem event = new HibNoteItem();
         event.setName(name);
         event.setOwner(getUser(userDao, owner));
-       
+
         EventStamp evs = new HibEventStamp();
         event.addStamp(evs);
         evs.setEventCalendar(CalendarUtils.parseCalendar(helper.getBytes(file)));
         event.setIcalUid(evs.getIcalUid());
         if(evs.getEvent().getDescription()!=null)
             event.setBody(evs.getEvent().getDescription().getValue());
-        
+
         if(evs.getEvent().getSummary()!=null)
             event.setDisplayName(evs.getEvent().getSummary().getValue());
-        
+
         return event;
     }
 
@@ -507,7 +507,7 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         freeBusy.setFreeBusyCalendar(calendar);
         return freeBusy;
     }
-    
+
     private AvailabilityItem generateAvailability(String name, String file, String owner) throws Exception {
         AvailabilityItem newItem = new HibAvailabilityItem();
         newItem.setOwner(getUser(userDao, owner));
@@ -527,33 +527,33 @@ public class HibernateCalendarDaoTest extends AbstractHibernateDaoTestCase {
         event.setName(name);
         event.setDisplayName(name);
         event.setOwner(getUser(userDao, owner));
-       
+
         EventExceptionStamp evs = new HibEventExceptionStamp();
         event.addStamp(evs);
         evs.setEventCalendar(CalendarUtils.parseCalendar(helper.getBytes(file)));
-        
+
         return event;
     }
-    
+
     private Calendar getCalendar(ContentItem item) {
         return new EntityConverter(null).convertContent(item);
     }
-    
+
     private void verifyItemNameInSet(Set<ContentItem> items, String name) {
         for(ContentItem item: items) {
             if(name.equals(item.getName()))
                 return;
         }
-        
+
         Assert.fail("item " + name + " not in set");
     }
-    
+
     private void verifyUidInSet(Set<ContentItem> items, String uid) {
         for(ContentItem item: items) {
             if(uid.equals(item.getUid()))
                 return;
         }
-        
+
         Assert.fail("uid " + uid + " not in set");
     }
 

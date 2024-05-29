@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.hibernate.SessionFactory;
 import org.junit.Assume;
 import org.junit.Test;

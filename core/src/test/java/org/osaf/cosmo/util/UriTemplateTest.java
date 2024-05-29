@@ -17,7 +17,7 @@ package org.osaf.cosmo.util;
 
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 
 public class UriTemplateTest extends TestCase {

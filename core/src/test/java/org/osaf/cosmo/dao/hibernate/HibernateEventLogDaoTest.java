@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import net.fortuna.ical4j.model.DateTime;
 
 import org.assertj.core.api.Assertions;

@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,7 @@ package org.osaf.cosmo.eim.schema.event;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,11 +39,11 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
         LogFactory.getLog(EventGeneratorTest.class);
 
     public void testGenerateRecord() throws Exception {
-        
+
         MockNoteItem noteItem = new MockNoteItem();
         noteItem.setModifiedDate(new Date());
         noteItem.setUid("1");
-        
+
         MockEventStamp eventStamp = new MockEventStamp(noteItem);
         eventStamp.setModifiedDate(noteItem.getModifiedDate());
         eventStamp.createCalendar();
@@ -51,7 +51,7 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
         eventStamp.setStatus("CONFIRMED");
         eventStamp.setStartDate(EimValueConverter.toICalDate(";VALUE=DATE-TIME:20070212T074500").getDate());
         eventStamp.setEndDate(EimValueConverter.toICalDate(";VALUE=DATE-TIME:20070212T084500").getDate());
-        
+
         noteItem.addStamp(eventStamp);
 
         EventGenerator generator = new EventGenerator(noteItem);
@@ -78,27 +78,27 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
 
         EimRecordField rruleField = fields.get(3);
         checkTextField(rruleField, FIELD_RRULE, null);
-        
+
         EimRecordField exruleField = fields.get(4);
         checkTextField(exruleField, FIELD_EXRULE, null);
-        
+
         EimRecordField rdateField = fields.get(5);
         checkTextField(rdateField, FIELD_RDATE, null);
-        
+
         EimRecordField exdateField = fields.get(6);
         checkTextField(exdateField, FIELD_EXDATE, null);
-        
+
         EimRecordField statusField = fields.get(7);
         checkTextField(statusField, FIELD_STATUS, "CONFIRMED");
     }
-    
+
     public void testGenerateMissingRecord() throws Exception {
-        
+
         MockNoteItem noteItem = new MockNoteItem();
         noteItem.setModifiedDate(new Date());
         noteItem.setUid("1");
         noteItem.setModifies(new MockNoteItem());
-        
+
         MockEventExceptionStamp eventStamp = new MockEventExceptionStamp(noteItem);
         eventStamp.setModifiedDate(noteItem.getModifiedDate());
         eventStamp.createCalendar();
@@ -108,7 +108,7 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
         eventStamp.setStartDate(EimValueConverter.toICalDate(";VALUE=DATE-TIME:20070212T074500").getDate());
         eventStamp.setAnyTime(null);
         eventStamp.setEndDate(EimValueConverter.toICalDate(";VALUE=DATE-TIME:20070212T084500").getDate());
-        
+
         noteItem.addStamp(eventStamp);
 
         EventGenerator generator = new EventGenerator(noteItem);
@@ -137,20 +137,20 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
 
         EimRecordField rruleField = fields.get(3);
         checkTextField(rruleField, FIELD_RRULE, null);
-        
+
         EimRecordField exruleField = fields.get(4);
         checkTextField(exruleField, FIELD_EXRULE, null);
-        
+
         EimRecordField rdateField = fields.get(5);
         checkTextField(rdateField, FIELD_RDATE, null);
-        
+
         EimRecordField exdateField = fields.get(6);
         checkTextField(exdateField, FIELD_EXDATE, null);
-        
+
         EimRecordField statusField = fields.get(7);
         Assert.assertEquals(FIELD_STATUS, statusField.getName());
         Assert.assertTrue(statusField.isMissing());
-        
+
         // now change anyTime to TRUE (not inherited)
         eventStamp.setAnyTime(true);
         records = generator.generateRecords(-1);
@@ -167,7 +167,7 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
         // since anyTime was set, dtStart will not be "missing"
         dtStartField = fields.get(0);
         Assert.assertFalse(dtStartField.isMissing());
-        checkTextField(dtStartField, FIELD_DTSTART, ";VALUE=DATE-TIME;X-OSAF-ANYTIME=TRUE:20070212T074500");        
+        checkTextField(dtStartField, FIELD_DTSTART, ";VALUE=DATE-TIME;X-OSAF-ANYTIME=TRUE:20070212T074500");
     }
 
 }

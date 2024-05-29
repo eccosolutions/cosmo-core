@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate.query;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 import net.fortuna.ical4j.model.TimeZoneRegistry;

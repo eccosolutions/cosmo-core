@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.eim.schema.contentitem;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.EimRecord;

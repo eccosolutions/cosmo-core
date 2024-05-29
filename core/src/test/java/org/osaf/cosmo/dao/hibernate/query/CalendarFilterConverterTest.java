@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate.query;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
@@ -44,7 +44,7 @@ import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 public class CalendarFilterConverterTest extends TestCase {
 
     CalendarFilterConverter converter = new CalendarFilterConverter();
-    
+
     public CalendarFilterConverterTest() {
         super();
     }
@@ -59,11 +59,11 @@ public class CalendarFilterConverterTest extends TestCase {
         ComponentFilter eventComp = new ComponentFilter();
         eventComp.setName("VEVENT");
         rootComp.getComponentFilters().add(eventComp);
-        
+
         Period period = new Period(new DateTime("20070101T100000Z"), new DateTime("20070201T100000Z"));
         TimeRangeFilter timeRangeFilter = new TimeRangeFilter(period);
         eventComp.setTimeRangeFilter(timeRangeFilter);
-        
+
         PropertyFilter uidFilter = new PropertyFilter();
         uidFilter.setName("UID");
         TextMatchFilter uidMatch = new TextMatchFilter();
@@ -71,7 +71,7 @@ public class CalendarFilterConverterTest extends TestCase {
         uidMatch.setCaseless(false);
         uidFilter.setTextMatchFilter(uidMatch);
         eventComp.getPropFilters().add(uidFilter);
-        
+
         PropertyFilter summaryFilter = new PropertyFilter();
         summaryFilter.setName("SUMMARY");
         TextMatchFilter summaryMatch = new TextMatchFilter();
@@ -79,7 +79,7 @@ public class CalendarFilterConverterTest extends TestCase {
         summaryMatch.setCaseless(false);
         summaryFilter.setTextMatchFilter(summaryMatch);
         eventComp.getPropFilters().add(summaryFilter);
-        
+
         PropertyFilter descFilter = new PropertyFilter();
         descFilter.setName("DESCRIPTION");
         TextMatchFilter descMatch = new TextMatchFilter();
@@ -87,9 +87,9 @@ public class CalendarFilterConverterTest extends TestCase {
         descMatch.setCaseless(true);
         descFilter.setTextMatchFilter(descMatch);
         eventComp.getPropFilters().add(descFilter);
-        
+
         ItemFilter itemFilter = converter.translateToItemFilter(calendar, calFilter);
-        
+
         Assert.assertTrue(itemFilter instanceof NoteItemFilter);
         NoteItemFilter noteFilter = (NoteItemFilter) itemFilter;
         Assert.assertEquals(calendar.getUid(), noteFilter.getParent().getUid());
@@ -99,14 +99,14 @@ public class CalendarFilterConverterTest extends TestCase {
         verifyFilterExpressionValue(noteFilter.getIcalUid(), "uid");
         Assert.assertTrue(noteFilter.getBody() instanceof ILikeExpression);
         verifyFilterExpressionValue(noteFilter.getBody(), "desc");
-       
+
         EventStampFilter sf = (EventStampFilter) noteFilter.getStampFilter(EventStampFilter.class);
         Assert.assertNotNull(sf);
         Assert.assertNotNull(sf.getPeriod());
         Assert.assertEquals(sf.getPeriod().getStart().toString(), "20070101T100000Z");
         Assert.assertEquals(sf.getPeriod().getEnd().toString(), "20070201T100000Z");
     }
-    
+
     public void testGetFirstPassFilter() throws Exception {
         CollectionItem calendar = new HibCollectionItem();
         calendar.setUid("calendar");
@@ -117,26 +117,26 @@ public class CalendarFilterConverterTest extends TestCase {
         ComponentFilter taskComp = new ComponentFilter();
         taskComp.setName("VTODO");
         rootComp.getComponentFilters().add(taskComp);
-        
+
         try {
             converter.translateToItemFilter(calendar, calFilter);
             Assert.fail("shouldn't get here");
         } catch(IllegalArgumentException e) {}
-        
-        
+
+
         ItemFilter itemFilter = converter.getFirstPassFilter(calendar, calFilter);
         Assert.assertNotNull(itemFilter);
         Assert.assertTrue(itemFilter instanceof NoteItemFilter);
         NoteItemFilter noteFilter = (NoteItemFilter) itemFilter;
-      
+
         Assert.assertFalse(noteFilter.getIsModification().booleanValue());
         Assert.assertEquals(1, noteFilter.getStampFilters().size());
-        
+
         StampFilter sf = noteFilter.getStampFilters().get(0);
         Assert.assertEquals(EventStamp.class, sf.getStampClass());
         Assert.assertEquals(true, sf.isMissing());
     }
-    
+
     private void verifyFilterExpressionValue(FilterCriteria fc, Object value) {
         FilterExpression fe = (FilterExpression) fc;
         Assert.assertTrue(fe.getValue().equals(value));
