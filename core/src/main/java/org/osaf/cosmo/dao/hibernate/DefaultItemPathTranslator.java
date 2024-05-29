@@ -15,14 +15,14 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.Item;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
 /**

@@ -27,9 +27,9 @@ import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.ModelValidationException;
 import org.osaf.cosmo.model.User;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;

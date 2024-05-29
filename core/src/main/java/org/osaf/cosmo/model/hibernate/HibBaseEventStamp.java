@@ -31,7 +31,7 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.NoteItem;
 
 import javax.annotation.Nullable;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;

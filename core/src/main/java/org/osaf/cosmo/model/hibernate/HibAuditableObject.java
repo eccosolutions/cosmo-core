@@ -19,8 +19,8 @@ import org.hibernate.annotations.Type;
 import org.osaf.cosmo.model.AuditableObject;
 import org.osaf.cosmo.model.EntityFactory;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import java.util.Date;
 
 /**

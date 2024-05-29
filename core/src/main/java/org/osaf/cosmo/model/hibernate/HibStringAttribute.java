@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,9 +15,9 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.Attribute;
@@ -37,12 +37,12 @@ public class HibStringAttribute extends HibAttribute implements
         java.io.Serializable, StringAttribute {
 
     public static final int VALUE_LEN_MAX = 2048;
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2417093506524504993L;
-    
+
     @Column(name="stringvalue", length=VALUE_LEN_MAX)
     @Length(min=0, max=VALUE_LEN_MAX)
     private String value;
@@ -59,7 +59,7 @@ public class HibStringAttribute extends HibAttribute implements
     }
 
     // Property accessors
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getValue()
      */
@@ -73,14 +73,14 @@ public class HibStringAttribute extends HibAttribute implements
     public void setValue(String value) {
         this.value = value;
     }
-    
+
     public void setValue(Object value) {
         if (value != null && !(value instanceof String))
             throw new ModelValidationException(
                     "attempted to set non String value on attribute");
         setValue((String) value);
     }
-    
+
     @Override
 	public Attribute copy() {
         StringAttribute attr = new HibStringAttribute();
@@ -88,7 +88,7 @@ public class HibStringAttribute extends HibAttribute implements
         attr.setValue(getValue());
         return attr;
     }
-    
+
     /**
      * Convienence method for returning a String value on a StringAttribute
      * with a given QName stored on the given item.
@@ -103,7 +103,7 @@ public class HibStringAttribute extends HibAttribute implements
         else
             return ta.getValue();
     }
-    
+
     /**
      * Convienence method for setting a String value on a StringAttribute
      * with a given QName stored on the given item.
@@ -123,7 +123,7 @@ public class HibStringAttribute extends HibAttribute implements
         else
             attr.setValue(value);
     }
-    
+
     @Override
     public void validate() {
         if (value!= null && value.length() > VALUE_LEN_MAX)

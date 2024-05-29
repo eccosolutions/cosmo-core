@@ -29,7 +29,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.ObjectDeletedException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.UnresolvableObjectException;
 import org.hibernate.proxy.HibernateProxy;
 import org.osaf.cosmo.dao.ItemDao;

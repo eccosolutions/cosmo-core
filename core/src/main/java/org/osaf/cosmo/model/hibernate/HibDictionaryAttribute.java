@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,13 @@ package org.osaf.cosmo.model.hibernate;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapKeyColumn;
 
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.DictionaryAttribute;
@@ -41,10 +41,10 @@ public class HibDictionaryAttribute extends HibAttribute
         implements java.io.Serializable, DictionaryAttribute {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3713980765847199175L;
-    
+
     @ElementCollection
     @CollectionTable(
             name="cosmo_dictionary_values",
@@ -65,7 +65,7 @@ public class HibDictionaryAttribute extends HibAttribute
     }
 
     // Property accessors
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getValue()
      */
@@ -79,7 +79,7 @@ public class HibDictionaryAttribute extends HibAttribute
     public void setValue(Map<String, String> value) {
         this.value = value;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#setValue(java.lang.Object)
      */
@@ -89,7 +89,7 @@ public class HibDictionaryAttribute extends HibAttribute
                     "attempted to set non Map value on attribute");
         setValue((Map<String, String>) value);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.hibernate.HibAttribute#copy()
      */
