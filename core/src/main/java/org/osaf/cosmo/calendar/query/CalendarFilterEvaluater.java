@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,14 +53,14 @@ import org.osaf.cosmo.calendar.InstanceList;
  * a CalendarFilter.
  */
 public class CalendarFilterEvaluater {
-    
+
     private static final String COMP_VCALENDAR = "VCALENDAR";
-    
-    private Stack<Component> stack = new Stack<Component>();
-    
+
+    private final Stack<Component> stack = new Stack<Component>();
+
     public CalendarFilterEvaluater() {}
-    
-    
+
+
     /**
      * Evaulate CalendarFilter against a Calendar.
      * @param calendar calendar to evaluate against
@@ -71,26 +71,26 @@ public class CalendarFilterEvaluater {
      */
     public boolean evaluate(Calendar calendar, CalendarFilter filter) {
         ComponentFilter rootFilter = filter.getFilter();
-        
+
         // root filter must be "VCALENDAR"
         if(!COMP_VCALENDAR.equalsIgnoreCase(rootFilter.getName()))
             return false;
-        
+
         stack.clear();
-        
+
         // evaluate all component filters
         for(Iterator it = rootFilter.getComponentFilters().iterator(); it.hasNext();) {
             ComponentFilter compFilter = (ComponentFilter) it.next();
-            
+
             // If any component filter fails to match, then the calendar filter
             // does not match
             if(!evaluateComps(calendar.getComponents(), compFilter))
                 return false;
         }
-        
+
         return true;
     }
-    
+
     private boolean evaluate(ComponentList comps, ComponentFilter filter) {
         // Evaluate component filter against a set of components.
         // If any component matches, then evaluation succeeds.
@@ -106,9 +106,9 @@ public class CalendarFilterEvaluater {
         }
         return false;
     }
-    
+
     private boolean evaluate(ComponentList comps, PropertyFilter filter) {
-        
+
         // Evaluate property filter against a set of components.
         // If any component matches, then evaluation succeeds.
         // This is basically a big OR
@@ -118,9 +118,9 @@ public class CalendarFilterEvaluater {
         }
         return false;
     }
-    
+
     private boolean evaluateComps(ComponentList components, ComponentFilter filter) {
-        
+
         /*The CALDAV:comp-filter XML element is empty and the
         calendar component type specified by the "name"
         attribute exists in the current scope;*/
@@ -128,7 +128,7 @@ public class CalendarFilterEvaluater {
             ComponentList comps = components.getComponents(filter.getName().toUpperCase());
             return !comps.isEmpty();
         }
-        
+
         /* The CALDAV:comp-filter XML element contains a CALDAV:is-not-
         defined XML element and the calendar object or calendar
         component type specified by the "name" attribute does not exist
@@ -137,40 +137,40 @@ public class CalendarFilterEvaluater {
             ComponentList comps = components.getComponents(filter.getName().toUpperCase());
             return comps.isEmpty();
         }
-        
+
         // Match the component
         ComponentList comps = components.getComponents(filter.getName().toUpperCase());
         if(comps.isEmpty())
             return false;
-        
+
         /*The CALDAV:comp-filter XML element contains a CALDAV:time-range
         XML element and at least one recurrence instance in the
         targeted calendar component is scheduled to overlap the
         specified time range, and all specified CALDAV:prop-filter and
         CALDAV:comp-filter child XML elements also match the targeted
         calendar component;*/
-        
+
         // Evaulate time-range filter
         if(filter.getTimeRangeFilter()!=null) {
             if(evaluate(comps, filter.getTimeRangeFilter())==false)
                 return false;
         }
-        
+
         for(Iterator<ComponentFilter> it = filter.getComponentFilters().iterator(); it.hasNext();) {
             if(evaluate(comps, it.next())==false)
                 return false;
         }
-        
+
         for(Iterator<PropertyFilter> it = filter.getPropFilters().iterator(); it.hasNext();) {
             if(evaluate(comps, it.next())==false)
                 return false;
         }
-        
+
         return true;
     }
-    
+
     private boolean evaluate(Component component, PropertyFilter filter) {
-        
+
         /*The CALDAV:prop-filter XML element is empty and a property of
         the type specified by the "name" attribute exists in the
         enclosing calendar component;*/
@@ -178,7 +178,7 @@ public class CalendarFilterEvaluater {
             PropertyList props = component.getProperties(filter.getName());
             return !props.isEmpty();
         }
-        
+
         /*The CALDAV:prop-filter XML element contains a CALDAV:is-not-
         defined XML element and no property of the type specified by
         the "name" attribute exists in the enclosing calendar
@@ -187,37 +187,37 @@ public class CalendarFilterEvaluater {
             PropertyList props = component.getProperties(filter.getName());
             return props.isEmpty();
         }
-        
+
         // Match the property
         PropertyList props = component.getProperties(filter.getName());
         if(props.isEmpty())
             return false;
-        
+
         /*The CALDAV:prop-filter XML element contains a CALDAV:time-range
         XML element and the property value overlaps the specified time
         range, and all specified CALDAV:param-filter child XML elements
         also match the targeted property;*/
-        
+
         // Evaulate time-range filter
         if(filter.getTimeRangeFilter()!=null) {
             if(evaluate(props, filter.getTimeRangeFilter())==false)
                 return false;
         }
-        
+
         if(filter.getTextMatchFilter()!=null) {
             props = evaluate(props, filter.getTextMatchFilter());
             if(props.isEmpty())
                 return false;
         }
-        
+
         for(Iterator<ParamFilter> it = filter.getParamFilters().iterator(); it.hasNext();) {
             if(evaluate(props, it.next())==false)
                     return false;
         }
-        
+
         return true;
     }
-    
+
     private boolean evaluate(PropertyList props, ParamFilter filter) {
         // Evaluate param filter against a set of properties.
         // If any property matches, then evaluation succeeds.
@@ -228,9 +228,9 @@ public class CalendarFilterEvaluater {
         }
         return false;
     }
-    
+
     private boolean evaulate(Property property, ParamFilter filter) {
-        
+
         /*The CALDAV:param-filter XML element is empty and a parameter of
         the type specified by the "name" attribute exists on the
         calendar property being examined;*/
@@ -238,7 +238,7 @@ public class CalendarFilterEvaluater {
             ParameterList params = property.getParameters(filter.getName());
             return !params.isEmpty();
         }
-        
+
        /* The CALDAV:param-filter XML element contains a CALDAV:is-not-
         defined XML element and no parameter of the type specified by
         the "name" attribute exists on the calendar property being
@@ -247,19 +247,19 @@ public class CalendarFilterEvaluater {
             ParameterList params = property.getParameters(filter.getName());
             return params.isEmpty();
         }
-        
+
         // Match the parameter
         ParameterList params = property.getParameters(filter.getName());
         if(params.isEmpty())
             return false;
-        
+
         // Match the TextMatchFilter
         if(evaluate(params, filter.getTextMatchFilter())==false)
             return false;
-        
+
         return true;
     }
-    
+
     private PropertyList evaluate(PropertyList props, TextMatchFilter filter) {
         PropertyList results = new PropertyList();
         for(Iterator<Property> it = props.iterator(); it.hasNext();) {
@@ -269,7 +269,7 @@ public class CalendarFilterEvaluater {
         }
         return results;
     }
-    
+
     private boolean evaluate(ParameterList params, TextMatchFilter filter) {
         // Evaluate textmatch filter against a set of parameters.
         // If any param matches, then evaluation succeeds.
@@ -281,37 +281,37 @@ public class CalendarFilterEvaluater {
         }
         return false;
     }
-    
+
     private boolean evaluate(Property property, TextMatchFilter filter) {
         boolean matched = false;
         if(filter.isCaseless())
             matched = property.getValue().toLowerCase().contains(filter.getValue().toLowerCase());
         else
             matched = property.getValue().contains(filter.getValue());
-        
+
         if(filter.isNegateCondition())
             return !matched;
         else
             return matched;
     }
-    
+
     private boolean evaluate(Parameter param, TextMatchFilter filter) {
         boolean matched = false;
         if(filter.isCaseless())
             matched = param.getValue().toLowerCase().contains(filter.getValue().toLowerCase());
         else
             matched = param.getValue().contains(filter.getValue());
-        
+
         if(filter.isNegateCondition())
             return !matched;
         else
             return matched;
     }
-    
+
     private boolean evaluate(ComponentList comps, TimeRangeFilter filter) {
-        
+
         Component comp = (Component) comps.get(0);
-        
+
         if(comp instanceof VEvent || comp instanceof VAvailability)
             return evaluateVEventTimeRange(comps, filter);
         else if(comp instanceof VFreeBusy)
@@ -325,7 +325,7 @@ public class CalendarFilterEvaluater {
         else
             return false;
     }
-    
+
     private boolean evaluate(PropertyList props, TimeRangeFilter filter) {
         // Evaluate timerange filter against a set of properties.
         // If any property matches, then evaluation succeeds.
@@ -336,19 +336,19 @@ public class CalendarFilterEvaluater {
         }
         return false;
     }
-    
+
     private boolean evaluate(Property property, TimeRangeFilter filter) {
         if(!(property instanceof DateProperty) )
             return false;
-        
+
         DateProperty dateProp = (DateProperty) property;
         Date date = dateProp.getDate();
-        
+
         return (  (date.before(filter.getPeriod().getEnd()) &&
               date.after(filter.getPeriod().getStart())) ||
               date.equals(filter.getPeriod().getStart()) );
     }
-    
+
     private ComponentList getSubComponents(Component component) {
         if(component instanceof VEvent)
             return ((VEvent) component).getAlarms();
@@ -356,10 +356,10 @@ public class CalendarFilterEvaluater {
             return ((VTimeZone) component).getObservances();
         else if(component instanceof VToDo)
             return ((VToDo) component).getAlarms();
-        
+
         return new ComponentList();
     }
-    
+
     /*
      * A VEVENT component overlaps a given time range if the condition
         for the corresponding component state specified in the table below
@@ -395,29 +395,29 @@ public class CalendarFilterEvaluater {
         +---+---+---+---+-----------------------------------------------+
      */
     private boolean evaluateVEventTimeRange(ComponentList comps, TimeRangeFilter filter) {
-        
+
         InstanceList instances = new InstanceList();
         if(filter.getTimezone()!=null)
             instances.setTimezone(new TimeZone(filter.getTimezone()));
         ArrayList<Component> mods = new ArrayList<Component>();
-        
+
         for(Iterator<Component> it=comps.iterator();it.hasNext();) {
             Component comp = it.next();
             // Add master first
             if(comp.getProperty(Property.RECURRENCE_ID)==null)
                 instances.addComponent(comp, filter.getPeriod().getStart(), filter.getPeriod().getEnd());
         }
-        
+
         // Add overides after master has been added
         for(Component mod : mods)
             instances.addOverride(mod, filter.getPeriod().getStart(), filter.getPeriod().getEnd());
-        
+
         if(!instances.isEmpty())
             return true;
-        
+
         return false;
     }
-    
+
     /*
         A VFREEBUSY component overlaps a given time range if the condition
         for the corresponding component state specified in the table below
@@ -451,7 +451,7 @@ public class CalendarFilterEvaluater {
     private boolean evaulateVFreeBusyTimeRange(VFreeBusy freeBusy, TimeRangeFilter filter) {
         DtStart start = freeBusy.getStartDate();
         DtEnd end = freeBusy.getEndDate();
-         
+
         if (start != null && end != null) {
             InstanceList instances = new InstanceList();
             if (filter.getTimezone() != null)
@@ -460,11 +460,11 @@ public class CalendarFilterEvaluater {
                     filter.getPeriod().getEnd());
             return !instances.isEmpty();
         }
-        
+
         PropertyList props = freeBusy.getProperties(Property.FREEBUSY);
         if(props.isEmpty())
             return false;
-        
+
         Iterator<FreeBusy> it = props.iterator();
         while(it.hasNext()) {
             FreeBusy fb = it.next();
@@ -477,10 +477,10 @@ public class CalendarFilterEvaluater {
                     return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /*
       A VJOURNAL component overlaps a given time range if the condition
         for the corresponding component state specified in the table below
@@ -502,13 +502,13 @@ public class CalendarFilterEvaluater {
         | Y | N | (start <  DTSTART+P1D) AND (end > DTSTART) |
         +---+---+--------------------------------------------+
         | N | * | FALSE                                      |
-        +---+---+--------------------------------------------+ */      
+        +---+---+--------------------------------------------+ */
     private boolean evaluateVJournalTimeRange(VJournal journal, TimeRangeFilter filter) {
         DtStart start = journal.getStartDate();
-      
+
         if(start==null)
             return false;
-        
+
         InstanceList instances = new InstanceList();
         if (filter.getTimezone() != null)
             instances.setTimezone(new TimeZone(filter.getTimezone()));
@@ -516,7 +516,7 @@ public class CalendarFilterEvaluater {
                 filter.getPeriod().getEnd());
         return !instances.isEmpty();
     }
-    
+
     /*
      *  A VTODO component is said to overlap a given time range if the
         condition for the corresponding component state specified in the
@@ -565,49 +565,49 @@ public class CalendarFilterEvaluater {
     private boolean evaulateVToDoTimeRange(ComponentList comps, TimeRangeFilter filter) {
         ArrayList<Component> mods = new ArrayList<Component>();
         VToDo master = null;
-        
+
         for(Iterator<Component> it=comps.iterator();it.hasNext();) {
             Component comp = it.next();
             // Add master first
             if(comp.getProperty(Property.RECURRENCE_ID)==null)
                 master = (VToDo) comp;
         }
-        
+
         // If there is no DTSTART, evaluate using special rules as
         // listed in the nice state table above
         if(mods.isEmpty()) {
             if(master.getStartDate()==null)
                 return isVToDoInRange(master, filter.getPeriod());
         }
-        
+
         // Otherwise use standard InstantList, which relies on
-        // DTSTART,DURATION. 
+        // DTSTART,DURATION.
         // TODO: Handle case of no DURATION and instead DUE
         // DUE is kind of like DTEND
         InstanceList instances = new InstanceList();
         if(filter.getTimezone()!=null)
             instances.setTimezone(new TimeZone(filter.getTimezone()));
-        
+
         instances.addComponent(master, filter.getPeriod().getStart(), filter
                 .getPeriod().getEnd());
-        
+
         // Add overides after master has been added
         for(Component mod : mods)
             instances.addOverride(mod, filter.getPeriod().getStart(), filter.getPeriod().getEnd());
-        
+
         if(!instances.isEmpty())
             return true;
-        
+
         return false;
     }
-    
+
     /*
      * Determine if VTODO overlaps timerange assuming the VTODO
      * has no DTSTART, using the state table defined in RFC-4791
      * Sec 9.9.
      */
     private boolean isVToDoInRange(VToDo vtodo, Period period) {
-        
+
         if(vtodo.getDue() != null) {
             //(start  <  DUE)      AND (end >= DUE)
             Date dueDate = vtodo.getDue().getDate();
@@ -615,7 +615,7 @@ public class CalendarFilterEvaluater {
                    (period.getEnd().compareTo(dueDate) >=0);
         } else if(vtodo.getCreated()!=null && vtodo.getDateCompleted()!=null) {
             //((start <= CREATED)  OR  (start <= COMPLETED))
-            //AND                                           
+            //AND
             //((end   >= CREATED)  OR  (end   >= COMPLETED))
             Date createDate = vtodo.getCreated().getDate();
             Date completeDate = vtodo.getDateCompleted().getDate();
@@ -630,15 +630,15 @@ public class CalendarFilterEvaluater {
             return (period.getStart().compareTo(completeDate)<=0) &&
                    (period.getEnd().compareTo(completeDate)>=0);
         } else if(vtodo.getCreated()!=null) {
-            //(end    >  CREATED)   
+            //(end    >  CREATED)
             Date createDate = vtodo.getCreated().getDate();
             return period.getEnd().compareTo(createDate) > 0;
         } else {
             return true;
         }
-        
+
     }
-    
+
     /*
      * A VALARM component is said to overlap a given time range if the
         following condition holds:
@@ -649,30 +649,30 @@ public class CalendarFilterEvaluater {
        Such a VALARM component is said to overlap a given time range if at
        least one of its triggers overlaps the time range.
      */
-            
+
     private boolean evaluateVAlarmTimeRange(ComponentList comps, TimeRangeFilter filter) {
-        
+
         // VALARAM must have parent VEVENT or VTODO
         Component parent = stack.peek();
         if(parent==null)
             return false;
-       
+
         // See if trigger-time overlaps the time range for each VALARM
         for(Iterator<Component> it=comps.iterator();it.hasNext();) {
             VAlarm alarm = (VAlarm) it.next();
             Trigger trigger = alarm.getTrigger();
             if(trigger==null)
                 continue;
-            
+
             List<Date> triggerDates = ICalendarUtils.getTriggerDates(alarm, parent);
-            
+
             for(Date triggerDate: triggerDates) {
                 if(filter.getPeriod().getStart().compareTo(triggerDate)<=0 &&
                    filter.getPeriod().getEnd().after(triggerDate))
                    return true;
             }
         }
-        
+
         return false;
     }
 }

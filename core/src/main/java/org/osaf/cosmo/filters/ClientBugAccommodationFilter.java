@@ -147,9 +147,9 @@ public class ClientBugAccommodationFilter implements Filter {
     }
 
     static class ReplaceTextStream extends ServletOutputStream {
-        private String findString;
-        private String replaceString;
-        private OutputStream originalStream;
+        private final String findString;
+        private final String replaceString;
+        private final OutputStream originalStream;
         private ByteArrayOutputStream tempStream;
         private boolean closed;
 

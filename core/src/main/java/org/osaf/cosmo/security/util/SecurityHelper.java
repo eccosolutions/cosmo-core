@@ -31,8 +31,8 @@ import org.osaf.cosmo.security.CosmoSecurityContext;
  */
 public class SecurityHelper {
 
-    private ContentDao contentDao;
-    private UserDao userDao;
+    private final ContentDao contentDao;
+    private final UserDao userDao;
 
     public SecurityHelper(ContentDao contentDao, UserDao userDao) {
         this.contentDao = contentDao;

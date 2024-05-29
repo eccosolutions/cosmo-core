@@ -45,7 +45,7 @@ import org.osaf.cosmo.util.PathUtil;
 public class MockItemDao implements ItemDao {
     private static final Log log = LogFactory.getLog(MockItemDao.class);
 
-    private MockDaoStorage storage;
+    private final MockDaoStorage storage;
 
     /**
      */

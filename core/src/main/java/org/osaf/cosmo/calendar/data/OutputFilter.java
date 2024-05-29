@@ -40,7 +40,7 @@ import java.util.TreeSet;
  */
 public class OutputFilter {
 
-    private String componentName;
+    private final String componentName;
     private boolean allSubComponents;
     private HashMap subComponents;
     private boolean allProperties;
@@ -507,8 +507,8 @@ public class OutputFilter {
     }
 
     public static class PropertyMatch {
-        private boolean match;
-        private boolean valueExcluded;
+        private final boolean match;
+        private final boolean valueExcluded;
 
         public PropertyMatch(boolean match,
                              boolean valueExcluded) {

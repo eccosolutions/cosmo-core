@@ -29,7 +29,7 @@ import javax.servlet.ServletOutputStream;
 public class BufferedServletOutputStream extends ServletOutputStream {
 
     // buffer to memory for now
-    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
     @Override
     public void write(int b) {

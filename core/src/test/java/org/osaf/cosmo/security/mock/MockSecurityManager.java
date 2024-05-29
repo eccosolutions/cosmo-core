@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,13 +35,13 @@ import org.osaf.cosmo.security.PermissionDeniedException;
  * unit mocks.
  */
 public class MockSecurityManager implements CosmoSecurityManager {
-   
+
     private static final Log log =
         LogFactory.getLog(MockSecurityManager.class);
 
-    private static ThreadLocal contexts = new ThreadLocal();
+    private static final ThreadLocal contexts = new ThreadLocal();
 
-    private TestHelper testHelper;
+    private final TestHelper testHelper;
 
     /**
      */
@@ -87,13 +87,13 @@ public class MockSecurityManager implements CosmoSecurityManager {
         contexts.set(context);
         return context;
     }
-    
+
     /**
      * Initiate the current security context with the current user.
      * This method is used when the server needs to run code as a
      * specific user.
      */
-    public CosmoSecurityContext initiateSecurityContext(User user) 
+    public CosmoSecurityContext initiateSecurityContext(User user)
     	throws CosmoSecurityException {
     	if (log.isDebugEnabled()) {
             log.debug("initiating security context for " + user.getUsername());
@@ -103,14 +103,14 @@ public class MockSecurityManager implements CosmoSecurityManager {
         contexts.set(context);
         return context;
     }
-    
+
     // for testing
     public void initiateSecurityContext(CosmoSecurityContext context) {
         contexts.set(context);
     }
 
     /**
-     * Overwrite the existing <code>CosmoSecurityContext</code>. This 
+     * Overwrite the existing <code>CosmoSecurityContext</code>. This
      * method is used when Cosmo components need to replace the
      * existing security context with a different one (useful when
      * executing multiple operations which require different security
@@ -149,17 +149,17 @@ public class MockSecurityManager implements CosmoSecurityManager {
         }
         contexts.set(null);
     }
-    
+
     public void registerTickets(Set<Ticket> tickets) {
         // for now nothing
     }
-    
+
 
     public void unregisterTickets() {
         // for now nothing
     }
 
-    
+
     public void checkPermission(Item item, int permission) throws PermissionDeniedException {
         return; //TODO does this Mock need more?
     }

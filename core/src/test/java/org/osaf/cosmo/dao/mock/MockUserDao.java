@@ -45,11 +45,11 @@ public class MockUserDao implements UserDao {
 
     static int idseq = 0;
 
-    private HashMap usernameIdx;
-    private HashMap emailIdx;
-    private HashMap uidIdx;
-    private HashMap activationIdIdx;
-    private HashMap<String, PasswordRecovery> passwordRecoveryIdx;
+    private final HashMap usernameIdx;
+    private final HashMap emailIdx;
+    private final HashMap uidIdx;
+    private final HashMap activationIdIdx;
+    private final HashMap<String, PasswordRecovery> passwordRecoveryIdx;
 
     private MockDaoStorage storage = null;
 

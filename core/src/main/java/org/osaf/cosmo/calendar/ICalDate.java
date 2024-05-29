@@ -34,7 +34,7 @@ import java.util.Map.Entry;
 public class ICalDate implements ICalendarConstants {
     private static final Log log = LogFactory.getLog(ICalDate.class);
 
-    private static TimeZoneTranslator tzTranslator = TimeZoneTranslator.getInstance();
+    private static final TimeZoneTranslator tzTranslator = TimeZoneTranslator.getInstance();
 
     private Value value;
     private TzId tzid;

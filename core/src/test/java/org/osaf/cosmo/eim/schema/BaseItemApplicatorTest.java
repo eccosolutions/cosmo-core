@@ -83,7 +83,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
     }
 
     private class TestItemApplicator extends BaseItemApplicator {
-        private HashSet<EimRecordField> appliedFields;
+        private final HashSet<EimRecordField> appliedFields;
 
         public TestItemApplicator(String prefix,
                                    String namespace) {

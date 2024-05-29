@@ -54,7 +54,7 @@ public class EimmlStreamReader implements EimmlConstants, XMLStreamConstants {
     private static final XMLInputFactory XML_INPUT_FACTORY =
         XMLInputFactory.newInstance();
 
-    private XMLStreamReader xmlReader;
+    private final XMLStreamReader xmlReader;
     private String documentEncoding;
     private String uuid;
     private String name;

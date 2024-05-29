@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,17 +21,17 @@ import net.fortuna.ical4j.model.DateTime;
 
 /**
  * @author cyrusdaboo
- * 
+ *
  * This class represents an instance of a (possibly) recurring component.
  */
 public class Instance {
 
-    private Component comp;
-    private Date start;
-    private Date end;
-    private Date rid;
-    private boolean overridden;
-    private boolean future;
+    private final Component comp;
+    private final Date start;
+    private final Date end;
+    private final Date rid;
+    private final boolean overridden;
+    private final boolean future;
 
     /**
      * @param comp
@@ -105,10 +105,10 @@ public class Instance {
         return future;
     }
 
-   
+
     /**
      * Copy a Date/DateTime and normalise to UTC if its not floating.
-     * 
+     *
      * @param date
      * @return
      */

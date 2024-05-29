@@ -28,7 +28,7 @@ import org.osaf.cosmo.model.mock.MockNoteItem;
  */
 public class NoteOccurrenceTest extends TestCase {
 
-    private EntityFactory factory = new MockEntityFactory();
+    private final EntityFactory factory = new MockEntityFactory();
 
     public void testGenerateNoteOccurrence() throws Exception {
 

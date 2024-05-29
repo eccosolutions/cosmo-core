@@ -44,7 +44,7 @@ public class UsernameRequestIntegrationFilter implements Filter {
     private static final Log log = LogFactory.getLog(UsernameRequestIntegrationFilter.class);
     private static final String USERNAME_ATTRIBUTE_KEY = "COSMO_PRINCIPAL";
     private CosmoSecurityManager securityManager;
-    private String BEAN_SECURITY_MANAGER =
+    private final String BEAN_SECURITY_MANAGER =
         "securityManager";
 
 

@@ -47,15 +47,15 @@ import org.osaf.cosmo.service.lock.SingleVMLockManager;
 public class MockHelper extends TestHelper {
     private static final Log log = LogFactory.getLog(MockHelper.class);
 
-    private MockEntityFactory entityFactory;
-    private MockSecurityManager securityManager;
-    private ServiceLocatorFactory serviceLocatorFactory;
-    private StandardContentService contentService;
-    private StandardUserService userService;
-    private ICalendarClientFilterManager clientFilterManager;
-    private StandardCalendarQueryProcessor calendarQueryProcessor;
+    private final MockEntityFactory entityFactory;
+    private final MockSecurityManager securityManager;
+    private final ServiceLocatorFactory serviceLocatorFactory;
+    private final StandardContentService contentService;
+    private final StandardUserService userService;
+    private final ICalendarClientFilterManager clientFilterManager;
+    private final StandardCalendarQueryProcessor calendarQueryProcessor;
     private User user;
-    private HomeCollectionItem homeCollection;
+    private final HomeCollectionItem homeCollection;
 
     public MockHelper() {
         super();

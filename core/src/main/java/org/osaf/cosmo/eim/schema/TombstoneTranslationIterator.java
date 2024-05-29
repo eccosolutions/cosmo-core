@@ -30,7 +30,7 @@ import org.osaf.cosmo.model.ItemTombstone;
  */
 public class TombstoneTranslationIterator implements EimRecordSetIterator {
 
-    private Iterator<ItemTombstone> decorated;
+    private final Iterator<ItemTombstone> decorated;
 
     public TombstoneTranslationIterator(List<ItemTombstone> tombstones) {
         this.decorated = tombstones.iterator();

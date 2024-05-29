@@ -68,7 +68,7 @@ public class StandardCalendarQueryProcessor implements CalendarQueryProcessor {
 
     private CalendarDao calendarDao = null;
     private ContentDao contentDao = null;
-    private EntityConverter entityConverter = new EntityConverter(null);
+    private final EntityConverter entityConverter = new EntityConverter(null);
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.calendar.query.CalendarQueryProcessor#filterQuery(org.osaf.cosmo.model.CollectionItem, org.osaf.cosmo.calendar.query.CalendarFilter)

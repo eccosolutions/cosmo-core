@@ -34,7 +34,7 @@ public abstract class BaseSecurityContext implements CosmoSecurityContext {
 
     private boolean admin;
     private boolean anonymous;
-    private Principal principal;
+    private final Principal principal;
     private User user;
     private Set<Ticket> tickets;
 

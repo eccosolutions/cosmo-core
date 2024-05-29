@@ -56,9 +56,9 @@ public abstract class BaseGenerator implements EimSchemaConstants {
     private static final Log log =
         LogFactory.getLog(BaseGenerator.class);
 
-    private String prefix;
-    private String namespace;
-    private Item item;
+    private final String prefix;
+    private final String namespace;
+    private final Item item;
 
     /**
      * This class should not be instantiated directly.

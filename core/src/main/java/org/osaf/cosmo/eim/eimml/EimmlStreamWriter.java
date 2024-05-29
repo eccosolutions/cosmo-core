@@ -44,7 +44,7 @@ public class EimmlStreamWriter implements EimmlConstants, XMLStreamConstants {
         XMLOutputFactory.newInstance();
 
     private boolean writeCharacterData = false;
-    private XMLStreamWriter xmlWriter;
+    private final XMLStreamWriter xmlWriter;
 
     /**
      * Opens the writer. No data is actually written to the stream.

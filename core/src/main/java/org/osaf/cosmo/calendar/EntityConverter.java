@@ -44,7 +44,7 @@ public class EntityConverter {
     private static final TimeZoneRegistry TIMEZONE_REGISTRY =
         TimeZoneRegistryFactory.getInstance().createRegistry();
 
-    private EntityFactory entityFactory;
+    private final EntityFactory entityFactory;
 
     public static final String X_OSAF_STARRED = "X-OSAF-STARRED";
 

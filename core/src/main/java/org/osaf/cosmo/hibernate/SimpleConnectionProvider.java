@@ -27,7 +27,7 @@ import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
  */
 public class SimpleConnectionProvider implements ConnectionProvider {
 
-    private static ThreadLocal<Connection> connectionLocal =
+    private static final ThreadLocal<Connection> connectionLocal =
         new ThreadLocal<Connection>();
 
     public SimpleConnectionProvider() {

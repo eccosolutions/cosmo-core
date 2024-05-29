@@ -67,7 +67,7 @@ public class WsseAuthenticationProvider
         LogFactory.getLog(WsseAuthenticationProvider.class);
 
     // 2 hour timeout (in seconds)
-    private static int DEFAULT_WSSE_TOKEN_TIMEOUT = 60*60*2;
+    private static final int DEFAULT_WSSE_TOKEN_TIMEOUT = 60*60*2;
 
     private UserDao userDao;
 

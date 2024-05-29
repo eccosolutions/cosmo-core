@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,12 +30,12 @@ import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.util.TimeZoneUtils;
 
 /**
- * Implementation of a <code>TimeZoneRegistry</code>. This implementation will 
+ * Implementation of a <code>TimeZoneRegistry</code>. This implementation will
  * use VTIMEZONE definitions provided by icu 3.8
  */
 public class CosmoICUTimeZoneRegistry implements TimeZoneRegistry {
 
-    private Log log = LogFactory.getLog(CosmoICUTimeZoneRegistry.class);
+    private final Log log = LogFactory.getLog(CosmoICUTimeZoneRegistry.class);
 
     private static final Map<String, TimeZone> DEFAULT_TIMEZONES = new HashMap<String, TimeZone>();
 
@@ -51,7 +51,7 @@ public class CosmoICUTimeZoneRegistry implements TimeZoneRegistry {
         }
     }
 
-    private Map<String, TimeZone> timezones = new HashMap<String, TimeZone>();
+    private final Map<String, TimeZone> timezones = new HashMap<String, TimeZone>();
 
     /**
      * Default constructor.
@@ -59,7 +59,7 @@ public class CosmoICUTimeZoneRegistry implements TimeZoneRegistry {
     public CosmoICUTimeZoneRegistry() {
     }
 
-    
+
     /*
      * (non-Javadoc)
      * @see net.fortuna.ical4j.model.TimeZoneRegistry#register(net.fortuna.ical4j.model.TimeZone)

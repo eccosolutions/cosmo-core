@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ import org.osaf.cosmo.util.PageCriteria;
  */
 public class StandardQueryCriteriaBuilder<SortType extends Enum> implements QueryCriteriaBuilder<SortType> {
 
-    private Class clazz;
+    private final Class clazz;
 
     /**
      * Constructs a <code>StandardQueryCriteriaBuilder</code> that
@@ -63,27 +63,27 @@ public class StandardQueryCriteriaBuilder<SortType extends Enum> implements Quer
                                pageCriteria.getPageSize());
             crit.setFirstResult(firstResult);
         }
-        
+
         for (Order order : buildOrders(pageCriteria))
             crit.addOrder(order);
 
         Criterion orCriterion = null;
         for (String[] pair: pageCriteria.getOrCriteria()){
             if (orCriterion == null){
-                orCriterion = Restrictions.ilike(pair[0], pair[1], 
+                orCriterion = Restrictions.ilike(pair[0], pair[1],
                         MatchMode.ANYWHERE);
             } else {
-                orCriterion = Restrictions.or(orCriterion, 
-                        Restrictions.ilike(pair[0], pair[1], 
+                orCriterion = Restrictions.or(orCriterion,
+                        Restrictions.ilike(pair[0], pair[1],
                                 MatchMode.ANYWHERE));
             }
         }
         if (orCriterion != null)
             crit.add(orCriterion);
-        
+
         return crit;
     }
-    
+
     /**
      * Returns a <code>List</code> of <code>Order</code> criteria
      * based on the sorting  attributes of the given

@@ -44,7 +44,7 @@ public class MockNoteItem extends MockICalendarItem implements NoteItem {
             .unmodifiableSet(new HashSet<NoteItem>(0));
 
 
-    private Set<NoteItem> modifications = new HashSet<NoteItem>(0);
+    private final Set<NoteItem> modifications = new HashSet<NoteItem>(0);
 
 
     private NoteItem modifies = null;

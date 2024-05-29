@@ -48,7 +48,7 @@ import static org.hamcrest.Matchers.instanceOf;
  *
  */
 public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTestCase {
-    private Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired protected UserDaoImpl userDao;
     @Autowired protected ContentDaoImpl contentDao;

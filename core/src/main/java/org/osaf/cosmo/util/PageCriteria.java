@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,9 +21,9 @@ import java.util.Set;
 /**
  * This class defines the criteria for pagination. Holds the Page Number, Page
  * Size, Sort Type and Sort Order
- * 
+ *
  * @author EdBindl, Travis Vachon
- * 
+ *
  */
 public class PageCriteria<SortType extends Enum> {
 
@@ -31,7 +31,7 @@ public class PageCriteria<SortType extends Enum> {
      * The constant to view all.
      */
     public static final int VIEW_ALL = -1;
-    
+
     /**
      * The Default Page Number
      */
@@ -46,12 +46,12 @@ public class PageCriteria<SortType extends Enum> {
     public static final Boolean DEFAULT_SORTASCENDING = true;
 
     public static final int FIRST_PAGE = 1;
-    
+
     /**
      * Value representing ascending sort order in URLs.
      */
     public static final String ASCENDING_STRING = "ascending";
-    
+
     /**
      * Value representing descending sort order in URLs.
      */
@@ -76,13 +76,13 @@ public class PageCriteria<SortType extends Enum> {
      * Key for sort type in URLs.
      */
     public static final String SORT_TYPE_URL_KEY = "st";
-    
+
     /**
      * Key for query in URLs.
      */
     public static final String QUERY_URL_KEY = "q";
 
-    
+
     /**
      * Number of the Page (1 Based)
      */
@@ -110,12 +110,12 @@ public class PageCriteria<SortType extends Enum> {
      */
     private SortType sortType;
 
-    private Set<String[]> orCriteria = new HashSet<String[]>();
+    private final Set<String[]> orCriteria = new HashSet<String[]>();
 
     public void addOr(String key, String value){
         orCriteria.add(new String[]{key, value});
     }
-    
+
     public Set<String[]> getOrCriteria(){
         return orCriteria;
     }
@@ -125,10 +125,10 @@ public class PageCriteria<SortType extends Enum> {
     public PageCriteria(){
         initialize();
     }
-    
+
     /**
      */
-    public PageCriteria(Integer pageNumber, Integer pageSize, 
+    public PageCriteria(Integer pageNumber, Integer pageSize,
             boolean sortAscending, SortType sortType) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
@@ -165,7 +165,7 @@ public class PageCriteria<SortType extends Enum> {
     public SortType getSortType() {
         return sortType;
     }
-    
+
     /**
      */
     public String getSortTypeString() {
@@ -179,7 +179,7 @@ public class PageCriteria<SortType extends Enum> {
     }
 
     /**
-     * 
+     *
      * @return <code>true</code> for Ascending and <code>false</code> for Descending
      */
     public boolean isSortAscending() {
@@ -192,11 +192,11 @@ public class PageCriteria<SortType extends Enum> {
     public void setSortAscending(boolean sortOrder) {
         this.sortAscending = sortOrder;
     }
-    
+
     public String getSortOrder() {
        return isSortAscending() ? ASCENDING_STRING : DESCENDING_STRING;
     }
-    
+
     public void initialize() {
         pageNumber = DEFAULT_PAGENUMBER;
         pageSize = DEFAULT_PAGESIZE;

@@ -42,10 +42,10 @@ import org.osaf.cosmo.model.mock.MockItem;
 public class MockDaoStorage {
     private static final Log log = LogFactory.getLog(MockDaoStorage.class);
 
-    private HashMap<String, Item> itemsByPath;
-    private HashMap<String, Item> itemsByUid;
-    private HashMap<String, String> rootUidsByUsername;
-    private HashMap<String, Set> tickets;
+    private final HashMap<String, Item> itemsByPath;
+    private final HashMap<String, Item> itemsByUid;
+    private final HashMap<String, String> rootUidsByUsername;
+    private final HashMap<String, Set> tickets;
 
     /** */
     public MockDaoStorage() {

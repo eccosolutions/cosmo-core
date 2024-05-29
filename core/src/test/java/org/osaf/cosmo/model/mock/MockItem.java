@@ -47,16 +47,16 @@ public abstract class MockItem extends MockAuditableObject implements Item {
     private transient Boolean isActive = Boolean.TRUE;
 
 
-    private Map<QName, Attribute> attributes = new HashMap<>(0);
+    private final Map<QName, Attribute> attributes = new HashMap<>(0);
 
-    private Set<Stamp> stamps = new HashSet<>(0);
+    private final Set<Stamp> stamps = new HashSet<>(0);
 
 
-    private Set<Tombstone> tombstones = new HashSet<>(0);
+    private final Set<Tombstone> tombstones = new HashSet<>(0);
 
     private transient Map<String, Stamp> stampMap = null;
 
-    private Set<CollectionItemDetails> parentDetails = new HashSet<>(0);
+    private final Set<CollectionItemDetails> parentDetails = new HashSet<>(0);
 
     private User owner;
 

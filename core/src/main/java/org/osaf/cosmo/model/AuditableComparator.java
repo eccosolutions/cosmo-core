@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,13 +26,13 @@ import org.apache.commons.logging.LogFactory;
  * created or modified dates.
  */
 public class AuditableComparator implements Comparator<AuditableObject> {
-    private static Log log = LogFactory.getLog(AuditableComparator.class);
+    private static final Log log = LogFactory.getLog(AuditableComparator.class);
 
     public static final int ATTRIBUTE_CREATED = 0;
     public static final int ATTRIBUTE_MODIFIED = 1;
 
-    private boolean reverse;
-    private int attribute;
+    private final boolean reverse;
+    private final int attribute;
 
     public AuditableComparator() {
         this(false, ATTRIBUTE_MODIFIED);

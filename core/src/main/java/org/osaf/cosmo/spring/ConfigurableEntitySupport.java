@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ConfigurableEntitySupport implements BeanFactoryAware{
-    private static BeanConfigurerSupport beanConfigurerSupport = new BeanConfigurerSupport();
+    private static final BeanConfigurerSupport beanConfigurerSupport = new BeanConfigurerSupport();
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {

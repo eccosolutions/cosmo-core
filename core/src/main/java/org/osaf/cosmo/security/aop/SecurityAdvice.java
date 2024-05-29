@@ -51,7 +51,7 @@ public class SecurityAdvice extends OrderedAdvice {
     private SecurityHelper securityHelper = null;
 
     // keep track of whether the current method call has been secured or not
-    private static ThreadLocal<Boolean> secured = new ThreadLocal<Boolean>();
+    private static final ThreadLocal<Boolean> secured = new ThreadLocal<Boolean>();
 
     private static final Log log =
         LogFactory.getLog(SecurityAdvice.class);

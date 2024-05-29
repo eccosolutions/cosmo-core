@@ -48,7 +48,7 @@ public class CalendarDaoImpl extends HibernateSessionSupport implements Calendar
     private static final Log log = LogFactory.getLog(CalendarDaoImpl.class);
 
     private ItemFilterProcessor itemFilterProcessor = null;
-    private EntityConverter entityConverter = new EntityConverter(null);
+    private final EntityConverter entityConverter = new EntityConverter(null);
 
 
     /* (non-Javadoc)

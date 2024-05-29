@@ -30,15 +30,15 @@ import org.osaf.cosmo.service.ServiceListener;
 public class OutOfTheBoxListener implements ServiceListener {
     private static final Log log = LogFactory.getLog(ActivationListener.class);
 
-    private OutOfTheBoxHelper helper;
-    private OutOfTheBoxContext context;
+    private final OutOfTheBoxHelper helper;
+    private final OutOfTheBoxContext context;
 
     public OutOfTheBoxListener(OutOfTheBoxHelper helper,
-                               OutOfTheBoxContext context) { 
+                               OutOfTheBoxContext context) {
         this.helper = helper;
         this.context = context;
     }
-    
+
     public void before(ServiceEvent se) {
         // nothing needs doing
     }

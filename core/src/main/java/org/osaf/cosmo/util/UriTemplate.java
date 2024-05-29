@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,8 +47,8 @@ import org.apache.commons.logging.LogFactory;
 public class UriTemplate {
     private static final Log log = LogFactory.getLog(UriTemplate.class);
 
-    private String pattern;
-    private ArrayList<Segment> segments;
+    private final String pattern;
+    private final ArrayList<Segment> segments;
 
     public UriTemplate(String pattern) {
         this.pattern = pattern;
@@ -93,7 +93,7 @@ public class UriTemplate {
 
     /**
      * Generates a absolute URI relative to <code>base</code> using the same
-     * algorithm as {@link #bindAbsolute(boolean, String, String...)}. Bound 
+     * algorithm as {@link #bindAbsolute(boolean, String, String...)}. Bound
      * values are escaped.
      *
      * @param escape a flag determining whether or not bound variables are to
@@ -236,7 +236,7 @@ public class UriTemplate {
                     break;
                 // if the segment is optional, the candidate doesn't
                 // have to have a matching segment
-                if (segment.isOptional()) 
+                if (segment.isOptional())
                     continue;
                 // mandatory segment - not a match
                 return null;
@@ -335,7 +335,7 @@ public class UriTemplate {
     }
 
     public static class Match extends HashMap<String, String> {
-        private String path;
+        private final String path;
 
         public Match(String path) {
             this.path = path;

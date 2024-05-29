@@ -30,7 +30,7 @@ public abstract class MockAuditableObject implements AuditableObject {
 
     private Date creationDate;
     private Date modifiedDate;
-    private String etag = "";
+    private final String etag = "";
 
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceAuditableObject#getCreationDate()

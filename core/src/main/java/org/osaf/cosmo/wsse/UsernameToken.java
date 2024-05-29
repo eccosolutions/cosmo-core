@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,19 +27,19 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * passwordDigest =  Base64 \ (SHA1 (Nonce + CreationTimestamp + Password))
  */
 public class UsernameToken {
-    
-    private String username;
-    private String nonce;
-    private String passwordDigest;
-    private String created;
-    
+
+    private final String username;
+    private final String nonce;
+    private final String passwordDigest;
+    private final String created;
+
     public UsernameToken(String username, String nonce, String passwordDigest, String created) {
         this.username = username;
         this.nonce = nonce;
         this.passwordDigest = passwordDigest;
         this.created = created;
     }
-    
+
     public String getUsername() {
         return username;
     }
@@ -89,7 +89,7 @@ public class UsernameToken {
         append("created", created).
         toString();
     }
-    
-    
-    
+
+
+
 }

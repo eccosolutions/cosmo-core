@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 public class UriTemplateTest extends TestCase {
 	private final static int MIN_CHARCODE = 0x21; //ASCII range
 	private final static int MAX_CHARCODE = 0x7e; //ASCII range
-	private Random rnd = new Random();
+	private final Random rnd = new Random();
 
     public void testUnescapeSpaces() {
         Assert.assertEquals("test test", UriTemplate.unescapeSegment("test+test"));

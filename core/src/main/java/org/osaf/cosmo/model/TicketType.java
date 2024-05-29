@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,8 +44,8 @@ public class TicketType {
     public static final TicketType FREE_BUSY = new TicketType(ID_FREE_BUSY,
             new String[] { PRIVILEGE_FREEBUSY });
 
-    private String id;
-    private Set<String> privileges;
+    private final String id;
+    private final Set<String> privileges;
 
     public TicketType(String id) {
         this.id = id;

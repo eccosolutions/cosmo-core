@@ -28,15 +28,15 @@ import org.osaf.cosmo.service.ServiceListener;
 public class ActivationListener implements ServiceListener {
     private static final Log log = LogFactory.getLog(ActivationListener.class);
 
-    private AccountActivator activator;
-    private ActivationContext context;
+    private final AccountActivator activator;
+    private final ActivationContext context;
 
     public ActivationListener(AccountActivator activator,
                               ActivationContext context) {
         this.activator = activator;
         this.context = context;
     }
-    
+
     public void before(ServiceEvent se) {
         if (! se.getId().equals("CREATE_USER"))
             return;

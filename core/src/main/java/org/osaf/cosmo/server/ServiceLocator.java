@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,9 +67,9 @@ public class ServiceLocator implements ServerConstants {
     private static final String PATH_ITEM = "item";
     private static final String PATH_USER = "user";
 
-    private String appMountUrl;
-    private String ticketKey;
-    private ServiceLocatorFactory factory;
+    private final String appMountUrl;
+    private final String ticketKey;
+    private final ServiceLocatorFactory factory;
 
     /**
      * Returns a <code>ServiceLocator</code> instance that uses the
@@ -169,7 +169,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the Atom URL of the item.
      *
      * @param the item
-     * @param absolute whether or not the URL should be absolute 
+     * @param absolute whether or not the URL should be absolute
      */
     public String getAtomUrl(Item item,
                              boolean absolute) {
@@ -219,7 +219,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the Atom URL of the user.
      *
      * @param the user
-     * @param absolute whether or not the URL should be absolute 
+     * @param absolute whether or not the URL should be absolute
      */
     public String getAtomUrl(User user,
                              boolean absolute) {
@@ -311,7 +311,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the Morse Code URL of the collection.
      *
      * @param the collection
-     * @param absolute whether or not the URL should be absolute 
+     * @param absolute whether or not the URL should be absolute
      */
     public String getMorseCodeUrl(CollectionItem collection,
                                   boolean absolute) {
@@ -344,7 +344,7 @@ public class ServiceLocator implements ServerConstants {
      * Returns the Pim UI URL of the item.
      *
      * @param the item
-     * @param absolute whether or not the URL should be absolute 
+     * @param absolute whether or not the URL should be absolute
      */
     public String getPimUrl(Item item,
                             boolean absolute) {
@@ -456,6 +456,6 @@ public class ServiceLocator implements ServerConstants {
         if (withTicket && ticketKey != null)
             buf.append("?").append(PARAM_TICKET).append("=").append(ticketKey);
 
-        return buf.toString();                                  
+        return buf.toString();
     }
 }

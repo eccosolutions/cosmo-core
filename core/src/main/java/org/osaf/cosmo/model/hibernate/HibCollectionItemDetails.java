@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,24 +49,24 @@ import org.osaf.cosmo.model.Item;
 public class HibCollectionItemDetails implements CollectionItemDetails {
 
     @Id
-    private CollectionItemPK primaryKey = new CollectionItemPK();
-    
+    private final CollectionItemPK primaryKey = new CollectionItemPK();
+
     @Column(name = "createdate", nullable=false)
     @Type(type="long_timestamp")
-    private Date creationDate = new Date();
- 
+    private final Date creationDate = new Date();
+
     public HibCollectionItemDetails() {}
-    
+
     public HibCollectionItemDetails(CollectionItem collection,
             Item item) {
         primaryKey.collection = collection;
         primaryKey.item = item;
     }
-    
+
     public void setCollection(CollectionItem collection) {
         primaryKey.collection = collection;
     }
-    
+
     public CollectionItem getCollection() {
         return primaryKey.collection;
     }
@@ -74,7 +74,7 @@ public class HibCollectionItemDetails implements CollectionItemDetails {
     public void  setItem(Item item) {
         primaryKey.item = item;
     }
-    
+
     public Item getItem() {
         return primaryKey.item;
     }
@@ -89,7 +89,7 @@ public class HibCollectionItemDetails implements CollectionItemDetails {
             return false;
         if( ! (obj instanceof HibCollectionItemDetails))
             return false;
-        
+
         HibCollectionItemDetails cid = (HibCollectionItemDetails) obj;
         return primaryKey.collection.equals(cid.getCollection()) &&
             primaryKey.item.equals(cid.getItem());
@@ -113,7 +113,7 @@ public class HibCollectionItemDetails implements CollectionItemDetails {
         @ManyToOne(targetEntity = HibItem.class)
         @JoinColumn(name = "itemid", nullable = false)
         public Item item;
-        
+
         public CollectionItemPK() {}
 
         @Override
@@ -122,7 +122,7 @@ public class HibCollectionItemDetails implements CollectionItemDetails {
                 return false;
             if( ! (obj instanceof CollectionItemPK))
                 return false;
-            
+
             CollectionItemPK pk = (CollectionItemPK) obj;
             return collection.equals(pk.collection) && item.equals(pk.item);
         }

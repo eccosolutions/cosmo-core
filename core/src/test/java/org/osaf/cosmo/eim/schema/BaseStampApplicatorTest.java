@@ -84,7 +84,7 @@ public class BaseStampApplicatorTest extends BaseApplicatorTestCase {
     private class TestStampApplicator extends BaseStampApplicator {
         private boolean stampCreated;
         private boolean deletionApplied;
-        private HashSet<EimRecordField> appliedFields;
+        private final HashSet<EimRecordField> appliedFields;
 
         public TestStampApplicator(String prefix,
                                    String namespace) {
