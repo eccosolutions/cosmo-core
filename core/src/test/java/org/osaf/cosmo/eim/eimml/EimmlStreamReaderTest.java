@@ -19,8 +19,7 @@ import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.assertj.core.api.Assertions;
 import org.osaf.cosmo.TestHelper;
 import org.osaf.cosmo.eim.EimRecordSet;
 
@@ -29,8 +28,6 @@ import org.osaf.cosmo.eim.EimRecordSet;
  */
 public class EimmlStreamReaderTest extends TestCase
     implements EimmlConstants {
-    private static final Log log =
-        LogFactory.getLog(EimmlStreamReaderTest.class);
 
     private TestHelper testHelper;
 
@@ -48,15 +45,13 @@ public class EimmlStreamReaderTest extends TestCase
                      reader.getCollectionUuid());
         assertNull("Collection name not null", reader.getCollectionName());
 
-        assertEquals("Collection hue incorrect",
-                1L,reader.getCollectionHue());
+        Assertions.assertThat(reader.getCollectionHue()).isEqualTo(1);
 
         assertTrue("Did not find next recordset", reader.hasNext());
 
         EimRecordSet recordset = reader.nextRecordSet();
         assertNotNull("Next recordset is null", recordset);
 
-        assertTrue("Reader thinks it has another recordset",
-                   ! reader.hasNext());
+        assertFalse("Reader thinks it has another recordset", reader.hasNext());
     }
 }

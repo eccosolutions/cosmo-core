@@ -17,6 +17,7 @@ package org.osaf.cosmo.dao.hibernate;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.property.ProdId;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -691,7 +692,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         CollectionItem queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
-        Assert.assertEquals(1L, queryItem.getHue());
+        Assertions.assertThat(queryItem.getHue()).isEqualTo(1);
         helper.verifyItem(a, queryItem);
     }
 

@@ -23,6 +23,7 @@ import java.util.List;
 import junit.framework.Assert;
 import net.fortuna.ical4j.model.DateTime;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.osaf.cosmo.model.ItemChangeRecord;
@@ -91,10 +92,10 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
        HibEventLogEntry hibEntry = results.get(0);
 
        Assert.assertEquals("user", hibEntry.getAuthType());
-       Assert.assertEquals(1L, hibEntry.getAuthId());
+       Assertions.assertThat(hibEntry.getAuthId()).isEqualTo(1);
        Assert.assertEquals("ItemAdded", hibEntry.getType());
-       Assert.assertEquals(2L, hibEntry.getId1());
-       Assert.assertEquals(4L, hibEntry.getId2());
+       Assertions.assertThat(hibEntry.getId1()).isEqualTo(2);
+       Assertions.assertThat(hibEntry.getId2()).isEqualTo(4);
        Assert.assertEquals("uid3", hibEntry.getUid1());
        Assert.assertEquals("note", hibEntry.getStrval1());
        Assert.assertEquals("Test McTester", hibEntry.getStrval2());
@@ -119,10 +120,10 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         HibEventLogEntry hibEntry = results.get(0);
 
         Assert.assertEquals("user", hibEntry.getAuthType());
-        Assert.assertEquals(1L, hibEntry.getAuthId());
+        Assertions.assertThat(hibEntry.getAuthId()).isEqualTo(1);
         Assert.assertEquals("ItemRemoved", hibEntry.getType());
-        Assert.assertEquals(2L, hibEntry.getId1());
-        Assert.assertEquals(4L, hibEntry.getId2());
+        Assertions.assertThat(hibEntry.getId1()).isEqualTo(2);
+        Assertions.assertThat(hibEntry.getId2()).isEqualTo(4);
         Assert.assertEquals("uid3", hibEntry.getUid1());
         Assert.assertEquals("note", hibEntry.getStrval1());
         Assert.assertEquals("Test McTester", hibEntry.getStrval2());
@@ -153,10 +154,10 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         HibEventLogEntry hibEntry = results.get(0);
 
         Assert.assertEquals("user", hibEntry.getAuthType());
-        Assert.assertEquals(1L, hibEntry.getAuthId());
+        Assertions.assertThat(hibEntry.getAuthId()).isEqualTo(1);
         Assert.assertEquals("ItemUpdated", hibEntry.getType());
-        Assert.assertEquals(2L, hibEntry.getId1());
-        Assert.assertEquals(4L, hibEntry.getId2());
+        Assertions.assertThat(hibEntry.getId1()).isEqualTo(2);
+        Assertions.assertThat(hibEntry.getId2()).isEqualTo(4);
         Assert.assertEquals("uid3", hibEntry.getUid1());
         Assert.assertEquals("note", hibEntry.getStrval1());
         Assert.assertEquals("Test McTester", hibEntry.getStrval2());
@@ -164,10 +165,10 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         hibEntry = results.get(1);
 
         Assert.assertEquals("user", hibEntry.getAuthType());
-        Assert.assertEquals(1L, hibEntry.getAuthId());
+        Assertions.assertThat(hibEntry.getAuthId()).isEqualTo(1);
         Assert.assertEquals("ItemUpdated", hibEntry.getType());
-        Assert.assertEquals(3L, hibEntry.getId1());
-        Assert.assertEquals(4L, hibEntry.getId2());
+        Assertions.assertThat(hibEntry.getId1()).isEqualTo(3);
+        Assertions.assertThat(hibEntry.getId2()).isEqualTo(4);
         Assert.assertEquals("uid3", hibEntry.getUid1());
         Assert.assertEquals("note", hibEntry.getStrval1());
         Assert.assertEquals("Test McTester", hibEntry.getStrval2());

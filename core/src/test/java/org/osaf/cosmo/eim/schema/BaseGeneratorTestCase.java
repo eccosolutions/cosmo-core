@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -101,7 +101,7 @@ public abstract class BaseGeneratorTestCase extends TestCase
         assertEquals("incorrect field name", expectedName, tf.getName());
         assertEquals("incorrect field value", expectedValue, tf.getText());
     }
-    
+
     /** */
     protected void checkClobField(EimRecordField field,
                                   String expectedName,
@@ -111,7 +111,7 @@ public abstract class BaseGeneratorTestCase extends TestCase
         assertEquals("incorrect field name", expectedName, cf.getName());
         assertEquals("incorrect field value", expectedValue, read(cf.getClob()));
     }
-    
+
     /** */
     protected void checkIntegerField(EimRecordField field,
                                   String expectedName,
@@ -126,8 +126,7 @@ public abstract class BaseGeneratorTestCase extends TestCase
     protected void checkBooleanField(EimRecordField field,
                                      String expectedName,
                                      Boolean expectedValue) {
-        Integer i = BooleanUtils.isTrue(expectedValue) ?
-            new Integer(1) : new Integer(0);
+        Integer i = BooleanUtils.isTrue(expectedValue) ? 1 : 0;
         checkIntegerField(field, expectedName, i);
     }
 
@@ -139,7 +138,7 @@ public abstract class BaseGeneratorTestCase extends TestCase
         checkDecimalField(field, expectedName, bd, DIGITS_TIMESTAMP,
                           DEC_TIMESTAMP);
     }
-    
+
     private String read(Reader reader) {
         if (reader == null)
             return null;
