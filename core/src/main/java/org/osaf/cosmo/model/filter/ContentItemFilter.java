@@ -15,8 +15,6 @@
  */
 package org.osaf.cosmo.model.filter;
 
-import org.osaf.cosmo.model.filter.FilterOrder.Order;
-
 
 /**
  * Adds ContentItem specific criteria to ItemFilter.

@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,6 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 
 import org.apache.commons.io.IOUtils;
-import org.hibernate.annotations.Type;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.BinaryAttribute;
 import org.osaf.cosmo.model.DataSizeException;
@@ -41,12 +40,12 @@ import org.osaf.cosmo.model.QName;
 public class HibBinaryAttribute extends HibAttribute implements java.io.Serializable, BinaryAttribute {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 6296196539997344427L;
 
     public static final long MAX_BINARY_ATTR_SIZE = 100 * 1024 * 1024;
-    
+
     @Column(name = "binvalue", length=102400000)
     @Lob
     private byte[] value;
@@ -59,11 +58,11 @@ public class HibBinaryAttribute extends HibAttribute implements java.io.Serializ
         setQName(qname);
         this.value = value;
     }
-    
+
     /**
      * Construct BinaryAttribute and initialize data using
      * an InputStream
-     * @param qname 
+     * @param qname
      * @param value
      */
     public HibBinaryAttribute(QName qname, InputStream value) {
@@ -78,7 +77,7 @@ public class HibBinaryAttribute extends HibAttribute implements java.io.Serializ
     }
 
     // Property accessors
- 
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getValue()
      */
@@ -112,7 +111,7 @@ public class HibBinaryAttribute extends HibAttribute implements java.io.Serializ
         else
             return 0;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.BinaryAttribute#getInputStream()
      */
@@ -121,10 +120,10 @@ public class HibBinaryAttribute extends HibAttribute implements java.io.Serializ
             return new ByteArrayInputStream(value);
         else return null;
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.osaf.cosmo.model.Attribute#copy()
      */
     public Attribute copy() {
@@ -134,7 +133,7 @@ public class HibBinaryAttribute extends HibAttribute implements java.io.Serializ
             attr.setValue(value.clone());
         return attr;
     }
-    
+
     @Override
     public void validate() {
         if (value!=null && value.length > MAX_BINARY_ATTR_SIZE)

@@ -27,7 +27,6 @@ import org.osaf.cosmo.eim.EimRecordField;
 import org.osaf.cosmo.eim.schema.*;
 import org.osaf.cosmo.model.*;
 
-import java.time.Duration;
 import java.time.format.DateTimeParseException;
 
 /**

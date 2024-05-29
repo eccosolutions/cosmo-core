@@ -22,7 +22,6 @@ import org.junit.Assert;
 import junit.framework.TestCase;
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Dur;
 
 import net.fortuna.ical4j.model.TemporalAmountAdapter;
 import org.apache.commons.logging.Log;

@@ -17,16 +17,12 @@ package org.osaf.cosmo.eim.schema.modifiedby;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Ignore;
-import org.osaf.cosmo.eim.EimRecord;
-import org.osaf.cosmo.eim.EimRecordField;
 import org.osaf.cosmo.eim.schema.BaseGeneratorTestCase;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.mock.MockNoteItem;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Test Case for {@link ModifiedByGenerator}.

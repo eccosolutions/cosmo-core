@@ -30,7 +30,6 @@ import org.osaf.cosmo.model.mock.MockEventExceptionStamp;
 import org.osaf.cosmo.model.mock.MockEventStamp;
 import org.osaf.cosmo.model.mock.MockNoteItem;
 
-import java.time.Duration;
 import java.time.Period;
 import java.util.Date;
 import java.util.List;

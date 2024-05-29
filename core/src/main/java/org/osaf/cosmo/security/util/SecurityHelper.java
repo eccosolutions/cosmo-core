@@ -15,14 +15,10 @@
  */
 package org.osaf.cosmo.security.util;
 
-import java.util.Set;
-
 import org.osaf.cosmo.dao.ContentDao;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionItem;
-import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.Item;
-import org.osaf.cosmo.model.Ticket;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.NoteItemFilter;

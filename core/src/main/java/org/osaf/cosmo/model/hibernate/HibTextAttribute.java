@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,6 @@ import javax.persistence.Lob;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.annotations.Type;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.ModelValidationException;
@@ -44,12 +43,12 @@ import org.osaf.cosmo.model.TextAttribute;
 public class HibTextAttribute extends HibAttribute implements
         java.io.Serializable, TextAttribute {
     private static final Log log = LogFactory.getLog(TextAttribute.class);
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2417093506524504993L;
-    
+
     @Column(name="textvalue", length=102400000)
     @Lob
     private String value;
@@ -64,7 +63,7 @@ public class HibTextAttribute extends HibAttribute implements
         setQName(qname);
         this.value = value;
     }
-    
+
     /**
      * Construct TextAttribute from Reader
      * @param qname
@@ -76,7 +75,7 @@ public class HibTextAttribute extends HibAttribute implements
     }
 
     // Property accessors
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getValue()
      */
@@ -90,7 +89,7 @@ public class HibTextAttribute extends HibAttribute implements
     public void setValue(String value) {
         this.value = value;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.TextAttribute#getReader()
      */
@@ -100,7 +99,7 @@ public class HibTextAttribute extends HibAttribute implements
         else
             return null;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.TextAttribute#getLength()
      */
@@ -110,7 +109,7 @@ public class HibTextAttribute extends HibAttribute implements
         else
             return 0;
     }
-    
+
     public void setValue(Object value) {
         if (value != null && !(value instanceof String) &&
             !(value instanceof Reader))
@@ -122,7 +121,7 @@ public class HibTextAttribute extends HibAttribute implements
             setValue((String) value);
         }
     }
-    
+
     public Attribute copy() {
         TextAttribute attr = new HibTextAttribute();
         attr.setQName(getQName().copy());
@@ -141,7 +140,7 @@ public class HibTextAttribute extends HibAttribute implements
         }
         return writer.toString();
     }
-    
+
     /**
      * Convienence method for returning a String value on a TextAttribute
      * with a given QName stored on the given item.
@@ -156,7 +155,7 @@ public class HibTextAttribute extends HibAttribute implements
         else
             return ta.getValue();
     }
-    
+
     /**
      * Convienence method for setting a String value on a TextAttribute
      * with a given QName stored on the given item.
@@ -176,7 +175,7 @@ public class HibTextAttribute extends HibAttribute implements
         else
             attr.setValue(value);
     }
-    
+
     /**
      * Convienence method for setting a Reader value on a TextAttribute
      * with a given QName stored on the given item.

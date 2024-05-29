@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,6 @@ import java.io.InputStream;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
@@ -58,7 +57,7 @@ public class HibICalendarAttribute extends HibAttribute implements
         setQName(qname);
         this.value = value;
     }
-    
+
     /**
      * @param qname qualified name
      * @param value calendar
@@ -81,14 +80,14 @@ public class HibICalendarAttribute extends HibAttribute implements
     public void setValue(Calendar value) {
         this.value = value;
     }
-    
+
     public void setValue(Object value) {
         if (value != null && !(value instanceof Calendar)
-                && !(value instanceof String) 
+                && !(value instanceof String)
                 && !(value instanceof InputStream))
             throw new ModelValidationException(
                     "attempted to set non Calendar value on attribute");
-        
+
         if(value instanceof Calendar)
             setValue((Calendar) value);
         else if(value instanceof InputStream)
@@ -96,7 +95,7 @@ public class HibICalendarAttribute extends HibAttribute implements
         else
             setValue((String) value);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.ICalendarAttribute#setValue(java.lang.String)
      */
@@ -109,7 +108,7 @@ public class HibICalendarAttribute extends HibAttribute implements
             throw new ModelValidationException("error parsing calendar");
         }
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.ICalendarAttribute#setValue(java.io.InputStream)
      */
@@ -124,7 +123,7 @@ public class HibICalendarAttribute extends HibAttribute implements
                     + ioe.getMessage());
         }
     }
-    
+
     public Attribute copy() {
         ICalendarAttribute attr = new HibICalendarAttribute();
         attr.setQName(getQName().copy());
@@ -137,9 +136,9 @@ public class HibICalendarAttribute extends HibAttribute implements
         }
         return attr;
     }
-    
+
     /**
-     * Convienence method for returning a Calendar value on 
+     * Convienence method for returning a Calendar value on
      * a ICalendarAttribute with a given QName stored on the given item.
      * @param item item to fetch ICalendarAttribute from
      * @param qname QName of attribute
@@ -152,9 +151,9 @@ public class HibICalendarAttribute extends HibAttribute implements
         else
             return attr.getValue();
     }
-    
+
     /**
-     * Convienence method for setting a Calendar value on a 
+     * Convienence method for setting a Calendar value on a
      * ICalendarpAttribute with a given QName stored on the given item.
      * @param item item to fetch ICalendarpAttribute from
      * @param qname QName of attribute

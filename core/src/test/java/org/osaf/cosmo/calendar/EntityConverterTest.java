@@ -23,7 +23,6 @@ import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VToDo;
-import net.fortuna.ical4j.model.property.Completed;
 import net.fortuna.ical4j.model.property.Status;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
