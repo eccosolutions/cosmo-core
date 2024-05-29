@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,21 +53,26 @@ public class StandardQueryCriteriaBuilder<SortType extends Enum> implements Quer
      */
     public Criteria buildQueryCriteria(Session session,
                                        PageCriteria<SortType> pageCriteria) {
-        Criteria crit = session.createCriteria(clazz);
+        CriteriaQuery query = session.getCriteriaBuilder().createQuery(clazz);
+        Root root = query.from(clazz);
 
         // If page size is -1, that means get all users
-        if(pageCriteria.getPageSize()>0) {
-            crit.setMaxResults(pageCriteria.getPageSize());
+        if(pageCriteria.getPageSize() > 0) {
+            query.select(root);
+            query.setMaxResults(pageCriteria.getPageSize());
 
             int firstResult = 0;
             if (pageCriteria.getPageNumber() > 1)
                 firstResult = ((pageCriteria.getPageNumber() - 1) *
                                pageCriteria.getPageSize());
-            crit.setFirstResult(firstResult);
+            query = session.createQuery(query)
+                .setFirstResult(firstResult)
+                .setMaxResults(pageCriteria.getPageSize());
+            query.setFirstResult(firstResult);
         }
 
         for (Order order : buildOrders(pageCriteria))
-            crit.addOrder(order);
+            query.addOrder(order);
 
         Criterion orCriterion = null;
         for (String[] pair: pageCriteria.getOrCriteria()){
