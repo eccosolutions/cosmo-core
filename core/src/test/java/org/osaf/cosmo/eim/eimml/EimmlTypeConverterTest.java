@@ -145,14 +145,14 @@ public class EimmlTypeConverterTest extends TestCase
 
         Integer resultInteger = EimmlTypeConverter.toInteger(testString);
 
-        assertEquals("Result integer does not match", new Integer(testString),
+        assertEquals("Result integer does not match", (Integer)Integer.parseInt(testString),
                      resultInteger);
     }
 
     /** */
     public void testFromInteger() throws Exception {
         String testString = "42";
-        Integer testInteger = new Integer(testString);
+        Integer testInteger = Integer.parseInt(testString);
 
         String resultString = EimmlTypeConverter.fromInteger(testInteger);
 

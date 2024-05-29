@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,7 +60,7 @@ public abstract class BaseApplicatorTestCase extends TestCase
     protected void checkBooleanValue(EimRecordField field,
                                      Boolean value) {
         Integer v = BooleanUtils.isTrue(value) ?
-            new Integer(1) : new Integer(0);
+            1 : 0;
         checkIntegerValue(field, v);
     }
 
@@ -89,19 +89,19 @@ public abstract class BaseApplicatorTestCase extends TestCase
         assertEquals("incorrect attribute value", field.getValue(),
                      attr.getValue());
     }
-    
+
     protected void addMissingTextField(String fieldName, EimRecord record) {
         TextField tf = new TextField(fieldName, null);
         tf.setMissing(true);
         record.addField(tf);
     }
-    
+
     protected void addMissingClobField(String fieldName, EimRecord record) {
         ClobField cf = new ClobField(fieldName, null);
         cf.setMissing(true);
         record.addField(cf);
     }
-    
+
     protected void addMissingIntegerField(String fieldName, EimRecord record) {
         IntegerField intF = new IntegerField(fieldName, 0);
         intF.setMissing(true);

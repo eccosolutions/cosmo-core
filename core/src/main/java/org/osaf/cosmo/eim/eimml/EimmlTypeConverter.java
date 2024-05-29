@@ -149,7 +149,7 @@ public class EimmlTypeConverter implements EimmlConstants {
         if (value == null)
             return null;
         try {
-            return new Integer(value);
+            return Integer.parseInt(value);
         } catch (NumberFormatException e) {
             throw new EimmlConversionException("Provided value " + value + " is not a valid integer", e);
         }

@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -103,7 +103,7 @@ public abstract class BaseGenerator implements EimSchemaConstants {
                 fields.add(new DecimalField(attr.getName(), value));
             } else if (attr instanceof IntegerAttribute) {
                 Long value = ((IntegerAttribute)attr).getValue();
-                fields.add(new IntegerField(attr.getName(), new Integer(value.intValue())));
+                fields.add(new IntegerField(attr.getName(), value.intValue()));
             } else if (attr instanceof StringAttribute) {
                 String value = ((StringAttribute)attr).getValue();
                 fields.add(new TextField(attr.getName(), value));
@@ -131,10 +131,10 @@ public abstract class BaseGenerator implements EimSchemaConstants {
     public Item getItem() {
         return item;
     }
-    
+
     /**
      * Determine if current item is a NoteItem that modifies another NoteItem
-     * 
+     *
      * @return true if item is a NoteItem and modifies another NoteItem
      */
     protected boolean isModification() {
@@ -143,14 +143,14 @@ public abstract class BaseGenerator implements EimSchemaConstants {
             if(note.getModifies()!=null)
                 return true;
         }
-        
+
         return false;
     }
-    
+
     /**
-     * Determine if attribute value of modification is "missing", 
+     * Determine if attribute value of modification is "missing",
      * meaning if the value is null.
-     * 
+     *
      * @param attribute attribute to copy
      * @param modification object to copy attribute to
      */
@@ -167,11 +167,11 @@ public abstract class BaseGenerator implements EimSchemaConstants {
             throw new RuntimeException("error getting attribute " + attribute);
         }
     }
-    
+
     /**
      * Determine if attribute value is "missing" for a note modificaiton.
      * An attribute is "missing" if it is null.
-     * 
+     *
      * @param attribute atttribute to copy
      * @throws EimSchemaException
      */
@@ -180,10 +180,10 @@ public abstract class BaseGenerator implements EimSchemaConstants {
         if (!isModification())
             return false;
 
-        NoteItem modification = (NoteItem) getItem();      
+        NoteItem modification = (NoteItem) getItem();
         return isMissingAttribute(attribute, modification);
     }
-    
+
     protected EimRecordField generateMissingField(EimRecordField field) {
         field.setMissing(true);
         return field;

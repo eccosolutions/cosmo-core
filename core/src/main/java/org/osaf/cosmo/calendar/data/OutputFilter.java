@@ -475,7 +475,7 @@ public class OutputFilter {
                             boolean no_value) {
         if (properties == null)
             properties = new HashMap();
-        properties.put(name.toUpperCase(), new Boolean(no_value));
+        properties.put(name.toUpperCase(), no_value);
     }
 
     public boolean hasPropertyFilters() {

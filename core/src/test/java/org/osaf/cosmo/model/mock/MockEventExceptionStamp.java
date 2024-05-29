@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,33 +39,33 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
         java.io.Serializable, EventExceptionStamp {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3992468809776886156L;
-    
+
     public static final String PARAM_OSAF_MISSING = "X-OSAF-MISSING";
-    
+
     /** default constructor */
     public MockEventExceptionStamp() {
     }
-    
+
     public MockEventExceptionStamp(Item item) {
         setItem(item);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#getType()
      */
     public String getType() {
         return "eventexception";
     }
-    
+
     /** Used by the hibernate validator **/
     @EventException
     private Calendar getValidationCalendar() {
         return getEventCalendar();
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#getEvent()
      */
@@ -73,8 +73,8 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
     public VEvent getEvent() {
         return getExceptionEvent();
     }
-     
-    
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#getExceptionEvent()
      */
@@ -82,22 +82,22 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
         return (VEvent) getEventCalendar().getComponents().getComponents(
                 Component.VEVENT).get(0);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#setExceptionEvent(net.fortuna.ical4j.model.component.VEvent)
      */
     public void setExceptionEvent(VEvent event) {
         if(getEventCalendar()==null)
             createCalendar();
-        
+
         // remove all events
         getEventCalendar().getComponents().removeAll(
                 getEventCalendar().getComponents().getComponents(Component.VEVENT));
-        
+
         // add event exception
         getEventCalendar().getComponents().add(event);
     }
- 
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#setAnyTime(java.lang.Boolean)
      */
@@ -112,14 +112,14 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
                     PARAM_X_OSAF_ANYTIME);
             if(parameter!=null)
                 dtStart.getParameters().remove(parameter);
-            
+
             // "missing" anyTime is represented as X-OSAF-ANYTIME=MISSING
             dtStart.getParameters().add(getInheritedAnyTimeXParam());
         } else {
             super.setAnyTime(isAnyTime);
         }
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#isAnyTime()
      */
@@ -133,15 +133,15 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
         if (parameter == null) {
             return Boolean.FALSE;
         }
-     
+
         // return null for "missing" anyTime
         if(VALUE_MISSING.equals(parameter.getValue()))
             return null;
 
-        return new Boolean(VALUE_TRUE.equals(parameter.getValue()));
+        return VALUE_TRUE.equals(parameter.getValue());
     }
-    
-    
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#getDisplayAlarmTrigger()
      */
@@ -163,19 +163,19 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
             newTrigger = new Trigger(new Dur("-PT15M"));
             setMissing(newTrigger, true);
         }
-        super.setDisplayAlarmTrigger(newTrigger);    
+        super.setDisplayAlarmTrigger(newTrigger);
     }
 
     protected boolean isMissing(Property prop) {
-        Parameter parameter = 
+        Parameter parameter =
             prop.getParameters().getParameter(PARAM_OSAF_MISSING);
         return (parameter!=null);
     }
-    
+
     protected void setMissing(Property prop, boolean missing) {
-        Parameter parameter = 
+        Parameter parameter =
             prop.getParameters().getParameter(PARAM_OSAF_MISSING);
-        
+
         if (missing) {
             if (parameter == null)
                 prop.getParameters().add(
@@ -185,12 +185,12 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
                 prop.getParameters().remove(parameter);
         }
     }
-    
+
     private Parameter getInheritedAnyTimeXParam() {
         return new XParameter(PARAM_X_OSAF_ANYTIME, VALUE_MISSING);
     }
 
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.copy.InterfaceEventExceptionStamp#getMasterStamp()
      */
@@ -198,7 +198,7 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
         NoteItem note = (NoteItem) getItem();
         return MockEventStamp.getStamp(note.getModifies());
     }
-    
+
     /**
      * Return EventExceptionStamp from Item
      * @param item
@@ -207,20 +207,20 @@ public class MockEventExceptionStamp extends MockBaseEventStamp implements
     public static EventExceptionStamp getStamp(Item item) {
         return (EventExceptionStamp) item.getStamp(EventExceptionStamp.class);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Stamp#copy()
      */
     public Stamp copy() {
         EventExceptionStamp stamp = new MockEventExceptionStamp();
-        
+
         // Need to copy Calendar
         try {
             stamp.setEventCalendar(new Calendar(getEventCalendar()));
         } catch (Exception e) {
             throw new RuntimeException("Cannot copy calendar", e);
         }
-        
+
         return stamp;
     }
 }
