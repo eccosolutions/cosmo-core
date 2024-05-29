@@ -20,10 +20,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;

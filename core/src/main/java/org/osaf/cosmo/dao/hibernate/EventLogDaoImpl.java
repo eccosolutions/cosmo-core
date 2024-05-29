@@ -18,7 +18,7 @@ package org.osaf.cosmo.dao.hibernate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

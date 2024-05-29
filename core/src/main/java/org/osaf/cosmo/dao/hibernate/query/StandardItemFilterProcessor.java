@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;

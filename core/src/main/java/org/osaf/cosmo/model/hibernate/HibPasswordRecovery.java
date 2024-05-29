@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,12 @@ package org.osaf.cosmo.model.hibernate;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -43,36 +43,36 @@ public class HibPasswordRecovery extends BaseModelObject implements PasswordReco
     private static final long serialVersionUID = 854107654491442548L;
 
     private static final long DEFAULT_TIMEOUT = 1000*60*60*24*3; // 3 days
-    
+
     @Column(name = "pwrecoverykey", unique = true, nullable = false, length = 255)
     @NotNull
     @Index(name = "idx_pwrecoverykey")
     private String key;
-    
+
     @Column(name = "creationdate")
     @Type(type="timestamp")
     private Date created;
-    
+
     @Column(name = "timeout")
     @Type(type = "long")
     private long timeout;
-    
+
     @ManyToOne(targetEntity=HibUser.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     private User user;
-    
+
     public HibPasswordRecovery(){
         this(null, null);
     }
-    
+
     /**
      */
     public HibPasswordRecovery(User user, String key) {
         this(user, key, DEFAULT_TIMEOUT);
     }
-    
+
     /**
-     * 
+     *
      */
     public HibPasswordRecovery(User user, String key, long timeout) {
         this.user = user;
@@ -80,7 +80,7 @@ public class HibPasswordRecovery extends BaseModelObject implements PasswordReco
         this.timeout = timeout;
         this.created = new Date();
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.PasswordRecovery#getKey()
      */
@@ -94,14 +94,14 @@ public class HibPasswordRecovery extends BaseModelObject implements PasswordReco
     public void setKey(String key) {
         this.key = key;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.PasswordRecovery#getTimeout()
      */
     public long getTimeout() {
         return timeout;
     }
-  
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.PasswordRecovery#setTimeout(long)
      */
@@ -115,28 +115,28 @@ public class HibPasswordRecovery extends BaseModelObject implements PasswordReco
     public Date getCreated() {
         return created;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.PasswordRecovery#setCreated(java.util.Date)
      */
     public void setCreated(Date created) {
         this.created = created;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.PasswordRecovery#getUser()
      */
     public User getUser() {
         return user;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.PasswordRecovery#setUser(org.osaf.cosmo.model.User)
      */
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.PasswordRecovery#hasExpired()
      */

@@ -11,7 +11,7 @@
     </parent>
 
     <properties>
-        <hibernate.version>5.6.15.Final</hibernate.version>
+        <hibernate.version>6.0.2.Final</hibernate.version>
         <spring.version>5.3.36</spring.version>
         <spring.security.version>4.1.5.RELEASE</spring.security.version>
     </properties>
@@ -240,8 +240,13 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
         <dependency>
@@ -324,8 +329,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-               <artifactId>hibernate-ehcache</artifactId>
+            <groupId>org.hibernate.orm</groupId>
+               <artifactId>hibernate-jcache</artifactId>
             <version>${hibernate.version}</version>
             <scope>runtime</scope>
         </dependency>

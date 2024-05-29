@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;

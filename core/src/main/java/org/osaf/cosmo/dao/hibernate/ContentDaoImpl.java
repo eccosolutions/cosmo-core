@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.osaf.cosmo.dao.ContentDao;

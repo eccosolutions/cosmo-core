@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@ package org.osaf.cosmo.model.hibernate;
 
 import java.io.Reader;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -37,59 +37,59 @@ import org.osaf.cosmo.model.Stamp;
 public class HibMessageStamp extends HibStamp implements
         java.io.Serializable, MessageStamp {
 
-   
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6100568628972081120L;
-    
+
     public static final QName ATTR_MESSAGE_ID = new HibQName(
             MessageStamp.class, "messageId");
-    
+
     public static final QName ATTR_MESSAGE_HEADERS = new HibQName(
             MessageStamp.class, "headers");
-    
+
     public static final QName ATTR_MESSAGE_FROM = new HibQName(
             MessageStamp.class, "from");
-    
+
     public static final QName ATTR_MESSAGE_TO = new HibQName(
             MessageStamp.class, "to");
-    
+
     public static final QName ATTR_MESSAGE_CC = new HibQName(
             MessageStamp.class, "cc");
-    
+
     public static final QName ATTR_MESSAGE_BCC = new HibQName(
             MessageStamp.class, "bcc");
-    
+
     public static final QName ATTR_MESSAGE_ORIGINATORS = new HibQName(
             MessageStamp.class, "originators");
-    
+
     public static final QName ATTR_MESSAGE_DATE_SENT = new HibQName(
             MessageStamp.class, "dateSent");
-    
+
     public static final QName ATTR_MESSAGE_IN_REPLY_TO = new HibQName(
             MessageStamp.class, "inReplyTo");
-    
+
     public static final QName ATTR_MESSAGE_REFERENCES = new HibQName(
             MessageStamp.class, "references");
-    
+
     /** default constructor */
     public HibMessageStamp() {
     }
-    
+
     public HibMessageStamp(Item item) {
         setItem(item);
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Stamp#getType()
      */
     public String getType() {
         return "message";
     }
-    
+
     // Property accessors
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#getMessageId()
      */
@@ -106,7 +106,7 @@ public class HibMessageStamp extends HibStamp implements
         HibStringAttribute.setValue(getItem(), ATTR_MESSAGE_ID, id);
         updateTimestamp();
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#getHeaders()
      */
@@ -123,7 +123,7 @@ public class HibMessageStamp extends HibStamp implements
         HibTextAttribute.setValue(getItem(), ATTR_MESSAGE_HEADERS, headers);
         updateTimestamp();
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#setHeaders(java.io.Reader)
      */
@@ -132,7 +132,7 @@ public class HibMessageStamp extends HibStamp implements
         HibTextAttribute.setValue(getItem(), ATTR_MESSAGE_HEADERS, headers);
         updateTimestamp();
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#getFrom()
      */
@@ -166,7 +166,7 @@ public class HibMessageStamp extends HibStamp implements
         HibStringAttribute.setValue(getItem(), ATTR_MESSAGE_TO, to);
         updateTimestamp();
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#getBcc()
      */
@@ -200,7 +200,7 @@ public class HibMessageStamp extends HibStamp implements
         HibStringAttribute.setValue(getItem(), ATTR_MESSAGE_CC, cc);
         updateTimestamp();
     }
- 
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#getOriginators()
      */
@@ -217,7 +217,7 @@ public class HibMessageStamp extends HibStamp implements
         HibStringAttribute.setValue(getItem(), ATTR_MESSAGE_ORIGINATORS, originators);
         updateTimestamp();
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#getDateSent()
      */
@@ -234,7 +234,7 @@ public class HibMessageStamp extends HibStamp implements
         HibStringAttribute.setValue(getItem(), ATTR_MESSAGE_DATE_SENT, dateSent);
         updateTimestamp();
     }
-  
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#getInReplyTo()
      */
@@ -268,7 +268,7 @@ public class HibMessageStamp extends HibStamp implements
         HibTextAttribute.setValue(getItem(), ATTR_MESSAGE_REFERENCES, references);
         updateTimestamp();
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.MessageStamp#setReferences(java.io.Reader)
      */
@@ -286,7 +286,7 @@ public class HibMessageStamp extends HibStamp implements
     public static MessageStamp getStamp(Item item) {
         return (MessageStamp) item.getStamp(MessageStamp.class);
     }
-    
+
     public Stamp copy() {
         MessageStamp stamp = new HibMessageStamp();
         return stamp;

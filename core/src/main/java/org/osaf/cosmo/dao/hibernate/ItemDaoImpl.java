@@ -15,11 +15,11 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import jakarta.persistence.TypedQuery;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
