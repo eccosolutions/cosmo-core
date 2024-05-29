@@ -11,7 +11,7 @@
     </parent>
 
     <properties>
-        <hibernate.version>5.2.18.Final</hibernate.version>
+        <hibernate.version>5.4.32.Final</hibernate.version>
         <spring.version>5.3.27</spring.version>
         <spring.security.version>4.1.5.RELEASE</spring.security.version>
     </properties>
