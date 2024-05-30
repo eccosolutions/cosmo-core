@@ -98,7 +98,7 @@ public abstract class BaseStampApplicator extends BaseApplicator {
      * stamp record is applied to an item that does not already have
      * that stamp.
      */
-    protected abstract Stamp createStamp(EimRecord record);
+    protected abstract Stamp createStamp(EimRecord record) throws EimSchemaException;
 
     /**
      * Deletes the stamp.
