@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import javax.persistence.NoResultException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -40,7 +41,7 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
         try {
             ServerProperty prop = (ServerProperty) currentSession().createQuery(
                     "from HibServerProperty where name=:name").setParameter(
-                    "name", property).uniqueResult();
+                    "name", property).getSingleResult();
             if (prop != null)
                 return prop.getValue();
             else
@@ -56,15 +57,14 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
     public void setServerProperty(String property, String value) {
         try {
 
-            ServerProperty prop = (ServerProperty) currentSession().createQuery(
-                    "from HibServerProperty where name=:name").setParameter(
-                    "name", property).uniqueResult();
-            if (prop != null) {
+            try {
+                ServerProperty prop = (ServerProperty) currentSession().createQuery(
+                        "from HibServerProperty where name=:name").setParameter(
+                        "name", property).getSingleResult();
                 prop.setValue(value);
                 currentSession().update(prop);
-            }
-            else {
-                prop = new HibServerProperty(property, value);
+            } catch (NoResultException e) {
+                ServerProperty prop = new HibServerProperty(property, value);
                 currentSession().save(prop);
             }
 

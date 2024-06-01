@@ -15,13 +15,13 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import javax.persistence.TypedQuery;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.osaf.cosmo.calendar.EntityConverter;
 import org.osaf.cosmo.calendar.query.CalendarFilter;
 import org.osaf.cosmo.calendar.query.CalendarFilterEvaluater;
@@ -143,11 +143,11 @@ public class CalendarDaoImpl extends HibernateSessionSupport implements Calendar
     public ContentItem findEventByIcalUid(String uid,
             CollectionItem calendar) {
         try {
-            Query hibQuery = currentSession().getNamedQuery(
+            TypedQuery hibQuery = currentSession().getNamedQuery(
                     "event.by.calendar.icaluid");
             hibQuery.setParameter("calendar", calendar);
             hibQuery.setParameter("uid", uid);
-            return (ContentItem) hibQuery.uniqueResult();
+            return (ContentItem) hibQuery.getSingleResult();
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
