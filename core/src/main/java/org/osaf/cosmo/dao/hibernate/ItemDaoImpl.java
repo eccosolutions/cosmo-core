@@ -191,9 +191,10 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             if(user==null)
                 throw new IllegalArgumentException("invalid user");
 
+            // Handle Hibernate and JPA
             try {
-                findRootItem(getBaseModelObject(user).getId());
-                throw new RuntimeException("user already has root item");
+                if( findRootItem(getBaseModelObject(user).getId()) != null )
+                    throw new RuntimeException("user already has root item");
             } catch (NoResultException _e) {
                 // expected
             }
@@ -609,7 +610,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
 
-        return (HomeCollectionItem) hibQuery.unwrap(Query.class).getSingleResult();
+        return (HomeCollectionItem) hibQuery.unwrap(Query.class).uniqueResult();
     }
 
     protected void checkForDuplicateUid(Item item) {
@@ -621,12 +622,12 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     .setParameter("uid", item.getUid());
             setManualFlush(hibQuery);
 
-            try {
-                hibQuery.getSingleResult();
+            Long itemId = (Long) hibQuery.unwrap(Query.class).uniqueResult();
+
+            // if uid is in use throw exception
+            if (itemId != null) {
                 throw new UidInUseException(item.getUid(), "uid " + item.getUid()
                         + " already in use");
-            } catch (NoResultException e) {
-                // expected
             }
         }
     }
