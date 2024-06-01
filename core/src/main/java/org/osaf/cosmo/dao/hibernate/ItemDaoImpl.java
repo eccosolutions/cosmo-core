@@ -568,7 +568,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
     protected Item findItemByParentAndName(Long userDbId, Long parentDbId,
             String name) {
-        TypedQuery hibQuery;
+        TypedQuery<Item> hibQuery;
         if (parentDbId != null) {
             hibQuery = currentSession().getNamedQuery(
                     "item.by.ownerId.parentId.name").setParameter("ownerid",
@@ -581,7 +581,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     userDbId).setParameter("name", name);
         }
         setManualFlush(hibQuery);
-        return (Item) hibQuery.getSingleResult();
+        return (Item) getUniqueResult(hibQuery);
     }
 
     protected Item findItemByParentAndNameMinusItem(Long userDbId, Long parentDbId,
@@ -600,7 +600,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     userDbId).setParameter("name", name);
         }
         setManualFlush(hibQuery);
-        return (Item) hibQuery.getSingleResult();
+        return (Item) getUniqueResult(hibQuery);
     }
 
     protected HomeCollectionItem findRootItem(Long dbUserId) {
@@ -622,7 +622,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     .setParameter("uid", item.getUid());
             setManualFlush(hibQuery);
 
-            Long itemId = (Long) hibQuery.unwrap(Query.class).uniqueResult();
+            Long itemId = (Long) getUniqueResult(hibQuery);
 
             // if uid is in use throw exception
             if (itemId != null) {

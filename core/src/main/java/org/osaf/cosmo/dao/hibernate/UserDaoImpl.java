@@ -240,7 +240,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             TypedQuery hibQuery = currentSession().getNamedQuery("passwordRecovery.byKey")
                 .setParameter("key", key);
             setCacheable(hibQuery);
-            return (PasswordRecovery) hibQuery.getSingleResult();
+            return (PasswordRecovery) getUniqueResult(hibQuery);
         } catch (NoResultException e) {
             return null;
         } catch (HibernateException e) {
@@ -338,7 +338,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
                 "uid", uid);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
-        return (User) hibQuery.getSingleResult();
+        return (User) getUniqueResult(hibQuery);
     }
 
     private void deleteAllPasswordRecoveries(User user) {
@@ -352,7 +352,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         TypedQuery hibQuery = session.getNamedQuery("user.byActivationId").setParameter(
                 "activationId", id);
         setCacheable(hibQuery);
-        return (User) hibQuery.getSingleResult();
+        return (User) getUniqueResult(hibQuery);
     }
 
     private static class UserQueryCriteriaBuilder<SortType extends User.SortType> extends

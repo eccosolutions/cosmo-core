@@ -25,6 +25,15 @@ public class HibernateSessionSupport {
         ((org.hibernate.query.Query<T>)query).setHibernateFlushMode(FlushMode.MANUAL);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T getUniqueResult(TypedQuery<T> hibQuery) {
+        try {
+            return hibQuery.getSingleResult();
+        } catch (javax.persistence.NoResultException e) {
+            return null;
+        }
+    }
+
     public static <T> String getQueryString(TypedQuery<T> query) {
         return ((org.hibernate.query.Query<T>)query).getQueryString();
     }

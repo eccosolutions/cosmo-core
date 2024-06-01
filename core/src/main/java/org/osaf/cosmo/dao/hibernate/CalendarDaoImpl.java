@@ -143,11 +143,11 @@ public class CalendarDaoImpl extends HibernateSessionSupport implements Calendar
     public ContentItem findEventByIcalUid(String uid,
             CollectionItem calendar) {
         try {
-            TypedQuery hibQuery = currentSession().getNamedQuery(
+            TypedQuery<ContentItem> hibQuery = currentSession().getNamedQuery(
                     "event.by.calendar.icaluid");
             hibQuery.setParameter("calendar", calendar);
             hibQuery.setParameter("uid", uid);
-            return (ContentItem) hibQuery.getSingleResult();
+            return getUniqueResult(hibQuery);
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);

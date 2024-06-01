@@ -725,10 +725,10 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
         HibernateSessionSupport.setManualFlush(hibQuery);
 
-        try {
-            Long itemId;
-            itemId = hibQuery.getSingleResult();
-            // If the note is new, then its a duplicate icaluid
+        // if icaluid is in use throw exception
+        Long itemId = getUniqueResult(hibQuery);
+        if (itemId != null) {
+                // If the note is new, then its a duplicate icaluid
             if (getBaseModelObject(item).getId() == -1) {
                 Item dup = currentSession().load(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
@@ -743,8 +743,6 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                     + " already in use for collection " + parent.getUid(),
                     item.getUid(), dup.getUid());
             }
-        } catch (Exception e) {
-            // expected
         }
     }
 
