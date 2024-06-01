@@ -38,9 +38,10 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
      */
     public String getServerProperty(String property) {
         try {
-            ServerProperty prop = (ServerProperty) currentSession().createQuery(
-                    "from HibServerProperty where name=:name").setParameter(
-                    "name", property).uniqueResult();
+            var query = currentSession().createQuery(
+                "from HibServerProperty where name=:name").setParameter(
+                "name", property);
+            var prop = (ServerProperty) getUniqueResult(query);
             if (prop != null)
                 return prop.getValue();
             else
@@ -56,9 +57,10 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
     public void setServerProperty(String property, String value) {
         try {
 
-            ServerProperty prop = (ServerProperty) currentSession().createQuery(
-                    "from HibServerProperty where name=:name").setParameter(
-                    "name", property).uniqueResult();
+            var query = currentSession().createQuery(
+                "from HibServerProperty where name=:name").setParameter(
+                "name", property);
+            var prop = (ServerProperty) getUniqueResult(query);
             if (prop != null) {
                 prop.setValue(value);
                 currentSession().update(prop);

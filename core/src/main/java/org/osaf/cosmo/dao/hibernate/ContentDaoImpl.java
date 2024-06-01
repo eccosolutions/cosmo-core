@@ -15,12 +15,9 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hibernate.FlushMode;
+import javax.persistence.TypedQuery;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.osaf.cosmo.dao.ContentDao;
 import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
@@ -36,8 +33,6 @@ import java.util.*;
  *
  */
 public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
-
-    private static final Log log = LogFactory.getLog(ContentDaoImpl.class);
 
     private boolean shouldUpdateCollectionTimestamp = Boolean.getBoolean("cosmo.updateCollectionTimestamp");
 
@@ -319,10 +314,10 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
      */
     public void removeUserContent(User user) {
         try {
-            Query query = currentSession().getNamedQuery("contentItem.by.owner")
+            TypedQuery<ContentItem> query = currentSession().getNamedQuery("contentItem.by.owner")
                 .setParameter("owner", user);
 
-            List<ContentItem> results = query.list();
+            List<ContentItem> results = query.getResultList();
             for(ContentItem content: results)
                 removeContentRecursive(content);
             currentSession().flush();
@@ -338,8 +333,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
      */
     public Set<ContentItem> loadChildren(CollectionItem collection, Date timestamp) {
         try {
-            Set<ContentItem> children = new HashSet<ContentItem>();
-            Query query = null;
+            Set<ContentItem> children = new HashSet<>();
+            TypedQuery<ContentItem> query;
 
             // use custom HQL query that will eager fetch all associations
             if (timestamp == null)
@@ -350,10 +345,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                         .setParameter("parent", collection).setParameter(
                                 "timestamp", timestamp);
 
-            query.setFlushMode(FlushMode.MANUAL);
-            List results = query.list();
-            for (Iterator it = results.iterator(); it.hasNext();) {
-                ContentItem content = (ContentItem) it.next();
+            setManualFlush(query);
+            List<ContentItem> results = query.getResultList();
+            for (ContentItem content : results) {
                 initializeItem(content);
                 children.add(content);
             }
@@ -719,7 +713,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             return;
 
         // Lookup item by parent/icaluid
-        Query hibQuery = null;
+        TypedQuery<Long> hibQuery;
         if (item instanceof NoteItem)
             hibQuery = currentSession().getNamedQuery(
                     "noteItemId.by.parent.icaluid").setParameter("parentid",
@@ -729,15 +723,15 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                     "icalendarItem.by.parent.icaluid").setParameter("parentid",
                             getBaseModelObject(parent).getId()).setParameter("icaluid", item.getIcalUid());
 
-        hibQuery.setFlushMode(FlushMode.MANUAL);
+        HibernateSessionSupport.setManualFlush(hibQuery);
 
-        Long itemId = (Long) hibQuery.uniqueResult();
+        Long itemId = getUniqueResult(hibQuery);
 
         // if icaluid is in use throw exception
         if (itemId != null) {
             // If the note is new, then its a duplicate icaluid
             if (getBaseModelObject(item).getId() == -1) {
-                Item dup = (Item) currentSession().load(HibItem.class, itemId);
+                Item dup = currentSession().load(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
                         + " already in use for collection " + parent.getUid(),
                         item.getUid(), dup.getUid());
@@ -745,7 +739,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             // If the note exists and there is another note with the same
             // icaluid, then its a duplicate icaluid
             if (getBaseModelObject(item).getId().equals(itemId)) {
-                Item dup = (Item) currentSession().load(HibItem.class, itemId);
+                Item dup = currentSession().load(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
                         + " already in use for collection " + parent.getUid(),
                         item.getUid(), dup.getUid());

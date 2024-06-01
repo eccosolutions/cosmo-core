@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
@@ -29,7 +30,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.ObjectDeletedException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
 import org.hibernate.UnresolvableObjectException;
 import org.hibernate.proxy.HibernateProxy;
 import org.osaf.cosmo.dao.ItemDao;
@@ -123,7 +123,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             currentSession().setFlushMode(FlushMode.MANUAL);
 
             // take advantage of optimized caching with naturalId
-            Item item = (Item) currentSession().bySimpleNaturalId(HibItem.class).load(uid);
+            Item item = currentSession().bySimpleNaturalId(HibItem.class).load(uid);
 
             // Prevent proxied object from being returned
             if (item instanceof HibernateProxy)
@@ -189,7 +189,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             if(user==null)
                 throw new IllegalArgumentException("invalid user");
 
-            if(findRootItem(getBaseModelObject(user).getId())!=null)
+            if( findRootItem(getBaseModelObject(user).getId()) != null )
                 throw new RuntimeException("user already has root item");
 
             HomeCollectionItem newItem = new HibHomeCollectionItem();
@@ -521,10 +521,10 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      *         in collection
      */
     protected void verifyItemNameUnique(Item item, CollectionItem collection) {
-        Query hibQuery = currentSession().getNamedQuery("itemId.by.parentId.name");
+        TypedQuery hibQuery = currentSession().getNamedQuery("itemId.by.parentId.name");
         hibQuery.setParameter("name", item.getName()).setParameter("parentid",
                 ((HibItem) collection).getId());
-        List<Long> results = hibQuery.list();
+        List<Long> results = hibQuery.getResultList();
         if(!results.isEmpty()) {
             throw new DuplicateItemNameException(item, "item name " + item.getName() +
                     " already exists in collection " + collection.getUid());
@@ -561,7 +561,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
     protected Item findItemByParentAndName(Long userDbId, Long parentDbId,
             String name) {
-        Query hibQuery = null;
+        TypedQuery<Item> hibQuery;
         if (parentDbId != null) {
             hibQuery = currentSession().getNamedQuery(
                     "item.by.ownerId.parentId.name").setParameter("ownerid",
@@ -573,13 +573,13 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     "item.by.ownerId.nullParent.name").setParameter("ownerid",
                     userDbId).setParameter("name", name);
         }
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        return (Item) hibQuery.uniqueResult();
+        setManualFlush(hibQuery);
+        return getUniqueResult(hibQuery);
     }
 
     protected Item findItemByParentAndNameMinusItem(Long userDbId, Long parentDbId,
             String name, Long itemId) {
-        Query hibQuery = null;
+        TypedQuery hibQuery;
         if (parentDbId != null) {
             hibQuery = currentSession().getNamedQuery(
                     "item.by.ownerId.parentId.name.minusItem").setParameter("itemid", itemId)
@@ -592,18 +592,18 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     .setParameter("ownerid",
                     userDbId).setParameter("name", name);
         }
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        return (Item) hibQuery.uniqueResult();
+        setManualFlush(hibQuery);
+        return (Item) getUniqueResult(hibQuery);
     }
 
     protected HomeCollectionItem findRootItem(Long dbUserId) {
-        Query hibQuery = currentSession().getNamedQuery(
+        TypedQuery<HomeCollectionItem> hibQuery = currentSession().getNamedQuery(
                 "homeCollection.by.ownerId").setParameter("ownerid",
                 dbUserId);
-        hibQuery.setCacheable(true);
-        hibQuery.setFlushMode(FlushMode.MANUAL);
+        setCacheable(hibQuery);
+        setManualFlush(hibQuery);
 
-        return (HomeCollectionItem) hibQuery.uniqueResult();
+        return getUniqueResult(hibQuery);
     }
 
     protected void checkForDuplicateUid(Item item) {
@@ -611,11 +611,11 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         if (item.getUid() != null) {
 
             // Lookup item by uid
-            Query hibQuery = currentSession().getNamedQuery("itemid.by.uid")
+            TypedQuery hibQuery = currentSession().getNamedQuery("itemid.by.uid")
                     .setParameter("uid", item.getUid());
-            hibQuery.setFlushMode(FlushMode.MANUAL);
+            setManualFlush(hibQuery);
 
-            Long itemId = (Long) hibQuery.uniqueResult();
+            Long itemId = (Long) getUniqueResult(hibQuery);
 
             // if uid is in use throw exception
             if (itemId != null) {

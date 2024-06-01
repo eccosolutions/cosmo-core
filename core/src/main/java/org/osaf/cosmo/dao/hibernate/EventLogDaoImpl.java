@@ -18,11 +18,11 @@ package org.osaf.cosmo.dao.hibernate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.TypedQuery;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.osaf.cosmo.dao.EventLogDao;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.ContentItem;
@@ -74,11 +74,11 @@ public class EventLogDaoImpl extends HibernateSessionSupport implements EventLog
     public List<ItemChangeRecord> findChangesForCollection(
             CollectionItem collection, Date start, Date end) {
         try {
-            Query hibQuery = currentSession().getNamedQuery("logEntry.by.collection.date");
+            TypedQuery hibQuery = currentSession().getNamedQuery("logEntry.by.collection.date");
             hibQuery.setParameter("parentId", ((HibItem) collection).getId());
             hibQuery.setParameter("startDate", start);
             hibQuery.setParameter("endDate", end);
-            List<HibEventLogEntry> results = hibQuery.list();
+            List<HibEventLogEntry> results = hibQuery.getResultList();
 
             ArrayList<ItemChangeRecord> changeRecords = new ArrayList<ItemChangeRecord>();
 

@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.persistence.TypedQuery;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.osaf.cosmo.calendar.Instance;
 import org.osaf.cosmo.calendar.InstanceList;
@@ -56,7 +56,7 @@ import org.osaf.cosmo.model.hibernate.HibNoteItem;
 
 /**
  * Standard Implementation of <code>ItemFilterProcessor</code>.
- * Translates filter into HQL Query, executes
+ * Translates filter into HQL TypedQuery, executes
  * query and processes the results.
  */
 public class StandardItemFilterProcessor implements ItemFilterProcessor {
@@ -69,13 +69,13 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
      * @see org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor#processFilter(org.hibernate.Session, org.osaf.cosmo.model.filter.ItemFilter)
      */
     public Set<Item> processFilter(Session session, ItemFilter filter) {
-        Query hibQuery = buildQuery(session, filter);
-        List<Item> queryResults = hibQuery.list();
+        TypedQuery hibQuery = buildQuery(session, filter);
+        List<Item> queryResults = hibQuery.getResultList();
         return processResults(queryResults, filter);
     }
 
     /**
-     * Build Hibernate Query from ItemFilter using HQL.
+     * Build Hibernate TypedQuery from ItemFilter using HQL.
      * The query returned is essentially the first pass at
      * retrieving the matched items.  A second pass is required in
      * order determine if any recurring events match a timeRange
@@ -86,7 +86,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
      * @param filter item filter
      * @return hibernate query built using HQL
      */
-    public Query buildQuery(Session session, ItemFilter filter) {
+    public <T> TypedQuery<T> buildQuery(Session session, ItemFilter filter) {
         StringBuilder selectBuf = new StringBuilder();
         StringBuilder whereBuf = new StringBuilder();
         StringBuilder orderBuf = new StringBuilder();
@@ -120,7 +120,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             log.debug(selectBuf.toString());
         }
 
-        Query hqlQuery = session.createQuery(selectBuf.toString());
+        TypedQuery hqlQuery = session.createQuery(selectBuf.toString());
 
         for(Entry<String, Object> param: params.entrySet())
             hqlQuery.setParameter(param.getKey(), param.getValue());

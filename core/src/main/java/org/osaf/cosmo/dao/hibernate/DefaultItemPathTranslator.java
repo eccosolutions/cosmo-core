@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.Item;
@@ -153,11 +153,11 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
 
     protected Item findRootItemByOwnerAndName(Session session,
             String username, String name) {
-        Query hibQuery = session.getNamedQuery(
+        TypedQuery hibQuery = session.getNamedQuery(
                 "item.by.ownerName.name.nullParent").setParameter("username",
                 username).setParameter("name", name);
 
-        List results = hibQuery.list();
+        List results = hibQuery.getResultList();
         if (!results.isEmpty())
             return (Item) results.get(0);
         else
@@ -166,10 +166,10 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
 
     protected Item findItemByParentAndName(Session session, Item parent,
             String name) {
-        Query hibQuery = session.getNamedQuery("item.by.parent.name")
+        TypedQuery hibQuery = session.getNamedQuery("item.by.parent.name")
                 .setParameter("parent", parent).setParameter("name", name);
 
-        List results = hibQuery.list();
+        List results = hibQuery.getResultList();
         if (!results.isEmpty())
             return (Item) results.get(0);
         else

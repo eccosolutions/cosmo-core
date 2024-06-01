@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
@@ -28,7 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.osaf.cosmo.dao.UserDao;
@@ -159,9 +160,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
             // Need the total
             Long size = (Long) currentSession().getNamedQuery("user.count")
-                    .uniqueResult();
+                    .getSingleResult();
 
-            return new ArrayPagedList<User, User.SortType>(pageCriteria, results, size.intValue());
+            return new ArrayPagedList<>(pageCriteria, results, size.intValue());
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
@@ -236,10 +237,12 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     public PasswordRecovery getPasswordRecovery(String key){
         try {
-            Query hibQuery = currentSession().getNamedQuery("passwordRecovery.byKey")
-                    .setParameter("key", key);
-            hibQuery.setCacheable(true);
-            return (PasswordRecovery) hibQuery.uniqueResult();
+            TypedQuery hibQuery = currentSession().getNamedQuery("passwordRecovery.byKey")
+                .setParameter("key", key);
+            setCacheable(hibQuery);
+            return (PasswordRecovery) getUniqueResult(hibQuery);
+        } catch (NoResultException e) {
+            return null;
         } catch (HibernateException e) {
             currentSession().clear();
             throw SessionFactoryUtils.convertHibernateAccessException(e);
@@ -258,18 +261,18 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private User findUserByUsername(String username) {
         // take advantage of optimized caching with naturalId
-        return (User) currentSession().bySimpleNaturalId(HibUser.class).load(username);
+        return currentSession().bySimpleNaturalId(HibUser.class).load(username);
     }
 
     private User findUserByUsernameIgnoreCase(String username) {
         Session session = currentSession();
-        Query hibQuery = session.getNamedQuery("user.byUsername.ignorecase").setParameter(
+        TypedQuery<User> hibQuery = session.getNamedQuery("user.byUsername.ignorecase").setParameter(
                 "username", username);
-        hibQuery.setCacheable(true);
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        List users = hibQuery.list();
+        setCacheable(hibQuery);
+        setManualFlush(hibQuery);
+        var users = hibQuery.getResultList();
         if (!users.isEmpty())
-            return (User) users.get(0);
+            return users.get(0);
         else
             return null;
     }
@@ -277,13 +280,13 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
     private User findUserByUsernameOrEmailIgnoreCaseAndId(Long userId,
             String username, String email) {
         Session session = currentSession();
-        Query hibQuery = session.getNamedQuery(
+        TypedQuery hibQuery = session.getNamedQuery(
                 "user.byUsernameOrEmail.ignorecase.ingoreId").setParameter(
                 "username", username).setParameter("email", email)
                 .setParameter("userid", userId);
-        hibQuery.setCacheable(true);
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        List users = hibQuery.list();
+        setCacheable(hibQuery);
+        setManualFlush(hibQuery);
+        List users = hibQuery.getResultList();
         if (!users.isEmpty())
             return (User) users.get(0);
         else
@@ -292,11 +295,11 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private User findUserByEmail(String email) {
         Session session = currentSession();
-        Query hibQuery = session.getNamedQuery("user.byEmail").setParameter(
+        TypedQuery hibQuery = session.getNamedQuery("user.byEmail").setParameter(
                 "email", email);
-        hibQuery.setCacheable(true);
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        List users = hibQuery.list();
+        setCacheable(hibQuery);
+        setManualFlush(hibQuery);
+        List users = hibQuery.getResultList();
         if (!users.isEmpty())
             return (User) users.get(0);
         else
@@ -305,11 +308,11 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private User findUserByEmailIgnoreCase(String email) {
         Session session = currentSession();
-        Query hibQuery = session.getNamedQuery("user.byEmail.ignorecase").setParameter(
+        TypedQuery hibQuery = session.getNamedQuery("user.byEmail.ignorecase").setParameter(
                 "email", email);
-        hibQuery.setCacheable(true);
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        List users = hibQuery.list();
+        setCacheable(hibQuery);
+        setManualFlush(hibQuery);
+        List users = hibQuery.getResultList();
         if (!users.isEmpty())
             return (User) users.get(0);
         else
@@ -318,11 +321,11 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private User findUserById(long userId) {
         Session session = currentSession();
-        Query hibQuery = session.getNamedQuery(
+        TypedQuery hibQuery = session.getNamedQuery(
                 "user.byId").setParameter("userId", userId);
-        hibQuery.setCacheable(true);
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        List users = hibQuery.list();
+        setCacheable(hibQuery);
+        setManualFlush(hibQuery);
+        List users = hibQuery.getResultList();
         if (!users.isEmpty())
             return (User) users.get(0);
         else
@@ -331,11 +334,11 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private User findUserByUid(String uid) {
         Session session = currentSession();
-        Query hibQuery = session.getNamedQuery("user.byUid").setParameter(
+        TypedQuery hibQuery = session.getNamedQuery("user.byUid").setParameter(
                 "uid", uid);
-        hibQuery.setCacheable(true);
-        hibQuery.setFlushMode(FlushMode.MANUAL);
-        return (User) hibQuery.uniqueResult();
+        setCacheable(hibQuery);
+        setManualFlush(hibQuery);
+        return (User) getUniqueResult(hibQuery);
     }
 
     private void deleteAllPasswordRecoveries(User user) {
@@ -346,10 +349,10 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private User findUserByActivationId(String id) {
         Session session = currentSession();
-        Query hibQuery = session.getNamedQuery("user.byActivationId").setParameter(
+        TypedQuery hibQuery = session.getNamedQuery("user.byActivationId").setParameter(
                 "activationId", id);
-        hibQuery.setCacheable(true);
-        return (User) hibQuery.uniqueResult();
+        setCacheable(hibQuery);
+        return (User) getUniqueResult(hibQuery);
     }
 
     private static class UserQueryCriteriaBuilder<SortType extends User.SortType> extends

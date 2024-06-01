@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ import org.osaf.cosmo.model.User;
  * <dt>General calendar query</dt>
  * <dd>Finds items that match one or more iCalendar components, properties
  * and/or parameters. The items may be required to occur within a specified
- * time period. Query criteria are expressed using a
+ * time period. TypedQuery criteria are expressed using a
  * {@link CalendarFilter}.</dd>
  * <dt>Free-busy query</dt>
  * <dd>Returns a description of the free-busy periods for items that occur
@@ -44,8 +44,8 @@ import org.osaf.cosmo.model.User;
  * Calendar queries will only ever match instances of {@link ICalendarItem}.
  * </p>
  */
-public interface CalendarQueryProcessor { 
- 
+public interface CalendarQueryProcessor {
+
     /**
      * <p>
      * Executes a general calendar query against a collection. Returns all
@@ -61,7 +61,7 @@ public interface CalendarQueryProcessor {
      * </p>
      */
     public boolean filterQuery(ICalendarItem item, CalendarFilter filter);
-    
+
     /**
      * <p>
      * Executes a free-busy query against a User. Returns a

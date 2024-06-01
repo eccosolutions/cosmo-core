@@ -15,12 +15,14 @@
  */
 package org.osaf.cosmo.dao.hibernate.query;
 
+import static org.osaf.cosmo.dao.hibernate.HibernateSessionSupport.getQueryString;
+
+import javax.persistence.TypedQuery;
 import org.junit.Assert;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
-import org.hibernate.Query;
 import org.junit.Test;
 import org.osaf.cosmo.dao.hibernate.AbstractHibernateDaoTestCase;
 import org.osaf.cosmo.model.CollectionItem;
@@ -50,40 +52,40 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
     public void testUidQuery() {
         ItemFilter filter = new ItemFilter();
         filter.setUid(Restrictions.eq("abc"));
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where i.uid=:param0", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibItem i where i.uid=:param0", getQueryString(query));
     }
 
     @Test
     public void testDisplayNameQuery() {
         ItemFilter filter = new ItemFilter();
         filter.setDisplayName(Restrictions.eq("test"));
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where i.displayName=:param0", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibItem i where i.displayName=:param0", getQueryString(query));
 
         filter.setDisplayName(Restrictions.neq("test"));
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where i.displayName!=:param0", query.getQueryString());
+        Assert.assertEquals("select i from HibItem i where i.displayName!=:param0", getQueryString(query));
 
         filter.setDisplayName(Restrictions.like("test"));
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where i.displayName like :param0", query.getQueryString());
+        Assert.assertEquals("select i from HibItem i where i.displayName like :param0", getQueryString(query));
 
         filter.setDisplayName(Restrictions.nlike("test"));
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where i.displayName not like :param0", query.getQueryString());
+        Assert.assertEquals("select i from HibItem i where i.displayName not like :param0", getQueryString(query));
 
         filter.setDisplayName(Restrictions.isNull());
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where i.displayName is null", query.getQueryString());
+        Assert.assertEquals("select i from HibItem i where i.displayName is null", getQueryString(query));
 
         filter.setDisplayName(Restrictions.ilike("test"));
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where lower(i.displayName) like :param0", query.getQueryString());
+        Assert.assertEquals("select i from HibItem i where lower(i.displayName) like :param0", getQueryString(query));
 
         filter.setDisplayName(Restrictions.nilike("test"));
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i where lower(i.displayName) not like :param0", query.getQueryString());
+        Assert.assertEquals("select i from HibItem i where lower(i.displayName) not like :param0", getQueryString(query));
 
     }
 
@@ -92,8 +94,8 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         ItemFilter filter = new ItemFilter();
         CollectionItem parent = new HibCollectionItem();
         filter.setParent(parent);
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i join i.parentDetails pd where pd.primaryKey.collection=:parent", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibItem i join i.parentDetails pd where pd.primaryKey.collection=:parent", getQueryString(query));
     }
 
     @Test
@@ -102,8 +104,8 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         CollectionItem parent = new HibCollectionItem();
         filter.setParent(parent);
         filter.setDisplayName(Restrictions.eq("test"));
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibItem i join i.parentDetails pd where pd.primaryKey.collection=:parent and i.displayName=:param1", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibItem i join i.parentDetails pd where pd.primaryKey.collection=:parent and i.displayName=:param1", getQueryString(query));
     }
 
     @Test
@@ -111,8 +113,8 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         ContentItemFilter filter = new ContentItemFilter();
         CollectionItem parent = new HibCollectionItem();
         filter.setParent(parent);
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibContentItem i join i.parentDetails pd where pd.primaryKey.collection=:parent", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibContentItem i join i.parentDetails pd where pd.primaryKey.collection=:parent", getQueryString(query));
 
     }
 
@@ -125,39 +127,39 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         filter.setIcalUid(Restrictions.eq("icaluid"));
         filter.setBody(Restrictions.eq("body"));
 
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibTextAttribute ta3 where pd.primaryKey.collection=:parent and i.displayName=:param1 and i.icalUid=:param2 and ta3.item=i and ta3.qname=:ta3qname and ta3.value=:param4", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibTextAttribute ta3 where pd.primaryKey.collection=:parent and i.displayName=:param1 and i.icalUid=:param2 and ta3.item=i and ta3.qname=:ta3qname and ta3.value=:param4", getQueryString(query));
 
         filter = new NoteItemFilter();
         filter.setIsModification(true);
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where i.modifies is not null", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i where i.modifies is not null", getQueryString(query));
 
         filter.setIsModification(false);
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where i.modifies is null", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i where i.modifies is null", getQueryString(query));
 
         filter.setIsModification(null);
 
         filter.setHasModifications(true);
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where size(i.modifications) > 0", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i where size(i.modifications) > 0", getQueryString(query));
 
         filter.setHasModifications(false);
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where size(i.modifications) = 0", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i where size(i.modifications) = 0", getQueryString(query));
 
         filter =  new NoteItemFilter();
         filter.setMasterNoteItem(new HibNoteItem());
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where (i=:masterItem or i.modifies=:masterItem)", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i where (i=:masterItem or i.modifies=:masterItem)", getQueryString(query));
 
         filter = new NoteItemFilter();
         Date date1 = new Date(1000);
         Date date2 = new Date(2000);
         filter.setReminderTime(Restrictions.between(date1,date2));
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i, HibTimestampAttribute tsa0 where tsa0.item=i and tsa0.qname=:tsa0qname and tsa0.value between :param1 and :param2", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i, HibTimestampAttribute tsa0 where tsa0.item=i and tsa0.qname=:tsa0qname and tsa0.value between :param1 and :param2", getQueryString(query));
 
     }
 
@@ -171,12 +173,12 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         filter.setIcalUid(Restrictions.eq("icaluid"));
         //filter.setBody("body");
         filter.getStampFilters().add(eventFilter);
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and i.displayName=:param1 and es.item=i and i.icalUid=:param2", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and i.displayName=:param1 and es.item=i and i.icalUid=:param2", getQueryString(query));
 
         eventFilter.setIsRecurring(true);
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and i.displayName=:param1 and es.item=i and (es.timeRangeIndex.isRecurring=true or i.modifies is not null) and i.icalUid=:param2", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and i.displayName=:param1 and es.item=i and (es.timeRangeIndex.isRecurring=true or i.modifies is not null) and i.icalUid=:param2", getQueryString(query));
     }
 
     @Test
@@ -190,8 +192,8 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         CollectionItem parent = new HibCollectionItem();
         filter.setParent(parent);
         filter.getStampFilters().add(eventFilter);
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and es.item=i and ( (es.timeRangeIndex.isFloating=true and es.timeRangeIndex.startDate < '20070201T040000' and es.timeRangeIndex.endDate > '20070101T040000') or (es.timeRangeIndex.isFloating=false and es.timeRangeIndex.startDate < '20070201T100000Z' and es.timeRangeIndex.endDate > '20070101T100000Z') or (es.timeRangeIndex.startDate=es.timeRangeIndex.endDate and (es.timeRangeIndex.startDate='20070101T040000' or es.timeRangeIndex.startDate='20070101T100000Z')))", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibNoteItem i join i.parentDetails pd, HibBaseEventStamp es where pd.primaryKey.collection=:parent and es.item=i and ( (es.timeRangeIndex.isFloating=true and es.timeRangeIndex.startDate < '20070201T040000' and es.timeRangeIndex.endDate > '20070101T040000') or (es.timeRangeIndex.isFloating=false and es.timeRangeIndex.startDate < '20070201T100000Z' and es.timeRangeIndex.endDate > '20070101T100000Z') or (es.timeRangeIndex.startDate=es.timeRangeIndex.endDate and (es.timeRangeIndex.startDate='20070101T040000' or es.timeRangeIndex.startDate='20070101T100000Z')))", getQueryString(query));
     }
 
     @Test
@@ -200,11 +202,11 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         StampFilter missingFilter = new StampFilter();
         missingFilter.setStampClass(EventStamp.class);
         filter.getStampFilters().add(missingFilter);
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where exists (select s.id from HibStamp s where s.item=i and s.class=HibEventStamp)", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibNoteItem i where exists (select s.id from HibStamp s where s.item=i and s.class=HibEventStamp)", getQueryString(query));
         missingFilter.setMissing(true);
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where not exists (select s.id from HibStamp s where s.item=i and s.class=HibEventStamp)", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i where not exists (select s.id from HibStamp s where s.item=i and s.class=HibEventStamp)", getQueryString(query));
     }
 
     @Test
@@ -213,11 +215,11 @@ public class StandardItemFilterProcessorTest extends AbstractHibernateDaoTestCas
         AttributeFilter missingFilter = new AttributeFilter();
         missingFilter.setQname(new HibQName("ns","name"));
         filter.getAttributeFilters().add(missingFilter);
-        Query query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where exists (select a.id from HibAttribute a where a.item=i and a.qname=:param0)", query.getQueryString());
+        TypedQuery<?> query =  queryBuilder.buildQuery(getSession(), filter);
+        Assert.assertEquals("select i from HibNoteItem i where exists (select a.id from HibAttribute a where a.item=i and a.qname=:param0)", getQueryString(query));
         missingFilter.setMissing(true);
         query =  queryBuilder.buildQuery(getSession(), filter);
-        Assert.assertEquals("select i from HibNoteItem i where not exists (select a.id from HibAttribute a where a.item=i and a.qname=:param0)", query.getQueryString());
+        Assert.assertEquals("select i from HibNoteItem i where not exists (select a.id from HibAttribute a where a.item=i and a.qname=:param0)", getQueryString(query));
     }
 
 }
