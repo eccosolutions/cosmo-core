@@ -21,8 +21,6 @@ import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
 import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.util.PageCriteria;
-import org.osaf.cosmo.util.PagedList;
 import org.springframework.dao.DataRetrievalFailureException;
 
 /**
@@ -38,14 +36,6 @@ public interface UserDao extends Dao {
      * Returns an unordered set of all user accounts in the repository.
      */
     Set<User> getUsers();
-
-    /**
-     * Returns the sorted list of user accounts corresponding to the
-     * given <code>PageCriteria</code>.
-     *
-     * @param pageCriteria the pagination criteria
-     */
-    PagedList getUsers(PageCriteria<User.SortType> pageCriteria);
 
     /**
      * Returns the user account identified by the given username.

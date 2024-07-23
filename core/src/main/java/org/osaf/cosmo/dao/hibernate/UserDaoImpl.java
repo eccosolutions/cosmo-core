@@ -38,9 +38,6 @@ import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.BaseModelObject;
 import org.osaf.cosmo.model.hibernate.HibUser;
-import org.osaf.cosmo.util.ArrayPagedList;
-import org.osaf.cosmo.util.PageCriteria;
-import org.osaf.cosmo.util.PagedList;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 /**
@@ -49,8 +46,6 @@ import org.springframework.orm.hibernate5.SessionFactoryUtils;
 public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private static final Log log = LogFactory.getLog(UserDaoImpl.class);
-
-    private static final QueryCriteriaBuilder<User.SortType> queryCriteriaBuilder = new UserQueryCriteriaBuilder<User.SortType>();
 
     public User createUser(User user) {
 
@@ -140,7 +135,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
     public Set<User> getUsers() {
         try {
             HashSet<User> users = new HashSet<User>();
-            Iterator it = currentSession().getNamedQuery("user.all").iterate();
+            Iterator it = currentSession().getNamedQuery("user.all").stream().iterator();
             while (it.hasNext())
                 users.add((User) it.next());
 
@@ -150,24 +145,6 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
-
-    public PagedList getUsers(PageCriteria<User.SortType> pageCriteria) {
-        try {
-            Criteria crit = queryCriteriaBuilder.buildQueryCriteria(
-                    currentSession(), pageCriteria);
-            List<User> results = crit.list();
-
-            // Need the total
-            Long size = (Long) currentSession().getNamedQuery("user.count")
-                    .getSingleResult();
-
-            return new ArrayPagedList<>(pageCriteria, results, size.intValue());
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        }
-    }
-
 
     public void removeUser(String username) {
         try {
@@ -352,47 +329,6 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
                 "activationId", id);
         setCacheable(hibQuery);
         return (User) getUniqueResult(hibQuery);
-    }
-
-    private static class UserQueryCriteriaBuilder<SortType extends User.SortType> extends
-            StandardQueryCriteriaBuilder<SortType> {
-
-        public UserQueryCriteriaBuilder() {
-            super(User.class);
-        }
-
-        protected List<Order> buildOrders(PageCriteria<SortType> pageCriteria) {
-            List<Order> orders = new ArrayList<Order>();
-
-            User.SortType sort = pageCriteria.getSortType();
-            if (sort == null)
-                sort = User.SortType.USERNAME;
-
-            if (sort.equals(User.SortType.NAME)) {
-                orders.add(createOrder(pageCriteria, "lastName"));
-                orders.add(createOrder(pageCriteria, "firstName"));
-            }
-            else if (sort.equals(User.SortType.ADMIN))
-                orders.add(createOrder(pageCriteria, "admin"));
-            else if (sort.equals(User.SortType.EMAIL))
-                orders.add(createOrder(pageCriteria, "email"));
-            else if (sort.equals(User.SortType.CREATED))
-                orders.add(createOrder(pageCriteria, "CreatedDate"));
-            else if (sort.equals(User.SortType.LAST_MODIFIED))
-                orders.add(createOrder(pageCriteria, "ModifiedDate"));
-            else if (sort.equals(User.SortType.ACTIVATED))
-                orders.add(createOrder(pageCriteria, "activationId"));
-            else
-                orders.add(createOrder(pageCriteria, "username"));
-
-            return orders;
-        }
-
-        private Order createOrder(PageCriteria pageCriteria, String property) {
-            return pageCriteria.isSortAscending() ?
-                Order.asc(property) :
-                   Order.desc(property);
-        }
     }
 
     protected BaseModelObject getBaseModelObject(Object obj) {

@@ -66,18 +66,6 @@ public class StandardUserService extends BaseService implements UserService {
     }
 
     /**
-     * Returns the sorted list of user accounts corresponding to the
-     * given <code>PageCriteria</code>.
-     *
-     * @param pageCriteria the pagination criteria
-     */
-    public PagedList<User, User.SortType> getUsers(PageCriteria<User.SortType> pageCriteria) {
-        if (log.isDebugEnabled())
-            log.debug("getting users for criteria " + pageCriteria);
-        return userDao.getUsers(pageCriteria);
-    }
-
-    /**
      * Returns the user account identified by the given username.
      *
      * @param username the username of the account to return

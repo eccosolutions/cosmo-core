@@ -521,7 +521,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      *         in collection
      */
     protected void verifyItemNameUnique(Item item, CollectionItem collection) {
-        TypedQuery hibQuery = currentSession().getNamedQuery("itemId.by.parentId.name");
+        TypedQuery<Long> hibQuery = currentSession().getNamedQuery("itemId.by.parentId.name");
         hibQuery.setParameter("name", item.getName()).setParameter("parentid",
                 ((HibItem) collection).getId());
         List<Long> results = hibQuery.getResultList();
@@ -539,7 +539,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      * @return DbItem with specified dbId
      */
     protected Item findItemByDbId(Long dbId) {
-        return (Item) currentSession().get(Item.class, dbId);
+        return currentSession().get(Item.class, dbId);
     }
 
     // Set server generated item properties
@@ -579,7 +579,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
     protected Item findItemByParentAndNameMinusItem(Long userDbId, Long parentDbId,
             String name, Long itemId) {
-        TypedQuery hibQuery;
+        TypedQuery<Item> hibQuery;
         if (parentDbId != null) {
             hibQuery = currentSession().getNamedQuery(
                     "item.by.ownerId.parentId.name.minusItem").setParameter("itemid", itemId)
@@ -593,7 +593,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     userDbId).setParameter("name", name);
         }
         setManualFlush(hibQuery);
-        return (Item) getUniqueResult(hibQuery);
+        return getUniqueResult(hibQuery);
     }
 
     protected HomeCollectionItem findRootItem(Long dbUserId) {
@@ -611,11 +611,11 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         if (item.getUid() != null) {
 
             // Lookup item by uid
-            TypedQuery hibQuery = currentSession().getNamedQuery("itemid.by.uid")
+            TypedQuery<Long> hibQuery = currentSession().getNamedQuery("itemid.by.uid")
                     .setParameter("uid", item.getUid());
             setManualFlush(hibQuery);
 
-            Long itemId = (Long) getUniqueResult(hibQuery);
+            Long itemId = getUniqueResult(hibQuery);
 
             // if uid is in use throw exception
             if (itemId != null) {

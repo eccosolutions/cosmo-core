@@ -46,17 +46,6 @@ public interface UserService extends Service {
     User getUser(String username);
 
     /**
-     * Returns the all user accounts meeting the supplied
-     * <code>PageCriteria</code>'s requirements
-     *
-     * @param pageCriteria the Pagination Criteria for the PagedList
-     *
-     * @throws IllegalArgumentException if an invalid pageNumber is supplied in the <code>PageCriteria</code>
-     */
-    PagedList<User, User.SortType> getUsers(
-            PageCriteria<User.SortType> pageCriteria);
-
-    /**
      * Returns the user account identified by the given id.
      *
      * @param userId the id of the account to return
