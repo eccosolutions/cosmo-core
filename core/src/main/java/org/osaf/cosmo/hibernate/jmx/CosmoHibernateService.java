@@ -15,14 +15,13 @@
  */
 package org.osaf.cosmo.hibernate.jmx;
 
+import java.time.Instant;
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.CacheRegionStatistics;
 import org.hibernate.stat.CollectionStatistics;
 import org.hibernate.stat.EntityStatistics;
-import org.hibernate.stat.NaturalIdCacheStatistics;
 import org.hibernate.stat.NaturalIdStatistics;
 import org.hibernate.stat.QueryStatistics;
-import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
 
 /**
@@ -45,7 +44,7 @@ public class CosmoHibernateService implements CosmoHibernateServiceMBean {
 
     public void evictEntity(String entityName) {
         try {
-            this.sessionFactory.getCache().evictEntity(entityName, null /* TODO: Only active via JMX */);
+            this.sessionFactory.getCache().evictEntityData(entityName /* TODO: Only active via JMX */);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -66,19 +65,9 @@ public class CosmoHibernateService implements CosmoHibernateServiceMBean {
         return statistics.getCollectionStatistics(role);
     }
 
-  @Override
-  public NaturalIdStatistics getNaturalIdStatistics(String s) {
-    return statistics.getNaturalIdStatistics(s);
-  }
-
-  @Override
-    public SecondLevelCacheStatistics getSecondLevelCacheStatistics(String regionName) {
-        return statistics.getSecondLevelCacheStatistics(regionName);
-    }
-
     @Override
-    public NaturalIdCacheStatistics getNaturalIdCacheStatistics(String regionName) {
-        return statistics.getNaturalIdCacheStatistics(regionName);
+    public NaturalIdStatistics getNaturalIdStatistics(String s) {
+        return statistics.getNaturalIdStatistics(s);
     }
 
     @Override
@@ -267,6 +256,11 @@ public class CosmoHibernateService implements CosmoHibernateServiceMBean {
     }
 
     @Override
+    public Instant getStart() {
+        return statistics.getStart();
+    }
+
+    @Override
     public long getStartTime() {
         return statistics.getStartTime();
     }
@@ -329,5 +323,15 @@ public class CosmoHibernateService implements CosmoHibernateServiceMBean {
     @Override
     public long getOptimisticFailureCount() {
         return statistics.getOptimisticFailureCount();
+    }
+
+    @Override
+    public long getQueryPlanCacheHitCount() {
+        return statistics.getQueryPlanCacheHitCount();
+    }
+
+    @Override
+    public long getQueryPlanCacheMissCount() {
+        return statistics.getQueryPlanCacheMissCount();
     }
 }
