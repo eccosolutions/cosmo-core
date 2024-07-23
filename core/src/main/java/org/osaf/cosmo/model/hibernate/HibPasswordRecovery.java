@@ -29,7 +29,9 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Index;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
+import org.hibernate.type.descriptor.jdbc.TimestampJdbcType;
 import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
 
@@ -50,11 +52,11 @@ public class HibPasswordRecovery extends BaseModelObject implements PasswordReco
     private String key;
 
     @Column(name = "creationdate")
-    @Type(type="timestamp")
+    @JdbcType(TimestampJdbcType.class)  // MySQL datetime
     private Date created;
 
     @Column(name = "timeout")
-    @Type(type = "long")
+    @JdbcType(BigIntJdbcType.class)  // bigint
     private long timeout;
 
     @ManyToOne(targetEntity=HibUser.class, fetch = FetchType.LAZY)

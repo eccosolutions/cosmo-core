@@ -21,7 +21,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JavaType;
+import org.hibernate.type.descriptor.java.BigDecimalJavaType;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.DecimalAttribute;
 import org.osaf.cosmo.model.ModelValidationException;
@@ -40,7 +41,7 @@ public class HibDecimalAttribute extends HibAttribute implements java.io.Seriali
     private static final long serialVersionUID = 7830581788843520989L;
 
     @Column(name = "decvalue", precision = 19, scale = 6)
-    @Type(type="org.hibernate.type.BigDecimalType")
+    @JavaType(BigDecimalJavaType.class)
     private BigDecimal value;
 
     /** default constructor */
