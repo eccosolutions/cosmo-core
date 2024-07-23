@@ -30,7 +30,8 @@ import jakarta.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.Tombstone;
 
@@ -47,7 +48,7 @@ import org.osaf.cosmo.model.Tombstone;
 public abstract class HibTombstone extends BaseModelObject implements Tombstone {
 
     @Column(name = "removedate", nullable = false)
-    @Type(type="long_timestamp")
+    @JdbcType(BigIntJdbcType.class)
     private Date timestamp = null;
 
     @ManyToOne(targetEntity=HibItem.class, fetch = FetchType.LAZY)
