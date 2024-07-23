@@ -754,7 +754,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             return;
 
         // ignore modifications
-        if(item instanceof NoteItem && ((NoteItem) item).getModifies()!=null)
+        if(isNoteModification(item))
             return;
 
         for (CollectionItem parent : parents)
