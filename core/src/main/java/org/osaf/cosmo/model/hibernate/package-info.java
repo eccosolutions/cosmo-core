@@ -34,11 +34,6 @@
     ),
 
     @TypeDef(
-            name="boolean_integer",
-            typeClass = org.osaf.cosmo.hibernate.BooleanIntegerType.class
-    ),
-
-    @TypeDef(
             name="xml_clob",
             typeClass = org.osaf.cosmo.hibernate.ElementType.class
     )
