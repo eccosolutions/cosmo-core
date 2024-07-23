@@ -7,8 +7,9 @@ import org.hibernate.engine.jdbc.CharacterStream;
 import org.hibernate.engine.jdbc.ClobProxy;
 import org.hibernate.engine.jdbc.internal.CharacterStreamImpl;
 import org.hibernate.type.descriptor.WrapperOptions;
-import org.hibernate.type.descriptor.java.AbstractTypeDescriptor;
+import org.hibernate.type.descriptor.java.AbstractJavaType;
 import org.hibernate.type.descriptor.java.DataHelper;
+import org.hibernate.type.descriptor.java.MutableMutabilityPlan;
 import org.osaf.cosmo.xml.DomReader;
 import org.osaf.cosmo.xml.DomWriter;
 import org.w3c.dom.Element;
@@ -33,15 +34,18 @@ import java.sql.SQLException;
  *  We could register (using service-provider - see https://stackoverflow.com/a/21518400)
  *  but we can avoid registering by using @TypeDef (exists in package-info)
  *  other items of interest: MaterializedClobType / ClobTypeDescriptor
+ *  <p>>
+ *
+ *  See https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#basic-legacy
  */
-public class ElementTypeDescriptor extends AbstractTypeDescriptor<Element> {
+public class ElementTypeDescriptor extends AbstractJavaType<Element> {
 
     private static final Log log = LogFactory.getLog(ElementTypeDescriptor.class);
 
     public static final ElementTypeDescriptor INSTANCE = new ElementTypeDescriptor();
 
     protected ElementTypeDescriptor() {
-        super(Element.class, new ElementType.ElementMutabilityPlan());
+        super(Element.class, new ElementMutabilityPlan());
     }
 
     @Override
@@ -59,16 +63,6 @@ public class ElementTypeDescriptor extends AbstractTypeDescriptor<Element> {
         } catch (Exception e) {
             log.error("Error serializing XML clob", e);
             throw new HibernateException("Error serializing XML clob: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public Element fromString(String string) {
-        try {
-            return (Element) DomReader.read(string);
-        } catch (Exception e) {
-            log.error("Error deserializing XML clob '" + string + "'", e);
-            return null;
         }
     }
 
@@ -126,4 +120,12 @@ public class ElementTypeDescriptor extends AbstractTypeDescriptor<Element> {
         throw unknownWrap(value.getClass());
     }
 
+    protected static class ElementMutabilityPlan extends MutableMutabilityPlan<Element> {
+        @Override
+        protected Element deepCopyNotNull(Element value) {
+            if (value == null)
+                return null;
+            return (Element) value.cloneNode(true);
+        }
+    }
 }

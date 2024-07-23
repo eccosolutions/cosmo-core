@@ -22,11 +22,6 @@
     @TypeDef(
             name = "calendar_clob",
             typeClass = org.osaf.cosmo.hibernate.CalendarClobType.class
-    ),
-
-    @TypeDef(
-            name="xml_clob",
-            typeClass = org.osaf.cosmo.hibernate.ElementType.class
     )
 
 })
