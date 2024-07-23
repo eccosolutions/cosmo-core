@@ -25,11 +25,6 @@
     ),
 
     @TypeDef(
-            name="long_timestamp",
-            typeClass = org.osaf.cosmo.hibernate.LongTimestampType.class
-    ),
-
-    @TypeDef(
             name="xml_clob",
             typeClass = org.osaf.cosmo.hibernate.ElementType.class
     )

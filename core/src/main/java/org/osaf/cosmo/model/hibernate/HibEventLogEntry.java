@@ -21,7 +21,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 
 /**
  * Persistent event log entry.
@@ -31,7 +32,7 @@ import org.hibernate.annotations.Type;
 public class HibEventLogEntry extends BaseModelObject {
 
     @Column(name = "entrydate")
-    @Type(type="long_timestamp")
+    @JdbcType(BigIntJdbcType.class)
     private Date entryDate = new Date();
 
     @Column(name = "eventtype", nullable=false, length=64)

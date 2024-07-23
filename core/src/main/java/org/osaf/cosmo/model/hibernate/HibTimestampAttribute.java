@@ -21,7 +21,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.ModelValidationException;
@@ -42,7 +43,7 @@ public class HibTimestampAttribute extends HibAttribute implements
     private static final long serialVersionUID = 5263977785074085449L;
 
     @Column(name = "intvalue")
-    @Type(type="long_timestamp")
+    @JdbcType(BigIntJdbcType.class)
     private Date value;
 
     /** default constructor */
