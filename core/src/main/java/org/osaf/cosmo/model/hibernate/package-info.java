@@ -23,10 +23,6 @@
             name = "calendar_clob",
             typeClass = org.osaf.cosmo.hibernate.CalendarClobType.class
     ),
-    @TypeDef(
-            name="composite_calendar",
-            typeClass = org.osaf.cosmo.hibernate.CalendarType.class
-    ),
 
     @TypeDef(
             name="long_timestamp",

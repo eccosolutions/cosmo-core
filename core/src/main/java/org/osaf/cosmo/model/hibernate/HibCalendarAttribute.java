@@ -40,7 +40,7 @@ public class HibCalendarAttribute extends HibAttribute implements
 
     @Columns(columns = { 
             @Column(name = "datevalue"), @Column(name = "tzvalue", length=32) })
-    @Type(type="composite_calendar")
+//   UNUSED we think: @Type(type="composite_calendar")
     private Calendar value;
 
     /** default constructor */
