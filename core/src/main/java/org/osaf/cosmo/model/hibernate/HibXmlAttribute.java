@@ -18,7 +18,8 @@ package org.osaf.cosmo.model.hibernate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.JavaType;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.osaf.cosmo.hibernate.ElementTypeDescriptor;
 import org.osaf.cosmo.model.*;
 import org.w3c.dom.Element;
@@ -38,6 +39,7 @@ public class HibXmlAttribute extends HibAttribute
     private static final Log log = LogFactory.getLog(XmlAttribute.class);
 
     @Column(name="textvalue", length=102400000)
+    @JdbcTypeCode(SqlTypes.CLOB)
     @JavaType(ElementTypeDescriptor.class)
     private Element value;
 

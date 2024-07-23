@@ -23,8 +23,13 @@ import net.fortuna.ical4j.model.parameter.TzId;
 import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.parameter.XParameter;
 import net.fortuna.ical4j.model.property.*;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JavaType;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import org.hibernate.type.descriptor.jdbc.ClobJdbcType;
 import org.osaf.cosmo.calendar.ICalendarUtils;
+import org.osaf.cosmo.hibernate.CalendarClobType.CalendarTypeDescriptor;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
 import org.osaf.cosmo.model.BaseEventStamp;
 import org.osaf.cosmo.model.Item;
@@ -57,8 +62,9 @@ public abstract class HibBaseEventStamp extends HibStamp
     protected static final String VALUE_MISSING = "MISSING";
 
     @Column(table="cosmo_event_stamp", name = "icaldata", length=102400000, nullable = false)
-    @Type(type="calendar_clob")
+    @JdbcTypeCode(SqlTypes.CLOB)
     @Lob
+    @JavaType(CalendarTypeDescriptor.class)
     @NotNull
     private Calendar eventCalendar = null;
 

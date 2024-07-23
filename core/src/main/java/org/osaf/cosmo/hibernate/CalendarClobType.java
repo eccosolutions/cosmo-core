@@ -20,6 +20,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VAvailability;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +31,6 @@ import org.hibernate.engine.jdbc.internal.CharacterStreamImpl;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractJavaType;
-import org.hibernate.type.descriptor.java.ClobJavaType;
 import org.hibernate.type.descriptor.java.MutabilityPlan;
 import org.hibernate.type.descriptor.java.MutableMutabilityPlan;
 import org.hibernate.type.descriptor.jdbc.ClobJdbcType;
@@ -69,19 +69,14 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
         return new CalendarMutabilityPlan();
     }
 
-    public Class returnedClass() {
-        return Calendar.class;
-    }
-
     private static class CalendarMutabilityPlan extends MutableMutabilityPlan<Calendar> {
         @Override
         protected Calendar deepCopyNotNull(Calendar value) {
-            final Calendar original = (Calendar) value;
             try {
-                final Calendar copy = new Calendar(original);
+                final Calendar copy = new Calendar(value);
                 // TODO: Remove the below availability mangling when the underlying iCal bug is fixed
-                final ComponentList vAvailabilities = copy.getComponents(Component.VAVAILABILITY);
-                final ComponentList originalAvailabilities = original.getComponents(Component.VAVAILABILITY);
+                final ComponentList<CalendarComponent> vAvailabilities = copy.getComponents(Component.VAVAILABILITY);
+                final ComponentList<CalendarComponent> originalAvailabilities = value.getComponents(Component.VAVAILABILITY);
                 for (int i = 0; i < vAvailabilities.size(); i++) {
                     VAvailability vAvailability = (VAvailability) vAvailabilities.get(i);
                     if (vAvailability.getAvailable().isEmpty()) {
@@ -97,7 +92,7 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
             } catch (IOException e) {
                 throw new HibernateException("Unable to read original calendar", e);
             } catch (ParseException e) {
-                log.error("parse error with following ics:" + original.toString());
+                log.error("parse error with following ics:" + value);
                 throw new HibernateException("Unable to parse original calendar", e);
             } catch (URISyntaxException e) {
                 throw new HibernateException("Unknown syntax exception", e);
@@ -105,7 +100,8 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
         }
     }
 
-    private static class CalendarTypeDescriptor extends AbstractJavaType<Calendar> {
+    /** for what was calendar_clob */
+    public static class CalendarTypeDescriptor extends AbstractJavaType<Calendar> {
         public CalendarTypeDescriptor() {
             super(Calendar.class, new CalendarMutabilityPlan());
         }
@@ -115,18 +111,7 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
             return value.toString();
         }
 
-        public Calendar fromString(String string) {
-            try {
-                return CalendarUtils.parseCalendar(string);
-            } catch (ParserException e) {
-                log.error("error parsing icalendar from db", e);
-                // shouldn't happen because we always persist valid data
-                throw new HibernateException("cannot parse icalendar stream");
-            } catch (IOException ioe) {
-                throw new HibernateException("cannot read icalendar stream");
-            }
-        }
-
+        @SuppressWarnings("unchecked")
         @Override
         public <X> X unwrap(Calendar value, Class<X> type, WrapperOptions options) {
             if (value == null) {
@@ -151,11 +136,8 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
                 } else if (Calendar.class.isAssignableFrom(value.getClass())) {
                     return (Calendar) value;
                 } else if (Clob.class.isAssignableFrom(value.getClass())) {
-                    final Reader characterStream = ((Clob) value).getCharacterStream();
-                    try {
+                    try (Reader characterStream = ((Clob) value).getCharacterStream()) {
                         return CalendarUtils.parseCalendar(characterStream);
-                    } finally {
-                        characterStream.close();
                     }
                 } else if (Reader.class.isAssignableFrom(value.getClass())) {
                     try {
