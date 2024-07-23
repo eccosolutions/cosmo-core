@@ -16,6 +16,7 @@
 package org.osaf.cosmo.model.hibernate;
 
 import org.hibernate.annotations.Type;
+import org.osaf.cosmo.hibernate.LongTimestampType;
 import org.osaf.cosmo.model.AuditableObject;
 import org.osaf.cosmo.model.EntityFactory;
 
@@ -32,7 +33,7 @@ public abstract class HibAuditableObject extends BaseModelObject implements Audi
     private static final EntityFactory FACTORY = new HibEntityFactory();
 
     @Column(name = "createdate")
-    @Type(type="long_timestamp")
+    @Type(LongTimestampType.class)
     private Date creationDate;
 
     @Column(name = "modifydate")
