@@ -33,8 +33,8 @@ import org.osaf.cosmo.util.DateUtil;
 /**
  * Hibernate persistent CalendarAtttribute.
  */
-@Entity
-@DiscriminatorValue("calendar")
+//@Entity
+//@DiscriminatorValue("calendar")
 public class HibCalendarAttribute extends HibAttribute implements
         java.io.Serializable, CalendarAttribute {
 
