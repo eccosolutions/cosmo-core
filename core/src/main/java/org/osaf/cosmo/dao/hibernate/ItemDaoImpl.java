@@ -120,7 +120,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     public Item findItemByUid(String uid) {
         try {
             // prevent auto flushing when looking up item by uid
-            currentSession().setFlushMode(FlushMode.MANUAL);
+            currentSession().setHibernateFlushMode(FlushMode.MANUAL);
 
             // take advantage of optimized caching with naturalId
             Item item = currentSession().bySimpleNaturalId(HibItem.class).load(uid);

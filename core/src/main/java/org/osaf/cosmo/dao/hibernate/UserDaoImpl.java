@@ -15,7 +15,6 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -199,7 +198,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
     public User updateUser(User user) {
         try {
             // prevent auto flushing when querying for existing users
-            currentSession().setFlushMode(FlushMode.MANUAL);
+            currentSession().setHibernateFlushMode(FlushMode.MANUAL);
 
             User findUser = findUserByUsernameOrEmailIgnoreCaseAndId(getBaseModelObject(user)
                     .getId(), user.getUsername(), user.getEmail());
