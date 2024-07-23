@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import jakarta.persistence.Lob;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,8 +26,9 @@ import jakarta.persistence.Entity;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JavaType;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
+import org.osaf.cosmo.hibernate.CalendarClobType.CalendarTypeDescriptor;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.ICalendarAttribute;
 import org.osaf.cosmo.model.Item;
@@ -42,7 +44,9 @@ public class HibICalendarAttribute extends HibAttribute implements
         java.io.Serializable, ICalendarAttribute {
 
     @Column(name="textvalue", length=102400000)
-    @Type(type="calendar_clob")
+//    @JdbcType(ClobJdbcType.class) - should be covered by @Lob
+    @JavaType(CalendarTypeDescriptor.class)
+    @Lob
     private Calendar value;
 
     /** default constructor */

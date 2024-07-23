@@ -105,7 +105,8 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
         }
     }
 
-    private static class CalendarTypeDescriptor extends AbstractJavaType<Calendar> {
+    /** for what was calendar_clob */
+    public static class CalendarTypeDescriptor extends AbstractJavaType<Calendar> {
         public CalendarTypeDescriptor() {
             super(Calendar.class, new CalendarMutabilityPlan());
         }

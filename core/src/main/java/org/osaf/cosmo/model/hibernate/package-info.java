@@ -16,17 +16,6 @@
 
 
 /*
- * Type Definitions for custom hibernate data types.
- */
-@TypeDefs({
-    @TypeDef(
-            name = "calendar_clob",
-            typeClass = org.osaf.cosmo.hibernate.CalendarClobType.class
-    )
-
-})
-
-/*
  * Named Queries
  */
 @NamedQueries({
