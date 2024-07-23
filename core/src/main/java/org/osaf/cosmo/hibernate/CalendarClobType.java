@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,9 +29,11 @@ import org.hibernate.engine.jdbc.ClobProxy;
 import org.hibernate.engine.jdbc.internal.CharacterStreamImpl;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.descriptor.WrapperOptions;
-import org.hibernate.type.descriptor.java.AbstractTypeDescriptor;
+import org.hibernate.type.descriptor.java.AbstractJavaType;
+import org.hibernate.type.descriptor.java.ClobJavaType;
 import org.hibernate.type.descriptor.java.MutabilityPlan;
 import org.hibernate.type.descriptor.java.MutableMutabilityPlan;
+import org.hibernate.type.descriptor.jdbc.ClobJdbcType;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 
 import java.io.IOException;
@@ -50,7 +52,7 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
     private static final Log log = LogFactory.getLog(CalendarClobType.class);
 
     public CalendarClobType() {
-        super(org.hibernate.type.descriptor.sql.ClobTypeDescriptor.DEFAULT, new CalendarTypeDescriptor());
+        super(ClobJdbcType.DEFAULT, new CalendarTypeDescriptor());
     }
 
     public String getName() {
@@ -103,7 +105,7 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
         }
     }
 
-    private static class CalendarTypeDescriptor extends AbstractTypeDescriptor<Calendar> {
+    private static class CalendarTypeDescriptor extends AbstractJavaType<Calendar> {
         public CalendarTypeDescriptor() {
             super(Calendar.class, new CalendarMutabilityPlan());
         }
@@ -113,7 +115,6 @@ public class CalendarClobType extends AbstractSingleColumnStandardBasicType<Cale
             return value.toString();
         }
 
-        @Override
         public Calendar fromString(String string) {
             try {
                 return CalendarUtils.parseCalendar(string);
