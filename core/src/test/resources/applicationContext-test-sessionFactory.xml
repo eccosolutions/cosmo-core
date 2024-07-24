@@ -3,7 +3,7 @@
         "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
     <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+          class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean"> <!-- TODO: DO this more portably - consider Spring Boot -->
         <!--<property name="lobHandler" ref="defaultLobHandler" />-->
         <property name="annotatedPackages">
             <list>
