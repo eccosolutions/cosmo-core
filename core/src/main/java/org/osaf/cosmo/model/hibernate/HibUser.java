@@ -15,10 +15,11 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import jakarta.persistence.Index;
+import java.io.Serial;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Index;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -39,12 +40,17 @@ import java.util.Set;
  * Hibernate persistent User.
  */
 @Entity
-@Table(name="cosmo_users")
+@Table(name="cosmo_users",
+indexes = {
+        @Index(name="idx_useruid", columnList="user_uid"),
+        @Index(name="idx_username", columnList="username"),
+        @Index(name="idx_useremail", columnList="email"),
+        @Index(name="idx_activationid", columnList="activationid")
+})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibUser extends HibAuditableObject implements User {
 
-    /**
-     */
+    @Serial
     private static final long serialVersionUID = -5401963358519490736L;
 
     /**
@@ -77,11 +83,9 @@ public class HibUser extends HibAuditableObject implements User {
     @Column(name = "user_uid", nullable=false, unique=true, length=255)
     @NotNull
     @Length(min=1, max=255)
-    @Index(name="idx_useruid")
     private String uid;
 
     @Column(name = "username", nullable=false)
-    @Index(name="idx_username")
     @NotNull
     @NaturalId
     @Length(min=USERNAME_LEN_MIN, max=USERNAME_LEN_MAX)
@@ -109,7 +113,6 @@ public class HibUser extends HibAuditableObject implements User {
     private String lastName;
 
     @Column(name = "email", nullable=false, unique=true)
-    @Index(name="idx_useremail")
     @NotNull
     @Length(min=EMAIL_LEN_MIN, max=EMAIL_LEN_MAX)
     @Email
@@ -119,7 +122,6 @@ public class HibUser extends HibAuditableObject implements User {
 
     @Column(name = "activationid", nullable=true, length=255)
     @Length(min=1, max=255)
-    @Index(name="idx_activationid")
     private String activationId;
 
     @Column(name = "admin")
