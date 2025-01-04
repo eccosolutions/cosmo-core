@@ -15,11 +15,14 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import java.io.Serial;
+import javax.persistence.Index;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.CollectionItem;
@@ -29,7 +32,9 @@ import org.osaf.cosmo.model.User;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
@@ -39,12 +44,17 @@ import java.util.Set;
  * Hibernate persistent User.
  */
 @Entity
-@Table(name="cosmo_users")
+@Table(name="cosmo_users",
+indexes = {
+        @Index(name="idx_useruid", columnList="user_uid"),
+        @Index(name="idx_username", columnList="username"),
+        @Index(name="idx_useremail", columnList="email"),
+        @Index(name="idx_activationid", columnList="activationid")
+})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibUser extends HibAuditableObject implements User {
 
-    /**
-     */
+    @Serial
     private static final long serialVersionUID = -5401963358519490736L;
 
     /**
@@ -77,11 +87,9 @@ public class HibUser extends HibAuditableObject implements User {
     @Column(name = "user_uid", nullable=false, unique=true, length=255)
     @NotNull
     @Length(min=1, max=255)
-    @Index(name="idx_useruid")
     private String uid;
 
     @Column(name = "username", nullable=false)
-    @Index(name="idx_username")
     @NotNull
     @NaturalId
     @Length(min=USERNAME_LEN_MIN, max=USERNAME_LEN_MAX)
@@ -109,7 +117,6 @@ public class HibUser extends HibAuditableObject implements User {
     private String lastName;
 
     @Column(name = "email", nullable=false, unique=true)
-    @Index(name="idx_useremail")
     @NotNull
     @Length(min=EMAIL_LEN_MIN, max=EMAIL_LEN_MAX)
     @Email
@@ -119,7 +126,6 @@ public class HibUser extends HibAuditableObject implements User {
 
     @Column(name = "activationid", nullable=true, length=255)
     @Length(min=1, max=255)
-    @Index(name="idx_activationid")
     private String activationId;
 
     @Column(name = "admin")
@@ -130,7 +136,7 @@ public class HibUser extends HibAuditableObject implements User {
     @Column(name = "locked")
     private Boolean locked;
 
-    @OneToMany(targetEntity=HibCollectionSubscription.class, mappedBy = "owner", fetch=FetchType.LAZY)
+    @OneToMany(targetEntity=HibCollectionSubscription.class, mappedBy = "owner", fetch= FetchType.LAZY)
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private final Set<CollectionSubscription> subscriptions =
