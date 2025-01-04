@@ -5,57 +5,9 @@
     <bean id="sessionFactory"
           class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean"> <!-- TODO: DO this more portably - consider Spring Boot -->
         <!--<property name="lobHandler" ref="defaultLobHandler" />-->
-        <property name="annotatedPackages">
-            <list>
-                <value>org.osaf.cosmo.model.hibernate</value>
-            </list>
-        </property>
-        <property name="annotatedClasses">
-            <list>
-                <value>org.osaf.cosmo.model.hibernate.HibAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibAttributeTombstone</value>
-                <value>org.osaf.cosmo.model.hibernate.HibAvailabilityItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibBaseEventStamp</value>
-                <value>org.osaf.cosmo.model.hibernate.HibBinaryAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibBooleanAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibCalendarAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibCalendarCollectionStamp</value>
-                <value>org.osaf.cosmo.model.hibernate.HibCollectionItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibCollectionItemDetails</value>
-                <value>org.osaf.cosmo.model.hibernate.HibCollectionSubscription</value>
-                <value>org.osaf.cosmo.model.hibernate.HibContentData</value>
-                <value>org.osaf.cosmo.model.hibernate.HibContentItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibDecimalAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibDictionaryAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibEventExceptionStamp</value>
-                <value>org.osaf.cosmo.model.hibernate.HibEventLogEntry</value>
-                <value>org.osaf.cosmo.model.hibernate.HibEventStamp</value>
-                <value>org.osaf.cosmo.model.hibernate.HibFileItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibFreeBusyItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibHomeCollectionItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibICalendarAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibICalendarItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibIntegerAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibItemTombstone</value>
-                <value>org.osaf.cosmo.model.hibernate.HibMessageStamp</value>
-                <value>org.osaf.cosmo.model.hibernate.HibMultiValueStringAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibNoteItem</value>
-                <value>org.osaf.cosmo.model.hibernate.HibPasswordRecovery</value>
-                <value>org.osaf.cosmo.model.hibernate.HibServerProperty</value>
-                <value>org.osaf.cosmo.model.hibernate.HibStringAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibStamp</value>
-                <value>org.osaf.cosmo.model.hibernate.HibStampTombstone</value>
-                <value>org.osaf.cosmo.model.hibernate.HibTaskStamp</value>
-                <value>org.osaf.cosmo.model.hibernate.HibTextAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibTimestampAttribute</value>
-                <value>org.osaf.cosmo.model.hibernate.HibTombstone</value>
-                <value>org.osaf.cosmo.model.hibernate.HibUser</value>
-                <value>org.osaf.cosmo.model.hibernate.HibXmlAttribute</value>
-            </list>
-        </property>
+        <property name="persistenceUnitName" value="eccoPU"/>
         <property name="entityInterceptor" ref="cosmoHibernateInterceptor"/>
-        <property name="hibernateProperties">
+        <property name="jpaProperties">
             <props>
                 <prop key="hibernate.generate_statistics">false</prop>
                 <prop key="hibernate.cache.use_query_cache">false</prop>
@@ -98,10 +50,8 @@
     <!-- Transaction manager for a single Hibernate SessionFactory
          (alternative to JTA) -->
     <bean id="transactionManager"
-          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory">
-            <ref bean="sessionFactory"/>
-        </property>
+          class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="sessionFactory" />
     </bean>
 
     <bean id="configurableEntitySupport" class="org.osaf.cosmo.spring.ConfigurableEntitySupport"/>
