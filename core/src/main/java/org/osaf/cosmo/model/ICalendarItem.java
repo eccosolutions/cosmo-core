@@ -32,6 +32,5 @@ public interface ICalendarItem extends ContentItem{
      * is separate from the uid.  A uid is unique across all items.
      * The icalUid only has to be unique within a collection.
      */
-    @Nonnull
     void setIcalUid(String icalUid);
 }
