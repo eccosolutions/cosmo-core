@@ -54,7 +54,6 @@ public abstract class HibICalendarItem extends HibContentItem implements ICalend
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.ICalendarItem#setIcalUid(java.lang.String)
      */
-    @Nonnull
     public void setIcalUid(String icalUid) {
         this.icalUid = icalUid;
     }
