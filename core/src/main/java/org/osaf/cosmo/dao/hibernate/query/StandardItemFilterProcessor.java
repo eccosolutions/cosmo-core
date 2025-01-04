@@ -69,7 +69,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
      * @see org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor#processFilter(org.hibernate.Session, org.osaf.cosmo.model.filter.ItemFilter)
      */
     public Set<Item> processFilter(Session session, ItemFilter filter) {
-        TypedQuery hibQuery = buildQuery(session, filter);
+        TypedQuery<Item> hibQuery = buildQuery(session, filter);
         List<Item> queryResults = hibQuery.getResultList();
         return processResults(queryResults, filter);
     }
@@ -86,7 +86,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
      * @param filter item filter
      * @return hibernate query built using HQL
      */
-    public <T> TypedQuery<T> buildQuery(Session session, ItemFilter filter) {
+    public TypedQuery<Item> buildQuery(Session session, ItemFilter filter) {
         StringBuilder selectBuf = new StringBuilder();
         StringBuilder whereBuf = new StringBuilder();
         StringBuilder orderBuf = new StringBuilder();
@@ -120,7 +120,8 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             log.debug(selectBuf.toString());
         }
 
-        TypedQuery hqlQuery = session.createQuery(selectBuf.toString());
+        @SuppressWarnings("SqlSourceToSinkFlow")
+        TypedQuery<Item> hqlQuery = session.createQuery(selectBuf.toString(), Item.class);
 
         for(Entry<String, Object> param: params.entrySet())
             hqlQuery.setParameter(param.getKey(), param.getValue());
