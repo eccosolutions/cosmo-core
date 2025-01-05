@@ -61,7 +61,7 @@ public class MockUserDao implements UserDao {
         emailIdx = new HashMap();
         uidIdx = new HashMap();
         activationIdIdx = new HashMap();
-        passwordRecoveryIdx = new HashMap<String, PasswordRecovery>();
+        passwordRecoveryIdx = new HashMap<>();
 
         // add overlord user
         MockUser overlord = new MockUser();

@@ -294,7 +294,7 @@ public class MockItemDao implements ItemDao {
     public Set<Item> findItems(ItemFilter filter) {
         ItemFilterEvaluater evaluater = new ItemFilterEvaluater();
         ItemFilterPostProcessor postProcessor = new ItemFilterPostProcessor();
-        HashSet<Item> results = new HashSet<Item>();
+        HashSet<Item> results = new HashSet<>();
         for(Item i : storage.getAllItems())
             if(evaluater.evaulate(i, filter))
                 results.add(i);
@@ -305,10 +305,10 @@ public class MockItemDao implements ItemDao {
     public Set<Item> findItems(ItemFilter[] filters) {
         ItemFilterEvaluater evaluater = new ItemFilterEvaluater();
         ItemFilterPostProcessor postProcessor = new ItemFilterPostProcessor();
-        HashSet<Item> allResults = new HashSet<Item>();
+        HashSet<Item> allResults = new HashSet<>();
 
         for(ItemFilter f: filters) {
-            HashSet<Item> results = new HashSet<Item>();
+            HashSet<Item> results = new HashSet<>();
             for(Item i : storage.getAllItems())
                 if(evaluater.evaulate(i, f))
                     results.add(i);

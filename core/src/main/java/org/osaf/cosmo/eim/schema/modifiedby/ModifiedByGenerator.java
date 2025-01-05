@@ -49,7 +49,7 @@ public class ModifiedByGenerator extends BaseItemGenerator
     public List<EimRecord> generateRecords() {
         ContentItem contentItem = (ContentItem) getItem();
 
-        ArrayList<EimRecord> records = new ArrayList<EimRecord>();
+        ArrayList<EimRecord> records = new ArrayList<>();
 
 //        if (contentItem.getClientModifiedDate() == null)
             return records;

@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,9 +37,9 @@ public class UnknownGenerator extends BaseGenerator {
         LogFactory.getLog(UnknownGenerator.class);
 
     private static final HashSet<QName> KNOWN_ATTRIBUTES =
-        new HashSet<QName>();
+        new HashSet<>();
     private static final HashSet<String> KNOWN_NAMESPACES =
-        new HashSet<String>();
+        new HashSet<>();
 
     static {
         KNOWN_NAMESPACES.add(NoteItem.class.getName());
@@ -62,7 +62,7 @@ public class UnknownGenerator extends BaseGenerator {
      */
     public List<EimRecord> generateRecords() {
         // index unknown namespaces
-        HashSet<String> idx = new HashSet<String>();
+        HashSet<String> idx = new HashSet<>();
         for (QName qn : getItem().getAttributes().keySet()) {
             if (KNOWN_ATTRIBUTES.contains(qn) ||
                 KNOWN_NAMESPACES.contains(qn.getNamespace()))
@@ -70,7 +70,7 @@ public class UnknownGenerator extends BaseGenerator {
             idx.add(qn.getNamespace());
         }
 
-        ArrayList<EimRecord> records = new ArrayList<EimRecord>();
+        ArrayList<EimRecord> records = new ArrayList<>();
 
         int prefix = 1;
         for (String ns : idx) {

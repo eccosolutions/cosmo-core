@@ -87,7 +87,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         // Keep track of duplicate icalUids because we don't flush
         // the db until the end so we need to handle the case of
         // duplicate icalUids in the same request.
-        HashMap<String, NoteItem> icalUidMap = new HashMap<String, NoteItem>();
+        HashMap<String, NoteItem> icalUidMap = new HashMap<>();
 
         try {
             updateCollectionInternal(collection);

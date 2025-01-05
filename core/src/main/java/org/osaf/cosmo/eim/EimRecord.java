@@ -60,7 +60,7 @@ public class EimRecord {
                      String namespace) {
         this.prefix = prefix;
         this.namespace = namespace;
-        fields = new ArrayList<EimRecordField>();
+        fields = new ArrayList<>();
     }
 
     /** */

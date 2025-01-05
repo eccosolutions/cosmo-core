@@ -229,7 +229,7 @@ public class HCalendarParser implements CalendarParser {
                                               Object context)
         throws ParserException {
         NodeList nodes = findNodes(expr, context);
-        ArrayList<Element> elements = new ArrayList<Element>();
+        ArrayList<Element> elements = new ArrayList<>();
         for (int i=0; i<nodes.getLength(); i++) {
             Node n = nodes.item(i);
             if (n instanceof Element)

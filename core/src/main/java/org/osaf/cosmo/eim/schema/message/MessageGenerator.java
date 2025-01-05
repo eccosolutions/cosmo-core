@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,8 +40,8 @@ public class MessageGenerator extends BaseStampGenerator
     private static final Log log =
         LogFactory.getLog(MessageGenerator.class);
 
-    private static final HashSet<String> STAMP_TYPES = new HashSet<String>(2);
-    
+    private static final HashSet<String> STAMP_TYPES = new HashSet<>(2);
+
     static {
         STAMP_TYPES.add("message");
     }
@@ -92,7 +92,7 @@ public class MessageGenerator extends BaseStampGenerator
         record.addField(new TextField(FIELD_ORIGINATORS, stamp.getOriginators()));
         record.addField(new TextField(FIELD_DATE_SENT, stamp.getDateSent()));
         record.addField(new TextField(FIELD_IN_REPLY_TO, stamp.getInReplyTo()));
-        
+
         StringReader refs = stamp.getReferences() != null ?
                 new StringReader(stamp.getReferences()) :
                 null;

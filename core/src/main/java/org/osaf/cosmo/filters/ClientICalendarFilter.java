@@ -46,7 +46,7 @@ public class ClientICalendarFilter implements Filter {
     private static final Log log = LogFactory.getLog(ClientICalendarFilter.class);
 
     private ICalendarClientFilterManager filterManager;
-    private Map<String, String> clientKeyMap = new HashMap<String, String>();
+    private Map<String, String> clientKeyMap = new HashMap<>();
 
 
     public void destroy() {

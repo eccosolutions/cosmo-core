@@ -50,7 +50,7 @@ public class EimValueConverter implements EimSchemaConstants {
      */
     public static List<Recur> toICalRecurs(String text)
         throws EimValidationException {
-        ArrayList<Recur> recurs = new ArrayList<Recur>();
+        ArrayList<Recur> recurs = new ArrayList<>();
         if (text != null) {
             for (String s : text.split(":")) {
                 try {

@@ -284,8 +284,8 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
 
     static class TransactionThread extends Thread {
 
-        private final List<RunContext> toRun = new ArrayList<RunContext>();
-        private final Map<String, Object> doneSet = Collections.synchronizedMap(new HashMap<String, Object>());
+        private final List<RunContext> toRun = new ArrayList<>();
+        private final Map<String, Object> doneSet = Collections.synchronizedMap(new HashMap<>());
         private boolean commit = false;
         HibernateTransactionHelper txHelper = null;
 

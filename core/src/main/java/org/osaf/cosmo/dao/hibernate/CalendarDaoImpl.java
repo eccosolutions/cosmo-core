@@ -68,7 +68,7 @@ public class CalendarDaoImpl extends HibernateSessionSupport implements Calendar
 
             // Use brute-force method if CalendarFilter can't be translated
             // to an ItemFilter (slower but at least gets the job done).
-            HashSet<ICalendarItem> results = new HashSet<ICalendarItem>();
+            HashSet<ICalendarItem> results = new HashSet<>();
             Set<Item> itemsToProcess = null;
 
             // Optimization:

@@ -39,7 +39,7 @@ import org.osaf.cosmo.model.event.ItemUpdatedEntry;
 public class MockEventLogDao implements EventLogDao {
     private static final Log log = LogFactory.getLog(MockEventLogDao.class);
 
-    ArrayList<EventLogEntry> allEntries = new ArrayList<EventLogEntry>();
+    ArrayList<EventLogEntry> allEntries = new ArrayList<>();
 
     public void addEventLogEntries(List<EventLogEntry> entries) {
         for(EventLogEntry entry: entries)
@@ -54,7 +54,7 @@ public class MockEventLogDao implements EventLogDao {
 
     public List<ItemChangeRecord> findChangesForCollection(
             CollectionItem collection, Date start, Date end) {
-       ArrayList<ItemChangeRecord> records = new ArrayList<ItemChangeRecord>();
+       ArrayList<ItemChangeRecord> records = new ArrayList<>();
 
        for(EventLogEntry entry: allEntries) {
 

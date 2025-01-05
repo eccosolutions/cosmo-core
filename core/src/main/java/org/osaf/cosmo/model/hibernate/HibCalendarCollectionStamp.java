@@ -149,7 +149,7 @@ public class HibCalendarCollectionStamp extends HibStamp implements
      * @see org.osaf.cosmo.model.CalendarCollectionStamp#getEventStamps()
      */
     public Set<EventStamp> getEventStamps() {
-        Set<EventStamp> events = new HashSet<EventStamp>();
+        Set<EventStamp> events = new HashSet<>();
         for (Iterator<Item> i= ((CollectionItem) getItem()).getChildren().iterator(); i.hasNext();) {
             Item child = i.next();
             Stamp stamp = child.getStamp(EventStamp.class);

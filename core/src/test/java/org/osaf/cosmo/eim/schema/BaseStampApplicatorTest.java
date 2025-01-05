@@ -91,7 +91,7 @@ public class BaseStampApplicatorTest extends BaseApplicatorTestCase {
             super(prefix, namespace, null);
             stampCreated = false;
             deletionApplied = false;
-            appliedFields = new HashSet<EimRecordField>();
+            appliedFields = new HashSet<>();
         }
 
         protected Stamp createStamp(EimRecord record) {

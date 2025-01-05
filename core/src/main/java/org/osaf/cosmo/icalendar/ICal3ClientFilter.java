@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,14 +34,14 @@ import net.fortuna.ical4j.model.property.ExDate;
 /**
  * ICalendar filter that tailors VEVENTs for
  * iCal 3 clients.  This includes fixing EXDATE
- * with multiple dates into multiple single EXDATE 
+ * with multiple dates into multiple single EXDATE
  * and removing redundant VALUE=DATE-TIME params
  * from date properties.
  */
 public class ICal3ClientFilter implements ICalendarClientFilter{
 
     public void filterCalendar(Calendar calendar) {
-       
+
         try {
             ComponentList events = calendar.getComponents(Component.VEVENT);
             for(Iterator i = events.iterator(); i.hasNext();) {
@@ -54,24 +54,24 @@ public class ICal3ClientFilter implements ICalendarClientFilter{
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } 
+        }
     }
-    
+
     private void fixExDates(Component comp) throws Exception {
         PropertyList props = comp.getProperties(Property.EXDATE);
-        ArrayList<Property> toAdd = new ArrayList<Property>();
-        ArrayList<Property> toRemove = new ArrayList<Property>();
-        
+        ArrayList<Property> toAdd = new ArrayList<>();
+        ArrayList<Property> toRemove = new ArrayList<>();
+
         for(Iterator i=props.iterator();i.hasNext();) {
             ExDate exDate = (ExDate) i.next();
-            
+
             // ical likes a single exdate
             if(exDate.getDates().size()==1)
                 continue;
-            
+
             // remove exdate with multiple dates
             toRemove.add(exDate);
-            
+
             // create single dates instead
             for(Iterator j=exDate.getDates().iterator();j.hasNext();) {
                 ExDate singleEx = (ExDate) exDate.copy();
@@ -81,15 +81,15 @@ public class ICal3ClientFilter implements ICalendarClientFilter{
                 toAdd.add(singleEx);
             }
         }
-        
+
         // remove exdates with multiple dates
         comp.getProperties().removeAll(toRemove);
-        
+
         // Add all single exdates
         comp.getProperties().addAll(toAdd);
     }
-    
-    // Remove VALUE=DATE-TIME because it is redundant and for 
+
+    // Remove VALUE=DATE-TIME because it is redundant and for
     // some reason ical doesn't like it
     private void fixDateTimeProperties(Component component) {
         PropertyList props = component.getProperties();

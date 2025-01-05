@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,22 +44,22 @@ import org.osaf.cosmo.model.Stamp;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibEventStamp extends HibBaseEventStamp implements
         java.io.Serializable, EventStamp {
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3992468809776886156L;
-    
-    
+
+
     /** default constructor */
     public HibEventStamp() {
     }
-    
+
     public HibEventStamp(Item item) {
         this();
         setItem(item);
     }
-    
+
     public String getType() {
         return "event";
     }
@@ -74,14 +74,14 @@ public class HibEventStamp extends HibBaseEventStamp implements
     private Calendar getValidationCalendar() {
         return getEventCalendar();
     }
-    
-   
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.EventStamp#getExceptions()
      */
     public List<Component> getExceptions() {
-        ArrayList<Component> exceptions = new ArrayList<Component>();
-        
+        ArrayList<Component> exceptions = new ArrayList<>();
+
         // add all exception events
         NoteItem note = (NoteItem) getItem();
         for(NoteItem exception : note.getModifications()) {
@@ -89,23 +89,23 @@ public class HibEventStamp extends HibBaseEventStamp implements
             if(exceptionStamp!=null)
                 exceptions.add(exceptionStamp.getEvent());
         }
-        
+
         return exceptions;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.EventStamp#getMasterEvent()
      */
     public VEvent getMasterEvent() {
         if(getEventCalendar()==null)
             return null;
-        
+
         ComponentList events = getEventCalendar().getComponents().getComponents(
                 Component.VEVENT);
-        
+
         if(events.isEmpty())
             return null;
-        
+
         return (VEvent) events.get(0);
     }
 
@@ -117,20 +117,20 @@ public class HibEventStamp extends HibBaseEventStamp implements
     public static EventStamp getStamp(Item item) {
         return (EventStamp) item.getStamp(EventStamp.class);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Stamp#copy()
      */
     public Stamp copy() {
         EventStamp stamp = new HibEventStamp();
-        
+
         // Need to copy Calendar, and indexes
         try {
             stamp.setEventCalendar(new Calendar(getEventCalendar()));
         } catch (Exception e) {
             throw new RuntimeException("Cannot copy calendar", e);
         }
-        
+
         return stamp;
     }
 }

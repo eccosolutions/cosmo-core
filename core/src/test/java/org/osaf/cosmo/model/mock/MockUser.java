@@ -90,7 +90,7 @@ public class MockUser extends MockAuditableObject implements User {
     private Boolean locked;
 
     private final Set<CollectionSubscription> subscriptions =
-        new HashSet<CollectionSubscription>(0);
+        new HashSet<>(0);
 
     /**
      */

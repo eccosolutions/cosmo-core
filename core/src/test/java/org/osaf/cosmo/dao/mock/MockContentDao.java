@@ -43,7 +43,7 @@ public class MockContentDao extends MockItemDao implements ContentDao {
     private static final Log log = LogFactory.getLog(MockItemDao.class);
 
     public static boolean THROW_CONCURRENT_EXCEPTION = false;
-    
+
     /**
      */
     public MockContentDao(MockDaoStorage storage) {
@@ -142,14 +142,14 @@ public class MockContentDao extends MockItemDao implements ContentDao {
 
         if (getStorage().getItemByUid(content.getUid()) != null)
             throw new UidInUseException(content.getUid(), "Uid " + content.getUid() + " already in use");
-        
+
         ((MockItem) content).addParent(parent);
-        
+
         getStorage().storeItem(content);
 
         return content;
-    } 
-   
+    }
+
 
     /**
      * Update an existing content item.
@@ -168,7 +168,7 @@ public class MockContentDao extends MockItemDao implements ContentDao {
         Item stored = getStorage().getItemByUid(content.getUid());
         if (stored != null && stored != content)
             throw new UidInUseException(content.getUid(), "Uid " + content.getUid() + " already in use");
-        
+
         getStorage().updateItem(content);
 
         return content;
@@ -228,13 +228,13 @@ public class MockContentDao extends MockItemDao implements ContentDao {
 
         if(THROW_CONCURRENT_EXCEPTION)
             throw new ConcurrencyFailureException("fail!");
-        
+
         if (getStorage().getItemByUid(content.getUid()) != null)
             throw new UidInUseException(content.getUid(), "Uid " + content.getUid() + " already in use");
-        
+
         for(CollectionItem parent: parents)
             ((MockItem) content).addParent(parent);
-          
+
         getStorage().storeItem(content);
 
         return content;
@@ -248,12 +248,12 @@ public class MockContentDao extends MockItemDao implements ContentDao {
             } else if (child.getIsActive() == false) {
                 removeItemFromCollection(child, collection);
             } else {
-                if(!child.getParents().contains(collection)) 
-                   addItemToCollection(child, collection);    
-                
+                if(!child.getParents().contains(collection))
+                   addItemToCollection(child, collection);
+
                 updateContent(child);
             }
-            
+
         }
         return collection;
     }
@@ -265,7 +265,7 @@ public class MockContentDao extends MockItemDao implements ContentDao {
     }
 
     public Set<ContentItem> loadChildren(CollectionItem collection, Date timestamp) {
-        Set<ContentItem> items = new HashSet<ContentItem>();
+        Set<ContentItem> items = new HashSet<>();
         for(Item item : collection.getChildren()) {
             if(item instanceof ContentItem) {
                 if(timestamp==null || item.getModifiedDate().after(timestamp))
@@ -274,5 +274,5 @@ public class MockContentDao extends MockItemDao implements ContentDao {
         }
         return items;
     }
-    
+
 }

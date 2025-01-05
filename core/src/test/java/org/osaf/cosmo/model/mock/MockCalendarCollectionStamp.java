@@ -143,7 +143,7 @@ public class MockCalendarCollectionStamp extends MockStamp implements
      * @see org.osaf.cosmo.model.CalendarCollectionStamp#getEventStamps()
      */
     public Set<EventStamp> getEventStamps() {
-        Set<EventStamp> events = new HashSet<EventStamp>();
+        Set<EventStamp> events = new HashSet<>();
         for (Item child : ((CollectionItem) getItem()).getChildren()) {
             Stamp stamp = child.getStamp(EventStamp.class);
             if (stamp != null)

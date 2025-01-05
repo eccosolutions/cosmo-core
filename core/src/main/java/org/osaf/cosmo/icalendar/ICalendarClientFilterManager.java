@@ -38,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ICalendarClientFilterManager {
     private Map<String, ICalendarClientFilter> clientFilters;
-    private final ThreadLocal<String> clientLocal = new ThreadLocal<String>();
+    private final ThreadLocal<String> clientLocal = new ThreadLocal<>();
 
     private static final Log log = LogFactory.getLog(ICalendarClientFilterManager.class);
 

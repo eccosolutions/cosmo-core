@@ -80,7 +80,7 @@ public class EventLogDaoImpl extends HibernateSessionSupport implements EventLog
             hibQuery.setParameter("endDate", end);
             List<HibEventLogEntry> results = hibQuery.getResultList();
 
-            ArrayList<ItemChangeRecord> changeRecords = new ArrayList<ItemChangeRecord>();
+            ArrayList<ItemChangeRecord> changeRecords = new ArrayList<>();
 
             for(HibEventLogEntry result: results)
                 changeRecords.add(convertToItemChangeRecord(result));

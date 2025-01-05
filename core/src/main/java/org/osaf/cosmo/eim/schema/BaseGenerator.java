@@ -85,7 +85,7 @@ public abstract class BaseGenerator implements EimSchemaConstants {
      */
     protected List<EimRecordField> generateUnknownFields(String namespace) {
         Map<String, Attribute> attrs = item.getAttributes(namespace);
-        ArrayList<EimRecordField> fields = new ArrayList<EimRecordField>();
+        ArrayList<EimRecordField> fields = new ArrayList<>();
         for (Attribute attr : attrs.values()) {
             if (attr instanceof BinaryAttribute) {
                 InputStream value = ((BinaryAttribute)attr).getInputStream();

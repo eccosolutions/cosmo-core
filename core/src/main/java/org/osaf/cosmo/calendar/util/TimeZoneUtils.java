@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class TimeZoneUtils {
 
-    private static Set<String> ALL_TIMEZONE_IDS = new HashSet<String>();
+    private static Set<String> ALL_TIMEZONE_IDS = new HashSet<>();
     public static final long ONE_DAY = 60*1000*60*24;
 
     // represents 1998

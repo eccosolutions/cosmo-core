@@ -87,7 +87,7 @@ public class EventLogAdvice extends OrderedAdvice {
         if(!(item instanceof ContentItem))
             return pjp.proceed();
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
 
         for(CollectionItem parent: item.getParents()) {
             entries.add(createItemRemovedEntry(parent, item));
@@ -131,7 +131,7 @@ public class EventLogAdvice extends OrderedAdvice {
 
 
         // create update and added record for each item
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         for(Item child: children) {
 
             // for now only care about content items
@@ -164,7 +164,7 @@ public class EventLogAdvice extends OrderedAdvice {
             return pjp.proceed();
 
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         for(Item child: children) {
 
             // for now only care about content items
@@ -221,7 +221,7 @@ public class EventLogAdvice extends OrderedAdvice {
         if (!enabled)
             return pjp.proceed();
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         for(Item child: contentItems)
             entries.add(createItemAddedEntry(parent, child));
 
@@ -242,7 +242,7 @@ public class EventLogAdvice extends OrderedAdvice {
             return pjp.proceed();
 
         Object returnVal = pjp.proceed();
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         entries.addAll(createItemUpdatedEntries(content));
         eventLogDao.addEventLogEntries(entries);
 
@@ -258,7 +258,7 @@ public class EventLogAdvice extends OrderedAdvice {
         if (!enabled)
             return pjp.proceed();
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         for(ContentItem content: contentItems) {
            if(content.getIsActive()==Boolean.FALSE) {
                for(CollectionItem parent: content.getParents())
@@ -289,12 +289,12 @@ public class EventLogAdvice extends OrderedAdvice {
         if (!enabled)
             return pjp.proceed();
 
-        HashSet<CollectionItem> parents = new HashSet<CollectionItem>();
+        HashSet<CollectionItem> parents = new HashSet<>();
         parents.addAll(content.getParents());
 
         Object returnValue = pjp.proceed();
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         for(CollectionItem parent: parents)
             entries.add(createItemRemovedEntry(parent, content));
 
@@ -310,7 +310,7 @@ public class EventLogAdvice extends OrderedAdvice {
     }
 
     protected List<ItemUpdatedEntry> createItemUpdatedEntries(Item item) {
-        ArrayList<ItemUpdatedEntry> entries = new ArrayList<ItemUpdatedEntry>();
+        ArrayList<ItemUpdatedEntry> entries = new ArrayList<>();
         for(CollectionItem parent: item.getParents()) {
             ItemUpdatedEntry entry = new ItemUpdatedEntry(item, parent);
             setBaseEntryProps(entry);

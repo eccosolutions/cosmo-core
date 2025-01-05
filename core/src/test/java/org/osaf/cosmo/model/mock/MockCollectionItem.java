@@ -45,7 +45,7 @@ public class MockCollectionItem extends MockItem implements CollectionItem {
     public static final QName ATTR_HUE =
         new MockQName(CollectionItem.class, "hue");
 
-    private final Set<CollectionItemDetails> childDetails = new HashSet<CollectionItemDetails>(0);
+    private final Set<CollectionItemDetails> childDetails = new HashSet<>(0);
 
 
     public MockCollectionItem() {
@@ -68,7 +68,7 @@ public class MockCollectionItem extends MockItem implements CollectionItem {
      */
     @Override
     public Set<Item> getChildren() {
-        Set<Item> children = new HashSet<Item>();
+        Set<Item> children = new HashSet<>();
         for(CollectionItemDetails cid: childDetails)
             children.add(cid.getItem());
 

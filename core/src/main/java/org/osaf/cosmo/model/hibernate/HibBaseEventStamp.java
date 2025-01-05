@@ -308,7 +308,7 @@ public abstract class HibBaseEventStamp extends HibStamp
      * @see org.osaf.cosmo.model.BaseEventStamp#getRecurrenceRules()
      */
     public List<Recur> getRecurrenceRules() {
-        ArrayList<Recur> l = new ArrayList<Recur>();
+        ArrayList<Recur> l = new ArrayList<>();
         VEvent event = getEvent();
         if(event!=null) {
             for (RRule rrule : getEvent().getProperties().<RRule>getProperties(Property.RRULE))
@@ -337,7 +337,7 @@ public abstract class HibBaseEventStamp extends HibStamp
     public void setRecurrenceRule(Recur recur) {
         if (recur == null)
             return;
-        ArrayList<Recur> recurs = new ArrayList<Recur>(1);
+        ArrayList<Recur> recurs = new ArrayList<>(1);
         recurs.add(recur);
         setRecurrenceRules(recurs);
     }
@@ -346,7 +346,7 @@ public abstract class HibBaseEventStamp extends HibStamp
      * @see org.osaf.cosmo.model.BaseEventStamp#getExceptionRules()
      */
     public List<Recur> getExceptionRules() {
-        ArrayList<Recur> l = new ArrayList<Recur>();
+        ArrayList<Recur> l = new ArrayList<>();
         for (ExRule exrule : getEvent().getProperties().<ExRule>
                  getProperties(Property.EXRULE))
             l.add(exrule.getRecur());

@@ -81,7 +81,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
        ItemAddedEntry entry = new ItemAddedEntry(note, col1);
        entry.setUser(user);
 
-       ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+       ArrayList<EventLogEntry> entries = new ArrayList<>();
        entries.add(entry);
 
        eventLogDao.addEventLogEntries(entries);
@@ -109,7 +109,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         ItemRemovedEntry entry = new ItemRemovedEntry(note, col1);
         entry.setUser(user);
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         entries.add(entry);
 
         eventLogDao.addEventLogEntries(entries);
@@ -142,7 +142,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         ItemUpdatedEntry entry2 = new ItemUpdatedEntry(note, col2);
         entry2.setUser(user);
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         entries.add(entry1);
         entries.add(entry2);
 
@@ -183,7 +183,7 @@ public class HibernateEventLogDaoTest extends AbstractHibernateDaoTestCase {
         Date entryDate = new DateTime("20080202T100000Z");
         entry.setDate(entryDate);
 
-        ArrayList<EventLogEntry> entries = new ArrayList<EventLogEntry>();
+        ArrayList<EventLogEntry> entries = new ArrayList<>();
         entries.add(entry);
 
         eventLogDao.addEventLogEntries(entries);

@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,12 +23,12 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Utility methods to process hierarchical String 
+ * Utility methods to process hierarchical String
  * properties.
  *
  */
 public class StringPropertyUtils {
-    
+
     /**
      * Get all child keys of a parent key.  For example
      * for the set of keys: a.b, a.c and a.d the set
@@ -38,20 +38,20 @@ public class StringPropertyUtils {
      * @return child keys
      */
     public static String[] getChildKeys(String parent, String[] keys) {
-        HashSet<String> children = new HashSet<String>();
+        HashSet<String> children = new HashSet<>();
         if(!parent.endsWith("."))
             parent = parent + ".";
         for(String key: keys) {
             String end = StringUtils.substringAfter(key, parent);
             if(end != null && end.isEmpty() || end==null)
                 continue;
-            
+
             children.add(StringUtils.substringBefore(end, "."));
         }
-        
+
         return children.toArray(new String[children.size()]);
     }
-    
+
     /**
      * Return a map of child properties.  For example for the
      * map of [a.b.c->foo1, a.b.d->foo2, a.b.e.f->foo3] the map
@@ -61,7 +61,7 @@ public class StringPropertyUtils {
      * @return map of child properties
      */
     public static Map<String, String> getChildProperties(String parent, Map<String, String> props) {
-        HashMap<String, String> childProps = new HashMap<String, String>();
+        HashMap<String, String> childProps = new HashMap<>();
         if(!parent.endsWith("."))
             parent = parent + ".";
         for(Entry<String, String> entry: props.entrySet()) {
@@ -70,13 +70,13 @@ public class StringPropertyUtils {
                 if(end!=null && end != null && !end.isEmpty() && !end.contains(".")) {
                     childProps.put(end, entry.getValue());
                 }
-                    
+
             }
         }
-        
+
         return childProps;
     }
-    
+
     /**
      * Return a map of sub properties.  For example for the
      * map of [a.b.c->foo1, a.b.d->foo2, a.b.e.f->foo3] the map
@@ -86,7 +86,7 @@ public class StringPropertyUtils {
      * @return map of child properties
      */
     public static Map<String, String> getSubProperties(String parent, Map<String, String> props) {
-        HashMap<String, String> childProps = new HashMap<String, String>();
+        HashMap<String, String> childProps = new HashMap<>();
         if(!parent.endsWith("."))
             parent = parent + ".";
         for(Entry<String, String> entry: props.entrySet()) {
@@ -95,12 +95,12 @@ public class StringPropertyUtils {
                 if(end!=null && end != null && !end.isEmpty()) {
                     childProps.put(end, entry.getValue());
                 }
-                    
+
             }
         }
-        
+
         return childProps;
     }
-    
-    
+
+
 }

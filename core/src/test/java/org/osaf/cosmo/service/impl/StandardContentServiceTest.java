@@ -182,7 +182,7 @@ public class StandardContentServiceTest extends TestCase {
         dummyContent.setName("bar");
         dummyContent.setOwner(user);
 
-        HashSet<Item> children = new HashSet<Item>();
+        HashSet<Item> children = new HashSet<>();
         children.add(dummyContent);
 
         dummyCollection =
@@ -210,7 +210,7 @@ public class StandardContentServiceTest extends TestCase {
         dummyContent2.setName("bar2");
         dummyContent2.setOwner(user);
 
-        HashSet<Item> children = new HashSet<Item>();
+        HashSet<Item> children = new HashSet<>();
         children.add(dummyContent1);
         children.add(dummyContent2);
 
@@ -293,7 +293,7 @@ public class StandardContentServiceTest extends TestCase {
         contentDao.createContent(rootCollection, masterNote);
 
         EntityConverter converter = new EntityConverter(testHelper.getEntityFactory());
-        Set<ContentItem> toUpdate = new HashSet<ContentItem>();
+        Set<ContentItem> toUpdate = new HashSet<>();
         toUpdate.addAll(converter.convertEventCalendar(masterNote, calendar));
         service.updateContentItems(masterNote.getParents(), toUpdate);
 

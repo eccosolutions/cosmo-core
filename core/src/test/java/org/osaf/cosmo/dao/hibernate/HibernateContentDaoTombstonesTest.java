@@ -120,7 +120,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
 
         note2.setModifies(note1);
 
-        Set<ContentItem> items = new LinkedHashSet<ContentItem>();
+        Set<ContentItem> items = new LinkedHashSet<>();
 
         items.add(note1);
         items.add(note2);

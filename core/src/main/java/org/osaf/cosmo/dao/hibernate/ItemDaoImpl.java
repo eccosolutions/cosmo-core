@@ -403,7 +403,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      */
     public Set<Item> findItems(ItemFilter[] filters) {
         try {
-            HashSet<Item> returnSet = new HashSet<Item>();
+            HashSet<Item> returnSet = new HashSet<>();
             for (ItemFilter filter : filters)
                 returnSet.addAll(itemFilterProcessor.processFilter(
                         currentSession(), filter));

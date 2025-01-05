@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,8 +29,8 @@ import net.fortuna.ical4j.model.Date;
  * InvocationHandler for supporting NoteOccurrences.
  * A NoteOccurrence wraps a master NoteItem, adding an
  * occurrence date.  The uuid of a NoteOccurrence is a
- * combination of the  master note's uuid and the 
- * occurrence date.  All other properties of a 
+ * combination of the  master note's uuid and the
+ * occurrence date.  All other properties of a
  * note occurrence should be inherited from the master
  * note.
  * </p>
@@ -43,13 +43,13 @@ import net.fortuna.ical4j.model.Date;
  * </p>
  */
 public class NoteOccurrenceInvocationHandler implements InvocationHandler {
-    
+
     private Date occurrenceDate = null;
     private NoteItem masterNote = null;
     private ModificationUid modUid = null;
     private static final Set<NoteItem> EMPTY_MODS = Collections
-            .unmodifiableSet(new HashSet<NoteItem>(0));
-    
+            .unmodifiableSet(new HashSet<>(0));
+
     public NoteOccurrenceInvocationHandler(Date occurrenceDate,
                                            NoteItem masterNote) {
         // uid is the same as a modification's uid
@@ -57,15 +57,15 @@ public class NoteOccurrenceInvocationHandler implements InvocationHandler {
         this.occurrenceDate = occurrenceDate;
         this.masterNote = masterNote;
     }
-    
+
     public Object invoke(Object proxy, Method method, Object[] args)
             throws Throwable {
         String name = method.getName();
-        
+
         // occurrences are read-only
         if(name.startsWith("set"))
             throw new UnsupportedOperationException("unsupported op: " + name);
-        
+
         // override "getUid" to return the modUid
         if(name.equals("getUid"))
             return modUid.toString();
@@ -91,20 +91,20 @@ public class NoteOccurrenceInvocationHandler implements InvocationHandler {
             return method.invoke(masterNote, args);
     }
 
-    
+
     public boolean equalsOverride(Object obj) {
         if(obj==null)
             return false;
         if( ! (obj instanceof NoteOccurrence))
             return false;
-        
+
         NoteOccurrence no = (NoteOccurrence) obj;
-        
+
         return no.getUid().equals(modUid.toString());
     }
 
     public int hashCodeOverride() {
         return modUid.toString().hashCode();
     }
-    
+
 }

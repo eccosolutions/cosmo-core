@@ -52,7 +52,7 @@ public class UriTemplate {
 
     public UriTemplate(String pattern) {
         this.pattern = pattern;
-        this.segments = new ArrayList<Segment>();
+        this.segments = new ArrayList<>();
 
         StrTokenizer tokenizer = new StrTokenizer(pattern, '/');
         while (tokenizer.hasNext())

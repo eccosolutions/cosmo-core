@@ -56,7 +56,7 @@ public class CalendarFilterEvaluater {
 
     private static final String COMP_VCALENDAR = "VCALENDAR";
 
-    private final Stack<Component> stack = new Stack<Component>();
+    private final Stack<Component> stack = new Stack<>();
 
     public CalendarFilterEvaluater() {}
 
@@ -399,7 +399,7 @@ public class CalendarFilterEvaluater {
         InstanceList instances = new InstanceList();
         if(filter.getTimezone()!=null)
             instances.setTimezone(new TimeZone(filter.getTimezone()));
-        ArrayList<Component> mods = new ArrayList<Component>();
+        ArrayList<Component> mods = new ArrayList<>();
 
         for(Iterator<Component> it=comps.iterator();it.hasNext();) {
             Component comp = it.next();
@@ -563,7 +563,7 @@ public class CalendarFilterEvaluater {
      +---+---+---+---+---+-----------------------------------------------+
      */
     private boolean evaulateVToDoTimeRange(ComponentList comps, TimeRangeFilter filter) {
-        ArrayList<Component> mods = new ArrayList<Component>();
+        ArrayList<Component> mods = new ArrayList<>();
         VToDo master = null;
 
         for(Iterator<Component> it=comps.iterator();it.hasNext();) {

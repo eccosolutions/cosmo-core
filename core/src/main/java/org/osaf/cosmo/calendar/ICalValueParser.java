@@ -69,7 +69,7 @@ public class ICalValueParser {
     public ICalValueParser(String text) {
         tokenizer = new StreamTokenizer(new StringReader(text));
         value = text;
-        params = new HashMap<String, String>();
+        params = new HashMap<>();
 
         tokenizer.resetSyntax();
         tokenizer.wordChars(32, 126);

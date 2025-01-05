@@ -188,7 +188,7 @@ public class OutputFilter {
         }
 
         // Expand each instance within the requested range
-        TreeSet<String> sortedKeys = new TreeSet<String>(instances.keySet());
+        TreeSet<String> sortedKeys = new TreeSet<>(instances.keySet());
         for (String ikey : sortedKeys) {
             Instance instance = (Instance) instances.get(ikey);
 

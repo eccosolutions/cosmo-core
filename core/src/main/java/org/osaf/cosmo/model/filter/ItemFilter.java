@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,26 +27,26 @@ import org.osaf.cosmo.model.QName;
  * The set of criteria is essentially "ANDed" together.
  * For example if displayName and parent are set, then the filter
  * will match all items that match the displayName set AND belong to
- * the parent set. 
- * 
+ * the parent set.
+ *
  * If there are multiple AttributeFilters or StampFilters, all filters
  * must match the item for the item to match the ItemFilter.
  */
 public class ItemFilter {
-   
+
     FilterCriteria displayName = null;
     CollectionItem parent = null;
     FilterCriteria uid = null;
     Integer maxResults = null;
-    
-    ArrayList<AttributeFilter> attributeFilters = new ArrayList<AttributeFilter>();
-    ArrayList<StampFilter> stampFilters = new ArrayList<StampFilter>();
-    HashMap<String, String> filterProperties = new HashMap<String, String>(); 
-    ArrayList<FilterOrder> order = new ArrayList<FilterOrder>();
-    
+
+    ArrayList<AttributeFilter> attributeFilters = new ArrayList<>();
+    ArrayList<StampFilter> stampFilters = new ArrayList<>();
+    HashMap<String, String> filterProperties = new HashMap<>();
+    ArrayList<FilterOrder> order = new ArrayList<>();
+
     public ItemFilter() {
     }
-    
+
     /**
      * List of AttributeFilters.  If there are multiple attribute filters,
      * each filter must match for an item to match the ItemFilter.
@@ -56,10 +56,10 @@ public class ItemFilter {
         return attributeFilters;
     }
 
-    
+
     /**
      * Return an AttributeFilter that matches a specific QName
-     * @param qname qualified name 
+     * @param qname qualified name
      * @return attribute filter that matches the qualified name
      */
     public AttributeFilter getAttributeFilter(QName qname) {
@@ -69,7 +69,7 @@ public class ItemFilter {
         }
         return null;
     }
-    
+
     /**
      * Return a specific StampFilter instance
      * @param clazz StampFilter class
@@ -82,7 +82,7 @@ public class ItemFilter {
         }
         return null;
     }
-    
+
     /**
      * List of StampFilters.  If there are multiple stamp filters,
      * each filter must match for an item to match the ItemFilter.
@@ -127,17 +127,17 @@ public class ItemFilter {
     public void setUid(FilterCriteria uid) {
         this.uid = uid;
     }
-    
+
     /**
      * Set a filter property.  Filter properties can be used by the
      * filter processor to further filter the results.
-     * @param key key 
+     * @param key key
      * @param value value
      */
     public void setFilterProperty(String key, String value) {
         filterProperties.put(key, value);
     }
-    
+
     /**
      * Get a filter property
      * @param key key
@@ -146,10 +146,10 @@ public class ItemFilter {
     public String getFilterProperty(String key) {
         return filterProperties.get(key);
     }
-    
+
     /**
      * <p>
-     * Add an item property to order results by.  For now, this is only 
+     * Add an item property to order results by.  For now, this is only
      * really useful when used with setMaxResults(), where you
      * only want to return the top X items, where the items are
      * in a certain order before the top X are chosen.
@@ -160,7 +160,7 @@ public class ItemFilter {
     public void addOrderBy(FilterOrder fo) {
         order.add(fo);
     }
-    
+
     public List<FilterOrder> getOrders() {
         return order;
     }
@@ -176,5 +176,5 @@ public class ItemFilter {
     public void setMaxResults(Integer maxResults) {
         this.maxResults = maxResults;
     }
-    
+
 }

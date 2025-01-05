@@ -80,8 +80,8 @@ public class StandardCalendarQueryProcessor implements CalendarQueryProcessor {
                     + " by filter " + filter);
         }
 
-        return new HashSet<ICalendarItem>(calendarDao
-                .findCalendarItems(collection, filter));
+        return new HashSet<>(calendarDao
+            .findCalendarItems(collection, filter));
     }
 
     /* (non-Javadoc)
@@ -164,7 +164,7 @@ public class StandardCalendarQueryProcessor implements CalendarQueryProcessor {
         if(ccs==null)
             return;
 
-        HashSet<ContentItem> results = new HashSet<ContentItem>();
+        HashSet<ContentItem> results = new HashSet<>();
         TimeZone tz = ccs.getTimezone();
 
         // For the time being, use CalendarFilters to get relevant

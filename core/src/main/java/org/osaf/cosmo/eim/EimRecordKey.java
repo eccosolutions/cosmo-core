@@ -35,7 +35,7 @@ public class EimRecordKey {
 
     /** */
     public EimRecordKey() {
-        fields = new ArrayList<EimRecordField>();
+        fields = new ArrayList<>();
     }
 
     /** */

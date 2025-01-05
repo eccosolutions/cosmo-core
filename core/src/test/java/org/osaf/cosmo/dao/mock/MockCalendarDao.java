@@ -41,7 +41,7 @@ import org.osaf.cosmo.model.Item;
 public class MockCalendarDao extends MockItemDao implements CalendarDao {
 
     private CalendarFilter lastCalendarFilter;
-    
+
     /**
      * Useful for unit tests.
      * @return
@@ -58,11 +58,11 @@ public class MockCalendarDao extends MockItemDao implements CalendarDao {
 
     // CalendarDao methods
 
-  
+
     /**
      * Find calendar events by filter.
-     * NOTE: This impl always returns an empty set, but has the side effect 
-     * of setting the last 
+     * NOTE: This impl always returns an empty set, but has the side effect
+     * of setting the last
      * @param calendar
      *            calendar collection to search
      * @param filter
@@ -73,25 +73,25 @@ public class MockCalendarDao extends MockItemDao implements CalendarDao {
     public Set<ICalendarItem> findCalendarItems(CollectionItem collection,
                                              CalendarFilter filter) {
         lastCalendarFilter = filter;
-        HashSet<ICalendarItem> results = new HashSet<ICalendarItem>();
+        HashSet<ICalendarItem> results = new HashSet<>();
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
-        
+
         // Evaluate filter against all calendar items
         for (Item child : collection.getChildren()) {
-            
+
             // only care about calendar items
             if (child instanceof ICalendarItem) {
-                
+
                 ICalendarItem content = (ICalendarItem) child;
                 Calendar calendar = new EntityConverter(null).convertContent(content);
-                
+
                 if(calendar!=null) {
                     if (evaluater.evaluate(calendar, filter) == true)
                         results.add(content);
                 }
             }
         }
-        
+
         return results;
 
     }
@@ -103,6 +103,6 @@ public class MockCalendarDao extends MockItemDao implements CalendarDao {
     public Set<ContentItem> findEvents(CollectionItem collection, DateTime rangeStart, DateTime rangeEnd, boolean expandRecurringEvents) {
         throw new UnsupportedOperationException();
     }
-    
-    
+
+
 }

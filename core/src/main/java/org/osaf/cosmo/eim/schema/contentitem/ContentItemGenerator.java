@@ -90,7 +90,7 @@ public class ContentItemGenerator extends BaseItemGenerator
 
         record.addFields(generateUnknownFields());
 
-        ArrayList<EimRecord> records = new ArrayList<EimRecord>();
+        ArrayList<EimRecord> records = new ArrayList<>();
         records.add(record);
 
         return records;

@@ -41,10 +41,10 @@ public class MockNoteItem extends MockICalendarItem implements NoteItem {
     private static final long serialVersionUID = -6100568628972081120L;
 
     private static final Set<NoteItem> EMPTY_MODS = Collections
-            .unmodifiableSet(new HashSet<NoteItem>(0));
+            .unmodifiableSet(new HashSet<>(0));
 
 
-    private final Set<NoteItem> modifications = new HashSet<NoteItem>(0);
+    private final Set<NoteItem> modifications = new HashSet<>(0);
 
 
     private NoteItem modifies = null;

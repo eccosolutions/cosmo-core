@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,10 +37,10 @@ import org.osaf.cosmo.model.NoteOccurrenceUtil;
  * master items, etc.
  */
 public class ItemFilterPostProcessor {
-     
+
     /**
      * Because a timeRange query requires two passes: one to get the list
-     * of possible events that occur in the range, and one 
+     * of possible events that occur in the range, and one
      * to expand recurring events if necessary.
      * This is required because we only index a start and end
      * for the entire recurrence series, and expansion is required to determine
@@ -50,46 +50,46 @@ public class ItemFilterPostProcessor {
         boolean hasTimeRangeFilter = false;
         boolean includeMasterInResults = true;
         boolean doTimeRangeSecondPass = true;
-        
-        HashSet<Item> processedResults = new HashSet<Item>();
+
+        HashSet<Item> processedResults = new HashSet<>();
         EventStampFilter eventFilter = (EventStampFilter) itemFilter.getStampFilter(EventStampFilter.class);
-        
-        
+
+
         if(eventFilter!=null) {
             // does eventFilter have timeRange filter?
             hasTimeRangeFilter = (eventFilter.getPeriod() != null);
         }
-        
-        // When expanding recurring events do we include the master item in 
+
+        // When expanding recurring events do we include the master item in
         // the results, or just the expanded occurrences/modifications
         if(hasTimeRangeFilter && "false".equalsIgnoreCase(itemFilter
                 .getFilterProperty(EventStampFilter.PROPERTY_INCLUDE_MASTER_ITEMS)))
             includeMasterInResults = false;
-        
+
         // Should we do a second pass to expand recurring events to determine
         // if a recurring event actually occurs in the time-range specified,
         // or should we just return the recurring event without double-checking.
         if (hasTimeRangeFilter && "false".equalsIgnoreCase(itemFilter
                  .getFilterProperty(EventStampFilter.PROPERTY_DO_TIMERANGE_SECOND_PASS)))
             doTimeRangeSecondPass = false;
-        
+
         for(Item item: results) {
-            
+
             // If item is not a note, then nothing to do
             if(!(item instanceof NoteItem)) {
                 processedResults.add(item);
                 continue;
             }
-            
+
             NoteItem note = (NoteItem) item;
-            
-            // If note is a modification then add both the modification and the 
+
+            // If note is a modification then add both the modification and the
             // master.
             if(note.getModifies()!=null) {
                 processedResults.add(note);
                 if(includeMasterInResults)
                     processedResults.add(note.getModifies());
-            } 
+            }
             // If filter doesn't have a timeRange, then we are done
             else if(!hasTimeRangeFilter)
                 processedResults.add(note);
@@ -98,15 +98,15 @@ public class ItemFilterPostProcessor {
                         includeMasterInResults, doTimeRangeSecondPass));
             }
         }
-        
+
         return processedResults;
     }
-    
+
     private Collection<ContentItem> processMasterNote(NoteItem note,
             EventStampFilter filter, boolean includeMasterInResults,
             boolean doTimeRangeSecondPass) {
         EventStamp eventStamp = (EventStamp) note.getStamp(EventStamp.class);
-        ArrayList<ContentItem> results = new ArrayList<ContentItem>();
+        ArrayList<ContentItem> results = new ArrayList<>();
 
         // If the event is not recurring or the filter is configured
         // to not do a second pass then just return the note
@@ -126,11 +126,11 @@ public class ItemFilterPostProcessor {
         // is configured to not return the master
         if (instances.size() > 0 && includeMasterInResults)
             results.add(note);
-        
+
         // If were aren't expanding, then return
         if(filter.isExpandRecurringEvents() == false)
             return results;
-        
+
         // Otherwise, add an occurence item for each occurrence
         for (Iterator<Entry<String, Instance>> it = instances.entrySet()
                 .iterator(); it.hasNext();) {

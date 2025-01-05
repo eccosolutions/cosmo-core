@@ -37,7 +37,7 @@ public class CosmoICUTimeZoneRegistry implements TimeZoneRegistry {
 
     private final Log log = LogFactory.getLog(CosmoICUTimeZoneRegistry.class);
 
-    private static final Map<String, TimeZone> DEFAULT_TIMEZONES = new HashMap<String, TimeZone>();
+    private static final Map<String, TimeZone> DEFAULT_TIMEZONES = new HashMap<>();
 
     private static final Properties ALIASES = new Properties();
     static {
@@ -51,7 +51,7 @@ public class CosmoICUTimeZoneRegistry implements TimeZoneRegistry {
         }
     }
 
-    private final Map<String, TimeZone> timezones = new HashMap<String, TimeZone>();
+    private final Map<String, TimeZone> timezones = new HashMap<>();
 
     /**
      * Default constructor.

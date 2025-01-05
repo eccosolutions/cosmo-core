@@ -48,13 +48,13 @@ public class HibNoteItem extends HibICalendarItem implements NoteItem {
     private static final long serialVersionUID = -6100568628972081120L;
 
     private static final Set<NoteItem> EMPTY_MODS = Collections
-            .unmodifiableSet(new HashSet<NoteItem>(0));
+            .unmodifiableSet(new HashSet<>(0));
 
     @OneToMany(targetEntity=HibNoteItem.class, mappedBy = "modifies", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.DELETE} )
     //@BatchSize(size=50)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<NoteItem> modifications = new HashSet<NoteItem>(0);
+    private Set<NoteItem> modifications = new HashSet<>(0);
 
     @ManyToOne(targetEntity=HibNoteItem.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "modifiesitemid")

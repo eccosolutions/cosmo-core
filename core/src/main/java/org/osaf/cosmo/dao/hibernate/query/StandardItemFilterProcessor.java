@@ -91,7 +91,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         StringBuilder whereBuf = new StringBuilder();
         StringBuilder orderBuf = new StringBuilder();
 
-        HashMap<String, Object> params = new HashMap<String, Object>();
+        HashMap<String, Object> params = new HashMap<>();
 
         if(filter instanceof NoteItemFilter)
             handleNoteItemFilter(selectBuf, whereBuf, orderBuf, params, (NoteItemFilter) filter);
@@ -344,7 +344,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         boolean includeMasterInResults = true;
         boolean doTimeRangeSecondPass = true;
 
-        HashSet<Item> processedResults = new HashSet<Item>();
+        HashSet<Item> processedResults = new HashSet<>();
         EventStampFilter eventFilter = (EventStampFilter) itemFilter.getStampFilter(EventStampFilter.class);
 
 
@@ -399,7 +399,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             EventStampFilter filter, boolean includeMasterInResults,
             boolean doTimeRangeSecondPass) {
         EventStamp eventStamp = (EventStamp) note.getStamp(EventStamp.class);
-        ArrayList<ContentItem> results = new ArrayList<ContentItem>();
+        ArrayList<ContentItem> results = new ArrayList<>();
 
         // If the event is not recurring or the filter is configured
         // to not do a second pass then just return the note

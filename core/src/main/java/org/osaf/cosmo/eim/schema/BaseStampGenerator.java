@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,7 +56,7 @@ public abstract class BaseStampGenerator extends BaseGenerator {
      * <code>-1</code> to ignore modification state
      */
     public List<EimRecord> generateRecords(long timestamp) {
-        ArrayList<EimRecord> records = new ArrayList<EimRecord>();
+        ArrayList<EimRecord> records = new ArrayList<>();
 
         // if stamp doesn't exist, check tombstones
         if(stamp==null) {
@@ -65,11 +65,11 @@ public abstract class BaseStampGenerator extends BaseGenerator {
                 checkForTombstones(records, timestamp);
             return records;
         }
-        
+
         if (stamp.getModifiedDate().getTime() < timestamp)
             // the stamp has not changed since the given time
             return records;
-       
+
         // the stamp has changed since the given time
         addRecords(records);
         return records;
@@ -94,7 +94,7 @@ public abstract class BaseStampGenerator extends BaseGenerator {
     public Stamp getStamp() {
         return stamp;
     }
-    
+
     /**
      * In order for the generator to determine if a stamp has been
      * deleted, it needs to know the stamp types to search for in
@@ -110,7 +110,7 @@ public abstract class BaseStampGenerator extends BaseGenerator {
     protected void setStamp(Stamp stamp) {
         this.stamp = stamp;
     }
-    
+
     /**
      * Need to override comparing attribute from stamp to parent stamp.
      */
@@ -120,11 +120,11 @@ public abstract class BaseStampGenerator extends BaseGenerator {
             return false;
 
         Stamp modStamp = getStamp();
-       
+
         return isMissingAttribute(attribute, modStamp);
     }
-    
-    
+
+
     /**
      * Search the current Item for StampTombstones that much the
      * generator's stamp types.  If a match is found and the timestamp
@@ -139,7 +139,7 @@ public abstract class BaseStampGenerator extends BaseGenerator {
             Tombstone ts = it.next();
             if(ts instanceof StampTombstone) {
                 if( getStampTypes().contains(((StampTombstone) ts).getStampType())) {
-                   
+
                     // Ignore tombstones for subscribes, because subscribes don't
                     // need to know about past deletions
                     if(timestamp==-1)
@@ -156,6 +156,6 @@ public abstract class BaseStampGenerator extends BaseGenerator {
                     records.add(record);
                 }
             }
-        }   
+        }
     }
 }

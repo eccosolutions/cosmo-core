@@ -507,7 +507,7 @@ public class ICalendarUtils {
      * @return dates that alarm is configured to trigger
      */
     public static List<Date> getTriggerDates(VAlarm alarm, Component parent) {
-        ArrayList<Date> dates = new ArrayList<Date>();
+        ArrayList<Date> dates = new ArrayList<>();
         Trigger trigger = alarm.getTrigger();
         if(trigger==null)
             return dates;

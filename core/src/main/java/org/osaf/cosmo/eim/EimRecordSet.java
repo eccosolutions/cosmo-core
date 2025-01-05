@@ -42,7 +42,7 @@ public class EimRecordSet {
 
     /** */
     public EimRecordSet() {
-        records = new ArrayList<EimRecord>();
+        records = new ArrayList<>();
     }
 
     /** */

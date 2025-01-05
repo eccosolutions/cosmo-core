@@ -62,7 +62,7 @@ public class EntityConverter {
      * @return set of ICalendarItems
      */
     public Set<ICalendarItem> convertCalendar(Calendar calendar) {
-        Set<ICalendarItem> items = new LinkedHashSet<ICalendarItem>();
+        Set<ICalendarItem> items = new LinkedHashSet<>();
         for(CalendarContext cc: splitCalendar(calendar)) {
             if(cc.type.equals(Component.VEVENT))
                 items.addAll(convertEventCalendar(cc.calendar));
@@ -112,7 +112,7 @@ public class EntityConverter {
 
         updateEventInternal(note, calendar);
 
-        LinkedHashSet<NoteItem> items = new LinkedHashSet<NoteItem>();
+        LinkedHashSet<NoteItem> items = new LinkedHashSet<>();
         items.add(note);
 
         // add modifications to set of items
@@ -355,7 +355,7 @@ public class EntityConverter {
 
         // build timezone map that includes all timezones in master calendar
         ComponentList timezones = masterCal.getComponents(Component.VTIMEZONE);
-        HashMap<String, VTimeZone> tzMap = new HashMap<String, VTimeZone>();
+        HashMap<String, VTimeZone> tzMap = new HashMap<>();
         for (Object timezone : timezones) {
             VTimeZone vtz = (VTimeZone) timezone;
             tzMap.put(vtz.getTimeZoneId().getValue(), vtz);
@@ -401,7 +401,7 @@ public class EntityConverter {
 
         // add all exception events
         NoteItem note = (NoteItem) stamp.getItem();
-        TreeMap<String, VEvent> sortedMap = new TreeMap<String, VEvent>();
+        TreeMap<String, VEvent> sortedMap = new TreeMap<>();
         for(NoteItem exception : note.getModifications()) {
             EventExceptionStamp exceptionStamp = HibEventExceptionStamp.getStamp(exception);
 
@@ -573,7 +573,7 @@ public class EntityConverter {
 
     private void updateEventInternal(NoteItem masterNote,
                                      Calendar calendar) {
-        HashMap<Date, VEvent> exceptions = new HashMap<Date, VEvent>();
+        HashMap<Date, VEvent> exceptions = new HashMap<>();
 
         Calendar masterCalendar = calendar;
 
@@ -854,7 +854,7 @@ public class EntityConverter {
      */
     private void addTimezones(Calendar calendar) {
         ComponentList comps = calendar.getComponents();
-        Set<VTimeZone> timezones = new HashSet<VTimeZone>();
+        Set<VTimeZone> timezones = new HashSet<>();
 
         for (Component comp : (Iterable<Component>) comps) {
             PropertyList props = comp.getProperties();
@@ -884,9 +884,9 @@ public class EntityConverter {
      * and a single UID.
      */
     private CalendarContext[] splitCalendar(Calendar calendar) {
-        Vector<CalendarContext> contexts = new Vector<CalendarContext>();
-        Set<String> allComponents = new HashSet<String>();
-        Map<String, ComponentList> componentMap = new HashMap<String, ComponentList>();
+        Vector<CalendarContext> contexts = new Vector<>();
+        Set<String> allComponents = new HashSet<>();
+        Map<String, ComponentList> componentMap = new HashMap<>();
 
         ComponentList comps = calendar.getComponents();
         for (Component comp : (Iterable<Component>) comps) {

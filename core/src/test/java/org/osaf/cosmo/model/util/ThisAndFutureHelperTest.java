@@ -218,7 +218,7 @@ public class ThisAndFutureHelperTest extends TestCase {
         ComponentList vevents = calendar.getComponents().getComponents(
                 Component.VEVENT);
 
-        ArrayList<VEvent> exceptions = new ArrayList<VEvent>();
+        ArrayList<VEvent> exceptions = new ArrayList<>();
 
         // get list of exceptions (VEVENT with RECURRENCEID)
         for (Iterator<VEvent> i = vevents.iterator(); i.hasNext();) {

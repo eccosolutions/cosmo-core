@@ -110,7 +110,7 @@ public class PageCriteria<SortType extends Enum> {
      */
     private SortType sortType;
 
-    private final Set<String[]> orCriteria = new HashSet<String[]>();
+    private final Set<String[]> orCriteria = new HashSet<>();
 
     public void addOr(String key, String value){
         orCriteria.add(new String[]{key, value});

@@ -58,7 +58,7 @@ public class StringPropertyUtilsTest extends TestCase {
     }
 
     public void testGetChildProperties() {
-        HashMap<String, String> testProps = new HashMap<String, String>();
+        HashMap<String, String> testProps = new HashMap<>();
         testProps.put("a.b.c", "foo1");
         testProps.put("a.b.d", "foo2");
         testProps.put("a.b.e.f", "foo3");

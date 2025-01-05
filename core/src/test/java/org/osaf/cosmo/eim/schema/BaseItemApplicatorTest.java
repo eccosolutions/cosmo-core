@@ -88,7 +88,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
         public TestItemApplicator(String prefix,
                                    String namespace) {
             super(prefix, namespace, null);
-            appliedFields = new HashSet<EimRecordField>();
+            appliedFields = new HashSet<>();
         }
 
         protected void applyField(EimRecordField field) {

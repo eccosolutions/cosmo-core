@@ -49,7 +49,7 @@ public class TicketType {
 
     public TicketType(String id) {
         this.id = id;
-        this.privileges = new HashSet<String>();
+        this.privileges = new HashSet<>();
     }
 
     public TicketType(String id, String[] privileges) {

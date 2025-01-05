@@ -351,11 +351,11 @@ public class StandardContentService implements ContentService {
             // Create the new collection
             collection = contentDao.createCollection(parent, collection);
 
-            Set<ContentItem> childrenToUpdate = new LinkedHashSet<ContentItem>();
+            Set<ContentItem> childrenToUpdate = new LinkedHashSet<>();
 
             // Keep track of NoteItem modifications that need to be processed
             // after the master NoteItem.
-            ArrayList<NoteItem> modifications = new ArrayList<NoteItem>();
+            ArrayList<NoteItem> modifications = new ArrayList<>();
 
             // Either create or update each item
             for (Item item : children) {
@@ -450,11 +450,11 @@ public class StandardContentService implements ContentService {
         Set<CollectionItem> locks = acquireLocks(collection, updates);
 
         try {
-            Set<ContentItem> childrenToUpdate = new LinkedHashSet<ContentItem>();
+            Set<ContentItem> childrenToUpdate = new LinkedHashSet<>();
 
             // Keep track of NoteItem modifications that need to be processed
             // after the master NoteItem.
-            ArrayList<NoteItem> modifications = new ArrayList<NoteItem>();
+            ArrayList<NoteItem> modifications = new ArrayList<>();
 
             // Either create or update each item
             for (Item item : updates) {
@@ -774,7 +774,7 @@ public class StandardContentService implements ContentService {
      */
     private Set<CollectionItem> acquireLocks(Set<? extends Item> children) {
 
-        HashSet<CollectionItem> locks = new HashSet<CollectionItem>();
+        HashSet<CollectionItem> locks = new HashSet<>();
 
         // Get locks for all collections involved
         try {
@@ -795,7 +795,7 @@ public class StandardContentService implements ContentService {
      */
     private Set<CollectionItem> acquireLocks(CollectionItem collection, Set<Item> children) {
 
-        HashSet<CollectionItem> locks = new HashSet<CollectionItem>();
+        HashSet<CollectionItem> locks = new HashSet<>();
 
         // Get locks for all collections involved
         try {
@@ -816,14 +816,14 @@ public class StandardContentService implements ContentService {
     }
 
     private Set<CollectionItem> acquireLocks(CollectionItem collection, Item item) {
-        HashSet<Item> items = new HashSet<Item>();
+        HashSet<Item> items = new HashSet<>();
         items.add(item);
 
         return acquireLocks(collection, items);
     }
 
     private Set<CollectionItem> acquireLocks(Item item) {
-        HashSet<CollectionItem> locks = new HashSet<CollectionItem>();
+        HashSet<CollectionItem> locks = new HashSet<>();
         try {
             acquireLocks(locks,item);
             return locks;

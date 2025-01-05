@@ -134,7 +134,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     public Set<User> getUsers() {
         try {
-            HashSet<User> users = new HashSet<User>();
+            HashSet<User> users = new HashSet<>();
             Iterator it = currentSession().getNamedQuery("user.all").stream().iterator();
             while (it.hasNext())
                 users.add((User) it.next());

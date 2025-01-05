@@ -53,7 +53,7 @@ public class HibCollectionItem extends HibItem implements CollectionItem {
 
     @OneToMany(targetEntity=HibCollectionItemDetails.class, mappedBy="primaryKey.collection", fetch=FetchType.LAZY)
     @Cascade( {CascadeType.DELETE })
-    private final Set<CollectionItemDetails> childDetails = new HashSet<CollectionItemDetails>(0);
+    private final Set<CollectionItemDetails> childDetails = new HashSet<>(0);
 
     private transient Set<Item> children = null;
 
@@ -68,7 +68,7 @@ public class HibCollectionItem extends HibItem implements CollectionItem {
         if(children!=null)
             return children;
 
-        children = new HashSet<Item>();
+        children = new HashSet<>();
         for(CollectionItemDetails cid: childDetails)
             children.add(cid.getItem());
 

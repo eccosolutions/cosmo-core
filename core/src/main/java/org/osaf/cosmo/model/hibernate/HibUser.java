@@ -134,7 +134,7 @@ public class HibUser extends HibAuditableObject implements User {
     @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private final Set<CollectionSubscription> subscriptions =
-        new HashSet<CollectionSubscription>(0);
+        new HashSet<>(0);
 
     /**
      */

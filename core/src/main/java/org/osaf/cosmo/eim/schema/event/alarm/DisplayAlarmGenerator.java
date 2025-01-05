@@ -44,7 +44,7 @@ public class DisplayAlarmGenerator extends BaseStampGenerator
     private static final Log log =
         LogFactory.getLog(DisplayAlarmGenerator.class);
 
-    private static final HashSet<String> STAMP_TYPES = new HashSet<String>(2);
+    private static final HashSet<String> STAMP_TYPES = new HashSet<>(2);
 
     public static final String DEFAULT_DESCRIPTION = "Event Reminder";
 
@@ -72,7 +72,7 @@ public class DisplayAlarmGenerator extends BaseStampGenerator
         if (stamp != null && stamp.getDisplayAlarm()!=null)
             return super.generateRecords(timestamp);
 
-        ArrayList<EimRecord> records = new ArrayList<EimRecord>();
+        ArrayList<EimRecord> records = new ArrayList<>();
 
         // Otherwise overide for non-event records, where we
         // pull the alarm from NoteItem.reminderTime
