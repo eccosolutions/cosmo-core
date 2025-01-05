@@ -35,8 +35,6 @@ import org.osaf.cosmo.model.event.ItemAddedEntry;
 import org.osaf.cosmo.model.event.ItemEntry;
 import org.osaf.cosmo.model.event.ItemRemovedEntry;
 import org.osaf.cosmo.model.event.ItemUpdatedEntry;
-import org.osaf.cosmo.security.CosmoSecurityContext;
-import org.osaf.cosmo.security.CosmoSecurityManager;
 
 /**
  * Advice for generating event log entries for
@@ -46,7 +44,6 @@ import org.osaf.cosmo.security.CosmoSecurityManager;
 public class EventLogAdvice extends OrderedAdvice {
 
     private boolean enabled = true;
-    private CosmoSecurityManager securityManager = null;
     private EventLogDao eventLogDao = null;
 
     private static final Log log =
@@ -334,17 +331,6 @@ public class EventLogAdvice extends OrderedAdvice {
     }
 
     protected void setBaseEntryProps(ItemEntry entry) {
-        CosmoSecurityContext context = securityManager.getSecurityContext();
-        if(context.getUser()!=null)
-            entry.setUser(context.getUser());
-    }
-
-    public CosmoSecurityManager getSecurityManager() {
-        return securityManager;
-    }
-
-    public void setSecurityManager(CosmoSecurityManager securityManager) {
-        this.securityManager = securityManager;
     }
 
     public boolean isEnabled() {

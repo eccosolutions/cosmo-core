@@ -152,29 +152,9 @@
   <!-- required for aspectj annotations support -->
   <aop:aspectj-autoproxy/>
 
-  <!--  Monitors all service calls (ContentService for now) and
-        logs all calls that aren't secured by advice in SecurityAdvice
-   -->
-  <bean id="securityAdviceMonitorAspect" class="org.osaf.cosmo.security.aop.SecurityAdviceMonitor">
-    <property name="order" value="4"/>
-  </bean>
-
-  <!--  Intercepts service calls and verifies current principal has sufficient
-        privileges to execute api.  Aspect bean is annotated with aspecj
-        annotations.
-   -->
-  <bean id="securityAspect" init-method="init" class="org.osaf.cosmo.security.aop.SecurityAdvice">
-    <property name="securityManager" ref="securityManager"/>
-    <property name="contentDao" ref="contentDao"/>
-    <property name="userDao" ref="userDao"/>
-    <property name="order" value="5"/>
-    <property name="enabled" value="true"/>
-  </bean>
-
   <!--  Intercepts service calls and logs events
    -->
   <bean id="eventLogAspect" init-method="init" class="org.osaf.cosmo.event.aop.EventLogAdvice">
-    <property name="securityManager" ref="securityManager"/>
     <property name="eventLogDao" ref="eventLogDao"/>
     <property name="order" value="6"/>
     <property name="enabled" value="true"/>
@@ -285,20 +265,6 @@
     <property name="contentDao" ref="contentDao"/>
   </bean>
 
-  <!-- general protocol/interface resources -->
-
-  <bean id="serviceLocatorFactory"
-        class="org.osaf.cosmo.server.ServiceLocatorFactory">
-    <property name="atomPrefix" value="/atom"/>
-    <property name="cmpPrefix" value="/cmp"/>
-    <property name="davPrefix" value="/dav"/>
-    <property name="morseCodePrefix" value="/mc"/>
-    <property name="pimPrefix" value="/pim"/>
-    <property name="webcalPrefix" value="/webcal"/>
-    <property name="securityManager" ref="securityManager"/>
-  </bean>
-
-  <!-- dav protocol resources -->
 
 
 
@@ -315,36 +281,9 @@
 
 
 
-  <bean id="securityManager"
-        class="org.osaf.cosmo.security.impl.CosmoSecurityManagerImpl">
-    <!--<property name="authenticationManager">-->
-      <!--<ref bean="authenticationManager"/>-->
-    <!--</property>-->
-  </bean>
-
-
   <!-- Logging resources -->
   <bean id="httpLoggingFormat" class="java.lang.String">
     <constructor-arg type="java.lang.String" value="${cosmo.log.HttpLoggingFilter.format}"/>
-  </bean>
-
-  <!--  Retry Filter -->
-  <bean id="retryFilter" class="org.osaf.cosmo.filters.RetryFilter">
-    <property name="maxRetries" value="10"/>
-    <property name="methods">
-      <list>
-        <value>POST</value>
-        <value>PUT</value>
-        <value>DELETE</value>
-        <value>MKCALENDAR</value>
-      </list>
-    </property>
-    <property name="exceptions">
-      <list>
-        <value>org.springframework.dao.ConcurrencyFailureException</value>
-        <value>org.springframework.dao.DataIntegrityViolationException</value>
-      </list>
-    </property>
   </bean>
 
   <!-- give JSP tag functions access to config properties -->
