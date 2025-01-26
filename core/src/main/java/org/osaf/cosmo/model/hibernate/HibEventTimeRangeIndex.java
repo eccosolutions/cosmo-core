@@ -1,9 +1,9 @@
 package org.osaf.cosmo.model.hibernate;
 
-import org.hibernate.annotations.Index;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 /**
  * Contains time-range data for an event that can be
@@ -11,22 +11,24 @@ import javax.persistence.Embeddable;
  * given time-range.
  */
 @Embeddable
+@Table(indexes = {
+        @Index(name = "idx_startdt", columnList = "startdate"), // TODO: should have composite cos_es_start_end_float
+        @Index(name = "idx_enddt", columnList = "enddate"),
+        @Index(name = "idx_floating", columnList = "isfloating"),
+        @Index(name = "idx_recurring", columnList = "isrecurring")
+})
 public class HibEventTimeRangeIndex {
 
     @Column(table="cosmo_event_stamp", name = "startdate", length=16)
-    @Index(name="idx_startdt")
     private String startDate = null;
 
     @Column(table="cosmo_event_stamp", name = "enddate", length=16)
-    @Index(name="idx_enddt")
     private String endDate = null;
 
     @Column(table="cosmo_event_stamp", name = "isfloating")
-    @Index(name="idx_floating")
     private Boolean isFloating = null;
 
     @Column(table="cosmo_event_stamp", name = "isrecurring")
-    @Index(name="idx_recurring")
     private Boolean isRecurring = null;
 
     /**
