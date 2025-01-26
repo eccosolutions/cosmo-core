@@ -15,10 +15,13 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import javax.persistence.Index;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.*;
 
@@ -36,10 +39,15 @@ import java.util.Map.Entry;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@Table(name="cosmo_item")
-@org.hibernate.annotations.Table(
-        appliesTo="cosmo_item",
-        indexes={@Index(name="idx_itemtype", columnNames={"itemtype"})})
+@Table(
+    name="cosmo_item",
+    indexes={
+        @Index(name="idx_itemtype", columnList="itemtype"),
+        @Index(name="idx_itemuid", unique = true, columnList="item_uid"),
+        @Index(name="idx_itemname", columnList="itemname"),
+        @Index(name="idx_ownerid", columnList="ownerid") // TODO: Or should we merge itemtype, ownerid for a single index
+    }
+)
 @DiscriminatorColumn(
         name="itemtype",
         discriminatorType=DiscriminatorType.STRING,
@@ -51,14 +59,12 @@ public abstract class HibItem extends HibAuditableObject implements Item {
     @Column(name = "item_uid", nullable = false, length=255)
     @NotNull
     @Length(min=1, max=255)
-    @Index(name="idx_itemuid")
     @NaturalId
     private String uid;
 
     @Column(name = "itemname", nullable = false)
     @NotNull
     @Length(min=1, max=255)
-    @Index(name="idx_itemname")
     private String name;
 
     @Nullable
