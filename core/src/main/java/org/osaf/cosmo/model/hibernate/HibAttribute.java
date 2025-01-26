@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -32,7 +33,6 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Target;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.Item;
@@ -45,13 +45,10 @@ import org.osaf.cosmo.model.QName;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 // Define a unique constraint on item, namespace, and localname
 @Table(name="cosmo_attribute", uniqueConstraints = {
-        @UniqueConstraint(columnNames={"itemid", "namespace", "localname"})})
-// Define indexes on discriminator and key fields
-@org.hibernate.annotations.Table(
-        appliesTo="cosmo_attribute", 
-        indexes={@Index(name="idx_attrtype", columnNames={"attributetype"}),
-                 @Index(name="idx_attrname", columnNames={"localname"}),
-                 @Index(name="idx_attrns", columnNames={"namespace"})})
+        @UniqueConstraint(columnNames={"itemid", "namespace", "localname"})},
+        indexes={@Index(name="idx_attrtype", columnList="attributetype"),
+                 @Index(name="idx_attrname", columnList="localname"),
+                 @Index(name="idx_attrns", columnList="namespace")})
 @DiscriminatorColumn(
         name="attributetype",
         discriminatorType=DiscriminatorType.STRING,
@@ -68,7 +65,7 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
             @AttributeOverride(name="localName", column = @Column(name="localname", nullable = false, length=128) )
     } )
     private HibQName qname;
-    
+
     @ManyToOne(targetEntity=HibItem.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "itemid", nullable = false)
     private Item item;
@@ -84,21 +81,21 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
     public HibQName getQName() {
         return qname;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#setQName(org.osaf.cosmo.model.QName)
      */
     public void setQName(QName qname) {
         this.qname = (HibQName) qname;
     }
-        
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getName()
      */
     public String getName() {
         if(qname==null)
             return null;
-        
+
         return qname.getLocalName();
     }
 
@@ -108,19 +105,19 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
     public Item getItem() {
         return item;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#setItem(org.osaf.cosmo.model.Item)
      */
     public void setItem(Item item) {
         this.item = item;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#copy()
      */
     public abstract Attribute copy();
-    
+
     /**
      * Return string representation
      */
@@ -131,7 +128,7 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
             return "null";
         return value.toString();
     }
-    
+
     public void validate() {
         // subclasses can override
     }
