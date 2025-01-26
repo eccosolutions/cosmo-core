@@ -32,7 +32,6 @@
         <class>org.osaf.cosmo.model.hibernate.HibMessageStamp</class>
         <class>org.osaf.cosmo.model.hibernate.HibMultiValueStringAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibNoteItem</class>
-        <class>org.osaf.cosmo.model.hibernate.HibPasswordRecovery</class>
         <class>org.osaf.cosmo.model.hibernate.HibServerProperty</class>
         <class>org.osaf.cosmo.model.hibernate.HibStringAttribute</class>
         <class>org.osaf.cosmo.model.hibernate.HibStamp</class>

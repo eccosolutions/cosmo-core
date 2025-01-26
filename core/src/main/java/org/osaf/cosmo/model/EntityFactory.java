@@ -50,15 +50,6 @@ public interface EntityFactory {
 
 
     /**
-     * Create new PasswordRecovery
-     * @param user associated user
-     * @param key recovery key
-     * @return new PasswordRecovery
-     */
-    PasswordRecovery createPasswordRecovery(User user, String key);
-
-
-    /**
      * Create new User
      * @return new User
      */

@@ -20,21 +20,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
-import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.BaseModelObject;
 import org.osaf.cosmo.model.hibernate.HibUser;
@@ -160,10 +156,6 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     public void removeUser(User user) {
         try {
-            // TODO: should probably let db take care of this with
-            // cacade constaint
-            deleteAllPasswordRecoveries(user);
-
             currentSession().delete(user);
             currentSession().flush();
         } catch (HibernateException e) {
@@ -198,40 +190,6 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         } catch (ConstraintViolationException ise) {
             logInvalidStateException(ise);
             throw ise;
-        }
-    }
-
-    public void createPasswordRecovery(PasswordRecovery passwordRecovery){
-        try {
-            currentSession().save(passwordRecovery);
-            currentSession().flush();
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        }
-    }
-
-    public PasswordRecovery getPasswordRecovery(String key){
-        try {
-            TypedQuery hibQuery = currentSession().getNamedQuery("passwordRecovery.byKey")
-                .setParameter("key", key);
-            setCacheable(hibQuery);
-            return (PasswordRecovery) getUniqueResult(hibQuery);
-        } catch (NoResultException e) {
-            return null;
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
-        }
-    }
-
-    public void deletePasswordRecovery(PasswordRecovery passwordRecovery) {
-        try {
-            currentSession().delete(passwordRecovery);
-            currentSession().flush();
-        } catch (HibernateException e) {
-            currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
         }
     }
 
@@ -315,12 +273,6 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
         return (User) getUniqueResult(hibQuery);
-    }
-
-    private void deleteAllPasswordRecoveries(User user) {
-        Session session = currentSession();
-        session.getNamedQuery("passwordRecovery.delete.byUser").setParameter(
-                "user", user).executeUpdate();
     }
 
     private User findUserByActivationId(String id) {

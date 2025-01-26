@@ -20,17 +20,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
-import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.model.hibernate.HibPasswordRecovery;
 import org.osaf.cosmo.model.hibernate.HibUser;
 import org.osaf.cosmo.util.PageCriteria;
-import org.osaf.cosmo.util.PagedList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
@@ -376,40 +372,6 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
 
         queryUser1 = userDao.getUser("user1");
         Assert.assertNull(queryUser1);
-    }
-
-    @Test
-    public void testCreatePasswordRecovery() {
-        User user1 = new HibUser();
-        user1.setUsername("user1");
-        user1.setFirstName("User");
-        user1.setLastName("1");
-        user1.setEmail("user1@user1.com");
-        user1.setPassword("user1password");
-        user1.setAdmin(Boolean.TRUE);
-
-        user1 = userDao.createUser(user1);
-
-        PasswordRecovery passwordRecovery = new HibPasswordRecovery(user1, "1");
-
-        userDao.createPasswordRecovery(passwordRecovery);
-
-        String passwordRecoveryKey = passwordRecovery.getKey();
-
-        clearSession();
-
-        PasswordRecovery queryPasswordRecovery =
-            userDao.getPasswordRecovery(passwordRecoveryKey);
-
-        Assert.assertNotNull(queryPasswordRecovery);
-        Assert.assertEquals(passwordRecovery, queryPasswordRecovery);
-
-        // Test delete
-        userDao.deletePasswordRecovery(queryPasswordRecovery);
-        queryPasswordRecovery =
-            userDao.getPasswordRecovery(passwordRecoveryKey);
-
-        Assert.assertNull(queryPasswordRecovery);
     }
 
     private void verifyUser(User user1, User user2) {

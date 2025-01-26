@@ -17,10 +17,7 @@ package org.osaf.cosmo.service;
 
 import java.util.Set;
 
-import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
-import org.osaf.cosmo.util.PageCriteria;
-import org.osaf.cosmo.util.PagedList;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
 
@@ -153,34 +150,4 @@ public interface UserService extends Service {
      * presentation as an authentication credential.
      */
     String generatePassword();
-
-    /**
-     * Returns the PasswordRecovery entity associated with the given password recovery key.
-     *
-     * If the specified PasswordRecovery entity has expired, returns null after removing
-     * the PasswordRecovery object from persistant storage.
-     *
-     * @param key the password recovery key associated with the account to return
-     * @return the User associated with key
-     * @throws DataRetrievalFailureException if there is no user associated with this
-     * activation id.
-     */
-    PasswordRecovery getPasswordRecovery(String key);
-
-    /**
-     * Creates a PasswordRecovery entity in the repository.
-     *
-     * Returns a new instance of the PasswordRecovery object after saving the original.
-     *
-     * @param passwordRecovery the PasswordRecovery object to create in the repository.
-     */
-    PasswordRecovery createPasswordRecovery(PasswordRecovery passwordRecovery);
-
-    /**
-     * Deletes the specified PasswordRecovery object from the repository.
-     *
-     * @param passwordRecovery the PasswordRecovery object to delete.
-     */
-    void deletePasswordRecovery(PasswordRecovery passwordRecovery);
-
 }

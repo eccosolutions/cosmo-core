@@ -26,17 +26,13 @@ import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
 import org.osaf.cosmo.model.HomeCollectionItem;
-import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.service.OverlordDeletionException;
 import org.osaf.cosmo.service.ServiceEvent;
 import org.osaf.cosmo.service.ServiceListener;
 import org.osaf.cosmo.service.UserService;
-import org.osaf.cosmo.util.PageCriteria;
-import org.osaf.cosmo.util.PagedList;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Standard implementation of {@link UserService}.
@@ -381,32 +377,6 @@ public class StandardUserService extends BaseService implements UserService {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
-
-    @Transactional
-    public PasswordRecovery getPasswordRecovery(String key) {
-         PasswordRecovery passwordRecovery = userDao.getPasswordRecovery(key);
-
-         if (passwordRecovery != null){
-             if (passwordRecovery.hasExpired()){
-                 userDao.deletePasswordRecovery(passwordRecovery);
-             } else {
-                 return passwordRecovery;
-             }
-         }
-         return null;
-     }
-
-     public PasswordRecovery createPasswordRecovery(
-                 PasswordRecovery passwordRecovery){
-
-         userDao.createPasswordRecovery(passwordRecovery);
-
-         return userDao.getPasswordRecovery(passwordRecovery.getKey());
-     }
-
-     public void deletePasswordRecovery(PasswordRecovery passwordRecovery){
-         userDao.deletePasswordRecovery(passwordRecovery);
-     }
 
     /**
      * Remove all Items associated to User.

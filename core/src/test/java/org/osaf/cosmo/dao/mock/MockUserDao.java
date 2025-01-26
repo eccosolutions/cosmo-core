@@ -29,7 +29,6 @@ import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
-import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.mock.MockAuditableObject;
 import org.osaf.cosmo.model.mock.MockUser;
@@ -49,7 +48,6 @@ public class MockUserDao implements UserDao {
     private final HashMap emailIdx;
     private final HashMap uidIdx;
     private final HashMap activationIdIdx;
-    private final HashMap<String, PasswordRecovery> passwordRecoveryIdx;
 
     private MockDaoStorage storage = null;
 
@@ -61,7 +59,6 @@ public class MockUserDao implements UserDao {
         emailIdx = new HashMap();
         uidIdx = new HashMap();
         activationIdIdx = new HashMap();
-        passwordRecoveryIdx = new HashMap<>();
 
         // add overlord user
         MockUser overlord = new MockUser();
@@ -233,22 +230,4 @@ public class MockUserDao implements UserDao {
         usernameIdx.remove(user.getUsername());
         emailIdx.remove(user.getEmail());
     }
-
-    // Dao methods
-
-
-    public void createPasswordRecovery(PasswordRecovery passwordRecovery) {
-        passwordRecoveryIdx.put(passwordRecovery.getKey(), passwordRecovery);
-
-    }
-
-    public void deletePasswordRecovery(PasswordRecovery passwordRecovery) {
-        passwordRecoveryIdx.remove(passwordRecovery.getKey());
-
-    }
-
-    public PasswordRecovery getPasswordRecovery(String key) {
-        return passwordRecoveryIdx.get(key);
-    }
-
 }

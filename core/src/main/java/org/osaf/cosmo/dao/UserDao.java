@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
-import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.User;
 import org.springframework.dao.DataRetrievalFailureException;
 
@@ -123,27 +122,4 @@ public interface UserDao extends Dao {
      * @param user the user to remove
      */
     void removeUser(User user);
-
-    /**
-     * Creates a password recovery entity in the repository. Returns a new
-     * instance of <code>PasswordRecovery</code> after saving the original one.
-     *
-     * @param passwordRecovery the password recovery entity to save
-     */
-    void createPasswordRecovery(PasswordRecovery passwordRecovery);
-
-    /**
-     * Returns the password recovery entity identified by the given key.
-     *
-     * @param key
-     * @return the passsword recovery entity identified by key
-     */
-    PasswordRecovery getPasswordRecovery(String key);
-
-    /**
-     * Delete <code>passwordRecovery</code> from the database.
-     *
-     * @param passwordRecovery the password recovery entity to delete
-     */
-    void deletePasswordRecovery(PasswordRecovery passwordRecovery);
 }

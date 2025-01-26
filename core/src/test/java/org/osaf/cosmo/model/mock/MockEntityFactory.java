@@ -35,7 +35,6 @@ import org.osaf.cosmo.model.FreeBusyItem;
 import org.osaf.cosmo.model.IntegerAttribute;
 import org.osaf.cosmo.model.MessageStamp;
 import org.osaf.cosmo.model.NoteItem;
-import org.osaf.cosmo.model.PasswordRecovery;
 import org.osaf.cosmo.model.QName;
 import org.osaf.cosmo.model.StringAttribute;
 import org.osaf.cosmo.model.TaskStamp;
@@ -111,10 +110,6 @@ public class MockEntityFactory implements EntityFactory {
 
     public MessageStamp createMessageStamp() {
         return new MockMessageStamp();
-    }
-
-    public PasswordRecovery createPasswordRecovery(User user, String key) {
-        return new MockPasswordRecovery(user, key);
     }
 
     public QName createQName(String namespace, String localname) {

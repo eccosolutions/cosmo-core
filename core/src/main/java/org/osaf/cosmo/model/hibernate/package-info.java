@@ -73,12 +73,6 @@
     @NamedQuery(name="user.all", query="from HibUser"),
     @NamedQuery(name="user.count", query="select count(id) from HibUser"),
 
-
-
-    // Password Recovery entity query
-    @NamedQuery(name="passwordRecovery.byKey", query="from HibPasswordRecovery where key=:key"),
-    @NamedQuery(name="passwordRecovery.delete.byUser", query="delete from HibPasswordRecovery where user=:user"),
-
     // Event Queries
     @NamedQuery(name="event.by.calendar.icaluid", query="select i from HibNoteItem i join i.parentDetails pd join i.stamps stamp where pd.primaryKey.collection=:calendar and stamp.class=HibEventStamp and i.icalUid=:uid"),
 
