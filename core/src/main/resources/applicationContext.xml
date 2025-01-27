@@ -131,8 +131,6 @@
   <tx:advice id="txAdvice" transaction-manager="transactionManager">
     <!-- the transactional semantics... -->
     <tx:attributes>
-      <!-- getPasswordRecovery is only 'get' thats not read-only -->
-      <tx:method name="getPasswordRecovery"/>
 
       <!--  checked exception OverlordDeletionException should cause rollback  -->
       <tx:method name="remove*" rollback-for="OverlordDeletionException"/>
