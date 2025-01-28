@@ -415,7 +415,6 @@
                 <directory>src/test/resources</directory>
                 <includes>
                     <include>log4j.xml</include>
-                    <include>cosmo.properties</include>
                     <include>applicationContext-test*.xml</include>
                 </includes>
             </testResource>

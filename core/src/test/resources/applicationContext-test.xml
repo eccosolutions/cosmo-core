@@ -20,13 +20,6 @@
 
 <beans>
 
-  <bean id="cosmoConfigPath"
-        class="java.lang.String">
-    <constructor-arg>
-      <value>classpath:cosmo.properties</value>
-    </constructor-arg>
-  </bean>
-
   <!-- we don't need these, but we have to override the bean definition
        from applicationContext.xml -->
   <bean id="exporter"

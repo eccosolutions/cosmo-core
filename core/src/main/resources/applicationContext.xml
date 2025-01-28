@@ -31,19 +31,6 @@
     <property name="basename" value="MessageResources"/>
   </bean>
 
-  <!-- load the cosmo properties file and make the cosmo
-       config properties available to other spring beans -->
-  <jee:jndi-lookup id="cosmoConfigPath" jndi-name="java:comp/env/cosmo/config"/>
-
-  <bean id="propertyPlaceholderConfigurer"
-        class="org.osaf.cosmo.spring.CosmoPropertyPlaceholderConfigurer">
-    <property name="locations">
-      <list>
-        <ref bean="cosmoConfigPath"/>
-      </list>
-    </property>
-  </bean>
-
 
     <!-- TODO: We did have a ValidatePreUpdateEventListener and ValidatePreInsertEventListener configured too -->
 
@@ -276,21 +263,4 @@
         class="org.osaf.cosmo.ui.config.ServletContextConfigurer">
     <property name="userService" ref="userService"/>
   </bean>
-
-
-
-  <!-- Logging resources -->
-  <bean id="httpLoggingFormat" class="java.lang.String">
-    <constructor-arg type="java.lang.String" value="${cosmo.log.HttpLoggingFilter.format}"/>
-  </bean>
-
-  <!-- give JSP tag functions access to config properties -->
-  <bean id="jspConfigProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="targetClass" value="org.osaf.cosmo.ui.TagFunctions"/>
-    <property name="targetMethod" value="setPropertyPlaceholderConfigurer"/>
-    <property name="arguments">
-        <list><ref bean="propertyPlaceholderConfigurer"/></list>
-    </property>
-  </bean>
-
 </beans>
