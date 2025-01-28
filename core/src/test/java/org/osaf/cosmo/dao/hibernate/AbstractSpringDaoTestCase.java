@@ -15,16 +15,35 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import org.osaf.cosmo.CosmoConfig;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 
-@ContextConfiguration({
-                "/applicationContext-test-sessionFactory.xml",
-                "/applicationContext.xml",
-                "/applicationContext-test.xml",
-            })
+@SpringBootTest
+@ActiveProfiles("test")
+@TestPropertySource(locations = "classpath:application-test.yml")
+@EnableAutoConfiguration
+@EnableTransactionManagement(proxyTargetClass = true)
 @Rollback
 public abstract class AbstractSpringDaoTestCase extends AbstractTransactionalJUnit4SpringContextTests {
+
+
+    @SpringBootConfiguration
+    @EnableAutoConfiguration
+    @Import(CosmoConfig.class)
+    @ComponentScan("org.osaf.cosmo")
+    @EntityScan(basePackages = "org.osaf.cosmo.model.hibernate")
+    public static class LibTestConfiguration {
+    }
 }

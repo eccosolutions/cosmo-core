@@ -27,6 +27,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.6.4</version>
@@ -416,6 +426,7 @@
                 <includes>
                     <include>log4j.xml</include>
                     <include>applicationContext-test*.xml</include>
+                    <include>application-test.yml</include>
                 </includes>
             </testResource>
             <testResource>

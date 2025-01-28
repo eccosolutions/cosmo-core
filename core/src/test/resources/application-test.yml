@@ -1,0 +1,20 @@
+debug: true
+spring:
+    main:
+        allow-bean-definition-overriding: true # doesn't seem to work
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+        properties:
+            hibernate:
+                cache:
+                    use_query_cache: false
+                    use_second_level_cache: false
+                dialect: org.hibernate.dialect.DerbyTenSevenDialect
+                generate_statistics: false
+                current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    datasource:
+        url: jdbc:derby:target/test-db;create=true
+        driver-class-name: org.apache.derby.jdbc.EmbeddedDriver
+

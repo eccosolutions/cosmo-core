@@ -60,9 +60,6 @@
                 <prop key="hibernate.cache.use_query_cache">false</prop>
                 <prop key="hibernate.cache.use_second_level_cache">false</prop>
                 <prop key="cache.region.factory_class">net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory</prop>
-                <prop key="hibernate.show_sql">true</prop>
-
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
 
                 <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
             </props>

@@ -20,17 +20,6 @@
 
 <beans>
 
-  <!-- we don't need these, but we have to override the bean definition
-       from applicationContext.xml -->
-  <bean id="exporter"
-        class="java.lang.String"/>
-  <bean id="dbInitializer"
-	  class="java.lang.String"/>
-  <bean id="cosmoScheduler"
-	  class="java.lang.String"/>
-  <bean id="schedulerManager"
-	  class="java.lang.String"/>
-
   <bean id="accountActivator"
          class="org.osaf.cosmo.service.account.AutomaticAccountActivator"/>
 
