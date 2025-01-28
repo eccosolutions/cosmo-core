@@ -30,6 +30,12 @@
 		<module>core</module>
 	</modules>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+    </parent>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
