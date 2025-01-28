@@ -51,11 +51,6 @@
     </property>
     -->
 
-  <!-- Hibernate statistics MBean -->
-  <bean name="cosmo:name=hibernateStatistics" class="org.osaf.cosmo.hibernate.jmx.CosmoHibernateService">
-    <property name="sessionFactory" ref="sessionFactory"/>
-  </bean>
-
   <!--  ICalendar Client Filter Manager
         The ICalendar Client Filter Manager provides a way
         for cosmo to tailor the icalendar data depending
