@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -86,7 +87,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
      * @param filter item filter
      * @return hibernate query built using HQL
      */
-    public TypedQuery<Item> buildQuery(Session session, ItemFilter filter) {
+    public TypedQuery<Item> buildQuery(EntityManager session, ItemFilter filter) {
         StringBuilder selectBuf = new StringBuilder();
         StringBuilder whereBuf = new StringBuilder();
         StringBuilder orderBuf = new StringBuilder();
