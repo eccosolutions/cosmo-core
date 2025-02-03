@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTest
 
     protected HibernateTestHelper helper;
 
+    @PersistenceContext
+    protected EntityManager entityManager;
+
     @Autowired
     protected SessionFactory sessionFactory;
 
@@ -38,8 +43,8 @@ public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTest
     }
 
     protected void clearSession() {
-        getSession().flush();
-        getSession().clear();
+        entityManager.flush();
+        entityManager.clear();
     }
 
     protected void cleanupDb () throws Exception {
@@ -58,7 +63,7 @@ public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTest
         conn.commit();
     }
 
-    protected Session getSession() {
-        return sessionFactory.getCurrentSession();
+    protected EntityManager getSession() {
+        return entityManager;
     }
 }
