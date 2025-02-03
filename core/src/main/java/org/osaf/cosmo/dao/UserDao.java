@@ -21,6 +21,7 @@ import org.osaf.cosmo.model.DuplicateEmailException;
 import org.osaf.cosmo.model.DuplicateUsernameException;
 import org.osaf.cosmo.model.User;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Interface for DAOs that manage user resources.
@@ -34,6 +35,7 @@ public interface UserDao extends Dao {
     /**
      * Returns an unordered set of all user accounts in the repository.
      */
+    @Transactional(readOnly = true)
     Set<User> getUsers();
 
     /**
@@ -44,6 +46,7 @@ public interface UserDao extends Dao {
      * @throws DataRetrievalFailureException if the account does not
      * exist
      */
+    @Transactional(readOnly = true)
     User getUser(String username);
 
 
@@ -55,8 +58,10 @@ public interface UserDao extends Dao {
      * @throws DataRetrievalFailureException if the account does not
      * exist
      */
+    @Transactional(readOnly = true)
     User getUserByUid(String uid);
 
+    @Transactional(readOnly = true)
     User getUserById(long id);
 
     /**
@@ -67,6 +72,7 @@ public interface UserDao extends Dao {
      * @throws DataRetrievalFailureException if the account does not
      * exist
      */
+    @Transactional(readOnly = true)
     User getUserByActivationId(String id);
 
     /**
@@ -77,6 +83,7 @@ public interface UserDao extends Dao {
      * @throws DataRetrievalFailureException if the account does not
      * exist
      */
+    @Transactional(readOnly = true)
     User getUserByEmail(String email);
 
     /**

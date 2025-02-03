@@ -22,6 +22,7 @@ import org.osaf.cosmo.model.HomeCollectionItem;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.filter.ItemFilter;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Interface for DAO that provides base functionality for items stored in the
@@ -38,7 +39,8 @@ public interface ItemDao extends Dao {
      *            uid of item to find
      * @return item represented by uid
      */
-    public Item findItemByUid(String uid);
+    @Transactional(readOnly = true)
+    Item findItemByUid(String uid);
 
     /**
      * Find an item with the specified path. The return type will be one of
@@ -48,7 +50,8 @@ public interface ItemDao extends Dao {
      *            path of item to find
      * @return item represented by path
      */
-    public Item findItemByPath(String path);
+    @Transactional(readOnly = true)
+    Item findItemByPath(String path);
 
     /**
      * Find an item with the specified path, relative to a parent collection.
@@ -61,7 +64,8 @@ public interface ItemDao extends Dao {
      *            uid of parent that path is relative to
      * @return item represented by path
      */
-    public Item findItemByPath(String path, String parentUid);
+    @Transactional(readOnly = true)
+    Item findItemByPath(String path, String parentUid);
 
     /**
      * Find the parent item of the item with the specified path.
@@ -71,20 +75,20 @@ public interface ItemDao extends Dao {
      *            path of item
      * @return parent item of item represented by path
      */
-    public Item findItemParentByPath(String path);
+    Item findItemParentByPath(String path);
 
     /**
      * Get the root item for a user
      *
      * @param user
      */
-    public HomeCollectionItem getRootItem(User user);
+    HomeCollectionItem getRootItem(User user);
 
     /**
      * Create the root item for a user.
      * @param user
      */
-    public HomeCollectionItem createRootItem(User user);
+    HomeCollectionItem createRootItem(User user);
 
     /**
      * Copy an item to the given path
@@ -97,7 +101,7 @@ public interface ItemDao extends Dao {
      * @throws org.osaf.cosmo.model.DuplicateItemNameException
      *         if path points to an item with the same path
      */
-    public void copyItem(Item item, String destPath, boolean deepCopy);
+    void copyItem(Item item, String destPath, boolean deepCopy);
 
 
     /**
@@ -109,7 +113,7 @@ public interface ItemDao extends Dao {
      * @throws org.osaf.cosmo.model.DuplicateItemNameException
      *         if path points to an item with the same path
      */
-    public void moveItem(String fromPath, String toPath);
+    void moveItem(String fromPath, String toPath);
 
     /**
      * Remove an item.
@@ -117,19 +121,19 @@ public interface ItemDao extends Dao {
      * @param item
      *            item to remove
      */
-    public void removeItem(Item item);
+    void removeItem(Item item);
 
     /**
      * Remove an item give the item's path
      * @param path path of item to remove
      */
-    public void removeItemByPath(String path);
+    void removeItemByPath(String path);
 
     /**
      * Remove an item given the item's uid
      * @param uid the uid of the item to remove
      */
-    public void removeItemByUid(String uid);
+    void removeItemByUid(String uid);
 
     /**
      * Adds item to a collection.
@@ -137,7 +141,7 @@ public interface ItemDao extends Dao {
      * @param item the item
      * @param collection the collection to add to
      */
-    public void addItemToCollection(Item item, CollectionItem collection);
+    void addItemToCollection(Item item, CollectionItem collection);
 
     /**
      * Remove item from a collection.
@@ -145,27 +149,28 @@ public interface ItemDao extends Dao {
      * @param item the item
      * @param collection the collection to remove from
      */
-    public void removeItemFromCollection(Item item, CollectionItem collection);
+    void removeItemFromCollection(Item item, CollectionItem collection);
 
     /**
      * Refresh item with persistent state.
      *
      * @param item the item
      */
-    public void refreshItem(Item item);
+    void refreshItem(Item item);
 
     /**
      * Initialize item, ensuring any proxied associations will be loaded.
      * @param item
      */
-    public void initializeItem(Item item);
+    void initializeItem(Item item);
 
     /**
      * Find a set of items using an ItemFilter.
      * @param filter criteria to filter items by
      * @return set of items matching ItemFilter
      */
-    public Set<Item> findItems(ItemFilter filter);
+    @Transactional(readOnly = true)
+    Set<Item> findItems(ItemFilter filter);
 
     /**
      * Find a set of items using a set of ItemFilters.  The set of items
@@ -173,11 +178,12 @@ public interface ItemDao extends Dao {
      * @param filters criteria to filter items by
      * @return set of items matching any of the filters
      */
-    public Set<Item> findItems(ItemFilter[] filters);
+    @Transactional(readOnly = true)
+    Set<Item> findItems(ItemFilter[] filters);
 
     /**
      * Generates a unique ID. Provided for consumers that need to
      * manipulate an item's UID before creating the item.
      */
-    public String generateUid();
+    String generateUid();
 }
