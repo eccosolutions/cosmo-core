@@ -92,13 +92,6 @@
   <!-- required for aspectj annotations support -->
   <aop:aspectj-autoproxy/>
 
-  <!--  Intercepts service calls and logs events
-   -->
-  <bean id="eventLogAspect" init-method="init" class="org.osaf.cosmo.event.aop.EventLogAdvice">
-    <property name="eventLogDao" ref="eventLogDao"/>
-    <property name="order" value="6"/>
-    <property name="enabled" value="true"/>
-  </bean>
 
   <!-- Timing advice, useful for timing operations -->
   <bean id="timingAdvice" class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor">
@@ -136,11 +129,6 @@
   <bean id="standardItemFilterProcessor"
         class="org.osaf.cosmo.dao.hibernate.query.StandardItemFilterProcessor" />
 
-  <bean id="eventLogDao"
-        class="org.osaf.cosmo.dao.hibernate.EventLogDaoImpl"
-        init-method="init"
-        destroy-method="destroy">
-  </bean>
 
   <bean id="contentDao"
         class="org.osaf.cosmo.dao.hibernate.ContentDaoImpl"
