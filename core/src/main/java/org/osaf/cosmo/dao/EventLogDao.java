@@ -1,12 +1,12 @@
 /*
  * Copyright 2008 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ import java.util.List;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.ItemChangeRecord;
 import org.osaf.cosmo.model.event.EventLogEntry;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Interface for DAO that provides base functionality for adding
@@ -33,14 +34,14 @@ public interface EventLogDao extends Dao {
      *  Add event log entry
       * @param entry entry to add
       */
-     public void addEventLogEntry(EventLogEntry entry);
-    
+    void addEventLogEntry(EventLogEntry entry);
+
    /**
     *  Add event log entries
      * @param entries entries to add
      */
-    public void addEventLogEntries(List<EventLogEntry> entries);
-    
+   void addEventLogEntries(List<EventLogEntry> entries);
+
     /**
      * Find changes to collection.
      * @param collection collection
@@ -49,6 +50,7 @@ public interface EventLogDao extends Dao {
      * @return list of ItemChangeRecords representing all changes to target
      *         collection during time period
      */
-    public List<ItemChangeRecord> findChangesForCollection(CollectionItem collection, Date start, Date end);
-    
+    @Transactional(readOnly = true)
+    List<ItemChangeRecord> findChangesForCollection(CollectionItem collection, Date start, Date end);
+
 }
