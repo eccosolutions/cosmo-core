@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -26,14 +27,16 @@ import org.osaf.cosmo.model.QName;
  */
 @Embeddable
 public class HibQName implements QName {
-    
+
     public static final String DEFAULT_NAMESPACE = "org.osaf.cosmo.default";
-    
+
     private String namespace = null;
+
+    @Column(name = "localname")
     private String localName = null;
-    
+
     public HibQName() {}
-    
+
     /**
      * Create new QName with specified namespace and local name.
      * @param namespace namespace
@@ -43,7 +46,7 @@ public class HibQName implements QName {
         this.namespace = namespace;
         this.localName = localName;
     }
-    
+
     /**
      * Create a new QName with the specified local name.  The namespace
      * is the fully qualified name of the specified class.
@@ -53,7 +56,7 @@ public class HibQName implements QName {
     public HibQName(Class clazz, String localName) {
         this(clazz.getName(), localName);
     }
-    
+
     /**
      * Create new QName with default namespace and specified local name.
      * @param localName local name
@@ -61,47 +64,47 @@ public class HibQName implements QName {
     public HibQName(String localName) {
         this(DEFAULT_NAMESPACE, localName);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.QName#getLocalName()
      */
     public String getLocalName() {
         return localName;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.QName#setLocalName(java.lang.String)
      */
     public void setLocalName(String localName) {
         this.localName = localName;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.QName#getNamespace()
      */
     public String getNamespace() {
         return namespace;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.QName#setNamespace(java.lang.String)
      */
     public void setNamespace(String namespace) {
         this.namespace = namespace;
     }
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.QName#copy()
      */
     public QName copy() {
         return new HibQName(namespace, localName);
     }
-   
+
     public int hashCode() {
         return new HashCodeBuilder(13, 27).
             append(namespace).append(localName).toHashCode();
     }
-  
+
     public boolean equals(Object o) {
         if (! (o instanceof HibQName)) {
             return false;
