@@ -14,6 +14,8 @@ spring:
                 dialect: org.hibernate.dialect.DerbyTenSevenDialect
                 generate_statistics: false
                 current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+                session_factory:
+                    interceptor: org.osaf.cosmo.hibernate.CompoundInterceptor
     datasource:
         url: jdbc:derby:target/test-db;create=true
         driver-class-name: org.apache.derby.jdbc.EmbeddedDriver
