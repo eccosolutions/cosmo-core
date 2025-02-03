@@ -1,5 +1,6 @@
 package org.osaf.cosmo;
 
+import org.hibernate.Interceptor;
 import org.osaf.cosmo.calendar.query.CalendarQueryProcessor;
 import org.osaf.cosmo.calendar.query.impl.StandardCalendarQueryProcessor;
 import org.osaf.cosmo.dao.CalendarDao;
@@ -14,6 +15,9 @@ import org.osaf.cosmo.dao.hibernate.ServerPropertyDaoImpl;
 import org.osaf.cosmo.dao.hibernate.UserDaoImpl;
 import org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor;
 import org.osaf.cosmo.dao.hibernate.query.StandardItemFilterProcessor;
+import org.osaf.cosmo.hibernate.CompoundInterceptor;
+import org.osaf.cosmo.model.hibernate.AuditableObjectInterceptor;
+import org.osaf.cosmo.model.hibernate.EventStampInterceptor;
 import org.osaf.cosmo.model.hibernate.HibEntityFactory;
 import org.osaf.cosmo.service.impl.StandardContentService;
 import org.osaf.cosmo.service.impl.StandardServerPropertyService;
@@ -25,10 +29,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * Note you need @EntityScan to include
+ * <code>@EntityScan(basePackages = "org.osaf.cosmo.model")</code>
+ */
 @Configuration
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
 public class CosmoConfig {
+
+    public CosmoConfig() {
+        CompoundInterceptor.registerInterceptor(new AuditableObjectInterceptor());
+        CompoundInterceptor.registerInterceptor(new EventStampInterceptor());
+    }
 
     @Bean(initMethod="init", destroyMethod="destroy")
     public StandardServerPropertyService serverPropertyService(ServerPropertyDao serverPropertyDao) {
@@ -88,7 +101,6 @@ public class CosmoConfig {
         calendarDao.setItemFilterProcessor(itemFilterProcessor);
         return calendarDao;
     }
-
     @Bean
     public LockManager contentLockManager() {
         return new SingleVMLockManager();
@@ -97,6 +109,7 @@ public class CosmoConfig {
     public ItemFilterProcessor standardItemFilterProcessor() {
         return new StandardItemFilterProcessor();
     }
+
     @Bean
     public ItemPathTranslator itemPathTranslator() {
         return new DefaultItemPathTranslator();
