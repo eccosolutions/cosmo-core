@@ -27,7 +27,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
@@ -43,7 +42,7 @@ public abstract class AbstractSpringDaoTestCase extends AbstractTransactionalJUn
     @EnableAutoConfiguration
     @Import(CosmoConfig.class)
     @ComponentScan("org.osaf.cosmo")
-    @EntityScan(basePackages = "org.osaf.cosmo.model.hibernate")
+    @EntityScan(basePackages = "org.osaf.cosmo.model.hibernate") // BUT in parent we use persistence.xml which isn't getting detected for some reason
     public static class LibTestConfiguration {
     }
 }

@@ -27,8 +27,11 @@ import org.osaf.cosmo.service.lock.SingleVMLockManager;
 import org.springframework.context.annotation.Bean;
 
 /**
- * Note you need @EntityScan to include
- * <code>@EntityScan(basePackages = "org.osaf.cosmo.model")</code>
+ * You could use @EntityScan at top level, but it's painful in Spring init if not doing Spring Boot
+ * autoconfiguration for the EntityManagerFactory,
+ * so we do provide a persistence.xml if your persistence-unit is set to eccoPU.
+ * <p>
+ * For EntityScan you can use: <code>@EntityScan(basePackages = "org.osaf.cosmo.model")</code>
  */
 public abstract class BaseCosmoConfig {
 
