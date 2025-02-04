@@ -67,7 +67,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
     /* (non-Javadoc)
      * @see org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor#processFilter(org.hibernate.Session, org.osaf.cosmo.model.filter.ItemFilter)
      */
-    public Set<Item> processFilter(Session session, ItemFilter filter) {
+    public Set<Item> processFilter(EntityManager session, ItemFilter filter) {
         TypedQuery<Item> hibQuery = buildQuery(session, filter);
         List<Item> queryResults = hibQuery.getResultList();
         return processResults(queryResults, filter);
