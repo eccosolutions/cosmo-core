@@ -20,15 +20,18 @@ import java.util.Set;
 import org.osaf.cosmo.model.User;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Interface for services that manage user accounts.
  */
+@Transactional
 public interface UserService extends Service {
 
     /**
      * Returns an unordered set of all user accounts in the repository.
      */
+    @Transactional(readOnly = true)
     Set<User> getUsers();
 
 
@@ -40,6 +43,7 @@ public interface UserService extends Service {
      * @throws DataRetrievalFailureException if the account does not
      * exist
      */
+    @Transactional(readOnly = true)
     User getUser(String username);
 
     /**
@@ -50,6 +54,7 @@ public interface UserService extends Service {
      * @throws DataRetrievalFailureException if the account does not
      * exist
      */
+    @Transactional(readOnly = true)
     User getUserById(long userId);
 
     /**
@@ -60,6 +65,7 @@ public interface UserService extends Service {
      * @throws DataRetrievalFailureException if the account does not
      * exist
      */
+    @Transactional(readOnly = true)
     User getUserByEmail(String email);
 
     /**
@@ -72,6 +78,7 @@ public interface UserService extends Service {
      * @throws DataRetrievalFailureException if there is no user associated with this
      * activation id.
      */
+    @Transactional(readOnly = true)
     User getUserByActivationId(String activationId);
 
 

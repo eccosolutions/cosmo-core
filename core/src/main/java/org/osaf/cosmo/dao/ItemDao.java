@@ -22,7 +22,6 @@ import org.osaf.cosmo.model.HomeCollectionItem;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.filter.ItemFilter;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Interface for DAO that provides base functionality for items stored in the
@@ -39,7 +38,6 @@ public interface ItemDao extends Dao {
      *            uid of item to find
      * @return item represented by uid
      */
-    @Transactional(readOnly = true)
     Item findItemByUid(String uid);
 
     /**
@@ -50,7 +48,6 @@ public interface ItemDao extends Dao {
      *            path of item to find
      * @return item represented by path
      */
-    @Transactional(readOnly = true)
     Item findItemByPath(String path);
 
     /**
@@ -64,7 +61,6 @@ public interface ItemDao extends Dao {
      *            uid of parent that path is relative to
      * @return item represented by path
      */
-    @Transactional(readOnly = true)
     Item findItemByPath(String path, String parentUid);
 
     /**
@@ -169,7 +165,6 @@ public interface ItemDao extends Dao {
      * @param filter criteria to filter items by
      * @return set of items matching ItemFilter
      */
-    @Transactional(readOnly = true)
     Set<Item> findItems(ItemFilter filter);
 
     /**
@@ -178,7 +173,6 @@ public interface ItemDao extends Dao {
      * @param filters criteria to filter items by
      * @return set of items matching any of the filters
      */
-    @Transactional(readOnly = true)
     Set<Item> findItems(ItemFilter[] filters);
 
     /**

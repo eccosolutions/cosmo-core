@@ -21,10 +21,12 @@ import org.osaf.cosmo.model.filter.ItemFilter;
 
 import java.util.Date;
 import java.util.Set;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Interface for services that manage access to user content.
  */
+@Transactional
 public interface ContentService extends Service {
 
     /**
@@ -32,6 +34,7 @@ public interface ContentService extends Service {
      *
      * @param user
      */
+    @Transactional(readOnly = true)
     HomeCollectionItem getRootItem(User user);
 
     /**
@@ -42,6 +45,7 @@ public interface ContentService extends Service {
      *            uid of item to find
      * @return item represented by uid
      */
+    @Transactional(readOnly = true)
     Item findItemByUid(String uid);
 
     /**
@@ -51,6 +55,7 @@ public interface ContentService extends Service {
      * @throws NoSuchItemException if a item does not exist at
      * the specified path
      */
+    @Transactional(readOnly = true)
     Item findItemByPath(String path);
 
     /**
@@ -60,6 +65,7 @@ public interface ContentService extends Service {
      * @throws NoSuchItemException if a item does not exist at
      * the specified path
      */
+    @Transactional(readOnly = true)
     Item findItemByPath(String path,
                         String parentUid);
 
@@ -71,6 +77,7 @@ public interface ContentService extends Service {
      * @throws NoSuchItemException if a item does not exist at
      * the specified path
      */
+    @Transactional(readOnly = true)
     Item findItemParentByPath(String path);
 
     /**
@@ -133,6 +140,7 @@ public interface ContentService extends Service {
      * @return children of collection that have been updated since
      *         timestamp, or all children if timestamp is null
      */
+    @Transactional(readOnly = true)
     Set<ContentItem> loadChildren(CollectionItem collection, Date timestamp);
 
     /**
@@ -271,6 +279,7 @@ public interface ContentService extends Service {
      * @return set items matching specified
      *         filter.
      */
+    @Transactional(readOnly = true)
     Set<Item> findItems(ItemFilter filter);
 
 
@@ -286,6 +295,7 @@ public interface ContentService extends Service {
      * @return set ContentItem objects that contain EventStamps that occur
      *         int the given timeRange.
      */
+    @Transactional(readOnly = true)
     Set<ContentItem> findEvents(CollectionItem collection,
                                 DateTime rangeStart, DateTime rangeEnd,
                                 boolean expandRecurringEvents);
