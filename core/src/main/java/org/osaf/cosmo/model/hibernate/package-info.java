@@ -69,12 +69,12 @@
     @NamedQuery(name="user.byUsernameOrEmail.ignorecase.ingoreId", query="from HibUser where id!=:userid and (lower(username)=lower(:username) or lower(email)=lower(:email))"),
     @NamedQuery(name="user.byId", query="from HibUser where id=:userId"),
     @NamedQuery(name="user.byUid", query="from HibUser where uid=:uid"),
-    @NamedQuery(name="user.byActivationId", query="from HibUser where activationid=:activationId"),
+    @NamedQuery(name="user.byActivationId", query="from HibUser where activationId=:activationId"),
     @NamedQuery(name="user.all", query="from HibUser"),
     @NamedQuery(name="user.count", query="select count(id) from HibUser"),
 
     // Event Queries
-    @NamedQuery(name="event.by.calendar.icaluid", query="select i from HibNoteItem i join i.parentDetails pd join i.stamps stamp where pd.primaryKey.collection=:calendar and stamp.class=HibEventStamp and i.icalUid=:uid"),
+    @NamedQuery(name="event.by.calendar.icaluid", query="select i from HibNoteItem i join i.parentDetails pd join i.stamps stamp where pd.primaryKey.collection=:calendar and type(stamp)=HibEventStamp and i.icalUid=:uid"),
 
     // Event Log Queries
     @NamedQuery(name="logEntry.by.collection.date", query="from HibEventLogEntry e where id1=:parentId and entryDate between :startDate and :endDate")
