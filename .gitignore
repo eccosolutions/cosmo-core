@@ -1,6 +1,7 @@
 target/
+build/
 bin/
-.svn
+.gradle/
 .settings/
 .classpath
 .project
