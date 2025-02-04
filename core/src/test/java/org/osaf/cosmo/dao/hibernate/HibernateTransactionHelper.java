@@ -15,10 +15,10 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.SessionHolder;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -30,17 +30,17 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  */
 public class HibernateTransactionHelper {
 
-    PlatformTransactionManager txManager = null;
-    SessionFactory sessionFactory = null;
+    final PlatformTransactionManager txManager;
+    final EntityManagerFactory entityManagerFactory;
 
-    public HibernateTransactionHelper(PlatformTransactionManager txManager, SessionFactory sessionFactory) {
+    public HibernateTransactionHelper(PlatformTransactionManager txManager, EntityManagerFactory entityManagerFactory) {
         this.txManager = txManager;
-        this.sessionFactory = sessionFactory;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public TransactionStatus startNewTransaction() {
-        Session session = sessionFactory.openSession();
-        TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TransactionSynchronizationManager.bindResource(entityManagerFactory, new EntityManagerHolder(entityManager));
         TransactionStatus transactionStatus = txManager.getTransaction(new DefaultTransactionDefinition());
         return transactionStatus;
     }
@@ -51,9 +51,10 @@ public class HibernateTransactionHelper {
         else
             txManager.commit(ts);
 
-        SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
-        Session s = holder.getSession();
-        SessionFactoryUtils.closeSession(s);
+        EntityManagerHolder holder = (EntityManagerHolder) TransactionSynchronizationManager.unbindResource(
+            entityManagerFactory);
+        EntityManager em = holder.getEntityManager();
+        EntityManagerFactoryUtils.closeEntityManager(em);
     }
 
 }
