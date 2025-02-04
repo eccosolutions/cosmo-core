@@ -15,7 +15,7 @@ import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 public class HibernateSessionSupport {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
     Session currentSession() {
         return entityManager.unwrap(Session.class);

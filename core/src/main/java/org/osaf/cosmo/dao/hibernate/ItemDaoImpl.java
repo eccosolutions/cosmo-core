@@ -520,10 +520,10 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      *         in collection
      */
     protected void verifyItemNameUnique(Item item, CollectionItem collection) {
-        TypedQuery<Long> hibQuery = currentSession().getNamedQuery("itemId.by.parentId.name");
+        var hibQuery = entityManager.createNamedQuery("itemId.by.parentId.name", Long.class);
         hibQuery.setParameter("name", item.getName()).setParameter("parentid",
                 ((HibItem) collection).getId());
-        List<Long> results = hibQuery.getResultList();
+        var results = hibQuery.getResultList();
         if(!results.isEmpty()) {
             throw new DuplicateItemNameException(item, "item name " + item.getName() +
                     " already exists in collection " + collection.getUid());
@@ -558,47 +558,39 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         }
     }
 
-    protected Item findItemByParentAndName(Long userDbId, Long parentDbId,
-            String name) {
-        TypedQuery<Item> hibQuery;
-        if (parentDbId != null) {
-            hibQuery = currentSession().getNamedQuery(
-                    "item.by.ownerId.parentId.name").setParameter("ownerid",
-                    userDbId).setParameter("parentid", parentDbId)
-                    .setParameter("name", name);
-
-        } else {
-            hibQuery = currentSession().getNamedQuery(
-                    "item.by.ownerId.nullParent.name").setParameter("ownerid",
-                    userDbId).setParameter("name", name);
-        }
+    protected Item findItemByParentAndName(Long userDbId, Long parentDbId, String name) {
+        var hibQuery = parentDbId != null
+            ? entityManager.createNamedQuery("item.by.ownerId.parentId.name", Item.class)
+                .setParameter("ownerid", userDbId)
+                .setParameter("parentid", parentDbId)
+                .setParameter("name", name)
+            : entityManager.createNamedQuery("item.by.ownerId.nullParent.name", Item.class)
+                .setParameter("ownerid", userDbId)
+                .setParameter("name", name);
         setManualFlush(hibQuery);
         return getUniqueResult(hibQuery);
     }
 
     protected Item findItemByParentAndNameMinusItem(Long userDbId, Long parentDbId,
             String name, Long itemId) {
-        TypedQuery<Item> hibQuery;
-        if (parentDbId != null) {
-            hibQuery = currentSession().getNamedQuery(
-                    "item.by.ownerId.parentId.name.minusItem").setParameter("itemid", itemId)
-                    .setParameter("ownerid",
-                    userDbId).setParameter("parentid", parentDbId)
-                    .setParameter("name", name);
-        } else {
-            hibQuery = currentSession().getNamedQuery(
-                    "item.by.ownerId.nullParent.name.minusItem").setParameter("itemid", itemId)
-                    .setParameter("ownerid",
-                    userDbId).setParameter("name", name);
-        }
+        var hibQuery = parentDbId != null
+            ? entityManager.createNamedQuery("item.by.ownerId.parentId.name.minusItem", Item.class)
+                .setParameter("itemid", itemId)
+                .setParameter("ownerid", userDbId)
+                .setParameter("parentid", parentDbId)
+                .setParameter("name", name)
+            : entityManager.createNamedQuery("item.by.ownerId.nullParent.name.minusItem", Item.class)
+                .setParameter("itemid", itemId)
+                .setParameter("ownerid", userDbId)
+                .setParameter("name", name);
         setManualFlush(hibQuery);
         return getUniqueResult(hibQuery);
     }
 
     protected HomeCollectionItem findRootItem(Long dbUserId) {
-        TypedQuery<HomeCollectionItem> hibQuery = currentSession().getNamedQuery(
-                "homeCollection.by.ownerId").setParameter("ownerid",
-                dbUserId);
+        var hibQuery = currentSession().createNamedQuery(
+                "homeCollection.by.ownerId", HomeCollectionItem.class)
+            .setParameter("ownerid", dbUserId);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
 
@@ -610,7 +602,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         if (item.getUid() != null) {
 
             // Lookup item by uid
-            TypedQuery<Long> hibQuery = currentSession().getNamedQuery("itemid.by.uid")
+            var hibQuery = currentSession().createNamedQuery("itemid.by.uid", Long.class)
                     .setParameter("uid", item.getUid());
             setManualFlush(hibQuery);
 

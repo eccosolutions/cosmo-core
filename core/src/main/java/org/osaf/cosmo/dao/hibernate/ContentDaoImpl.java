@@ -313,7 +313,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
      */
     public void removeUserContent(User user) {
         try {
-            TypedQuery<ContentItem> query = currentSession().getNamedQuery("contentItem.by.owner")
+            var query = entityManager.createNamedQuery("contentItem.by.owner", ContentItem.class)
                 .setParameter("owner", user);
 
             List<ContentItem> results = query.getResultList();
@@ -333,16 +333,16 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
     public Set<ContentItem> loadChildren(CollectionItem collection, Date timestamp) {
         try {
             Set<ContentItem> children = new HashSet<>();
-            TypedQuery<ContentItem> query;
+            TypedQuery<ContentItem> query =
+                timestamp == null ? entityManager.createNamedQuery("contentItem.by.parent",
+                        ContentItem.class)
+                    .setParameter("parent", collection)
+                    : entityManager.createNamedQuery("contentItem.by.parent.timestamp",
+                            ContentItem.class)
+                        .setParameter("parent", collection).setParameter(
+                            "timestamp", timestamp);
 
             // use custom HQL query that will eager fetch all associations
-            if (timestamp == null)
-                query = currentSession().getNamedQuery("contentItem.by.parent")
-                        .setParameter("parent", collection);
-            else
-                query = currentSession().getNamedQuery("contentItem.by.parent.timestamp")
-                        .setParameter("parent", collection).setParameter(
-                                "timestamp", timestamp);
 
             setManualFlush(query);
             List<ContentItem> results = query.getResultList();
@@ -712,15 +712,12 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             return;
 
         // Lookup item by parent/icaluid
-        TypedQuery<Long> hibQuery;
-        if (item instanceof NoteItem)
-            hibQuery = currentSession().getNamedQuery(
-                    "noteItemId.by.parent.icaluid").setParameter("parentid",
-                            getBaseModelObject(parent).getId()).setParameter("icaluid", item.getIcalUid());
-        else
-            hibQuery = currentSession().getNamedQuery(
-                    "icalendarItem.by.parent.icaluid").setParameter("parentid",
-                            getBaseModelObject(parent).getId()).setParameter("icaluid", item.getIcalUid());
+        TypedQuery<Long> hibQuery = item instanceof NoteItem ? entityManager.createNamedQuery(
+            "noteItemId.by.parent.icaluid", Long.class).setParameter("parentid",
+            getBaseModelObject(parent).getId()).setParameter("icaluid", item.getIcalUid())
+            : entityManager.createNamedQuery(
+                "icalendarItem.by.parent.icaluid", Long.class).setParameter("parentid",
+                getBaseModelObject(parent).getId()).setParameter("icaluid", item.getIcalUid());
 
         HibernateSessionSupport.setManualFlush(hibQuery);
 

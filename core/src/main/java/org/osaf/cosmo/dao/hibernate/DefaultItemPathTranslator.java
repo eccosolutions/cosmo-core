@@ -153,20 +153,17 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
 
     protected Item findRootItemByOwnerAndName(Session session,
             String username, String name) {
-        TypedQuery hibQuery = session.getNamedQuery(
-                "item.by.ownerName.name.nullParent").setParameter("username",
-                username).setParameter("name", name);
+        var hibQuery = session.createNamedQuery(
+                "item.by.ownerName.name.nullParent", Item.class)
+                .setParameter("username", username).setParameter("name", name);
 
-        List results = hibQuery.getResultList();
-        if (!results.isEmpty())
-            return (Item) results.get(0);
-        else
-            return null;
+        var results = hibQuery.getResultList();
+        return results.isEmpty() ? null : (Item) results.get(0);
     }
 
     protected Item findItemByParentAndName(Session session, Item parent,
             String name) {
-        TypedQuery hibQuery = session.getNamedQuery("item.by.parent.name")
+        var hibQuery = session.createNamedQuery("item.by.parent.name", Item.class)
                 .setParameter("parent", parent).setParameter("name", name);
 
         List results = hibQuery.getResultList();

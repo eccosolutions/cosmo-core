@@ -16,18 +16,14 @@
 package org.osaf.cosmo.dao.hibernate;
 
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.FlushMode;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.DuplicateEmailException;
@@ -35,7 +31,6 @@ import org.osaf.cosmo.model.DuplicateUsernameException;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.BaseModelObject;
 import org.osaf.cosmo.model.hibernate.HibUser;
-import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 
 /**
  * Implemtation of UserDao using Hibernate persistence objects.
@@ -67,7 +62,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             return user;
         } catch (PersistenceException e) {
             currentSession().clear();
-            throw EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException cve) {
             logInvalidStateException(cve);
             throw cve;
@@ -132,9 +127,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
     public Set<User> getUsers() {
         try {
             HashSet<User> users = new HashSet<>();
-            Iterator it = currentSession().getNamedQuery("user.all").stream().iterator();
+            var it = currentSession().createNamedQuery("user.all", User.class).stream().iterator();
             while (it.hasNext())
-                users.add((User) it.next());
+                users.add(it.next());
 
             return users;
         } catch (PersistenceException e) {
@@ -201,87 +196,72 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     private User findUserByUsernameIgnoreCase(String username) {
         Session session = currentSession();
-        TypedQuery<User> hibQuery = session.getNamedQuery("user.byUsername.ignorecase").setParameter(
+        var hibQuery = session.createNamedQuery("user.byUsername.ignorecase", User.class).setParameter(
                 "username", username);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
         var users = hibQuery.getResultList();
-        if (!users.isEmpty())
-            return users.get(0);
-        else
-            return null;
+        return users.isEmpty() ? null : users.get(0);
     }
 
     private User findUserByUsernameOrEmailIgnoreCaseAndId(Long userId,
             String username, String email) {
         Session session = currentSession();
-        TypedQuery hibQuery = session.getNamedQuery(
-                "user.byUsernameOrEmail.ignorecase.ingoreId").setParameter(
+        var hibQuery = session.createNamedQuery(
+                "user.byUsernameOrEmail.ignorecase.ingoreId", User.class).setParameter(
                 "username", username).setParameter("email", email)
                 .setParameter("userid", userId);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
-        List users = hibQuery.getResultList();
-        if (!users.isEmpty())
-            return (User) users.get(0);
-        else
-            return null;
+        var users = hibQuery.getResultList();
+        return users.isEmpty() ? null : users.get(0);
     }
 
     private User findUserByEmail(String email) {
         Session session = currentSession();
-        TypedQuery hibQuery = session.getNamedQuery("user.byEmail").setParameter(
+        var hibQuery = session.createNamedQuery("user.byEmail", User.class).setParameter(
                 "email", email);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
-        List users = hibQuery.getResultList();
-        if (!users.isEmpty())
-            return (User) users.get(0);
-        else
-            return null;
+        var users = hibQuery.getResultList();
+        return users.isEmpty() ? null : users.get(0);
     }
 
     private User findUserByEmailIgnoreCase(String email) {
         Session session = currentSession();
-        TypedQuery hibQuery = session.getNamedQuery("user.byEmail.ignorecase").setParameter(
+        var hibQuery = session.createNamedQuery("user.byEmail.ignorecase", User.class).setParameter(
                 "email", email);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
-        List users = hibQuery.getResultList();
-        if (!users.isEmpty())
-            return (User) users.get(0);
-        else
-            return null;
+        var users = hibQuery.getResultList();
+        return users.isEmpty() ? null : users.get(0);
     }
 
     private User findUserById(long userId) {
         Session session = currentSession();
-        TypedQuery hibQuery = session.getNamedQuery(
-                "user.byId").setParameter("userId", userId);
+        var hibQuery = session.createNamedQuery(
+                "user.byId", User.class).setParameter("userId", userId);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
-        List users = hibQuery.getResultList();
-        if (!users.isEmpty())
-            return (User) users.get(0);
-        else
-            return null;
+        var users = hibQuery.getResultList();
+        return users.isEmpty() ? null : users.get(0);
     }
 
     private User findUserByUid(String uid) {
         Session session = currentSession();
-        TypedQuery hibQuery = session.getNamedQuery("user.byUid").setParameter(
+        var hibQuery = session.createNamedQuery("user.byUid", User.class).setParameter(
                 "uid", uid);
         setCacheable(hibQuery);
         setManualFlush(hibQuery);
-        return (User) getUniqueResult(hibQuery);
+        return getUniqueResult(hibQuery);
     }
 
     private User findUserByActivationId(String id) {
         Session session = currentSession();
-        TypedQuery hibQuery = session.getNamedQuery("user.byActivationId").setParameter(
+        var hibQuery = session.createNamedQuery("user.byActivationId", User.class).setParameter(
                 "activationId", id);
         setCacheable(hibQuery);
-        return (User) getUniqueResult(hibQuery);
+        return getUniqueResult(hibQuery);
     }
 
     protected BaseModelObject getBaseModelObject(Object obj) {
@@ -292,7 +272,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {
             log.debug(cve.getLocalizedMessage());
-            for (ConstraintViolation iv : cve.getConstraintViolations()) {
+            for (ConstraintViolation<?> iv : cve.getConstraintViolations()) {
                 log.debug("property name: " + iv.getPropertyPath() + " value: "
                         + iv.getInvalidValue());
             }
