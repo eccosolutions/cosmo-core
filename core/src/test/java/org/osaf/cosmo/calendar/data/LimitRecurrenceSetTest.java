@@ -30,15 +30,16 @@ import java.io.StringReader;
 /**
  * Test limit-recurring-events output filter
  */
-public class LimitRecurrenceSetTest extends TestCase {
+public class LimitRecurrenceSetTest {
     protected String baseDir = "src/test/resources/testdata/";
 
+    @Test
     public void testLimitRecurrenceSet() throws Exception {
         CalendarBuilder cb = new CalendarBuilder();
         FileInputStream fis = new FileInputStream(baseDir + "limit_recurr_test.ics");
         Calendar calendar = cb.build(fis);
 
-        Assert.assertEquals(5, calendar.getComponents().getComponents("VEVENT").size());
+        Assertions.assertEquals(5, calendar.getComponents().getComponents("VEVENT").size());
 
         VTimeZone vtz = (VTimeZone) calendar.getComponents().getComponent("VTIMEZONE");
         TimeZone tz = new TimeZone(vtz);
@@ -60,8 +61,8 @@ public class LimitRecurrenceSetTest extends TestCase {
         Calendar filterCal = cb.build(sr);
 
         ComponentList<CalendarComponent> comps = filterCal.getComponents();
-        Assert.assertEquals(3, comps.getComponents("VEVENT").size());
-        Assert.assertEquals(1, comps.getComponents("VTIMEZONE").size());
+        Assertions.assertEquals(3, comps.getComponents("VEVENT").size());
+        Assertions.assertEquals(1, comps.getComponents("VTIMEZONE").size());
 
         // Make sure 3rd and 4th override are dropped
         ComponentList<VEvent> components = comps.getComponents("VEVENT");
@@ -71,12 +72,13 @@ public class LimitRecurrenceSetTest extends TestCase {
         }
     }
 
+    @Test
     public void testLimitFloatingRecurrenceSet() throws Exception {
         CalendarBuilder cb = new CalendarBuilder();
         FileInputStream fis = new FileInputStream(baseDir + "limit_recurr_float_test.ics");
         Calendar calendar = cb.build(fis);
 
-        Assert.assertEquals(3, calendar.getComponents().getComponents("VEVENT").size());
+        Assertions.assertEquals(3, calendar.getComponents().getComponents("VEVENT").size());
 
         OutputFilter filter = new OutputFilter("test");
         DateTime start = new DateTime("20060102T170000");
@@ -96,19 +98,20 @@ public class LimitRecurrenceSetTest extends TestCase {
 
         Calendar filterCal = cb.build(sr);
 
-        Assert.assertEquals(2, filterCal.getComponents().getComponents("VEVENT").size());
+        Assertions.assertEquals(2, filterCal.getComponents().getComponents("VEVENT").size());
         // Make sure 2nd override is dropped
         for (Component c : filterCal.getComponents().getComponents("VEVENT")) {
             Assert.assertNotSame("event 6 changed 2", c.getProperties().<Summary>getProperty("SUMMARY").getValue());
         }
     }
 
+    @Test
     public void testLimitRecurrenceSetThisAndFuture() throws Exception {
         CalendarBuilder cb = new CalendarBuilder();
         FileInputStream fis = new FileInputStream(baseDir + "limit_recurr_taf_test.ics");
         Calendar calendar = cb.build(fis);
 
-        Assert.assertEquals(4, calendar.getComponents().getComponents("VEVENT").size());
+        Assertions.assertEquals(4, calendar.getComponents().getComponents("VEVENT").size());
 
         VTimeZone vtz = (VTimeZone) calendar.getComponents().getComponent("VTIMEZONE");
         TimeZone tz = new TimeZone(vtz);
@@ -129,7 +132,7 @@ public class LimitRecurrenceSetTest extends TestCase {
 
         Calendar filterCal = cb.build(sr);
 
-        Assert.assertEquals(2, filterCal.getComponents().getComponents("VEVENT").size());
+        Assertions.assertEquals(2, filterCal.getComponents().getComponents("VEVENT").size());
         // Make sure 2nd and 3rd override are dropped
         for (Component c : filterCal.getComponents().getComponents("VEVENT")) {
             Assert.assertNotSame("event 6 changed", c.getProperties().<Summary>getProperty("SUMMARY").getValue());

@@ -15,11 +15,11 @@
  */
 package org.osaf.cosmo.dao.hibernate.query;
 
-import org.junit.Assert;
-import junit.framework.TestCase;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.calendar.query.CalendarFilter;
 import org.osaf.cosmo.calendar.query.ComponentFilter;
 import org.osaf.cosmo.calendar.query.PropertyFilter;
@@ -41,7 +41,7 @@ import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 /**
  * Test CalendarFilterConverter.
  */
-public class CalendarFilterConverterTest extends TestCase {
+public class CalendarFilterConverterTest {
 
     CalendarFilterConverter converter = new CalendarFilterConverter();
 
@@ -49,6 +49,7 @@ public class CalendarFilterConverterTest extends TestCase {
         super();
     }
 
+    @Test
     public void testTranslateItemToFilter() throws Exception {
         CollectionItem calendar = new HibCollectionItem();
         calendar.setUid("calendar");
@@ -90,23 +91,24 @@ public class CalendarFilterConverterTest extends TestCase {
 
         ItemFilter itemFilter = converter.translateToItemFilter(calendar, calFilter);
 
-        Assert.assertTrue(itemFilter instanceof NoteItemFilter);
+        Assertions.assertTrue(itemFilter instanceof NoteItemFilter);
         NoteItemFilter noteFilter = (NoteItemFilter) itemFilter;
-        Assert.assertEquals(calendar.getUid(), noteFilter.getParent().getUid());
-        Assert.assertTrue(noteFilter.getDisplayName() instanceof LikeExpression);
+        Assertions.assertEquals(calendar.getUid(), noteFilter.getParent().getUid());
+        Assertions.assertTrue(noteFilter.getDisplayName() instanceof LikeExpression);
         verifyFilterExpressionValue(noteFilter.getDisplayName(), "summary");
-        Assert.assertTrue(noteFilter.getIcalUid() instanceof LikeExpression);
+        Assertions.assertTrue(noteFilter.getIcalUid() instanceof LikeExpression);
         verifyFilterExpressionValue(noteFilter.getIcalUid(), "uid");
-        Assert.assertTrue(noteFilter.getBody() instanceof ILikeExpression);
+        Assertions.assertTrue(noteFilter.getBody() instanceof ILikeExpression);
         verifyFilterExpressionValue(noteFilter.getBody(), "desc");
 
         EventStampFilter sf = (EventStampFilter) noteFilter.getStampFilter(EventStampFilter.class);
-        Assert.assertNotNull(sf);
-        Assert.assertNotNull(sf.getPeriod());
-        Assert.assertEquals(sf.getPeriod().getStart().toString(), "20070101T100000Z");
-        Assert.assertEquals(sf.getPeriod().getEnd().toString(), "20070201T100000Z");
+        Assertions.assertNotNull(sf);
+        Assertions.assertNotNull(sf.getPeriod());
+        Assertions.assertEquals(sf.getPeriod().getStart().toString(), "20070101T100000Z");
+        Assertions.assertEquals(sf.getPeriod().getEnd().toString(), "20070201T100000Z");
     }
 
+    @Test
     public void testGetFirstPassFilter() {
         CollectionItem calendar = new HibCollectionItem();
         calendar.setUid("calendar");
@@ -120,26 +122,26 @@ public class CalendarFilterConverterTest extends TestCase {
 
         try {
             converter.translateToItemFilter(calendar, calFilter);
-            Assert.fail("shouldn't get here");
+            Assertions.fail("shouldn't get here");
         } catch(IllegalArgumentException e) {}
 
 
         ItemFilter itemFilter = converter.getFirstPassFilter(calendar, calFilter);
-        Assert.assertNotNull(itemFilter);
-        Assert.assertTrue(itemFilter instanceof NoteItemFilter);
+        Assertions.assertNotNull(itemFilter);
+        Assertions.assertTrue(itemFilter instanceof NoteItemFilter);
         NoteItemFilter noteFilter = (NoteItemFilter) itemFilter;
 
-        Assert.assertFalse(noteFilter.getIsModification().booleanValue());
-        Assert.assertEquals(1, noteFilter.getStampFilters().size());
+        Assertions.assertFalse(noteFilter.getIsModification().booleanValue());
+        Assertions.assertEquals(1, noteFilter.getStampFilters().size());
 
         StampFilter sf = noteFilter.getStampFilters().get(0);
-        Assert.assertEquals(EventStamp.class, sf.getStampClass());
-        Assert.assertEquals(true, sf.isMissing());
+        Assertions.assertEquals(EventStamp.class, sf.getStampClass());
+        Assertions.assertEquals(true, sf.isMissing());
     }
 
     private void verifyFilterExpressionValue(FilterCriteria fc, Object value) {
         FilterExpression fe = (FilterExpression) fc;
-        Assert.assertTrue(fe.getValue().equals(value));
+        Assertions.assertTrue(fe.getValue().equals(value));
     }
 
 }

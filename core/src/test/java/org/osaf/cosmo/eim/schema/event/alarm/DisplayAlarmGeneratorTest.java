@@ -42,6 +42,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
     private static final Log log =
         LogFactory.getLog(DisplayAlarmGeneratorTest.class);
 
+    @Test
     public void testGenerateRecord() throws Exception {
 
         MockNoteItem noteItem = new MockNoteItem();
@@ -87,6 +88,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
                        eventStamp.getDisplayAlarmRepeat());
     }
 
+    @Test
     public void testGenerateRecordNonEvent() {
 
         MockNoteItem noteItem = new MockNoteItem();
@@ -123,6 +125,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         checkIntegerField(repeatField, FIELD_REPEAT, null);
     }
 
+    @Test
     public void testGenerateNoAlarmNonEvent() {
 
         MockNoteItem noteItem = new MockNoteItem();
@@ -146,6 +149,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         checkTextField(triggerField, FIELD_TRIGGER, null);
     }
 
+    @Test
     public void testGenerateNoAlarmEvent() {
 
         MockNoteItem noteItem = new MockNoteItem();
@@ -174,6 +178,7 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         checkTextField(triggerField, FIELD_TRIGGER, null);
     }
 
+    @Test
     public void testGenerateMissingRecord() throws Exception {
 
         NoteItem masterNote = new MockNoteItem();
@@ -216,16 +221,16 @@ public class DisplayAlarmGeneratorTest extends BaseGeneratorTestCase
         assertEquals("unexpected number of fields", 4, fields.size());
 
         EimRecordField descriptionField = fields.get(0);
-        Assert.assertTrue(descriptionField.isMissing());
+        Assertions.assertTrue(descriptionField.isMissing());
 
         EimRecordField triggerField = fields.get(1);
-        Assert.assertTrue(triggerField.isMissing());
+        Assertions.assertTrue(triggerField.isMissing());
 
         EimRecordField durationField = fields.get(2);
-        Assert.assertTrue(durationField.isMissing());
+        Assertions.assertTrue(durationField.isMissing());
 
         EimRecordField repeatField = fields.get(3);
-        Assert.assertTrue(repeatField.isMissing());
+        Assertions.assertTrue(repeatField.isMissing());
     }
 
 }

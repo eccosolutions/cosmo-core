@@ -37,7 +37,7 @@ import org.osaf.cosmo.model.mock.MockQName;
 /**
  * Base class for record applicator tests.
  */
-public abstract class BaseApplicatorTestCase extends TestCase
+public abstract class BaseApplicatorTestCase
     implements EimSchemaConstants {
     private static final Log log =
         LogFactory.getLog(BaseApplicatorTestCase.class);

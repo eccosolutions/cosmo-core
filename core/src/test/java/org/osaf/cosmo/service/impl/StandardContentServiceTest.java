@@ -47,7 +47,7 @@ import java.util.Set;
  * @see StandardContentService
  * @see MockContentDao
  */
-public class StandardContentServiceTest extends TestCase {
+public class StandardContentServiceTest {
     private static final Log log =
         LogFactory.getLog(StandardContentServiceTest.class);
 
@@ -75,6 +75,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testFindItemByPath() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -94,6 +95,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testInvalidModUid() {
 
         Item item = service.findItemByUid("uid" + ModificationUid.RECURRENCEID_DELIMITER + "bogus");
@@ -103,6 +105,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testFindNonExistentItemByPath() {
         String path = "/foo/bar/baz";
         Item item = service.findItemByPath(path);
@@ -112,6 +115,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testRemoveItem() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -131,12 +135,13 @@ public class StandardContentServiceTest extends TestCase {
         // cannot remove HomeCollection
         try {
             service.removeItem(rootCollection);
-            Assert.fail("able to remove root!");
+            Assertions.fail("able to remove root!");
         } catch (IllegalArgumentException e) {
         }
     }
 
     /** */
+    @Test
     public void testCreateContent() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -152,6 +157,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testRemoveContent() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -170,6 +176,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
 
+    @Test
     public void testCreateCollectionWithChildren() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -194,6 +201,7 @@ public class StandardContentServiceTest extends TestCase {
                 dummyCollection.getChildren().iterator().next().getName());
     }
 
+    @Test
     public void testUpdateCollectionWithChildren() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -250,6 +258,7 @@ public class StandardContentServiceTest extends TestCase {
         assertNotNull(bar3);
     }
 
+    @Test
     public void testCollectionHashGetsUpdated() {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -279,6 +288,7 @@ public class StandardContentServiceTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testUpdateEvent() throws Exception {
         User user = testHelper.makeDummyUser();
         CollectionItem rootCollection = contentDao.createRootItem(user);
@@ -300,30 +310,30 @@ public class StandardContentServiceTest extends TestCase {
         Calendar masterCal = eventStamp.getEventCalendar();
         VEvent masterEvent = eventStamp.getMasterEvent();
 
-        Assert.assertEquals(1, masterCal.getComponents().getComponents(Component.VEVENT).size());
-        Assert.assertNull(eventStamp.getMasterEvent().getRecurrenceId());
+        Assertions.assertEquals(1, masterCal.getComponents().getComponents(Component.VEVENT).size());
+        Assertions.assertNull(eventStamp.getMasterEvent().getRecurrenceId());
 
-        Assert.assertEquals(masterNote.getModifications().size(), 4);
+        Assertions.assertEquals(masterNote.getModifications().size(), 4);
         for(NoteItem mod : masterNote.getModifications()) {
             EventExceptionStamp eventException = StampUtils.getEventExceptionStamp(mod);
             VEvent exceptionEvent = eventException.getExceptionEvent();
-            Assert.assertEquals(mod.getModifies(), masterNote);
-            Assert.assertEquals(masterEvent.getUid().getValue(), exceptionEvent.getUid().getValue());
+            Assertions.assertEquals(mod.getModifies(), masterNote);
+            Assertions.assertEquals(masterEvent.getUid().getValue(), exceptionEvent.getUid().getValue());
         }
 
         Calendar fullCal = converter.convertNote(masterNote);
 
-        Assert.assertNotNull(getEvent("20060104T140000", fullCal));
-        Assert.assertNotNull(getEvent("20060105T140000", fullCal));
-        Assert.assertNotNull(getEvent("20060106T140000", fullCal));
-        Assert.assertNotNull(getEvent("20060107T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060104T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060105T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060106T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060107T140000", fullCal));
 
-        Assert.assertNotNull(getEventException("20060104T140000", masterNote.getModifications()));
-        Assert.assertNotNull(getEventException("20060105T140000", masterNote.getModifications()));
-        Assert.assertNotNull(getEventException("20060106T140000", masterNote.getModifications()));
-        Assert.assertNotNull(getEventException("20060107T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060104T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060105T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060106T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060107T140000", masterNote.getModifications()));
 
-        Assert.assertEquals(fullCal.getComponents().getComponents(Component.VEVENT).size(), 5);
+        Assertions.assertEquals(fullCal.getComponents().getComponents(Component.VEVENT).size(), 5);
 
         // now update
         calendar = getCalendar("event_with_exceptions2.ics");
@@ -333,24 +343,25 @@ public class StandardContentServiceTest extends TestCase {
         fullCal = converter.convertNote(masterNote);
 
         // should have removed 1, added 2 so that makes 4-1+2=5
-        Assert.assertEquals(masterNote.getModifications().size(), 5);
-        Assert.assertNotNull(getEventException("20060104T140000", masterNote.getModifications()));
-        Assert.assertNotNull(getEventException("20060105T140000", masterNote.getModifications()));
-        Assert.assertNotNull(getEventException("20060106T140000", masterNote.getModifications()));
-        Assert.assertNull(getEventException("20060107T140000", masterNote.getModifications()));
-        Assert.assertNotNull(getEventException("20060108T140000", masterNote.getModifications()));
-        Assert.assertNotNull(getEventException("20060109T140000", masterNote.getModifications()));
+        Assertions.assertEquals(masterNote.getModifications().size(), 5);
+        Assertions.assertNotNull(getEventException("20060104T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060105T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060106T140000", masterNote.getModifications()));
+        Assertions.assertNull(getEventException("20060107T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060108T140000", masterNote.getModifications()));
+        Assertions.assertNotNull(getEventException("20060109T140000", masterNote.getModifications()));
 
-        Assert.assertNotNull(getEvent("20060104T140000", fullCal));
-        Assert.assertNotNull(getEvent("20060105T140000", fullCal));
-        Assert.assertNotNull(getEvent("20060106T140000", fullCal));
-        Assert.assertNull(getEvent("20060107T140000", fullCal));
-        Assert.assertNotNull(getEvent("20060108T140000", fullCal));
-        Assert.assertNotNull(getEvent("20060109T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060104T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060105T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060106T140000", fullCal));
+        Assertions.assertNull(getEvent("20060107T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060108T140000", fullCal));
+        Assertions.assertNotNull(getEvent("20060109T140000", fullCal));
     }
 
 
     /** */
+    @Test
     public void testNullContentDao() {
         service.setContentDao(null);
         try {

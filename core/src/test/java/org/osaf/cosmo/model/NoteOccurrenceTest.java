@@ -17,19 +17,19 @@ package org.osaf.cosmo.model;
 
 import java.util.Date;
 
-import org.junit.Assert;
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.model.mock.MockEntityFactory;
 import org.osaf.cosmo.model.mock.MockNoteItem;
 
 /**
  * Test NoteOccurrenceItem
  */
-public class NoteOccurrenceTest extends TestCase {
+public class NoteOccurrenceTest {
 
     private final EntityFactory factory = new MockEntityFactory();
 
+    @Test
     public void testGenerateNoteOccurrence() throws Exception {
 
         MockNoteItem note = (MockNoteItem) factory.createNote();
@@ -44,22 +44,22 @@ public class NoteOccurrenceTest extends TestCase {
         NoteOccurrence no2 = NoteOccurrenceUtil.createNoteOccurrence(new net.fortuna.ical4j.model.Date("20070102"), note);
 
 
-        Assert.assertEquals("1:20070101", no.getUid());
-        Assert.assertEquals(note, no.getMasterNote());
-        Assert.assertNotNull(no.getOccurrenceDate());
+        Assertions.assertEquals("1:20070101", no.getUid());
+        Assertions.assertEquals(note, no.getMasterNote());
+        Assertions.assertNotNull(no.getOccurrenceDate());
 
-        Assert.assertEquals(note.getCreationDate(), no.getCreationDate());
-        Assert.assertEquals("dn", no.getDisplayName());
-        Assert.assertEquals("body", no.getBody());
+        Assertions.assertEquals(note.getCreationDate(), no.getCreationDate());
+        Assertions.assertEquals("dn", no.getDisplayName());
+        Assertions.assertEquals("body", no.getBody());
 
-        Assert.assertEquals(1, no.getStamps().size());
+        Assertions.assertEquals(1, no.getStamps().size());
 
-        Assert.assertFalse(no.equals(no2));
-        Assert.assertTrue(no.hashCode() != no2.hashCode());
+        Assertions.assertNotEquals(no, no2);
+        Assertions.assertTrue(no.hashCode() != no2.hashCode());
 
         try {
             no.setUid("blah");
-            Assert.fail("able to perform unsupported op");
+            Assertions.fail("able to perform unsupported op");
         } catch (UnsupportedOperationException e) {
 
         }

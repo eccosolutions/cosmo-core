@@ -20,9 +20,10 @@ import junit.framework.TestCase;
 /**
  * Test case for <code>UserPath</code>.
  */
-public class UserPathTest extends TestCase {
+public class UserPathTest {
 
     /** */
+    @Test
     public void testAbsoluteUrlPath() {
         String badUrlPath = "http://dead.beef/";
         try {
@@ -32,6 +33,7 @@ public class UserPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testSuccessfulParse() {
         String urlPath = "/user/jonez";
         UserPath up = UserPath.parse(urlPath);
@@ -39,6 +41,7 @@ public class UserPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testUnsuccessfulParse() {
         String urlPath = "/bcm/stuff/jonez";
         UserPath up = UserPath.parse(urlPath);
@@ -46,6 +49,7 @@ public class UserPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testParseNoPathInfo() {
         String urlPath = "/user/jonez/foobar";
         UserPath up = UserPath.parse(urlPath);
@@ -53,6 +57,7 @@ public class UserPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testParseWithPathInfo() {
         String urlPath = "/user/jonez/foobar";
         UserPath up = UserPath.parse(urlPath, true);
@@ -61,6 +66,7 @@ public class UserPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testGetUsername() {
         String username = "jonez";
         String urlPath = "/user/" + username;
@@ -71,6 +77,7 @@ public class UserPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testGetUsernameWithPathInfo() {
         String username = "jonez";
         String pathInfo = "/foobar";

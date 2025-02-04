@@ -19,12 +19,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
-import org.junit.Assert;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CalendarCollectionStamp;
@@ -65,7 +65,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         super();
     }
 
-    @Before
+    @BeforeEach
     public void onSetUpInTransaction() throws Exception {
         CollectionItem calendar1 = generateCalendar("test1", "testuser");
         CollectionItem calendar2 = generateCalendar("test2", "testuser");
@@ -114,7 +114,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         ItemFilter filter = new ItemFilter();
         filter.setUid(Restrictions.eq(CALENDAR_UID_1));
         Set<Item> results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
         verifyItemInSet(results, CALENDAR_UID_1);
     }
 
@@ -122,69 +122,69 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
     public void testNoteFilter() {
         NoteItemFilter filter = new NoteItemFilter();
         Set<Item> results = contentDao.findItems(filter);
-        Assert.assertEquals(11, results.size());
+        Assertions.assertEquals(11, results.size());
 
         filter.setIcalUid(Restrictions.eq("icaluid1"));
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         filter.setIcalUid(null);
 
         filter.setDisplayName(Restrictions.eq("find me not"));
         results = contentDao.findItems(filter);
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
         filter.setDisplayName(Restrictions.eq("find me"));
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         filter.setBody(Restrictions.like("find me not"));
         results = contentDao.findItems(filter);
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
         filter.setBody(Restrictions.like("find me"));
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         // find master items only
         filter = new NoteItemFilter();
         filter.setIsModification(false);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(10, results.size());
+        Assertions.assertEquals(10, results.size());
 
         // find master items with modifications only
         filter.setIsModification(null);
         filter.setHasModifications(true);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         // find specific master and modifications
         filter = new NoteItemFilter();
         NoteItem note = (NoteItem) contentDao.findItemByUid(NOTE_UID);
         filter.setMasterNoteItem(note);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(2, results.size());
+        Assertions.assertEquals(2, results.size());
 
 
         //find notes without triage
         filter = new NoteItemFilter();
         results = contentDao.findItems(filter);
-//        Assert.assertEquals(9, results.size());
+//        Assertions.assertEquals(9, results.size());
 
         // limit results
         filter.setMaxResults(5);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(5, results.size());
+        Assertions.assertEquals(5, results.size());
 
         // find notes by reminderTime
         filter = new NoteItemFilter();
         filter.setReminderTime(Restrictions.between(new Date(12345678),new Date(1234567890)));
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         filter.setReminderTime(Restrictions.between(new Date(1000),new Date(2000)));
         results = contentDao.findItems(filter);
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
     }
 
     @Test
@@ -194,7 +194,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         filter.setParent(calendar1);
 
         Set<Item> results = contentDao.findItems(filter);
-        Assert.assertEquals(8, results.size());
+        Assertions.assertEquals(8, results.size());
     }
 
     @Test
@@ -208,7 +208,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         filter.getStampFilters().add(missingStamp);
 
         Set<Item> results = contentDao.findItems(filter);
-        Assert.assertEquals(2, results.size());
+        Assertions.assertEquals(2, results.size());
         verifyItemInSet(results, NOTE_UID);
     }
 
@@ -221,17 +221,17 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         filter.getStampFilters().add(eventFilter);
 
         Set<Item> results = contentDao.findItems(filter);
-        Assert.assertEquals(9, results.size());
+        Assertions.assertEquals(9, results.size());
 
         // find only recurring events
         eventFilter.setIsRecurring(true);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(2, results.size());
+        Assertions.assertEquals(2, results.size());
 
         eventFilter.setIsRecurring(null);
         filter.setParent(calendar1);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         DateTime start = new DateTime("20050817T115000Z");
         DateTime end = new DateTime("20050818T115000Z");
@@ -240,7 +240,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
 
         eventFilter.setPeriod(period);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         // Test that event with start==end==rangeStart (cal6.ics)
         // is returned
@@ -251,7 +251,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
 
         eventFilter.setPeriod(period);
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
         verifyItemInSet(results, "calendar1_6");
 
         start.setTime(new GregorianCalendar(1996, 1, 22).getTimeInMillis());
@@ -260,7 +260,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         eventFilter.setPeriod(period);
 
         results = contentDao.findItems(filter);
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         start.setTime(new GregorianCalendar(2007, 8, 6).getTimeInMillis());
         end.setTime(System.currentTimeMillis());
@@ -268,7 +268,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         eventFilter.setPeriod(period);
 
         results = contentDao.findItems(filter);
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
         // test query from calendar 2
         filter.setParent(calendar2);
@@ -279,7 +279,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         eventFilter.setPeriod(period);
 
         results = contentDao.findItems(filter);
-        Assert.assertEquals(3, results.size());
+        Assertions.assertEquals(3, results.size());
 
         start = new DateTime("20080501T010000Z");
         end = new DateTime("20080601T160000Z");
@@ -287,7 +287,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         eventFilter.setPeriod(period);
 
         results = contentDao.findItems(filter);
-        Assert.assertEquals(2, results.size());
+        Assertions.assertEquals(2, results.size());
 
         start = new DateTime("20200501T160000Z");
         end = new DateTime("20200601T160000Z");
@@ -295,7 +295,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         eventFilter.setPeriod(period);
 
         results = contentDao.findItems(filter);
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         // test expand recurring events
         eventFilter.setExpandRecurringEvents(true);
@@ -307,13 +307,13 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         results = contentDao.findItems(filter);
         // Should be two masters + 32 occurences for the daily + 4 occurences for
         // the weekly event
-        Assert.assertEquals(38, results.size());
+        Assertions.assertEquals(38, results.size());
 
         // configure filter to not return master items
         filter.setFilterProperty(EventStampFilter.PROPERTY_INCLUDE_MASTER_ITEMS, "false");
         results = contentDao.findItems(filter);
         // Should just be the occurrences
-        Assert.assertEquals(36, results.size());
+        Assertions.assertEquals(36, results.size());
     }
 
     @Test
@@ -339,7 +339,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
         ItemFilter[] filters = new ItemFilter[] {filter1, filter2};
 
         Set<Item> results = contentDao.findItems(filters);
-        Assert.assertEquals(7, results.size());
+        Assertions.assertEquals(7, results.size());
     }
 
     private User getUser(UserDao userDao, String username) {
@@ -390,7 +390,7 @@ public class HibernateItemDaoFilterTest extends AbstractHibernateDaoTestCase {
                 return;
         }
 
-        Assert.fail("item " + uid + " not in set");
+        Assertions.fail("item " + uid + " not in set");
     }
 
 }

@@ -34,6 +34,7 @@ public class MessageGeneratorTest extends BaseGeneratorTestCase
     private static final Log log =
         LogFactory.getLog(MessageGeneratorTest.class);
 
+    @Test
     public void testGenerateRecord() {
 
         MockNoteItem noteItem = new MockNoteItem();

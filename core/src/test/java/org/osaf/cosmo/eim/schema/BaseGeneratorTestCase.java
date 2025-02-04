@@ -37,7 +37,7 @@ import org.osaf.cosmo.eim.TextField;
 /**
  * Base class for record generator tests.
  */
-public abstract class BaseGeneratorTestCase extends TestCase
+public abstract class BaseGeneratorTestCase
     implements EimSchemaConstants {
 
     /** */

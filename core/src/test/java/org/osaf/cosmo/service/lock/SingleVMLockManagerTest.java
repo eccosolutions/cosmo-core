@@ -24,10 +24,11 @@ import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 /**
  * Test StandardLockManager
  */
-public class SingleVMLockManagerTest extends TestCase {
+public class SingleVMLockManagerTest {
 
     SingleVMLockManager lockManager = new SingleVMLockManager();
 
+    @Test
     public void testStandardLockManager() throws Exception{
         lockManager.setMaxLocks(3);
 
@@ -61,60 +62,60 @@ public class SingleVMLockManagerTest extends TestCase {
         Thread.sleep(300);
 
         // All 3 threads should have lock
-        Assert.assertTrue(t1.hasLock);
-        Assert.assertTrue(t2.hasLock);
-        Assert.assertTrue(t3.hasLock);
+        Assertions.assertTrue(t1.hasLock);
+        Assertions.assertTrue(t2.hasLock);
+        Assertions.assertTrue(t3.hasLock);
 
         // t4 should be waiting
-        Assert.assertFalse(t4.hasLock);
+        Assertions.assertFalse(t4.hasLock);
 
         CollectionItem col = new HibCollectionItem();
         col.setUid("3");
 
-        Assert.assertEquals(1, lockManager.getNumWaitingThreads(col));
-        Assert.assertTrue(lockManager.isLocked(col));
+        Assertions.assertEquals(1, lockManager.getNumWaitingThreads(col));
+        Assertions.assertTrue(lockManager.isLocked(col));
 
         col.setUid("1");
 
         // Should not be able to obtain lock to 1
-        Assert.assertFalse(lockManager.lockCollection(col,100));
+        Assertions.assertFalse(lockManager.lockCollection(col,100));
 
         // should be 3 locks in memory
-        Assert.assertEquals(3, lockManager.getNumLocksInMemory());
+        Assertions.assertEquals(3, lockManager.getNumLocksInMemory());
 
         // Should not be able to obtain lock to 4 because there are
         // already 3 locks (max) in memory
         col.setUid("4");
         try {
             lockManager.lockCollection(col);
-            Assert.fail("able to create more than maxLocks!");
+            Assertions.fail("able to create more than maxLocks!");
         } catch (RuntimeException e) {}
 
         // increase max to 4
         lockManager.setMaxLocks(4);
 
         // now we should be ok
-        Assert.assertTrue(lockManager.lockCollection(col,100));
+        Assertions.assertTrue(lockManager.lockCollection(col,100));
         lockManager.unlockCollection(col);
 
-        Assert.assertEquals(4, lockManager.getNumLocksInMemory());
+        Assertions.assertEquals(4, lockManager.getNumLocksInMemory());
 
         // this should trigger a clean
         col.setUid("5");
-        Assert.assertTrue(lockManager.lockCollection(col,100));
+        Assertions.assertTrue(lockManager.lockCollection(col,100));
         lockManager.unlockCollection(col);
-        Assert.assertEquals(4, lockManager.getNumLocksInMemory());
+        Assertions.assertEquals(4, lockManager.getNumLocksInMemory());
 
         // another clean
         col.setUid("6");
-        Assert.assertTrue(lockManager.lockCollection(col,100));
-        Assert.assertEquals(4, lockManager.getNumLocksInMemory());
+        Assertions.assertTrue(lockManager.lockCollection(col,100));
+        Assertions.assertEquals(4, lockManager.getNumLocksInMemory());
 
         // should not be able to unlock something we don't own
         col.setUid("1");
         try {
             lockManager.unlockCollection(col);
-            Assert.fail("able to unlock something we don't own");
+            Assertions.fail("able to unlock something we don't own");
         } catch (RuntimeException e) {
         }
     }

@@ -15,8 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class HibernateServerPropertyDaoTest extends
@@ -34,11 +34,11 @@ public class HibernateServerPropertyDaoTest extends
         serverPropertyDao.setServerProperty("testprop1", "testvalue1");
         clearSession();
         String propValue = serverPropertyDao.getServerProperty("testprop1");
-        Assert.assertEquals("testvalue1", propValue);
+        Assertions.assertEquals("testvalue1", propValue);
         clearSession();
         serverPropertyDao.setServerProperty("testprop1", "testvalue2");
         clearSession();
         propValue = serverPropertyDao.getServerProperty("testprop1");
-        Assert.assertEquals("testvalue2", propValue);
+        Assertions.assertEquals("testvalue2", propValue);
     }
 }

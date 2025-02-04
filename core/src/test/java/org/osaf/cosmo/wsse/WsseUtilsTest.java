@@ -18,20 +18,21 @@ package org.osaf.cosmo.wsse;
 import org.junit.Assert;
 import junit.framework.TestCase;
 
-public class WsseUtilsTest extends TestCase {
+public class WsseUtilsTest {
 
+    @Test
     public void testParseWsseToken() {
        String testStr = "UsernameToken Username=\"user\", PasswordDigest=\"pass\", Nonce=\"nonce\", Created=\"created\"";
        UsernameToken token = WsseUtils.parseWsseToken(testStr);
-       Assert.assertNotNull(token);
-       Assert.assertEquals("user", token.getUsername());
-       Assert.assertEquals("pass", token.getPasswordDigest());
-       Assert.assertEquals("nonce", token.getNonce());
-       Assert.assertEquals("created", token.getCreated());
+       Assertions.assertNotNull(token);
+       Assertions.assertEquals("user", token.getUsername());
+       Assertions.assertEquals("pass", token.getPasswordDigest());
+       Assertions.assertEquals("nonce", token.getNonce());
+       Assertions.assertEquals("created", token.getCreated());
 
        testStr = "UsernameToken Username=\"user\", PasswordDigest=\"pass\", Nonce=\"nonce\"";
        token = WsseUtils.parseWsseToken(testStr);
-       Assert.assertNull(token);
+       Assertions.assertNull(token);
     }
 
 }

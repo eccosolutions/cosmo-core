@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,9 +15,14 @@
  */
 package org.osaf.cosmo.calendar;
 
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
+import static org.springframework.test.util.AssertionErrors.assertNull;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
+
 import java.text.ParseException;
 
-import junit.framework.TestCase;
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateList;
 import net.fortuna.ical4j.model.DateTime;
@@ -28,12 +33,14 @@ import net.fortuna.ical4j.model.parameter.Value;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.jupiter.api.Test;
 
-public class ICalDateTest extends TestCase {
+public class ICalDateTest {
     private static final Log log = LogFactory.getLog(ICalDateTest.class);
     private static final TimeZoneRegistry TIMEZONE_REGISTRY =
         TimeZoneRegistryFactory.getInstance().createRegistry();
 
+    @Test
     public void testParseDateTime() throws Exception {
         String str =
             ";VALUE=DATE-TIME;TZID=America/Los_Angeles:20021010T120000";
@@ -47,7 +54,8 @@ public class ICalDateTest extends TestCase {
         assertEquals("incorrect datetime timezone", "America/Los_Angeles",
                      dtTz.getID());
     }
-    
+
+    @Test
     public void testParseDate() throws Exception {
         String str = ";VALUE=DATE;X-OSAF-ANYTIME=TRUE:20021010";
 
@@ -56,7 +64,8 @@ public class ICalDateTest extends TestCase {
         assertEquals("incorrect date", "20021010", icd.getDate().toString());
         assertTrue("not anytime", icd.isAnyTime());
     }
-    
+
+    @Test
     public void testParseDateList() throws Exception {
         String str = ";VALUE=DATE:20021010,20021011,20021012";
 
@@ -72,13 +81,15 @@ public class ICalDateTest extends TestCase {
         assertEquals("incorrect date", "20021011", dl.get(1).toString());
         assertEquals("incorrect date", "20021012", dl.get(2).toString());
     }
-    
+
+    @Test
     public void testParseDateNoParams() throws Exception {
         DateTime dt = new ICalDate("20021010T120000").getDateTime();
         assertNotNull("not datetime", dt);
         assertNull("timezone where none should be", dt.getTimeZone());
     }
 
+    @Test
     public void testParseErrors() throws Exception {
         try {
             new ICalDate(";TZID=deadbeef:20021010T120000");
@@ -95,7 +106,8 @@ public class ICalDateTest extends TestCase {
             fail("converted with bad text deadbeef");
         } catch (ParseException e) {}
     }
-    
+
+    @Test
     public void testDateTimeToString() throws Exception {
         TimeZone tz = TIMEZONE_REGISTRY.getTimeZone("America/Los_Angeles");
         DateTime dt = new DateTime("20021010T120000", tz);
@@ -103,17 +115,19 @@ public class ICalDateTest extends TestCase {
         String test =
             ";VALUE=DATE-TIME;TZID=America/Los_Angeles:20021010T120000";
         String result = new ICalDate(dt).toString();
-        assertEquals(test, result);
+        assertEquals("", test, result);
     }
 
+    @Test
     public void testDateToString() throws Exception {
         Date d = new Date("20021010");
 
         String test = ";VALUE=DATE;X-OSAF-ANYTIME=TRUE:20021010";
         String result = new ICalDate(d, true).toString();
-        assertEquals(test, result);
+        assertEquals("", test, result);
     }
 
+    @Test
     public void testDateListToString() throws Exception {
         DateList dl = new DateList(Value.DATE);
         dl.add(new Date("20021010"));
@@ -122,16 +136,16 @@ public class ICalDateTest extends TestCase {
 
         String test = ";VALUE=DATE:20021010,20021011,20021012";
         String result = new ICalDate(dl).toString();
-        assertEquals(test, result);
-        
+        assertEquals("", test, result);
+
         TimeZone tz = TIMEZONE_REGISTRY.getTimeZone("America/Los_Angeles");
         dl = new DateList(Value.DATE_TIME, tz);
         dl.add(new DateTime("20021010T100000", tz));
         dl.add(new DateTime("20021011T100000", tz));
         dl.add(new DateTime("20021012T100000", tz));
-        
+
         test = ";VALUE=DATE-TIME;TZID=America/Los_Angeles:20021010T100000,20021011T100000,20021012T100000";
         result = new ICalDate(dl).toString();
-        assertEquals(test, result);
+        assertEquals("", test, result);
     }
 }

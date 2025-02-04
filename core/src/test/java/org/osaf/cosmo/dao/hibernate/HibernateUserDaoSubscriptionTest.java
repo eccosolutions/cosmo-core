@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
@@ -25,10 +25,10 @@ import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibCollectionSubscription;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class HibernateUserDaoSubscriptionTest
     extends AbstractHibernateDaoTestCase {
@@ -58,12 +58,12 @@ public class HibernateUserDaoSubscriptionTest
 
         user = getUser(userDao, "subuser1");
 
-        assertFalse("no subscriptions saved",
-                user.getCollectionSubscriptions().isEmpty());
+        assertFalse(user.getCollectionSubscriptions().isEmpty(),
+            "no subscriptions saved");
 
         CollectionSubscription querySub = user
                 .getSubscription("sub1");
-        assertNotNull("sub1 not found", querySub);
+        assertNotNull(querySub, "sub1 not found");
         assertEquals("sub1 not same subscriber", user.getUid(), querySub
                 .getOwner().getUid());
         assertEquals("sub1 not same collection", collection.getUid(), querySub
@@ -77,10 +77,10 @@ public class HibernateUserDaoSubscriptionTest
         user = getUser(userDao, "subuser1");
 
         querySub = user.getSubscription("sub1");
-        assertNull("sub1 mistakenly found", querySub);
+        assertNull(querySub, "sub1 mistakenly found");
 
         querySub = user.getSubscription("sub2");
-        assertNotNull("sub2 not found", querySub);
+        assertNotNull(querySub, "sub2 not found");
 
         user.removeSubscription(querySub);
         userDao.updateUser(user);
@@ -90,10 +90,10 @@ public class HibernateUserDaoSubscriptionTest
         user = getUser(userDao, "subuser1");
 
         querySub = user.getSubscription("sub1");
-        assertNull("sub1 mistakenly found", querySub);
+        assertNull(querySub, "sub1 mistakenly found");
 
         querySub = user.getSubscription("sub2");
-        assertNull("sub2 mistakenly found", querySub);
+        assertNull(querySub, "sub2 mistakenly found");
     }
 
     private User getUser(UserDao userDao, String username) {

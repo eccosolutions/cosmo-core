@@ -21,9 +21,8 @@ import java.text.ParseException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.junit.Assert;
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.calendar.query.CalendarFilter;
 import org.osaf.cosmo.calendar.query.ComponentFilter;
 import org.osaf.cosmo.calendar.query.ParamFilter;
@@ -36,203 +35,211 @@ import org.w3c.dom.Element;
 /**
  * Test CalendarQueryFilter
  */
-public class CalendarQueryFilterTest extends TestCase {
+public class CalendarQueryFilterTest {
     protected String baseDir = "src/test/resources/testdata/queries";
 
+    @Test
     public void testComponentFilterBasic() throws Exception {
         Element element = parseFile(new File(baseDir + "/test1.xml"));
         CalendarFilter filter = new CalendarFilter(element);
         ComponentFilter compFilter = filter.getFilter();
 
-        Assert.assertNotNull(compFilter);
-        Assert.assertEquals("VCALENDAR", compFilter.getName());
-        Assert.assertEquals(1, compFilter.getComponentFilters().size());
+        Assertions.assertNotNull(compFilter);
+        Assertions.assertEquals("VCALENDAR", compFilter.getName());
+        Assertions.assertEquals(1, compFilter.getComponentFilters().size());
 
         compFilter = (ComponentFilter) compFilter.getComponentFilters().get(0);
 
-        Assert.assertEquals("VEVENT", compFilter.getName());
-        Assert.assertNotNull(compFilter.getTimeRangeFilter());
+        Assertions.assertEquals("VEVENT", compFilter.getName());
+        Assertions.assertNotNull(compFilter.getTimeRangeFilter());
 
         TimeRangeFilter timeRange = compFilter.getTimeRangeFilter();
-        Assert.assertEquals("20040902T000000Z", timeRange.getUTCStart());
-        Assert.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
+        Assertions.assertEquals("20040902T000000Z", timeRange.getUTCStart());
+        Assertions.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
     }
 
+    @Test
     public void testComponentFilterIsNotDefined() throws Exception {
         Element element = parseFile(new File(baseDir + "/test4.xml"));
         CalendarFilter filter = new CalendarFilter(element);
         ComponentFilter compFilter = filter.getFilter();
 
-        Assert.assertNotNull(compFilter);
-        Assert.assertEquals("VCALENDAR", compFilter.getName());
-        Assert.assertEquals(1, compFilter.getComponentFilters().size());
+        Assertions.assertNotNull(compFilter);
+        Assertions.assertEquals("VCALENDAR", compFilter.getName());
+        Assertions.assertEquals(1, compFilter.getComponentFilters().size());
 
         compFilter = (ComponentFilter) compFilter.getComponentFilters().get(0);
 
-        Assert.assertEquals("VEVENT", compFilter.getName());
-        Assert.assertNotNull(compFilter.getIsNotDefinedFilter());
+        Assertions.assertEquals("VEVENT", compFilter.getName());
+        Assertions.assertNotNull(compFilter.getIsNotDefinedFilter());
     }
 
+    @Test
     public void testPropertyFilterBasic() throws Exception {
         Element element = parseFile(new File(baseDir + "/test2.xml"));
         CalendarFilter filter = new CalendarFilter(element);
         ComponentFilter compFilter = filter.getFilter();
 
-        Assert.assertNotNull(compFilter);
-        Assert.assertEquals("VCALENDAR", compFilter.getName());
-        Assert.assertEquals(1, compFilter.getComponentFilters().size());
+        Assertions.assertNotNull(compFilter);
+        Assertions.assertEquals("VCALENDAR", compFilter.getName());
+        Assertions.assertEquals(1, compFilter.getComponentFilters().size());
 
         compFilter = (ComponentFilter) compFilter.getComponentFilters().get(0);
 
-        Assert.assertEquals("VEVENT", compFilter.getName());
-        Assert.assertNotNull(compFilter.getTimeRangeFilter());
+        Assertions.assertEquals("VEVENT", compFilter.getName());
+        Assertions.assertNotNull(compFilter.getTimeRangeFilter());
 
         TimeRangeFilter timeRange = compFilter.getTimeRangeFilter();
-        Assert.assertEquals("20040902T000000Z", timeRange.getUTCStart());
-        Assert.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
+        Assertions.assertEquals("20040902T000000Z", timeRange.getUTCStart());
+        Assertions.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
 
-        Assert.assertEquals(1, compFilter.getPropFilters().size());
+        Assertions.assertEquals(1, compFilter.getPropFilters().size());
         PropertyFilter propFilter = (PropertyFilter) compFilter.getPropFilters().get(0);
 
-        Assert.assertEquals("SUMMARY", propFilter.getName());
+        Assertions.assertEquals("SUMMARY", propFilter.getName());
         TextMatchFilter textMatch = propFilter.getTextMatchFilter();
-        Assert.assertNotNull(textMatch);
-        Assert.assertEquals("ABC",textMatch.getValue());
+        Assertions.assertNotNull(textMatch);
+        Assertions.assertEquals("ABC",textMatch.getValue());
     }
 
+    @Test
     public void testPropertyFilterIsNotDefined() throws Exception {
         Element element = parseFile(new File(baseDir + "/test5.xml"));
         CalendarFilter filter = new CalendarFilter(element);
         ComponentFilter compFilter = filter.getFilter();
 
-        Assert.assertNotNull(compFilter);
-        Assert.assertEquals("VCALENDAR", compFilter.getName());
-        Assert.assertEquals(1, compFilter.getComponentFilters().size());
+        Assertions.assertNotNull(compFilter);
+        Assertions.assertEquals("VCALENDAR", compFilter.getName());
+        Assertions.assertEquals(1, compFilter.getComponentFilters().size());
 
         compFilter = (ComponentFilter) compFilter.getComponentFilters().get(0);
 
-        Assert.assertEquals("VEVENT", compFilter.getName());
-        Assert.assertNotNull(compFilter.getTimeRangeFilter());
+        Assertions.assertEquals("VEVENT", compFilter.getName());
+        Assertions.assertNotNull(compFilter.getTimeRangeFilter());
 
         TimeRangeFilter timeRange = compFilter.getTimeRangeFilter();
-        Assert.assertEquals("20040902T000000Z", timeRange.getUTCStart());
-        Assert.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
+        Assertions.assertEquals("20040902T000000Z", timeRange.getUTCStart());
+        Assertions.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
 
-        Assert.assertEquals(1, compFilter.getPropFilters().size());
+        Assertions.assertEquals(1, compFilter.getPropFilters().size());
         PropertyFilter propFilter = (PropertyFilter) compFilter.getPropFilters().get(0);
 
-        Assert.assertEquals("SUMMARY", propFilter.getName());
-        Assert.assertNotNull(propFilter.getIsNotDefinedFilter());
+        Assertions.assertEquals("SUMMARY", propFilter.getName());
+        Assertions.assertNotNull(propFilter.getIsNotDefinedFilter());
     }
 
+    @Test
     public void testParamFilterBasic() throws Exception {
         Element element = parseFile(new File(baseDir + "/test3.xml"));
         CalendarFilter filter = new CalendarFilter(element);
         ComponentFilter compFilter = filter.getFilter();
 
-        Assert.assertNotNull(compFilter);
-        Assert.assertEquals("VCALENDAR", compFilter.getName());
-        Assert.assertEquals(1, compFilter.getComponentFilters().size());
+        Assertions.assertNotNull(compFilter);
+        Assertions.assertEquals("VCALENDAR", compFilter.getName());
+        Assertions.assertEquals(1, compFilter.getComponentFilters().size());
 
         compFilter = (ComponentFilter) compFilter.getComponentFilters().get(0);
 
-        Assert.assertEquals("VEVENT", compFilter.getName());
-        Assert.assertNotNull(compFilter.getTimeRangeFilter());
+        Assertions.assertEquals("VEVENT", compFilter.getName());
+        Assertions.assertNotNull(compFilter.getTimeRangeFilter());
 
         TimeRangeFilter timeRange = compFilter.getTimeRangeFilter();
-        Assert.assertEquals("20040902T000000Z", timeRange.getUTCStart());
-        Assert.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
+        Assertions.assertEquals("20040902T000000Z", timeRange.getUTCStart());
+        Assertions.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
 
-        Assert.assertEquals(1, compFilter.getPropFilters().size());
+        Assertions.assertEquals(1, compFilter.getPropFilters().size());
         PropertyFilter propFilter = (PropertyFilter) compFilter.getPropFilters().get(0);
 
-        Assert.assertEquals("SUMMARY", propFilter.getName());
+        Assertions.assertEquals("SUMMARY", propFilter.getName());
         TextMatchFilter textMatch = propFilter.getTextMatchFilter();
-        Assert.assertNotNull(textMatch);
-        Assert.assertEquals("ABC",textMatch.getValue());
+        Assertions.assertNotNull(textMatch);
+        Assertions.assertEquals("ABC",textMatch.getValue());
 
-        Assert.assertEquals(1, propFilter.getParamFilters().size());
+        Assertions.assertEquals(1, propFilter.getParamFilters().size());
         ParamFilter paramFilter = (ParamFilter) propFilter.getParamFilters().get(0);
-        Assert.assertEquals("PARAM1", paramFilter.getName());
+        Assertions.assertEquals("PARAM1", paramFilter.getName());
 
         textMatch = paramFilter.getTextMatchFilter();
-        Assert.assertNotNull(textMatch);
-        Assert.assertEquals("DEF", textMatch.getValue());
-        Assert.assertTrue(textMatch.isCaseless());
+        Assertions.assertNotNull(textMatch);
+        Assertions.assertEquals("DEF", textMatch.getValue());
+        Assertions.assertTrue(textMatch.isCaseless());
     }
 
+    @Test
     public void testParamFilterIsNotDefined() throws Exception {
         Element element = parseFile(new File(baseDir + "/test6.xml"));
         CalendarFilter filter = new CalendarFilter(element);
         ComponentFilter compFilter = filter.getFilter();
 
-        Assert.assertNotNull(compFilter);
-        Assert.assertEquals("VCALENDAR", compFilter.getName());
-        Assert.assertEquals(1, compFilter.getComponentFilters().size());
+        Assertions.assertNotNull(compFilter);
+        Assertions.assertEquals("VCALENDAR", compFilter.getName());
+        Assertions.assertEquals(1, compFilter.getComponentFilters().size());
 
         compFilter = (ComponentFilter) compFilter.getComponentFilters().get(0);
 
-        Assert.assertEquals("VEVENT", compFilter.getName());
-        Assert.assertNotNull(compFilter.getTimeRangeFilter());
+        Assertions.assertEquals("VEVENT", compFilter.getName());
+        Assertions.assertNotNull(compFilter.getTimeRangeFilter());
 
         TimeRangeFilter timeRange = compFilter.getTimeRangeFilter();
-        Assert.assertEquals("20040902T000000Z", timeRange.getUTCStart());
-        Assert.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
+        Assertions.assertEquals("20040902T000000Z", timeRange.getUTCStart());
+        Assertions.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
 
-        Assert.assertEquals(1, compFilter.getPropFilters().size());
+        Assertions.assertEquals(1, compFilter.getPropFilters().size());
         PropertyFilter propFilter = (PropertyFilter) compFilter.getPropFilters().get(0);
 
-        Assert.assertEquals("SUMMARY", propFilter.getName());
+        Assertions.assertEquals("SUMMARY", propFilter.getName());
         TextMatchFilter textMatch = propFilter.getTextMatchFilter();
-        Assert.assertNotNull(textMatch);
-        Assert.assertEquals("ABC",textMatch.getValue());
+        Assertions.assertNotNull(textMatch);
+        Assertions.assertEquals("ABC",textMatch.getValue());
 
-        Assert.assertEquals(1, propFilter.getParamFilters().size());
+        Assertions.assertEquals(1, propFilter.getParamFilters().size());
         ParamFilter paramFilter = (ParamFilter) propFilter.getParamFilters().get(0);
-        Assert.assertEquals("PARAM1", paramFilter.getName());
+        Assertions.assertEquals("PARAM1", paramFilter.getName());
 
 
-        Assert.assertNotNull(paramFilter.getIsNotDefinedFilter());
+        Assertions.assertNotNull(paramFilter.getIsNotDefinedFilter());
     }
 
+    @Test
     public void testMultiplePropFilters() throws Exception {
         Element element = parseFile(new File(baseDir + "/test7.xml"));
         CalendarFilter filter = new CalendarFilter(element);
         ComponentFilter compFilter = filter.getFilter();
 
-        Assert.assertNotNull(compFilter);
-        Assert.assertEquals("VCALENDAR", compFilter.getName());
-        Assert.assertEquals(1, compFilter.getComponentFilters().size());
+        Assertions.assertNotNull(compFilter);
+        Assertions.assertEquals("VCALENDAR", compFilter.getName());
+        Assertions.assertEquals(1, compFilter.getComponentFilters().size());
 
         compFilter = (ComponentFilter) compFilter.getComponentFilters().get(0);
 
-        Assert.assertEquals("VEVENT", compFilter.getName());
-        Assert.assertNotNull(compFilter.getTimeRangeFilter());
+        Assertions.assertEquals("VEVENT", compFilter.getName());
+        Assertions.assertNotNull(compFilter.getTimeRangeFilter());
 
         TimeRangeFilter timeRange = compFilter.getTimeRangeFilter();
-        Assert.assertEquals("20040902T000000Z", timeRange.getUTCStart());
-        Assert.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
+        Assertions.assertEquals("20040902T000000Z", timeRange.getUTCStart());
+        Assertions.assertEquals("20040903T000000Z", timeRange.getUTCEnd());
 
-        Assert.assertEquals(2, compFilter.getPropFilters().size());
+        Assertions.assertEquals(2, compFilter.getPropFilters().size());
         PropertyFilter propFilter = (PropertyFilter) compFilter.getPropFilters().get(0);
 
-        Assert.assertEquals("SUMMARY", propFilter.getName());
+        Assertions.assertEquals("SUMMARY", propFilter.getName());
         TextMatchFilter textMatch = propFilter.getTextMatchFilter();
-        Assert.assertNotNull(textMatch);
-        Assert.assertEquals("ABC",textMatch.getValue());
+        Assertions.assertNotNull(textMatch);
+        Assertions.assertEquals("ABC",textMatch.getValue());
 
         propFilter = (PropertyFilter) compFilter.getPropFilters().get(1);
-        Assert.assertEquals("DESCRIPTION", propFilter.getName());
-        Assert.assertNotNull(propFilter.getIsNotDefinedFilter());
+        Assertions.assertEquals("DESCRIPTION", propFilter.getName());
+        Assertions.assertNotNull(propFilter.getIsNotDefinedFilter());
     }
 
+    @Test
     public void testComponentFilterError() throws Exception {
 
         try
         {
             Element element = parseFile(new File(baseDir + "/error-test4.xml"));
             CalendarFilter filter = new CalendarFilter(element);
-            Assert.fail("able to create invalid filter");
+            Assertions.fail("able to create invalid filter");
         }
         catch(ParseException e) {}
 
@@ -240,7 +247,7 @@ public class CalendarQueryFilterTest extends TestCase {
         {
             Element element = parseFile(new File(baseDir + "/error-test5.xml"));
             CalendarFilter filter = new CalendarFilter(element);
-            Assert.fail("able to create invalid filter");
+            Assertions.fail("able to create invalid filter");
         }
         catch(ParseException e) {}
 
@@ -248,7 +255,7 @@ public class CalendarQueryFilterTest extends TestCase {
         {
             Element element = parseFile(new File(baseDir + "/error-test6.xml"));
             CalendarFilter filter = new CalendarFilter(element);
-            Assert.fail("able to create invalid filter");
+            Assertions.fail("able to create invalid filter");
         }
         catch(ParseException e) {}
 
@@ -256,7 +263,7 @@ public class CalendarQueryFilterTest extends TestCase {
         {
             Element element = parseFile(new File(baseDir + "/error-test7.xml"));
             CalendarFilter filter = new CalendarFilter(element);
-            Assert.fail("able to create invalid filter");
+            Assertions.fail("able to create invalid filter");
         }
         catch(ParseException e) {}
 
@@ -264,30 +271,32 @@ public class CalendarQueryFilterTest extends TestCase {
         {
             Element element = parseFile(new File(baseDir + "/error-test8.xml"));
             CalendarFilter filter = new CalendarFilter(element);
-            Assert.fail("able to create invalid filter");
+            Assertions.fail("able to create invalid filter");
         }
         catch(ParseException e) {}
 
     }
 
+    @Test
     public void testPropertyFilterError() throws Exception {
 
         try
         {
             Element element = parseFile(new File(baseDir + "/error-test9.xml"));
             CalendarFilter filter = new CalendarFilter(element);
-            Assert.fail("able to create invalid filter");
+            Assertions.fail("able to create invalid filter");
         }
         catch(ParseException e) {}
     }
 
+    @Test
     public void testParamFilterError() throws Exception {
 
         try
         {
             Element element = parseFile(new File(baseDir + "/error-test10.xml"));
             CalendarFilter filter = new CalendarFilter(element);
-            Assert.fail("able to create invalid filter");
+            Assertions.fail("able to create invalid filter");
         }
         catch(ParseException e) {}
     }

@@ -15,11 +15,11 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import org.junit.Assert;
 import org.hibernate.SessionFactory;
-import org.junit.Assume;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.hibernate.*;
@@ -32,8 +32,6 @@ import org.springframework.transaction.TransactionStatus;
 
 import javax.persistence.OptimisticLockException;
 import java.util.*;
-
-import static org.hamcrest.Matchers.instanceOf;
 
 /**
  * Test concurrent modification of an item.  Since cosmo uses
@@ -48,7 +46,7 @@ import static org.hamcrest.Matchers.instanceOf;
  *    no longer version 1, and throws exception
  *
  */
-@Ignore("Failing since move to Spring Boot configuration")
+@Disabled("Failing since move to Spring Boot configuration")
 public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTestCase {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -81,7 +79,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
             item.setUid("test");
 
             ContentItem newItem = contentDao.createContent(root, item);
-            Assume.assumeNotNull(newItem);
+            Assumptions.assumeTrue(newItem != null);
             return newItem;
         });
 
@@ -89,7 +87,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread2.addRunnable("1", () -> {
 
             ContentItem item = (ContentItem) contentDao.findItemByUid("test");
-            Assume.assumeNotNull(item);
+            Assumptions.assumeTrue(item != null);
             return item;
         });
 
@@ -97,7 +95,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread3.addRunnable("1", () -> {
 
             ContentItem item = (ContentItem) contentDao.findItemByUid("test");
-            Assume.assumeNotNull(item);
+            Assumptions.assumeTrue(item != null);
             return item;
         });
 
@@ -106,7 +104,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread1.start();
         txThread1.commit();
         txThread1.join();
-        Assume.assumeThat(txThread1.getRunnableResults("1"), instanceOf(ContentItem.class));
+        Assumptions.assumeTrue(txThread1.getRunnableResults("1") instanceof ContentItem);
 
         // read item at the same time
         txThread2.start();
@@ -148,7 +146,8 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread3.join();
 
         // results should be OptimisticLockingFailureException
-        Assert.assertTrue(txThread3.getRunnableResults("2") instanceof OptimisticLockException);
+        Assertions.assertInstanceOf(OptimisticLockException.class,
+            txThread3.getRunnableResults("2"));
 
         cleanupDb();
     }
@@ -181,7 +180,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread2.addRunnable("1", () -> {
 
             ContentItem item = (ContentItem) contentDao.findItemByUid("test");
-            Assume.assumeNotNull(item);
+            Assumptions.assumeTrue(item != null);
             return item;
         });
 
@@ -189,7 +188,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread3.addRunnable("1", () -> {
 
             ContentItem item = (ContentItem) contentDao.findItemByUid("test");
-            Assume.assumeNotNull(item);
+            Assumptions.assumeTrue(item != null);
             return item;
         });
 
@@ -198,7 +197,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread1.start();
         txThread1.commit();
         txThread1.join();
-        Assume.assumeThat(txThread1.getRunnableResults("1"), instanceOf(ContentItem.class));
+        Assumptions.assumeTrue(txThread1.getRunnableResults("1") instanceof ContentItem);
 
         // read item at the same time
         txThread2.start();
@@ -240,7 +239,7 @@ public class HibernateContentDaoConcurrencyTest extends AbstractHibernateDaoTest
         txThread3.join();
 
         // results should be DataRetrievalFailureException
-        Assert.assertTrue(txThread3.getRunnableResults("2") instanceof DataRetrievalFailureException);
+        Assertions.assertTrue(txThread3.getRunnableResults("2") instanceof DataRetrievalFailureException);
 
         cleanupDb();
     }

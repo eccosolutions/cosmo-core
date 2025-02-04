@@ -30,7 +30,7 @@ import org.osaf.cosmo.eim.TextField;
 /**
  * Test Case for {@link EimmlStreamWriter}.
  */
-public class EimmlStreamWriterTest extends TestCase
+public class EimmlStreamWriterTest
     implements EimmlConstants {
 
     private TestHelper testHelper;
@@ -41,6 +41,7 @@ public class EimmlStreamWriterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testBasicWrite() throws Exception {
         String collUuid = "cafebebe";
         String collName = "Test Collection";

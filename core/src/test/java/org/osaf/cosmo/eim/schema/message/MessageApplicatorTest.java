@@ -39,6 +39,7 @@ public class MessageApplicatorTest extends BaseApplicatorTestCase
     private static final Log log =
         LogFactory.getLog(MessageApplicatorTest.class);
 
+    @Test
     public void testApplyField() throws Exception {
         NoteItem noteItem = new MockNoteItem();
         MessageStamp messageStamp = new MockMessageStamp(noteItem);
@@ -50,17 +51,18 @@ public class MessageApplicatorTest extends BaseApplicatorTestCase
             new MessageApplicator(noteItem);
         applicator.applyRecord(record);
 
-        Assert.assertEquals(messageStamp.getMessageId(),"id");
-        Assert.assertEquals(messageStamp.getHeaders(), "blah");
-        Assert.assertEquals(messageStamp.getFrom(), "from");
-        Assert.assertEquals(messageStamp.getCc(), "cc");
-        Assert.assertEquals(messageStamp.getBcc(), "bcc");
-        Assert.assertEquals(messageStamp.getOriginators(), "originators");
-        Assert.assertEquals(messageStamp.getDateSent(), "dateSent");
-        Assert.assertEquals(messageStamp.getInReplyTo(), "inReplyTo");
-        Assert.assertEquals(messageStamp.getReferences(), "blah2");
+        Assertions.assertEquals(messageStamp.getMessageId(),"id");
+        Assertions.assertEquals(messageStamp.getHeaders(), "blah");
+        Assertions.assertEquals(messageStamp.getFrom(), "from");
+        Assertions.assertEquals(messageStamp.getCc(), "cc");
+        Assertions.assertEquals(messageStamp.getBcc(), "bcc");
+        Assertions.assertEquals(messageStamp.getOriginators(), "originators");
+        Assertions.assertEquals(messageStamp.getDateSent(), "dateSent");
+        Assertions.assertEquals(messageStamp.getInReplyTo(), "inReplyTo");
+        Assertions.assertEquals(messageStamp.getReferences(), "blah2");
     }
 
+    @Test
     public void testApplyMissingFields() throws Exception {
         NoteItem masterNote = new MockNoteItem();
         NoteItem modItem = new MockNoteItem();
@@ -86,15 +88,15 @@ public class MessageApplicatorTest extends BaseApplicatorTestCase
 
         MessageStamp modStamp = StampUtils.getMessageStamp(modItem);
 
-        Assert.assertNull(modStamp.getMessageId());
-        Assert.assertNull(modStamp.getHeaders());
-        Assert.assertNull(modStamp.getFrom());
-        Assert.assertNull(modStamp.getCc());
-        Assert.assertNull(modStamp.getBcc());
-        Assert.assertNull(modStamp.getOriginators());
-        Assert.assertNull(modStamp.getDateSent());
-        Assert.assertNull(modStamp.getInReplyTo());
-        Assert.assertNull(modStamp.getReferences());
+        Assertions.assertNull(modStamp.getMessageId());
+        Assertions.assertNull(modStamp.getHeaders());
+        Assertions.assertNull(modStamp.getFrom());
+        Assertions.assertNull(modStamp.getCc());
+        Assertions.assertNull(modStamp.getBcc());
+        Assertions.assertNull(modStamp.getOriginators());
+        Assertions.assertNull(modStamp.getDateSent());
+        Assertions.assertNull(modStamp.getInReplyTo());
+        Assertions.assertNull(modStamp.getReferences());
     }
 
     private EimRecord makeTestRecord() {

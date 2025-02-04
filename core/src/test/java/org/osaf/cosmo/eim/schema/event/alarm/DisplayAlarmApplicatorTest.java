@@ -43,6 +43,7 @@ public class DisplayAlarmApplicatorTest extends BaseApplicatorTestCase
     private static final Log log =
         LogFactory.getLog(DisplayAlarmApplicatorTest.class);
 
+    @Test
     public void testApplyField() throws Exception {
         NoteItem noteItem = new MockNoteItem();
         EventStamp eventStamp = new MockEventStamp(noteItem);
@@ -58,26 +59,27 @@ public class DisplayAlarmApplicatorTest extends BaseApplicatorTestCase
 
         Period period = new Period((DateTime) eventStamp.getStartDate(), new Dur("PT15M"));
 
-        Assert.assertEquals("My alarm", eventStamp.getDisplayAlarmDescription());
-        Assert.assertEquals("PT15M", eventStamp.getDisplayAlarmTrigger().getValue());
+        Assertions.assertEquals("My alarm", eventStamp.getDisplayAlarmDescription());
+        Assertions.assertEquals("PT15M", eventStamp.getDisplayAlarmTrigger().getValue());
         // 1W = 7D
-        Assert.assertEquals("P7D", eventStamp.getDisplayAlarmDuration().toString());
-        Assert.assertEquals(Integer.valueOf("1"), eventStamp.getDisplayAlarmRepeat());
+        Assertions.assertEquals("P7D", eventStamp.getDisplayAlarmDuration().toString());
+        Assertions.assertEquals(Integer.valueOf("1"), eventStamp.getDisplayAlarmRepeat());
 
         // verify that NoteItem.reminderTime was updated
-        Assert.assertNotNull(noteItem.getReminderTime());
+        Assertions.assertNotNull(noteItem.getReminderTime());
         // it should be the end date of the period of eventStart,trigger duration
-        Assert.assertEquals(period.getEnd().getTime(), noteItem.getReminderTime().getTime());
+        Assertions.assertEquals(period.getEnd().getTime(), noteItem.getReminderTime().getTime());
 
         // test removing alarm from event
         record = makeTestNoneRecord();
 
         applicator.applyRecord(record);
 
-        Assert.assertNull(noteItem.getReminderTime());
-        Assert.assertNull(eventStamp.getDisplayAlarm());
+        Assertions.assertNull(noteItem.getReminderTime());
+        Assertions.assertNull(eventStamp.getDisplayAlarm());
     }
 
+    @Test
     public void testApplyBogusRecord() throws Exception {
         NoteItem noteItem = new MockNoteItem();
         EventStamp eventStamp = new MockEventStamp(noteItem);
@@ -91,10 +93,11 @@ public class DisplayAlarmApplicatorTest extends BaseApplicatorTestCase
             new DisplayAlarmApplicator(noteItem);
         try {
             applicator.applyRecord(record);
-            Assert.fail("able to apply bogus record");
+            Assertions.fail("able to apply bogus record");
         } catch (EimValidationException e) {}
     }
 
+    @Test
     public void testApplyFieldNonEvent() throws Exception {
         NoteItem noteItem = new MockNoteItem();
         EimRecord record = makeTestRecordNonEvent();
@@ -103,16 +106,17 @@ public class DisplayAlarmApplicatorTest extends BaseApplicatorTestCase
             new DisplayAlarmApplicator(noteItem);
         applicator.applyRecord(record);
 
-        Assert.assertNotNull(noteItem.getReminderTime());
-        Assert.assertEquals(noteItem.getReminderTime(), new DateTime("20080101T075900Z"));
+        Assertions.assertNotNull(noteItem.getReminderTime());
+        Assertions.assertEquals(noteItem.getReminderTime(), new DateTime("20080101T075900Z"));
 
         record = makeTestNoneRecord();
 
         applicator.applyRecord(record);
 
-        Assert.assertNull(noteItem.getReminderTime());
+        Assertions.assertNull(noteItem.getReminderTime());
     }
 
+    @Test
     public void testApplyMissingField() throws Exception {
         NoteItem masterNote = new MockNoteItem();
         EventStamp masterEvent = new MockEventStamp(masterNote);
@@ -139,10 +143,10 @@ public class DisplayAlarmApplicatorTest extends BaseApplicatorTestCase
 
         modEvent.getEventCalendar().validate(true);
 
-        Assert.assertNull(modEvent.getDisplayAlarmDescription());
-        Assert.assertNull(modEvent.getDisplayAlarmTrigger());
-        Assert.assertNull(modEvent.getDisplayAlarmDuration());
-        Assert.assertNull(modEvent.getDisplayAlarmRepeat());
+        Assertions.assertNull(modEvent.getDisplayAlarmDescription());
+        Assertions.assertNull(modEvent.getDisplayAlarmTrigger());
+        Assertions.assertNull(modEvent.getDisplayAlarmDuration());
+        Assertions.assertNull(modEvent.getDisplayAlarmRepeat());
     }
 
     private EimRecord makeTestRecord() {

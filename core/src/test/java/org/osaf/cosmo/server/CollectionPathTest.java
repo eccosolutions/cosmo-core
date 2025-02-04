@@ -20,9 +20,10 @@ import junit.framework.TestCase;
 /**
  * Test case for <code>CollectionPath</code>.
  */
-public class CollectionPathTest extends TestCase {
+public class CollectionPathTest {
 
     /** */
+    @Test
     public void testAbsoluteUrlPath() {
         String badUrlPath = "http://dead.beef/";
         try {
@@ -32,6 +33,7 @@ public class CollectionPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testSuccessfulParse() {
         String urlPath = "/collection/deadbeef";
         CollectionPath cp = CollectionPath.parse(urlPath);
@@ -39,6 +41,7 @@ public class CollectionPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testUnsuccessfulParse() {
         String urlPath = "/bcm/stuff/deadbeef";
         CollectionPath cp = CollectionPath.parse(urlPath);
@@ -46,6 +49,7 @@ public class CollectionPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testParseNoPathInfo() {
         String urlPath = "/collection/deadbeef/foobar";
         CollectionPath cp = CollectionPath.parse(urlPath);
@@ -53,6 +57,7 @@ public class CollectionPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testParseWithPathInfo() {
         String urlPath = "/collection/deadbeef/foobar";
         CollectionPath cp = CollectionPath.parse(urlPath, true);
@@ -61,6 +66,7 @@ public class CollectionPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testGetUid() {
         String uid = "deadbeef";
         String urlPath = "/collection/" + uid;
@@ -71,6 +77,7 @@ public class CollectionPathTest extends TestCase {
     }
 
     /** */
+    @Test
     public void testGetUidWithPathInfo() {
         String uid = "deadbeef";
         String pathInfo = "/foobar";

@@ -26,7 +26,7 @@ import org.osaf.cosmo.eim.EimRecordSet;
 /**
  * Test Case for {@link EimmlStreamReader}.
  */
-public class EimmlStreamReaderTest extends TestCase
+public class EimmlStreamReaderTest
     implements EimmlConstants {
 
     private TestHelper testHelper;
@@ -35,6 +35,7 @@ public class EimmlStreamReaderTest extends TestCase
         testHelper = new TestHelper();
     }
 
+    @Test
     public void testReadChandlerUpdate() throws Exception {
         InputStreamReader in = new InputStreamReader(testHelper.
             getInputStream("eimml/chandler-update.xml"));

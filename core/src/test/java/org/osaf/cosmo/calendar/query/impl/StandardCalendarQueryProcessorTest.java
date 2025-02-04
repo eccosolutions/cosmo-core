@@ -17,8 +17,6 @@ package org.osaf.cosmo.calendar.query.impl;
 
 import java.util.Iterator;
 
-import org.junit.Assert;
-import junit.framework.TestCase;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Parameter;
@@ -33,6 +31,8 @@ import net.fortuna.ical4j.model.component.VFreeBusy;
 import net.fortuna.ical4j.model.parameter.FbType;
 import net.fortuna.ical4j.model.property.FreeBusy;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.TestHelper;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
@@ -52,7 +52,7 @@ import org.osaf.cosmo.model.mock.MockEntityFactory;
  * Test StandardCalendarQueryProcessorTest using mock implementations.
  *
  */
-public class StandardCalendarQueryProcessorTest extends TestCase {
+public class StandardCalendarQueryProcessorTest {
 
     private MockCalendarDao calendarDao;
     private MockContentDao contentDao;
@@ -102,6 +102,7 @@ public class StandardCalendarQueryProcessorTest extends TestCase {
         contentDao.createContent(calendar, fb);
     }
 
+    @Test
     public void testAddBusyPeriodsRecurringAllDay() throws Exception {
         PeriodList busyPeriods = new PeriodList();
         PeriodList busyTentativePeriods = new PeriodList();
@@ -120,23 +121,24 @@ public class StandardCalendarQueryProcessorTest extends TestCase {
 
         queryProcessor.addBusyPeriods(calendar, tz, fbRange, busyPeriods, busyTentativePeriods, busyUnavailablePeriods);
 
-        Assert.assertEquals("20070108T060000Z/20070109T060000Z,20070115T060000Z/20070116T060000Z", busyPeriods.toString());
+        Assertions.assertEquals("20070108T060000Z/20070109T060000Z,20070115T060000Z/20070116T060000Z", busyPeriods.toString());
 
         busyPeriods.clear();
 
         tz = TIMEZONE_REGISTRY.getTimeZone("America/Los_Angeles");
         queryProcessor.addBusyPeriods(calendar, tz, fbRange, busyPeriods, busyTentativePeriods, busyUnavailablePeriods);
 
-        Assert.assertEquals("20070108T080000Z/20070109T080000Z,20070115T080000Z/20070116T080000Z", busyPeriods.toString());
+        Assertions.assertEquals("20070108T080000Z/20070109T080000Z,20070115T080000Z/20070116T080000Z", busyPeriods.toString());
 
         busyPeriods.clear();
 
         tz = TIMEZONE_REGISTRY.getTimeZone("Australia/Sydney");
         queryProcessor.addBusyPeriods(calendar, tz, fbRange, busyPeriods, busyTentativePeriods, busyUnavailablePeriods);
 
-        Assert.assertEquals("20070107T130000Z/20070108T130000Z,20070114T130000Z/20070115T130000Z", busyPeriods.toString());
+        Assertions.assertEquals("20070107T130000Z/20070108T130000Z,20070114T130000Z/20070115T130000Z", busyPeriods.toString());
     }
 
+    @Test
     public void testFreeBusyQuery() throws Exception {
         DateTime start = new DateTime("20070507T051500Z");
         DateTime end = new DateTime("200705016T051500Z");
@@ -221,8 +223,8 @@ public class StandardCalendarQueryProcessorTest extends TestCase {
         }
 
         if(fb==null)
-            Assert.fail("periods " + periods + " not in " + vfb.toString());
+            Assertions.fail("periods " + periods + " not in " + vfb.toString());
 
-        Assert.assertEquals(periods, fb.getPeriods().toString());
+        Assertions.assertEquals(periods, fb.getPeriods().toString());
     }
 }

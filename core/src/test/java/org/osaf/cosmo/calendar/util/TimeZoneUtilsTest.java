@@ -23,30 +23,32 @@ import net.fortuna.ical4j.model.component.VTimeZone;
 /**
  * Test TimeZoneUtils
  */
-public class TimeZoneUtilsTest extends TestCase {
+public class TimeZoneUtilsTest {
 
+    @Test
     public void testLoadTimeZone() {
         VTimeZone vtz = TimeZoneUtils.getVTimeZone("America/Chicago");
-        Assert.assertNotNull(vtz);
-        Assert.assertEquals("America/Chicago", vtz.getTimeZoneId().getValue());
-        Assert.assertEquals(4, vtz.getObservances().size());
+        Assertions.assertNotNull(vtz);
+        Assertions.assertEquals("America/Chicago", vtz.getTimeZoneId().getValue());
+        Assertions.assertEquals(4, vtz.getObservances().size());
 
         vtz = TimeZoneUtils.getVTimeZone("blah");
-        Assert.assertNull(vtz);
+        Assertions.assertNull(vtz);
     }
 
+    @Test
     public void testLoadSimpleTimeZone() throws Exception {
         DateTime dt1 = new DateTime("20080101T100000", TimeZoneUtils.getTimeZone("America/Chicago"));
         DateTime dt2 = new DateTime("20060101T100000", TimeZoneUtils.getTimeZone("America/Chicago"));
 
         VTimeZone vtz1 = TimeZoneUtils.getSimpleVTimeZone("America/Chicago", dt1.getTime());
-        Assert.assertNotNull(vtz1);
-        Assert.assertEquals(2, vtz1.getObservances().size());
+        Assertions.assertNotNull(vtz1);
+        Assertions.assertEquals(2, vtz1.getObservances().size());
 
         VTimeZone vtz2 = TimeZoneUtils.getSimpleVTimeZone("America/Chicago", dt2.getTime());
-        Assert.assertNotNull(vtz2);
-        Assert.assertEquals(2, vtz2.getObservances().size());
+        Assertions.assertNotNull(vtz2);
+        Assertions.assertEquals(2, vtz2.getObservances().size());
 
-        Assert.assertFalse(vtz1.equals(vtz2));
+        Assertions.assertFalse(vtz1.equals(vtz2));
     }
 }

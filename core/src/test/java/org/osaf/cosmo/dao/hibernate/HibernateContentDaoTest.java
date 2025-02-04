@@ -17,10 +17,9 @@ package org.osaf.cosmo.dao.hibernate;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.property.ProdId;
-import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.*;
@@ -56,8 +55,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         ContentItem newItem = contentDao.createContent(root, item);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertNotNull(newItem.getUid());
+        Assertions.assertTrue(getHibItem(newItem).getId() > -1);
+        Assertions.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -76,19 +75,19 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         ContentItem newItem = contentDao.createContent(root, item);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertNotNull(newItem.getUid());
+        Assertions.assertTrue(getHibItem(newItem).getId() > -1);
+        Assertions.assertNotNull(newItem.getUid());
 
         clearSession();
 
         Set<ContentItem> children = contentDao.loadChildren(root, null);
-        Assert.assertEquals(1, children.size());
+        Assertions.assertEquals(1, children.size());
 
         children = contentDao.loadChildren(root, newItem.getModifiedDate());
-        Assert.assertEquals(0, children.size());
+        Assertions.assertEquals(0, children.size());
 
         children = contentDao.loadChildren(root, new Date(newItem.getModifiedDate().getTime() -1));
-        Assert.assertEquals(1, children.size());
+        Assertions.assertEquals(1, children.size());
     }
 
     @Test
@@ -109,7 +108,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         try {
             contentDao.createContent(root, item2);
             clearSession();
-            Assert.fail("able to create duplicate uid");
+            Assertions.fail("able to create duplicate uid");
         } catch (UidInUseException ignored) {
         }
     }
@@ -130,7 +129,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         try {
             contentDao.createContent(root, note2);
-            Assert.fail("able to create duplicate icaluid");
+            Assertions.fail("able to create duplicate icaluid");
         } catch (IcalUidInUseException ignored) {}
 
     }
@@ -145,9 +144,9 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         try {
             contentDao.createContent(root, item);
-            Assert.fail("able to create invalid content.");
+            Assertions.fail("able to create invalid content.");
         } catch (ConstraintViolationException e) {
-            Assert.assertEquals("name", e.getConstraintViolations().iterator().next().getPropertyPath().toString());
+            Assertions.assertEquals("name", e.getConstraintViolations().iterator().next().getPropertyPath().toString());
         }
     }
 
@@ -184,32 +183,32 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         ContentItem newItem = contentDao.createContent(root, item);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertNotNull(newItem.getUid());
+        Assertions.assertTrue(getHibItem(newItem).getId() > -1);
+        Assertions.assertNotNull(newItem.getUid());
 
         clearSession();
 
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         Attribute attr = queryItem.getAttribute(new HibQName("decimalattribute"));
-        Assert.assertNotNull(attr);
-        Assert.assertTrue(attr instanceof DecimalAttribute);
-        Assert.assertEquals(attr.getValue().toString(),"1.234567");
+        Assertions.assertNotNull(attr);
+        Assertions.assertTrue(attr instanceof DecimalAttribute);
+        Assertions.assertEquals(attr.getValue().toString(),"1.234567");
 
         @SuppressWarnings("unchecked")
 		Set<String> querySet = (Set<String>) queryItem
                 .getAttributeValue("multistringattribute");
-        Assert.assertTrue(querySet.contains("value1"));
-        Assert.assertTrue(querySet.contains("value2"));
+        Assertions.assertTrue(querySet.contains("value1"));
+        Assertions.assertTrue(querySet.contains("value2"));
 
         @SuppressWarnings("unchecked")
 		Map<String, String> queryDictionary = (Map<String, String>) queryItem
                 .getAttributeValue("dictionaryattribute");
-        Assert.assertEquals("value1", queryDictionary.get("key1"));
-        Assert.assertEquals("value2", queryDictionary.get("key2"));
+        Assertions.assertEquals("value1", queryDictionary.get("key1"));
+        Assertions.assertEquals("value2", queryDictionary.get("key2"));
 
         Attribute custom = queryItem.getAttribute("customattribute");
-        Assert.assertEquals("customattributevalue", custom.getValue());
+        Assertions.assertEquals("customattributevalue", custom.getValue());
 
         helper.verifyItem(newItem, queryItem);
 
@@ -231,14 +230,14 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
                 .getAttributeValue("dictionaryattribute");
         Attribute queryAttribute = queryItem.getAttribute("customattribute");
 
-        Assert.assertTrue(querySet.contains("value3"));
-        Assert.assertEquals("value3", queryDictionary.get("key3"));
-        Assert.assertNotNull(queryAttribute);
-        Assert.assertNull(queryAttribute.getValue());
-        Assert.assertNull(queryItem.getAttribute("intattribute"));
+        Assertions.assertTrue(querySet.contains("value3"));
+        Assertions.assertEquals("value3", queryDictionary.get("key3"));
+        Assertions.assertNotNull(queryAttribute);
+        Assertions.assertNull(queryAttribute.getValue());
+        Assertions.assertNull(queryItem.getAttribute("intattribute"));
     }
 
-    @Ignore("Timezone seems to be GMT+1 when testing")
+    @Disabled("Timezone seems to be GMT+1 when testing")
     @Test
     public void junit3ignored_testCalendarAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
@@ -257,12 +256,12 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         Attribute attr = queryItem.getAttribute(new HibQName("calendarattribute"));
-        Assert.assertNotNull(attr);
-        Assert.assertTrue(attr instanceof CalendarAttribute);
+        Assertions.assertNotNull(attr);
+        Assertions.assertTrue(attr instanceof CalendarAttribute);
 
         Calendar cal = (Calendar) attr.getValue();
-        Assert.assertEquals(cal.getTimeZone().getID(), "GMT+05:00");
-        Assert.assertEquals(cal, calAttr.getValue()); // fails: out by 4 hours
+        Assertions.assertEquals(cal.getTimeZone().getID(), "GMT+05:00");
+        Assertions.assertEquals(cal, calAttr.getValue()); // fails: out by 4 hours
 
         attr.setValue("2003-10-10T00:00:00+02:00");
 
@@ -272,12 +271,12 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
         Attribute queryAttr = queryItem.getAttribute(new HibQName("calendarattribute"));
-        Assert.assertNotNull(queryAttr);
-        Assert.assertTrue(queryAttr instanceof CalendarAttribute);
+        Assertions.assertNotNull(queryAttr);
+        Assertions.assertTrue(queryAttr instanceof CalendarAttribute);
 
         cal = (Calendar) queryAttr.getValue();
-        Assert.assertEquals(cal.getTimeZone().getID(), "GMT+02:00");
-        Assert.assertEquals(cal, attr.getValue()); // fails: 1 hour out (something is using GMT+1 ...
+        Assertions.assertEquals(cal.getTimeZone().getID(), "GMT+02:00");
+        Assertions.assertEquals(cal, attr.getValue()); // fails: 1 hour out (something is using GMT+1 ...
     }
 
     @Test
@@ -298,11 +297,11 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         Attribute attr = queryItem.getAttribute(new HibQName("timestampattribute"));
-        Assert.assertNotNull(attr);
-        Assert.assertTrue(attr instanceof TimestampAttribute);
+        Assertions.assertNotNull(attr);
+        Assertions.assertTrue(attr instanceof TimestampAttribute);
 
         Date val = (Date) attr.getValue();
-        Assert.assertEquals(dateVal, val);
+        Assertions.assertEquals(dateVal, val);
 
         dateVal.setTime(dateVal.getTime() + 101);
         attr.setValue(dateVal);
@@ -313,11 +312,11 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
         Attribute queryAttr = queryItem.getAttribute(new HibQName("timestampattribute"));
-        Assert.assertNotNull(queryAttr);
-        Assert.assertTrue(queryAttr instanceof TimestampAttribute);
+        Assertions.assertNotNull(queryAttr);
+        Assertions.assertTrue(queryAttr instanceof TimestampAttribute);
 
         val = (Date) queryAttr.getValue();
-        Assert.assertEquals(dateVal, val);
+        Assertions.assertEquals(dateVal, val);
     }
 
 //    @Ignore("FIXME: fails since updateContent(queryItem) updates modifiedDate")
@@ -333,7 +332,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         testElement2.setAttribute("foo", "bar");
 
-        Assert.assertFalse(testElement.isEqualNode(testElement2));
+        Assertions.assertFalse(testElement.isEqualNode(testElement2));
 
         XmlAttribute xmlAttr =
             new HibXmlAttribute(new HibQName("xmlattribute"), testElement );
@@ -346,12 +345,12 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         Attribute attr = queryItem.getAttribute(new HibQName("xmlattribute"));
-        Assert.assertNotNull(attr);
-        Assert.assertTrue(attr instanceof XmlAttribute);
+        Assertions.assertNotNull(attr);
+        Assertions.assertTrue(attr instanceof XmlAttribute);
 
         Element element = (Element) attr.getValue();
 
-        Assert.assertEquals(DomWriter.write(testElement), DomWriter.write(element));
+        Assertions.assertEquals(DomWriter.write(testElement), DomWriter.write(element));
 
         Date modifyDate = attr.getModifiedDate();
 
@@ -374,7 +373,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         attr = queryItem.getAttribute(new HibQName("xmlattribute"));
 
         // Attribute shouldn't have been updated
-        Assert.assertEquals(modifyDate, attr.getModifiedDate());
+        Assertions.assertEquals(modifyDate, attr.getModifiedDate());
 
         attr.setValue(testElement2);
 
@@ -389,14 +388,14 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         attr = queryItem.getAttribute(new HibQName("xmlattribute"));
-        Assert.assertNotNull(attr);
-        Assert.assertTrue(attr instanceof XmlAttribute);
+        Assertions.assertNotNull(attr);
+        Assertions.assertTrue(attr instanceof XmlAttribute);
         // Attribute should have been updated
-        Assert.assertTrue(modifyDate.before(attr.getModifiedDate()));
+        Assertions.assertTrue(modifyDate.before(attr.getModifiedDate()));
 
         element = (Element) attr.getValue();
 
-        Assert.assertEquals(DomWriter.write(testElement2),DomWriter.write(element));
+        Assertions.assertEquals(DomWriter.write(testElement2),DomWriter.write(element));
     }
 
     @Test
@@ -418,15 +417,15 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         Attribute attr = queryItem.getAttribute(new HibQName("icalattribute"));
-        Assert.assertNotNull(attr);
-        Assert.assertTrue(attr instanceof ICalendarAttribute);
+        Assertions.assertNotNull(attr);
+        Assertions.assertTrue(attr instanceof ICalendarAttribute);
 
         net.fortuna.ical4j.model.Calendar calendar = (net.fortuna.ical4j.model.Calendar) attr.getValue();
-        Assert.assertNotNull(calendar);
+        Assertions.assertNotNull(calendar);
 
         net.fortuna.ical4j.model.Calendar expected = CalendarUtils.parseCalendar(helper.getInputStream("vjournal.ics"));
 
-        Assert.assertEquals(expected.toString(),calendar.toString());
+        Assertions.assertEquals(expected.toString(),calendar.toString());
 
         calendar.getProperties().add(new ProdId("blah"));
 
@@ -437,7 +436,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         ICalendarAttribute ica = (ICalendarAttribute) queryItem.getAttribute(new HibQName("icalattribute"));
-        Assert.assertNotEquals(expected.toString(), ica.getValue().toString());
+        Assertions.assertNotEquals(expected.toString(), ica.getValue().toString());
     }
 
     @Test
@@ -445,7 +444,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         User testuser = getUser(userDao, "testuser");
         try {
             contentDao.createRootItem(testuser);
-            Assert.fail("able to create duplicate root item");
+            Assertions.fail("able to create duplicate root item");
         } catch (RuntimeException ignored) {
         }
     }
@@ -466,12 +465,12 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         Item queryItem = contentDao.findItemByUid(a.getUid());
-        Assert.assertNotNull(queryItem);
-        Assert.assertTrue(queryItem instanceof CollectionItem);
+        Assertions.assertNotNull(queryItem);
+        Assertions.assertTrue(queryItem instanceof CollectionItem);
 
         queryItem = contentDao.findItemByPath("/testuser2/a");
-        Assert.assertNotNull(queryItem);
-        Assert.assertTrue(queryItem instanceof CollectionItem);
+        Assertions.assertNotNull(queryItem);
+        Assertions.assertTrue(queryItem instanceof CollectionItem);
 
         ContentItem item = generateTestContent();
 
@@ -481,14 +480,14 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         queryItem = contentDao.findItemByPath("/testuser2/a/test");
-        Assert.assertNotNull(queryItem);
-        Assert.assertTrue(queryItem instanceof ContentItem);
+        Assertions.assertNotNull(queryItem);
+        Assertions.assertTrue(queryItem instanceof ContentItem);
 
         clearSession();
 
         queryItem = contentDao.findItemParentByPath("/testuser2/a/test");
-        Assert.assertNotNull(queryItem);
-        Assert.assertEquals(a.getUid(), queryItem.getUid());
+        Assertions.assertNotNull(queryItem);
+        Assertions.assertEquals(a.getUid(), queryItem.getUid());
     }
 
     @Test
@@ -506,7 +505,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         HibFileItem queryItem = (HibFileItem) contentDao.findItemByUid(newItem.getUid());
 
         helper.verifyItem(newItem, queryItem);
-        Assert.assertEquals(0, queryItem.getVersion().intValue());
+        Assertions.assertEquals(0, queryItem.getVersion().intValue());
 
         queryItem.setName("test2");
         queryItem.setDisplayName("this is a test item2");
@@ -522,11 +521,11 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
         Thread.sleep(200);
         HibContentItem queryItem2 = (HibContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertTrue(queryItem2.getVersion() > 0);
+        Assertions.assertTrue(queryItem2.getVersion() > 0);
 
         helper.verifyItem(queryItem, queryItem2);
 
-        Assert.assertTrue(newItemModifyDate.before(
+        Assertions.assertTrue(newItemModifyDate.before(
                 queryItem2.getModifiedDate()));
     }
 
@@ -549,12 +548,12 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         queryItem = (ContentItem) contentDao.findItemByUid(queryItem.getUid());
-        Assert.assertNull(queryItem);
+        Assertions.assertNull(queryItem);
 
         clearSession();
 
         root = contentDao.getRootItem(user);
-        Assert.assertEquals(0, root.getChildren().size());
+        Assertions.assertEquals(0, root.getChildren().size());
 
     }
 
@@ -581,7 +580,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         contentDao.removeUserContent(user2);
 
         root = contentDao.getRootItem(user1);
-        Assert.assertEquals(0, root.getChildren().size());
+        Assertions.assertEquals(0, root.getChildren().size());
     }
 
     @Test
@@ -603,7 +602,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         queryItem = (ContentItem) contentDao.findItemByUid(queryItem.getUid());
-        Assert.assertNull(queryItem);
+        Assertions.assertNull(queryItem);
     }
 
     @Test
@@ -625,7 +624,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         queryItem = (ContentItem) contentDao.findItemByUid(queryItem.getUid());
-        Assert.assertNull(queryItem);
+        Assertions.assertNull(queryItem);
     }
 
     @Test
@@ -642,22 +641,22 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
         helper.verifyItem(newItem, queryItem);
 
-        Assert.assertEquals(0, (int) ((HibItem) queryItem).getVersion());
+        Assertions.assertEquals(0, (int) ((HibItem) queryItem).getVersion());
 
         contentDao.removeContent(queryItem);
 
         clearSession();
 
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertNull(queryItem);
+        Assertions.assertNull(queryItem);
 
         root = contentDao.getRootItem(user);
-        Assert.assertEquals(root.getTombstones().size(), 1);
+        Assertions.assertEquals(root.getTombstones().size(), 1);
 
         Tombstone ts = root.getTombstones().iterator().next();
 
-        Assert.assertTrue(ts instanceof ItemTombstone);
-        Assert.assertEquals(((ItemTombstone) ts).getItemUid(), newItem.getUid());
+        Assertions.assertTrue(ts instanceof ItemTombstone);
+        Assertions.assertEquals(((ItemTombstone) ts).getItemUid(), newItem.getUid());
 
         item = generateTestContent();
         item.setUid(newItem.getUid());
@@ -668,10 +667,10 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
-        Assert.assertNotNull(queryItem);
+        Assertions.assertNotNull(queryItem);
 
         root = contentDao.getRootItem(user);
-        Assert.assertEquals(root.getTombstones().size(), 0);
+        Assertions.assertEquals(root.getTombstones().size(), 0);
     }
 
     @Test
@@ -686,13 +685,13 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         a = contentDao.createCollection(root, a);
 
-        Assert.assertTrue(getHibItem(a).getId() > -1);
-        Assert.assertNotNull(a.getUid());
+        Assertions.assertTrue(getHibItem(a).getId() > -1);
+        Assertions.assertNotNull(a.getUid());
 
         clearSession();
 
         CollectionItem queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
-        Assertions.assertThat(queryItem.getHue()).isEqualTo(1);
+        org.assertj.core.api.Assertions.assertThat(queryItem.getHue()).isEqualTo(1);
         helper.verifyItem(a, queryItem);
     }
 
@@ -709,8 +708,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         clearSession();
 
-        Assert.assertTrue(getHibItem(a).getId() > -1);
-        Assert.assertNotNull(a.getUid());
+        Assertions.assertTrue(getHibItem(a).getId() > -1);
+        Assertions.assertNotNull(a.getUid());
 
         CollectionItem queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
         helper.verifyItem(a, queryItem);
@@ -721,7 +720,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
-        Assert.assertEquals("b", queryItem.getName());
+        Assertions.assertEquals("b", queryItem.getName());
     }
 
     @Test
@@ -743,8 +742,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Thread.sleep(1);
 
         a = contentDao.updateCollectionTimestamp(a);
-        Assert.assertEquals((int) ((HibItem) a).getVersion(), ver + 1);
-        Assert.assertTrue(timestamp.before(a.getModifiedDate()));
+        Assertions.assertEquals((int) ((HibItem) a).getVersion(), ver + 1);
+        Assertions.assertTrue(timestamp.before(a.getModifiedDate()));
     }
 
     @Test
@@ -761,14 +760,14 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         CollectionItem queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
-        Assert.assertNotNull(queryItem);
+        Assertions.assertNotNull(queryItem);
 
         contentDao.removeCollection(queryItem);
 
         clearSession();
 
         queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
-        Assert.assertNull(queryItem);
+        Assertions.assertNull(queryItem);
     }
 
     @Test
@@ -805,50 +804,50 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         d = (ContentItem) contentDao.findItemByUid(d.getUid());
         root = contentDao.getRootItem(testuser2);
 
-        Assert.assertNotNull(a);
-        Assert.assertNotNull(b);
-        Assert.assertNotNull(d);
-        Assert.assertNotNull(root);
+        Assertions.assertNotNull(a);
+        Assertions.assertNotNull(b);
+        Assertions.assertNotNull(d);
+        Assertions.assertNotNull(root);
 
         // test children
         Collection children = a.getChildren();
-        Assert.assertEquals(2, children.size());
+        Assertions.assertEquals(2, children.size());
         verifyContains(children, b);
         verifyContains(children, d);
 
         children = root.getChildren();
-        Assert.assertEquals(1, children.size());
+        Assertions.assertEquals(1, children.size());
         verifyContains(children, a);
 
         // test get by path
         ContentItem queryC = (ContentItem) contentDao.findItemByPath("/testuser2/a/b/c");
-        Assert.assertNotNull(queryC);
+        Assertions.assertNotNull(queryC);
         helper.verifyInputStream(
                 helper.getInputStream("testdata1.txt"), ((FileItem) queryC)
                         .getContent());
-        Assert.assertEquals("c", queryC.getName());
+        Assertions.assertEquals("c", queryC.getName());
 
         // test get path/uid abstract
         Item queryItem = contentDao.findItemByPath("/testuser2/a/b/c");
-        Assert.assertNotNull(queryItem);
-        Assert.assertTrue(queryItem instanceof ContentItem);
+        Assertions.assertNotNull(queryItem);
+        Assertions.assertTrue(queryItem instanceof ContentItem);
 
         queryItem = contentDao.findItemByUid(a.getUid());
-        Assert.assertNotNull(queryItem);
-        Assert.assertTrue(queryItem instanceof CollectionItem);
+        Assertions.assertNotNull(queryItem);
+        Assertions.assertTrue(queryItem instanceof CollectionItem);
 
         // test delete
         contentDao.removeContent(c);
         queryC = (ContentItem) contentDao.findItemByUid(c.getUid());
-        Assert.assertNull(queryC);
+        Assertions.assertNull(queryC);
 
         contentDao.removeCollection(a);
 
         CollectionItem queryA = (CollectionItem) contentDao.findItemByUid(a.getUid());
-        Assert.assertNull(queryA);
+        Assertions.assertNull(queryA);
 
         ContentItem queryD = (ContentItem) contentDao.findItemByUid(d.getUid());
-        Assert.assertNull(queryD);
+        Assertions.assertNull(queryD);
     }
 
 
@@ -857,9 +856,9 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         User testuser2 = getUser(userDao, "testuser2");
         HomeCollectionItem root = contentDao.getRootItem(testuser2);
 
-        Assert.assertNotNull(root);
+        Assertions.assertNotNull(root);
         root.setName("alsfjal;skfjasd");
-        Assert.assertEquals(root.getName(), "testuser2");
+        Assertions.assertEquals(root.getName(), "testuser2");
 
     }
 
@@ -906,21 +905,21 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // verify can't move root collection
         try {
             contentDao.moveItem("/testuser2", "/testuser2/a/blah");
-            Assert.fail("able to move root collection");
+            Assertions.fail("able to move root collection");
         } catch (IllegalArgumentException ignored) {
         }
 
         // verify can't move to root collection
         try {
             contentDao.moveItem("/testuser2/a/e", "/testuser2");
-            Assert.fail("able to move to root collection");
+            Assertions.fail("able to move to root collection");
         } catch (ItemNotFoundException ignored) {
         }
 
         // verify can't create loop
         try {
             contentDao.moveItem("/testuser2/a/b", "/testuser2/a/b/c/new");
-            Assert.fail("able to create loop");
+            Assertions.fail("able to create loop");
         } catch (ModelValidationException ignored) {
         }
 
@@ -935,18 +934,18 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         CollectionItem queryCollection = (CollectionItem) contentDao
                 .findItemByPath("/testuser2/a/e/b");
-        Assert.assertNotNull(queryCollection);
+        Assertions.assertNotNull(queryCollection);
 
         contentDao.moveItem("/testuser2/a/e/b", "/testuser2/a/e/bnew");
 
         clearSession();
         queryCollection = (CollectionItem) contentDao
                 .findItemByPath("/testuser2/a/e/bnew");
-        Assert.assertNotNull(queryCollection);
+        Assertions.assertNotNull(queryCollection);
 
         Item queryItem = contentDao.findItemByPath("/testuser2/a/e/bnew/c/d");
-        Assert.assertNotNull(queryItem);
-        Assert.assertTrue(queryItem instanceof ContentItem);
+        Assertions.assertNotNull(queryItem);
+        Assertions.assertTrue(queryItem instanceof ContentItem);
     }
 
     @Test
@@ -992,21 +991,21 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // verify can't copy root collection
         try {
             contentDao.copyItem(root, "/testuser2/a/blah", true);
-            Assert.fail("able to copy root collection");
+            Assertions.fail("able to copy root collection");
         } catch (IllegalArgumentException ignored) {
         }
 
         // verify can't move to root collection
         try {
             contentDao.copyItem(e, "/testuser2", true);
-            Assert.fail("able to move to root collection");
+            Assertions.fail("able to move to root collection");
         } catch (ItemNotFoundException ignored) {
         }
 
         // verify can't create loop
         try {
             contentDao.copyItem(b, "/testuser2/a/b/c/new", true);
-            Assert.fail("able to create loop");
+            Assertions.fail("able to create loop");
         } catch (ModelValidationException ignored) {
         }
 
@@ -1021,18 +1020,18 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         CollectionItem queryCollection = (CollectionItem) contentDao
                 .findItemByPath("/testuser2/a/e/bcopy");
-        Assert.assertNotNull(queryCollection);
+        Assertions.assertNotNull(queryCollection);
 
         queryCollection = (CollectionItem) contentDao
                 .findItemByPath("/testuser2/a/e/bcopy/c");
-        Assert.assertNotNull(queryCollection);
+        Assertions.assertNotNull(queryCollection);
 
         d = (ContentItem) contentDao.findItemByUid(d.getUid());
         ContentItem dcopy = (ContentItem) contentDao
                 .findItemByPath("/testuser2/a/e/bcopy/c/d");
-        Assert.assertNotNull(dcopy);
-        Assert.assertEquals(d.getName(), dcopy.getName());
-        Assert.assertNotSame(d.getUid(), dcopy.getUid());
+        Assertions.assertNotNull(dcopy);
+        Assertions.assertEquals(d.getName(), dcopy.getName());
+        Assertions.assertNotSame(d.getUid(), dcopy.getUid());
         helper.verifyBytes(((FileItem) d).getContent(), ((FileItem) dcopy).getContent());
 
         clearSession();
@@ -1045,11 +1044,11 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         queryCollection = (CollectionItem) contentDao
                 .findItemByPath("/testuser2/a/e/bcopyshallow");
-        Assert.assertNotNull(queryCollection);
+        Assertions.assertNotNull(queryCollection);
 
         queryCollection = (CollectionItem) contentDao
                 .findItemByPath("/testuser2/a/e/bcopyshallow/c");
-        Assert.assertNull(queryCollection);
+        Assertions.assertNull(queryCollection);
 
         clearSession();
         d = (ContentItem) contentDao.findItemByUid(d.getUid());
@@ -1058,7 +1057,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         dcopy = (ContentItem) contentDao.findItemByPath("/testuser2/dcopy");
-        Assert.assertNotNull(dcopy);
+        Assertions.assertNotNull(dcopy);
     }
 
     @Test
@@ -1080,7 +1079,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(queryItem.getParents().size(), 1);
+        Assertions.assertEquals(queryItem.getParents().size(), 1);
 
         CollectionItem b = new HibCollectionItem();
         b.setName("b");
@@ -1092,19 +1091,19 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         clearSession();
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(queryItem.getParents().size(), 2);
+        Assertions.assertEquals(queryItem.getParents().size(), 2);
 
         b = (CollectionItem) contentDao.findItemByUid(b.getUid());
         contentDao.removeItemFromCollection(queryItem, b);
         clearSession();
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(queryItem.getParents().size(), 1);
+        Assertions.assertEquals(queryItem.getParents().size(), 1);
 
         a = (CollectionItem) contentDao.findItemByUid(a.getUid());
         contentDao.removeItemFromCollection(queryItem, a);
         clearSession();
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertNull(queryItem);
+        Assertions.assertNull(queryItem);
     }
 
     @Test
@@ -1126,7 +1125,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(queryItem.getParents().size(), 1);
+        Assertions.assertEquals(queryItem.getParents().size(), 1);
 
         CollectionItem b = new HibCollectionItem();
         b.setName("b");
@@ -1141,7 +1140,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // should get DuplicateItemName here
         try {
             contentDao.addItemToCollection(queryItem, b);
-            Assert.fail("able to add item with same name to collection");
+            Assertions.fail("able to add item with same name to collection");
         } catch (DuplicateItemNameException ignored) {
         }
     }
@@ -1165,7 +1164,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
 
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(queryItem.getParents().size(), 1);
+        Assertions.assertEquals(queryItem.getParents().size(), 1);
 
         CollectionItem b = new HibCollectionItem();
         b.setName("b");
@@ -1177,7 +1176,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         clearSession();
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(queryItem.getParents().size(), 2);
+        Assertions.assertEquals(queryItem.getParents().size(), 2);
 
         b = (CollectionItem) contentDao.findItemByUid(b.getUid());
         contentDao.removeCollection(b);
@@ -1185,8 +1184,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
         b = (CollectionItem) contentDao.findItemByUid(b.getUid());
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertNull(b);
-        Assert.assertEquals(queryItem.getParents().size(), 1);
+        Assertions.assertNull(b);
+        Assertions.assertEquals(queryItem.getParents().size(), 1);
 
         a = (CollectionItem) contentDao.findItemByUid(a.getUid());
         contentDao.removeCollection(a);
@@ -1194,8 +1193,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         a = (CollectionItem) contentDao.findItemByUid(a.getUid());
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertNull(a);
-        Assert.assertNull(queryItem);
+        Assertions.assertNull(a);
+        Assertions.assertNull(queryItem);
     }
 
 
@@ -1216,8 +1215,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         newItem = (FreeBusyItem) contentDao.createContent(root, newItem);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertNotNull(newItem.getUid());
+        Assertions.assertTrue(getHibItem(newItem).getId() > -1);
+        Assertions.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -1243,8 +1242,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         newItem = (AvailabilityItem) contentDao.createContent(root, newItem);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
-        Assert.assertNotNull(newItem.getUid());
+        Assertions.assertTrue(getHibItem(newItem).getId() > -1);
+        Assertions.assertNotNull(newItem.getUid());
 
         clearSession();
 
@@ -1278,8 +1277,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         items.add(note1);
         items.add(note2);
 
-        Assert.assertNotNull(note1);
-        Assert.assertNotNull(note2);
+        Assertions.assertNotNull(note1);
+        Assertions.assertNotNull(note2);
 
         note1.setDisplayName("changed");
         note2.setIsActive(false);
@@ -1289,9 +1288,9 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         note1 = (NoteItem) contentDao.findItemByUid("1");
         note2 = (NoteItem) contentDao.findItemByUid("2");
 
-        Assert.assertNotNull(note1);
-        Assert.assertEquals("changed", note1.getDisplayName());
-        Assert.assertNull(note2);
+        Assertions.assertNotNull(note1);
+        Assertions.assertEquals("changed", note1.getDisplayName());
+        Assertions.assertNull(note2);
     }
 
     @Test
@@ -1315,7 +1314,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // should fail because modification is processed before master
         try {
             contentDao.updateCollection(root, items);
-            Assert.fail("able to create invalid mod");
+            Assertions.fail("able to create invalid mod");
         } catch (ModelValidationException ignored) {
         }
 
@@ -1328,11 +1327,11 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         contentDao.updateCollection(root, items);
 
         note1 = (NoteItem) contentDao.findItemByUid("1");
-        Assert.assertNotNull(note1);
-        Assert.assertEquals(1, note1.getModifications().size());
+        Assertions.assertNotNull(note1);
+        Assertions.assertEquals(1, note1.getModifications().size());
         note2 = (NoteItem) contentDao.findItemByUid("1:20070101");
-        Assert.assertNotNull(note2);
-        Assert.assertNotNull(note2.getModifies());
+        Assertions.assertNotNull(note2);
+        Assertions.assertNotNull(note2.getModifies());
 
         // now create new collection
         CollectionItem a = new HibCollectionItem();
@@ -1349,7 +1348,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // should fail because modification is added before master
         try {
             contentDao.updateCollection(a, items);
-            Assert.fail("able to add mod before master");
+            Assertions.fail("able to add mod before master");
         } catch (ModelValidationException ignored) {
         }
 
@@ -1376,8 +1375,8 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         // adding master should add mods too
         clearSession();
         b = (CollectionItem) contentDao.findItemByUid("b");
-        Assert.assertNotNull(b);
-        Assert.assertEquals(2, b.getChildren().size());
+        Assertions.assertNotNull(b);
+        Assertions.assertEquals(2, b.getChildren().size());
     }
 
     @Test
@@ -1399,7 +1398,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         try {
             contentDao.updateCollection(root, items);
-            Assert.fail("able to create duplicate icaluids!");
+            Assertions.fail("able to create duplicate icaluids!");
         } catch (IcalUidInUseException ignored) {
         }
     }
@@ -1412,7 +1411,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
                 && item.getName().equals(collection.getName()))
                 return;
         }
-        Assert.fail("collection not found");
+        Assertions.fail("collection not found");
     }
 
     private void verifyContains(Collection items, ContentItem content) {
@@ -1422,7 +1421,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
                 && item.getName().equals(content.getName()))
                 return;
         }
-        Assert.fail("content not found");
+        Assertions.fail("content not found");
     }
 
     private User getUser(UserDao userDao, String username) {

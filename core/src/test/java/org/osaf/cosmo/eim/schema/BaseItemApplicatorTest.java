@@ -40,6 +40,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
         applicator = new TestItemApplicator(PREFIX, NAMESPACE);
     }
 
+    @Test
     public void testApplyRecordNullNamespace() throws Exception {
         try {
             applicator.applyRecord(new EimRecord(null, null));
@@ -47,6 +48,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
         } catch (IllegalArgumentException e) {}
     }
 
+    @Test
     public void testApplyRecordWrongNamespace() throws Exception {
         try {
             applicator.applyRecord(new EimRecord("bad", "bad"));
@@ -54,6 +56,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
         } catch (IllegalArgumentException e) {}
     }
 
+    @Test
     public void testApplyDeletion() {
         EimRecord record = new EimRecord(PREFIX, NAMESPACE);
         TextField field = new TextField("foo", "bar");
@@ -68,6 +71,7 @@ public class BaseItemApplicatorTest extends BaseApplicatorTestCase {
                     applicator.isFieldApplied(field));
     }
 
+    @Test
     public void testApplyRecord() {
         EimRecord record = new EimRecord(PREFIX, NAMESPACE);
         TextField field = new TextField("foo", "bar");

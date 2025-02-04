@@ -17,26 +17,27 @@ package org.osaf.cosmo.model;
 
 import java.io.FileInputStream;
 
-import org.junit.Assert;
-import junit.framework.TestCase;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateList;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.model.mock.MockEventStamp;
 import org.osaf.cosmo.model.mock.MockNoteItem;
 
 /**
  * Test EventStamp
  */
-public class EventStampTest extends TestCase {
+public class EventStampTest {
 
     protected String baseDir = "src/test/resources/testdata/";
     private static final TimeZoneRegistry TIMEZONE_REGISTRY =
         TimeZoneRegistryFactory.getInstance().createRegistry();
 
+    @Test
     public void testExDates() throws Exception {
         NoteItem master = new MockNoteItem();
         master.setDisplayName("displayName");
@@ -47,9 +48,9 @@ public class EventStampTest extends TestCase {
 
         DateList exdates = eventStamp.getExceptionDates();
 
-        Assert.assertNotNull(exdates);
-        Assert.assertTrue(2==exdates.size());
-        Assert.assertNotNull(exdates.getTimeZone());
+        Assertions.assertNotNull(exdates);
+        Assertions.assertEquals(2, exdates.size());
+        Assertions.assertNotNull(exdates.getTimeZone());
     }
 
     protected Calendar getCalendar(String name) throws Exception {

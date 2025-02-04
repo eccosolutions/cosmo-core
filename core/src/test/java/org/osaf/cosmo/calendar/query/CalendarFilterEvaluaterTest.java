@@ -17,34 +17,35 @@ package org.osaf.cosmo.calendar.query;
 
 import java.io.InputStream;
 
-import org.junit.Assert;
-import junit.framework.TestCase;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test CalendarFilterEvaluater
  */
-public class CalendarFilterEvaluaterTest extends TestCase {
+public class CalendarFilterEvaluaterTest {
 
-    @Override
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
         System.setProperty("ical4j.unfolding.relaxed", "true");
         System.setProperty("ical4j.parsing.relaxed", "true");
         System.setProperty("ical4j.validation.relaxed", "true");
     }
 
-    @Override
+    @AfterEach
     protected void tearDown() throws Exception {
-        super.tearDown();
         System.clearProperty("ical4j.unfolding.relaxed");
         System.clearProperty("ical4j.parsing.relaxed");
         System.clearProperty("ical4j.validation.relaxed");
     }
 
+    @Test
     public void testEvaluateFilterPropFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -60,29 +61,30 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         propFilter.setTextMatchFilter(textFilter);
         eventFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         textFilter.setValue("ViSiBle");
         textFilter.setCollation(textFilter.COLLATION_OCTET);
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
 
         textFilter.setCollation(null);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         textFilter.setValue("XXX");
         textFilter.setNegateCondition(true);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         propFilter.setTextMatchFilter(null);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         propFilter.setName("RRULE");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
 
         propFilter.setIsNotDefinedFilter(new IsNotDefinedFilter());
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateFilterParamFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -100,24 +102,25 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         propFilter.getParamFilters().add(paramFilter);
         eventFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         textFilter.setValue("XXX");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
 
         textFilter.setNegateCondition(true);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         paramFilter.setTextMatchFilter(null);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         paramFilter.setName("BOGUS");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
 
         paramFilter.setIsNotDefinedFilter(new IsNotDefinedFilter());
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateFilterEventTimeRangeFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -137,14 +140,15 @@ public class CalendarFilterEvaluaterTest extends TestCase {
 
         eventFilter.setTimeRangeFilter(timeRangeFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         start = new DateTime("20050818T115000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateFilterRecurringEventTimeRangeFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -164,14 +168,15 @@ public class CalendarFilterEvaluaterTest extends TestCase {
 
         eventFilter.setTimeRangeFilter(timeRangeFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         start = new DateTime("20070515T205000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateFilterPropertyTimeRangeFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -193,14 +198,15 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         propFilter.setTimeRangeFilter(timeRangeFilter);
         eventFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         start = new DateTime("20060717T115000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateComplicated() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -240,13 +246,14 @@ public class CalendarFilterEvaluaterTest extends TestCase {
 
         eventFilter.getPropFilters().add(propFilter2);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         // change one thing
         paramFilter2.setName("XXX");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateVAlarmFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -267,13 +274,13 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         eventFilter.getComponentFilters().add(alarmFilter);
         alarmFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         textMatch.setValue("EMAIL");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
 
         alarmFilter.getPropFilters().clear();
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         // time-range filter on VALARM
 
@@ -284,34 +291,35 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         Period period = new Period(start, end);
         TimeRangeFilter timeRangeFilter = new TimeRangeFilter(period);
         alarmFilter.setTimeRangeFilter(timeRangeFilter);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         // find alarm relative to end
         start = new DateTime("20060101T050000Z");
         end = new DateTime("20060101T190000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         // find absolute repeating alarm
         start = new DateTime("20051230T050000Z");
         end = new DateTime("20051230T080000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         // find no alarms
         start = new DateTime("20060101T020000Z");
         end = new DateTime("20060101T030000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
 
         alarmFilter.setTimeRangeFilter(null);
         alarmFilter.setIsNotDefinedFilter(new IsNotDefinedFilter());
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateFilterPropFilterAgainstException() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -325,9 +333,10 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         PropertyFilter propFilter = new PropertyFilter("DESCRIPTION");
         eventFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateVJournalFilterPropFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -340,19 +349,20 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         filter.setFilter(compFilter);
         compFilter.getComponentFilters().add(eventFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         PropertyFilter propFilter = new PropertyFilter("SUMMARY");
         TextMatchFilter textFilter = new TextMatchFilter("Staff");
         propFilter.setTextMatchFilter(textFilter);
         eventFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         textFilter.setValue("bogus");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateVToDoFilterPropFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -365,19 +375,20 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         filter.setFilter(compFilter);
         compFilter.getComponentFilters().add(eventFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         PropertyFilter propFilter = new PropertyFilter("SUMMARY");
         TextMatchFilter textFilter = new TextMatchFilter("Income");
         propFilter.setTextMatchFilter(textFilter);
         eventFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         textFilter.setValue("bogus");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateVToDoTimeRangeFilter() throws Exception {
 
         Calendar calendar1 = getCalendar("vtodo/vtodo.ics");
@@ -398,26 +409,27 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         TimeRangeFilter timeRangeFilter = new TimeRangeFilter(period);
         vtodoFilter.setTimeRangeFilter(timeRangeFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar1, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar1, filter));
 
         // Verify VTODO that has DTSTART doesn't match
         start = new DateTime("19970420T133000Z");
         end = new DateTime("19970421T133000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertFalse(evaluater.evaluate(calendar1, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar1, filter));
 
         // Verify VTODO that has DUE doesn't match
-        Assert.assertFalse(evaluater.evaluate(calendar2, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar2, filter));
 
         // Verify VTODO that has DUE matches
         start = new DateTime("20080401T133000Z");
         end = new DateTime("20080421T133000Z");
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
-        Assert.assertTrue(evaluater.evaluate(calendar2, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar2, filter));
     }
 
+    @Test
     public void testEvaluateVFreeBusyFilterFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -429,19 +441,20 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         filter.setFilter(compFilter);
         compFilter.getComponentFilters().add(vfbFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         PropertyFilter propFilter = new PropertyFilter("ORGANIZER");
         TextMatchFilter textFilter = new TextMatchFilter("Joe");
         propFilter.setTextMatchFilter(textFilter);
         vfbFilter.getPropFilters().add(propFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
 
         textFilter.setValue("bogus");
-        Assert.assertFalse(evaluater.evaluate(calendar, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar, filter));
     }
 
+    @Test
     public void testEvaluateVFreeBusyFilterFilterTimeRange() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -461,8 +474,8 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         TimeRangeFilter timeRangeFilter = new TimeRangeFilter(period);
         vfbFilter.setTimeRangeFilter(timeRangeFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar1, filter));
-        Assert.assertTrue(evaluater.evaluate(calendar2, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar1, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar2, filter));
 
         start = new DateTime("20070102T115000Z");
         end = new DateTime("20070109T115000Z");
@@ -470,11 +483,12 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         period = new Period(start, end);
         timeRangeFilter.setPeriod(period);
 
-        Assert.assertFalse(evaluater.evaluate(calendar1, filter));
-        Assert.assertFalse(evaluater.evaluate(calendar2, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar1, filter));
+        Assertions.assertFalse(evaluater.evaluate(calendar2, filter));
 
     }
 
+    @Test
     public void testEvaluateVAvailabilityFilter() throws Exception {
 
         CalendarFilterEvaluater evaluater = new CalendarFilterEvaluater();
@@ -486,7 +500,7 @@ public class CalendarFilterEvaluaterTest extends TestCase {
         filter.setFilter(compFilter);
         compFilter.getComponentFilters().add(vfbFilter);
 
-        Assert.assertTrue(evaluater.evaluate(calendar, filter));
+        Assertions.assertTrue(evaluater.evaluate(calendar, filter));
     }
 
     protected Calendar getCalendar(String name) throws Exception {

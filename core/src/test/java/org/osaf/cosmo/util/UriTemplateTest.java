@@ -20,13 +20,14 @@ import java.util.Random;
 import org.junit.Assert;
 import junit.framework.TestCase;
 
-public class UriTemplateTest extends TestCase {
+public class UriTemplateTest {
 	private final static int MIN_CHARCODE = 0x21; //ASCII range
 	private final static int MAX_CHARCODE = 0x7e; //ASCII range
 	private final Random rnd = new Random();
 
+    @Test
     public void testUnescapeSpaces() {
-        Assert.assertEquals("test test", UriTemplate.unescapeSegment("test+test"));
+        Assertions.assertEquals("test test", UriTemplate.unescapeSegment("test+test"));
     }
 
     private String getPlaceHolder(int length) {
@@ -45,9 +46,10 @@ public class UriTemplateTest extends TestCase {
     	return result.toString();
     }
 
+    @Test
     public void testBindAbsolute() {
     	String username = getPlaceHolder(10);
-        Assert.assertEquals("Error binding template: ", "/" + username + "/Inbox", new UriTemplate("/{username}/Inbox").bindAbsolute(false, "", username));
+        Assertions.assertEquals("Error binding template: ", "/" + username + "/Inbox", new UriTemplate("/{username}/Inbox").bindAbsolute(false, "", username));
     }
 
 }

@@ -28,9 +28,10 @@ import net.fortuna.ical4j.model.component.VTimeZone;
 /**
  * Test TimeZoneTranslator
  */
-public class TimeZoneTranslatorTest extends TestCase {
+public class TimeZoneTranslatorTest {
     protected String baseDir = "src/test/resources/testdata/testtimezones/";
 
+    @Test
     public void testTimeZoneTranslator() throws Exception {
         TimeZoneTranslator translator = TimeZoneTranslator.getInstance();
         TimeZone tz1 = getTimeZone("timezone1.ics");
@@ -39,29 +40,30 @@ public class TimeZoneTranslatorTest extends TestCase {
         TimeZone tz4 = getTimeZone("timezone4.ics");
 
         TimeZone olsonTz = translator.translateToOlsonTz(tz1);
-        Assert.assertNotNull(olsonTz);
-        Assert.assertEquals("America/Los_Angeles", olsonTz.getID());
+        Assertions.assertNotNull(olsonTz);
+        Assertions.assertEquals("America/Los_Angeles", olsonTz.getID());
 
         olsonTz = translator.translateToOlsonTz(tz2);
-        Assert.assertNotNull(olsonTz);
-        Assert.assertEquals("America/Los_Angeles", olsonTz.getID());
+        Assertions.assertNotNull(olsonTz);
+        Assertions.assertEquals("America/Los_Angeles", olsonTz.getID());
 
         olsonTz = translator.translateToOlsonTz(tz3);
-        Assert.assertNotNull(olsonTz);
-        Assert.assertEquals("America/Chicago", olsonTz.getID());
+        Assertions.assertNotNull(olsonTz);
+        Assertions.assertEquals("America/Chicago", olsonTz.getID());
 
         // bogus timezone should return null
         olsonTz = translator.translateToOlsonTz(tz4);
-        Assert.assertNull(olsonTz);
+        Assertions.assertNull(olsonTz);
     }
 
+    @Test
     public void testTranslateLightningTZID() {
         TimeZoneTranslator translator = TimeZoneTranslator.getInstance();
 
         // test Lightning TZID format
         TimeZone olsonTz = translator.translateToOlsonTz("/mozilla.org/20050126_1/America/Los_Angeles");
 
-        Assert.assertEquals("America/Los_Angeles", olsonTz.getID());
+        Assertions.assertEquals("America/Los_Angeles", olsonTz.getID());
     }
 
     private TimeZone getTimeZone(String filename) throws Exception {

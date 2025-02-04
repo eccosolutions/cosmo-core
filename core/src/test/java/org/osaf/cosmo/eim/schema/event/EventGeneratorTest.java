@@ -38,6 +38,7 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
     private static final Log log =
         LogFactory.getLog(EventGeneratorTest.class);
 
+    @Test
     public void testGenerateRecord() throws Exception {
 
         MockNoteItem noteItem = new MockNoteItem();
@@ -92,6 +93,7 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
         checkTextField(statusField, FIELD_STATUS, "CONFIRMED");
     }
 
+    @Test
     public void testGenerateMissingRecord() throws Exception {
 
         MockNoteItem noteItem = new MockNoteItem();
@@ -125,15 +127,15 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
         assertEquals("unexpected number of fields", 8, fields.size());
 
         EimRecordField dtStartField = fields.get(0);
-        Assert.assertEquals(FIELD_DTSTART, dtStartField.getName());
-        Assert.assertTrue(dtStartField.isMissing());
+        Assertions.assertEquals(FIELD_DTSTART, dtStartField.getName());
+        Assertions.assertTrue(dtStartField.isMissing());
 
         EimRecordField durationField = fields.get(1);
         checkTextField(durationField, FIELD_DURATION, "PT1H");
 
         EimRecordField locationField = fields.get(2);
-        Assert.assertEquals(FIELD_LOCATION, locationField.getName());
-        Assert.assertTrue(locationField.isMissing());
+        Assertions.assertEquals(FIELD_LOCATION, locationField.getName());
+        Assertions.assertTrue(locationField.isMissing());
 
         EimRecordField rruleField = fields.get(3);
         checkTextField(rruleField, FIELD_RRULE, null);
@@ -148,8 +150,8 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
         checkTextField(exdateField, FIELD_EXDATE, null);
 
         EimRecordField statusField = fields.get(7);
-        Assert.assertEquals(FIELD_STATUS, statusField.getName());
-        Assert.assertTrue(statusField.isMissing());
+        Assertions.assertEquals(FIELD_STATUS, statusField.getName());
+        Assertions.assertTrue(statusField.isMissing());
 
         // now change anyTime to TRUE (not inherited)
         eventStamp.setAnyTime(true);
@@ -166,7 +168,7 @@ public class EventGeneratorTest extends BaseGeneratorTestCase
 
         // since anyTime was set, dtStart will not be "missing"
         dtStartField = fields.get(0);
-        Assert.assertFalse(dtStartField.isMissing());
+        Assertions.assertFalse(dtStartField.isMissing());
         checkTextField(dtStartField, FIELD_DTSTART, ";VALUE=DATE-TIME;X-OSAF-ANYTIME=TRUE:20070212T074500");
     }
 

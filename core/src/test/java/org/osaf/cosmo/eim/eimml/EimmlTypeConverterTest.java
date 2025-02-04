@@ -33,12 +33,13 @@ import static java.util.Base64.getEncoder;
 /**
  * Test Case for {@link EimmlTypeConverter}.
  */
-public class EimmlTypeConverterTest extends TestCase
+public class EimmlTypeConverterTest
     implements EimmlConstants {
     private static final Log log =
         LogFactory.getLog(EimmlTypeConverterTest.class);
 
     /** */
+    @Test
     public void testToBytes() throws Exception {
         String testString = "this is a test string";
 
@@ -52,6 +53,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testfromBytes() throws Exception {
         String testString = "this is a test string";
         byte[] testBytes = testString.getBytes();
@@ -64,6 +66,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testToText() throws Exception {
         String testString = "this is a test string";
 
@@ -85,6 +88,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testToClob() throws Exception {
         String testString = "this is a test string";
         byte[] testBytes = testString.getBytes();
@@ -100,6 +104,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testFromClob() throws Exception {
         String testString = "this is a test string";
         StringReader testReader = new StringReader(testString);
@@ -110,6 +115,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testToBlob() throws Exception {
         String testString = "this is a test string";
 
@@ -126,6 +132,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testFromBlob() throws Exception {
         String testString = "this is a test string";
         byte[] testBytes = testString.getBytes();
@@ -140,6 +147,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testToInteger() throws Exception {
         String testString = "42";
 
@@ -150,6 +158,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testFromInteger() throws Exception {
         String testString = "42";
         Integer testInteger = Integer.parseInt(testString);
@@ -160,6 +169,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testToDateTime() throws Exception {
         String testString = "1996-12-19T16:39:57-08:00";
 
@@ -186,6 +196,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testFromDateTime() throws Exception {
         String testString = "1996-12-19T16:39:57-08:00";
 
@@ -204,6 +215,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testToDecimal() throws Exception {
         try {
             EimmlTypeConverter.toDecimal("deadbeef");
@@ -218,6 +230,7 @@ public class EimmlTypeConverterTest extends TestCase
     }
 
     /** */
+    @Test
     public void testFromDecimal() {
         String testString = "3.14159";
         BigDecimal testDecimal = new BigDecimal(testString);

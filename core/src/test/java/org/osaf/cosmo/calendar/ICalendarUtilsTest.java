@@ -16,8 +16,6 @@
 package org.osaf.cosmo.calendar;
 
 
-import org.junit.Assert;
-import junit.framework.TestCase;
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.TimeZone;
@@ -26,72 +24,78 @@ import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test ICalendarUtils
  */
-public class ICalendarUtilsTest extends TestCase {
+public class ICalendarUtilsTest {
     private static final Log log = LogFactory.getLog(ICalendarUtilsTest.class);
     private static final TimeZoneRegistry TIMEZONE_REGISTRY =
         TimeZoneRegistryFactory.getInstance().createRegistry();
 
+    @Test
     public void testNormalizeUTCDateTimeToDate() throws Exception {
         TimeZone tz = TIMEZONE_REGISTRY.getTimeZone("America/Chicago");
 
         DateTime dt = new DateTime("20070201T070000Z");
 
-        Assert.assertEquals("20070201", ICalendarUtils.normalizeUTCDateTimeToDate(dt, tz).toString());
+        Assertions.assertEquals("20070201", ICalendarUtils.normalizeUTCDateTimeToDate(dt, tz).toString());
 
         tz = TIMEZONE_REGISTRY.getTimeZone("America/Los_Angeles");
-        Assert.assertEquals("20070131", ICalendarUtils.normalizeUTCDateTimeToDate(dt, tz).toString());
+        Assertions.assertEquals("20070131", ICalendarUtils.normalizeUTCDateTimeToDate(dt, tz).toString());
 
         tz = TIMEZONE_REGISTRY.getTimeZone("Australia/Sydney");
-        Assert.assertEquals("20070201", ICalendarUtils.normalizeUTCDateTimeToDate(dt, tz).toString());
+        Assertions.assertEquals("20070201", ICalendarUtils.normalizeUTCDateTimeToDate(dt, tz).toString());
     }
 
+    @Test
     public void testCompareDates() throws Exception {
         TimeZone tz = TIMEZONE_REGISTRY.getTimeZone("America/Chicago");
 
         DateTime dt = new DateTime("20070201T070000Z");
         Date toTest = new Date("20070201");
 
-        Assert.assertEquals(-1, ICalendarUtils.compareDates(toTest, dt, tz));
+        Assertions.assertEquals(-1, ICalendarUtils.compareDates(toTest, dt, tz));
 
         tz = TIMEZONE_REGISTRY.getTimeZone("America/Los_Angeles");
-        Assert.assertEquals(1, ICalendarUtils.compareDates(toTest, dt, tz));
+        Assertions.assertEquals(1, ICalendarUtils.compareDates(toTest, dt, tz));
     }
 
+    @Test
     public void testPinFloatingTime() throws Exception {
         TimeZone tz1 = TIMEZONE_REGISTRY.getTimeZone("America/Chicago");
 
-        Assert.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new Date("20070101"), tz1).toString());
-        Assert.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new DateTime("20070101T000000"), tz1).toString());
+        Assertions.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new Date("20070101"), tz1).toString());
+        Assertions.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new DateTime("20070101T000000"), tz1).toString());
 
 
         TimeZone tz2 = TIMEZONE_REGISTRY.getTimeZone("America/Los_Angeles");
-        Assert.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new Date("20070101"), tz1).toString());
-        Assert.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new DateTime("20070101T000000"), tz1).toString());
+        Assertions.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new Date("20070101"), tz1).toString());
+        Assertions.assertEquals("20070101T000000", ICalendarUtils.pinFloatingTime(new DateTime("20070101T000000"), tz1).toString());
 
-        Assert.assertTrue(ICalendarUtils.pinFloatingTime(
+        Assertions.assertTrue(ICalendarUtils.pinFloatingTime(
                 new Date("20070101"), tz1).before(
                 ICalendarUtils.pinFloatingTime(new Date("20070101"),
                         tz2)));
-        Assert.assertTrue(ICalendarUtils.pinFloatingTime(
+        Assertions.assertTrue(ICalendarUtils.pinFloatingTime(
                 new DateTime("20070101T000000"), tz1).before(
                 ICalendarUtils.pinFloatingTime(new DateTime("20070101T000000"),
                         tz2)));
     }
 
+    @Test
     public void testConvertToUTC() throws Exception {
         TimeZone tz = TIMEZONE_REGISTRY.getTimeZone("America/Chicago");
 
-        Assert.assertEquals("20070101T060000Z", ICalendarUtils.convertToUTC(new Date("20070101"), tz).toString());
-        Assert.assertEquals("20070101T160000Z", ICalendarUtils.convertToUTC(new DateTime("20070101T100000"), tz).toString());
+        Assertions.assertEquals("20070101T060000Z", ICalendarUtils.convertToUTC(new Date("20070101"), tz).toString());
+        Assertions.assertEquals("20070101T160000Z", ICalendarUtils.convertToUTC(new DateTime("20070101T100000"), tz).toString());
 
 
         tz = TIMEZONE_REGISTRY.getTimeZone("America/Los_Angeles");
-        Assert.assertEquals("20070101T080000Z", ICalendarUtils.convertToUTC(new Date("20070101"), tz).toString());
-        Assert.assertEquals("20070101T180000Z", ICalendarUtils.convertToUTC(new DateTime("20070101T100000"), tz).toString());
+        Assertions.assertEquals("20070101T080000Z", ICalendarUtils.convertToUTC(new Date("20070101"), tz).toString());
+        Assertions.assertEquals("20070101T180000Z", ICalendarUtils.convertToUTC(new DateTime("20070101T100000"), tz).toString());
 
     }
 }

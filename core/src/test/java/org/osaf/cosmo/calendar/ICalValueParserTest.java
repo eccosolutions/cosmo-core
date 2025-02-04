@@ -15,17 +15,21 @@
  */
 package org.osaf.cosmo.calendar;
 
-import java.text.ParseException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import junit.framework.TestCase;
+import java.text.ParseException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.jupiter.api.Test;
 
-public class ICalValueParserTest extends TestCase {
+public class ICalValueParserTest {
     private static final Log log =
         LogFactory.getLog(ICalValueParserTest.class);
 
+    @Test
     public void testParseWithParams() throws Exception {
         String str =
             ";VALUE=DATE-TIME;TZID=America/Los_Angeles:20021010T120000";
@@ -36,7 +40,7 @@ public class ICalValueParserTest extends TestCase {
         assertNotNull("null value", parser.getValue());
         assertEquals("incorrect value", "20021010T120000", parser.getValue());
 
-        assertEquals("wrong number of params", 2,
+        assertEquals(2,
                      parser.getParams().keySet().size());
         assertEquals("wrong VALUE value", "DATE-TIME",
                      parser.getParams().get("VALUE"));
@@ -44,6 +48,7 @@ public class ICalValueParserTest extends TestCase {
                      parser.getParams().get("TZID"));
     }
 
+    @Test
     public void testParseWithoutParams() throws Exception {
         String str = "20021010T120000";
 
@@ -53,10 +58,11 @@ public class ICalValueParserTest extends TestCase {
         assertNotNull("null value", parser.getValue());
         assertEquals("incorrect value", "20021010T120000", parser.getValue());
 
-        assertEquals("wrong number of params", 0,
+        assertEquals(0,
                      parser.getParams().keySet().size());
     }
 
+    @Test
     public void testParseQuotedParam() throws Exception {
         String str =";VALUE=\"DATE-TIME\":20021010T120000";
 
@@ -66,12 +72,13 @@ public class ICalValueParserTest extends TestCase {
         assertNotNull("null value", parser.getValue());
         assertEquals("incorrect value", "20021010T120000", parser.getValue());
 
-        assertEquals("wrong number of params", 1,
+        assertEquals(1,
                      parser.getParams().keySet().size());
         assertEquals("wrong VALUE value", "DATE-TIME",
                      parser.getParams().get("VALUE"));
     }
 
+    @Test
     public void testParseUnclosedQuotes() {
         String str = ";VALUE=\"DATE-TIME:20021010T120000";
 

@@ -27,9 +27,10 @@ import net.fortuna.ical4j.model.TemporalAmountAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class DurationFormatTest extends TestCase {
+public class DurationFormatTest {
     private static final Log log = LogFactory.getLog(DurationFormatTest.class);
 
+    @Test
     public void testGetValue() {
         // iCal's Duration() internally sets a TemporalAmountAdapter, which getValue() calls toString() on.
         // The toString() is flawed in earlier iCal versions, so we do a quick test.
@@ -39,6 +40,7 @@ public class DurationFormatTest extends TestCase {
         assertEquals("P1DT3H40M", TemporalAmountAdapter.parse("P1DT3H40M").toString());
     }
 
+    @Test
     public void testFormat() throws Exception {
         DurationFormat df = DurationFormat.getInstance();
         TemporalAmount dur = null;
@@ -62,39 +64,40 @@ public class DurationFormatTest extends TestCase {
         assertEquals("PT30S", df.format(dur));
     }
 
+    @Test
     public void testParse() throws Exception {
         DurationFormat df = DurationFormat.getInstance();
 
-        Assert.assertEquals(df.parse("P5W").toString(), "P35D");
-        Assert.assertEquals(df.parse("P5D").toString(), "P5D");
-        Assert.assertEquals(df.parse("PT5H").toString(), "PT5H");
-        Assert.assertEquals(df.parse("P5DT5H").toString(), "PT125H");
-        Assert.assertEquals(df.parse("PT5H5M").toString(), "PT5H5M");
-        Assert.assertEquals(df.parse("PT5M").toString(), "PT5M");
-        Assert.assertEquals(df.parse("PT5M5S").toString(), "PT5M5S");
-        Assert.assertEquals(df.parse("PT5S").toString(), "PT5S");
+        Assertions.assertEquals(df.parse("P5W").toString(), "P35D");
+        Assertions.assertEquals(df.parse("P5D").toString(), "P5D");
+        Assertions.assertEquals(df.parse("PT5H").toString(), "PT5H");
+        Assertions.assertEquals(df.parse("P5DT5H").toString(), "PT125H");
+        Assertions.assertEquals(df.parse("PT5H5M").toString(), "PT5H5M");
+        Assertions.assertEquals(df.parse("PT5M").toString(), "PT5M");
+        Assertions.assertEquals(df.parse("PT5M5S").toString(), "PT5M5S");
+        Assertions.assertEquals(df.parse("PT5S").toString(), "PT5S");
 
         try {
             df.parse("P");
-            Assert.fail("able to parse invalid duration");
+            Assertions.fail("able to parse invalid duration");
         } catch (ParseException e) {
         }
 
         try {
             df.parse("P5H");
-            Assert.fail("able to parse invalid duration");
+            Assertions.fail("able to parse invalid duration");
         } catch (ParseException e) {
         }
 
         try {
             df.parse("P0M");
-            Assert.fail("able to parse invalid duration");
+            Assertions.fail("able to parse invalid duration");
         } catch (ParseException e) {
         }
 
         try {
             df.parse("PT5M5H");
-            Assert.fail("able to parse invalid duration");
+            Assertions.fail("able to parse invalid duration");
         } catch (ParseException e) {
         }
     }

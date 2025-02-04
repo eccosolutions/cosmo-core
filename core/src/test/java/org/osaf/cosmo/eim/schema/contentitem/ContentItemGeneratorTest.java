@@ -38,6 +38,7 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
     private static final Log log =
         LogFactory.getLog(ContentItemGeneratorTest.class);
 
+    @Test
     public void testGenerateRecord() {
         String uid = "deadbeef";
         String name = "3inchesofblood";
@@ -83,6 +84,7 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
                        unknownAttr.getValue());
     }
 
+    @Test
     public void testInactiveNotDeleted() {
         // inactive items are not deleted via item records but via
         // recordset
@@ -94,6 +96,7 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
         checkNotDeleted(generator.generateRecords().get(0));
     }
 
+    @Test
     public void testGenerateMissingField() {
         NoteItem modification = new MockNoteItem();
         NoteItem parent = new MockNoteItem();
@@ -116,7 +119,7 @@ public class ContentItemGeneratorTest extends BaseGeneratorTestCase
         assertEquals("unexpected number of fields", 4, fields.size());
 
         EimRecordField titleField = fields.get(0);
-        Assert.assertTrue(titleField.isMissing());
+        Assertions.assertTrue(titleField.isMissing());
     }
 
     private StringAttribute makeStringAttribute() {

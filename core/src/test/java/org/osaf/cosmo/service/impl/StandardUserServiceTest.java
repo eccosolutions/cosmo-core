@@ -29,7 +29,7 @@ import org.springframework.dao.DataRetrievalFailureException;
 /**
  * Test Case for {@link StandardUserService}.
  */
-public class StandardUserServiceTest extends TestCase {
+public class StandardUserServiceTest {
     private static final Log log =
         LogFactory.getLog(StandardUserServiceTest.class);
 
@@ -54,6 +54,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testGetUsers() {
         User u1 = testHelper.makeDummyUser();
         userDao.createUser(u1);
@@ -72,6 +73,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testGetUser() {
         User u1 = testHelper.makeDummyUser();
         String username1 = u1.getUsername();
@@ -83,6 +85,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testGetUserByEmail() {
         User u1 = testHelper.makeDummyUser();
         String email1 = u1.getEmail();
@@ -94,6 +97,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testCreateUser() {
         User u1 = testHelper.makeDummyUser();
         String password = u1.getPassword();
@@ -107,6 +111,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testUpdateUser() throws Exception {
         User u1 = testHelper.makeDummyUser();
         u1.setPassword(service.digestPassword(u1.getPassword()));
@@ -145,6 +150,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testRemoveUser() {
         User u1 = testHelper.makeDummyUser();
         service.createUser(u1);
@@ -156,6 +162,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testRemoveUserByUsername() {
         User u1 = testHelper.makeDummyUser();
         service.createUser(u1);
@@ -167,6 +174,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testGeneratePassword() {
         String pwd = service.generatePassword();
 
@@ -176,6 +184,7 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testNullUserDao() {
         service.setUserDao(null);
         try {
@@ -188,12 +197,14 @@ public class StandardUserServiceTest extends TestCase {
 
     /**
      */
+    @Test
     public void testDefaultDigestAlgorithm() {
         assertEquals(service.getDigestAlgorithm(), "MD5");
     }
 
     /**
      */
+    @Test
     public void testDigestPassword() {
         String password = "deadbeef";
 

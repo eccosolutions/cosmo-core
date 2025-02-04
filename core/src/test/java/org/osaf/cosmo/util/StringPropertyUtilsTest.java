@@ -25,38 +25,40 @@ import junit.framework.TestCase;
  * Test StringPropertyUtils
  *
  */
-public class StringPropertyUtilsTest extends TestCase {
+public class StringPropertyUtilsTest {
 
+    @Test
     public void testGetChildKeys() {
         String[] testKeys = {"a.b.c", "a.b.d", "a.b.d.foo", "a.e.f.g.h.i"};
 
         String[] childKeys = StringPropertyUtils.getChildKeys("a", testKeys);
-        Assert.assertEquals(2, childKeys.length);
+        Assertions.assertEquals(2, childKeys.length);
         verifyContains(childKeys, "b");
         verifyContains(childKeys, "e");
 
         childKeys = StringPropertyUtils.getChildKeys("a.", testKeys);
-        Assert.assertEquals(2, childKeys.length);
+        Assertions.assertEquals(2, childKeys.length);
         verifyContains(childKeys, "b");
         verifyContains(childKeys, "e");
 
         childKeys = StringPropertyUtils.getChildKeys("a.b", testKeys);
-        Assert.assertEquals(2, childKeys.length);
+        Assertions.assertEquals(2, childKeys.length);
         verifyContains(childKeys, "c");
         verifyContains(childKeys, "d");
 
         childKeys = StringPropertyUtils.getChildKeys("a.b.d", testKeys);
-        Assert.assertEquals(1, childKeys.length);
+        Assertions.assertEquals(1, childKeys.length);
         verifyContains(childKeys, "foo");
 
         childKeys = StringPropertyUtils.getChildKeys("a.b.d.foo", testKeys);
-        Assert.assertEquals(0, childKeys.length);
+        Assertions.assertEquals(0, childKeys.length);
 
         childKeys = StringPropertyUtils.getChildKeys("ldksf", testKeys);
-        Assert.assertEquals(0, childKeys.length);
+        Assertions.assertEquals(0, childKeys.length);
 
     }
 
+    @Test
     public void testGetChildProperties() {
         HashMap<String, String> testProps = new HashMap<>();
         testProps.put("a.b.c", "foo1");
@@ -64,18 +66,18 @@ public class StringPropertyUtilsTest extends TestCase {
         testProps.put("a.b.e.f", "foo3");
 
         Map<String, String> childProps = StringPropertyUtils.getChildProperties("a.b", testProps);
-        Assert.assertEquals(2, childProps.size());
-        Assert.assertEquals("foo1", childProps.get("c"));
-        Assert.assertEquals("foo2", childProps.get("d"));
+        Assertions.assertEquals(2, childProps.size());
+        Assertions.assertEquals("foo1", childProps.get("c"));
+        Assertions.assertEquals("foo2", childProps.get("d"));
 
         childProps = StringPropertyUtils.getChildProperties("a.b.c", testProps);
-        Assert.assertEquals(0, childProps.size());
+        Assertions.assertEquals(0, childProps.size());
 
         childProps = StringPropertyUtils.getChildProperties("a", testProps);
-        Assert.assertEquals(0, childProps.size());
+        Assertions.assertEquals(0, childProps.size());
 
         childProps = StringPropertyUtils.getChildProperties("afsdfasd", testProps);
-        Assert.assertEquals(0, childProps.size());
+        Assertions.assertEquals(0, childProps.size());
 
     }
 
@@ -84,7 +86,7 @@ public class StringPropertyUtilsTest extends TestCase {
             if(s.equals(str))
                 return;
 
-        Assert.fail("String " + str + " not found");
+        Assertions.fail("String " + str + " not found");
     }
 
 }

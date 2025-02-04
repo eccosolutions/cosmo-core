@@ -17,25 +17,27 @@ package org.osaf.cosmo.model.hibernate;
 
 import java.util.List;
 
-import org.junit.Assert;
-import junit.framework.TestCase;
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.eim.schema.EimValueConverter;
 
 /**
  * Test EventStampHandler
  */
-public class EventStampInterceptorTest extends TestCase {
+public class EventStampInterceptorTest {
 
     EventStampInterceptor interceptor = new EventStampInterceptor();
     TimeZoneRegistry registry =
         TimeZoneRegistryFactory.getInstance().createRegistry();
 
+    @Test
     public void testEventStampHandler() throws Exception {
 
         HibNoteItem master = new HibNoteItem();
@@ -47,9 +49,9 @@ public class EventStampInterceptorTest extends TestCase {
 
         HibEventTimeRangeIndex index = interceptor.calculateEventStampIndexes(eventStamp);
 
-        Assert.assertEquals("20070212T074500", index.getStartDate());
-        Assert.assertEquals("20070212T094500", index.getEndDate());
-        Assert.assertTrue(index.getIsFloating().booleanValue());
+        Assertions.assertEquals("20070212T074500", index.getStartDate());
+        Assertions.assertEquals("20070212T094500", index.getEndDate());
+        Assertions.assertTrue(index.getIsFloating());
 
         TimeZone ctz = registry.getTimeZone("America/Chicago");
         DateTime start = new DateTime("20070212T074500", ctz);
@@ -60,16 +62,17 @@ public class EventStampInterceptorTest extends TestCase {
 
         String recur1 = "FREQ=DAILY;";
 
-        List recurs = EimValueConverter.toICalRecurs(recur1);
+        List<Recur> recurs = EimValueConverter.toICalRecurs(recur1);
         eventStamp.setRecurrenceRules(recurs);
 
         index = interceptor.calculateEventStampIndexes(eventStamp);
 
-        Assert.assertEquals("20070212T134500Z", index.getStartDate());
-        Assert.assertEquals(HibEventStamp.TIME_INFINITY, index.getEndDate());
-        Assert.assertFalse(index.getIsFloating().booleanValue());
+        Assertions.assertEquals("20070212T134500Z", index.getStartDate());
+        Assertions.assertEquals(HibEventStamp.TIME_INFINITY, index.getEndDate());
+        Assertions.assertFalse(index.getIsFloating());
     }
 
+    @Test
     public void testEventStampHandlerAllDay() throws Exception {
 
         HibNoteItem master = new HibNoteItem();
@@ -81,22 +84,23 @@ public class EventStampInterceptorTest extends TestCase {
 
         HibEventTimeRangeIndex index = interceptor.calculateEventStampIndexes(eventStamp);
 
-        Assert.assertEquals("20070212", index.getStartDate());
-        Assert.assertEquals("20070213", index.getEndDate());
-        Assert.assertTrue(index.getIsFloating().booleanValue());
+        Assertions.assertEquals("20070212", index.getStartDate());
+        Assertions.assertEquals("20070213", index.getEndDate());
+        Assertions.assertTrue(index.getIsFloating());
 
         String recur1 = "FREQ=DAILY;";
 
-        List recurs = EimValueConverter.toICalRecurs(recur1);
+        List<Recur> recurs = EimValueConverter.toICalRecurs(recur1);
         eventStamp.setRecurrenceRules(recurs);
 
         index = interceptor.calculateEventStampIndexes(eventStamp);
 
-        Assert.assertEquals("20070212", index.getStartDate());
-        Assert.assertEquals(HibEventStamp.TIME_INFINITY, index.getEndDate());
-        Assert.assertTrue(index.getIsFloating().booleanValue());
+        Assertions.assertEquals("20070212", index.getStartDate());
+        Assertions.assertEquals(HibEventStamp.TIME_INFINITY, index.getEndDate());
+        Assertions.assertTrue(index.getIsFloating());
     }
 
+    @Test
     public void testEventStampHandlerMods() throws Exception {
 
         HibNoteItem master = new HibNoteItem();
@@ -117,16 +121,16 @@ public class EventStampInterceptorTest extends TestCase {
 
         HibEventTimeRangeIndex index = interceptor.calculateEventStampIndexes(eventExceptionStamp);
 
-        Assert.assertEquals("20070213T084500", index.getStartDate());
-        Assert.assertEquals("20070213T104500", index.getEndDate());
-        Assert.assertTrue(index.getIsFloating().booleanValue());
+        Assertions.assertEquals("20070213T084500", index.getStartDate());
+        Assertions.assertEquals("20070213T104500", index.getEndDate());
+        Assertions.assertTrue(index.getIsFloating());
 
         // handle case where master isn't an event anymore
         master.removeStamp(eventStamp);
         index = interceptor.calculateEventStampIndexes(eventExceptionStamp);
 
-        Assert.assertEquals("20070213T084500", index.getStartDate());
-        Assert.assertEquals("20070213T084500", index.getEndDate());
+        Assertions.assertEquals("20070213T084500", index.getStartDate());
+        Assertions.assertEquals("20070213T084500", index.getEndDate());
     }
 
 

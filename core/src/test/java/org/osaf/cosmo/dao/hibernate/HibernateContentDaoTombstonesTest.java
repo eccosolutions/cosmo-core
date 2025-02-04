@@ -18,9 +18,8 @@ package org.osaf.cosmo.dao.hibernate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.junit.Assert;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.AttributeTombstone;
 import org.osaf.cosmo.model.CollectionItem;
@@ -77,20 +76,20 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         clearSession();
 
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(0, queryItem.getAttributes().size());
-        Assert.assertEquals(1, queryItem.getTombstones().size());
+        Assertions.assertEquals(0, queryItem.getAttributes().size());
+        Assertions.assertEquals(1, queryItem.getTombstones().size());
 
         Tombstone ts = queryItem.getTombstones().iterator().next();
-        Assert.assertTrue(ts instanceof AttributeTombstone);
-        Assert.assertTrue(((AttributeTombstone) ts).getQName().equals(new HibQName("customattribute")));
+        Assertions.assertTrue(ts instanceof AttributeTombstone);
+        Assertions.assertTrue(((AttributeTombstone) ts).getQName().equals(new HibQName("customattribute")));
 
         queryItem.addAttribute(new HibStringAttribute(new HibQName("customattribute"),"customattributevalue"));
         contentDao.updateContent(queryItem);
         clearSession();
 
         queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
-        Assert.assertEquals(1, queryItem.getAttributes().size());
-        Assert.assertEquals(0, queryItem.getTombstones().size());
+        Assertions.assertEquals(1, queryItem.getAttributes().size());
+        Assertions.assertEquals(0, queryItem.getTombstones().size());
     }
 
     @Test
@@ -135,8 +134,8 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         a = (CollectionItem) contentDao.findItemByUid(a.getUid());
 
         // should be two because of master/mod
-        Assert.assertNotNull(getItemTombstone(a, note1.getUid()));
-        Assert.assertNotNull(getItemTombstone(a, note2.getUid()));
+        Assertions.assertNotNull(getItemTombstone(a, note1.getUid()));
+        Assertions.assertNotNull(getItemTombstone(a, note2.getUid()));
 
         // now re-add
         note1 = (NoteItem) contentDao.findItemByUid(note1.getUid());
@@ -147,7 +146,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         a = (CollectionItem) contentDao.findItemByUid(a.getUid());
 
         // should none now
-        Assert.assertEquals(0, a.getTombstones().size());
+        Assertions.assertEquals(0, a.getTombstones().size());
 
 
         note1 = (NoteItem) contentDao.findItemByUid(note1.getUid());
@@ -160,11 +159,11 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         b = (CollectionItem) contentDao.findItemByUid(b.getUid());
 
         // should be two for each collection because of master/mod
-        Assert.assertNotNull(getItemTombstone(a, note1.getUid()));
-        Assert.assertNotNull(getItemTombstone(a, note2.getUid()));
+        Assertions.assertNotNull(getItemTombstone(a, note1.getUid()));
+        Assertions.assertNotNull(getItemTombstone(a, note2.getUid()));
 
-        Assert.assertNotNull(getItemTombstone(b, note1.getUid()));
-        Assert.assertNotNull(getItemTombstone(b, note2.getUid()));
+        Assertions.assertNotNull(getItemTombstone(b, note1.getUid()));
+        Assertions.assertNotNull(getItemTombstone(b, note2.getUid()));
 
     }
 
@@ -185,15 +184,15 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         clearSession();
 
         item = (NoteItem) contentDao.findItemByUid(item.getUid());
-        Assert.assertEquals(0, item.getTombstones().size());
+        Assertions.assertEquals(0, item.getTombstones().size());
 
         item.removeStamp(item.getStamp(TaskStamp.class));
 
         contentDao.updateContent(item);
         item = (NoteItem) contentDao.findItemByUid(item.getUid());
-        Assert.assertEquals(1, item.getTombstones().size());
+        Assertions.assertEquals(1, item.getTombstones().size());
 
-        Assert.assertTrue(item.getTombstones().contains(new HibStampTombstone(item, "task")));
+        Assertions.assertTrue(item.getTombstones().contains(new HibStampTombstone(item, "task")));
 
         // re-add
         task = new HibTaskStamp();
@@ -204,7 +203,7 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         clearSession();
 
         item = (NoteItem) contentDao.findItemByUid(item.getUid());
-        Assert.assertEquals(0, item.getTombstones().size());
+        Assertions.assertEquals(0, item.getTombstones().size());
     }
 
     private ItemTombstone getItemTombstone(Item item, String uid) {
