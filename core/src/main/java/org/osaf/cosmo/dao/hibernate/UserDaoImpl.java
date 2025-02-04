@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -34,7 +35,7 @@ import org.osaf.cosmo.model.DuplicateUsernameException;
 import org.osaf.cosmo.model.User;
 import org.osaf.cosmo.model.hibernate.BaseModelObject;
 import org.osaf.cosmo.model.hibernate.HibUser;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 
 /**
  * Implemtation of UserDao using Hibernate persistence objects.
@@ -64,9 +65,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             currentSession().save(user);
             currentSession().flush();
             return user;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(e);
         } catch (ConstraintViolationException cve) {
             logInvalidStateException(cve);
             throw cve;
@@ -77,18 +78,18 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
     public User getUser(String username) {
         try {
             return findUserByUsername(username);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
     public User getUserById(long userId) {
         try {
             return findUserById(userId);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -98,9 +99,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
         try {
             return findUserByUid(uid);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -110,9 +111,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
         try {
             return findUserByActivationId(id);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -122,9 +123,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
         try {
             return findUserByEmail(email);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -136,9 +137,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
                 users.add((User) it.next());
 
             return users;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -148,9 +149,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             // delete user
             if (user != null)
                 removeUser(user);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -158,9 +159,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         try {
             currentSession().delete(user);
             currentSession().flush();
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -184,9 +185,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             currentSession().flush();
 
             return user;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException ise) {
             logInvalidStateException(ise);
             throw ise;

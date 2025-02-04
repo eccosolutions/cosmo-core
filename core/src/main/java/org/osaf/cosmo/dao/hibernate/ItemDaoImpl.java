@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -26,7 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.ObjectDeletedException;
 import org.hibernate.ObjectNotFoundException;
@@ -52,7 +52,6 @@ import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibHomeCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 /**
  * Implementation of ItemDao using Hibernate persistent objects.
@@ -74,9 +73,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         try {
             Item dbItem = itemPathTranslator.findItemByPath(path);
             return dbItem;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -91,9 +90,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                 return null;
             Item item = itemPathTranslator.findItemByPath(path, (CollectionItem) parent);
             return item;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -105,9 +104,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         try {
             Item dbItem = itemPathTranslator.findItemParent(path);
             return dbItem;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -130,9 +129,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                 item = (Item) ((HibernateProxy) item).getHibernateLazyInitializer().getImplementation();
 
             return item;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -159,9 +158,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             throw new ItemNotFoundException("item not found");
         } catch(UnresolvableObjectException uoe) {
             throw new ItemNotFoundException("item not found");
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -174,9 +173,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     public HomeCollectionItem getRootItem(User user) {
         try {
             return findRootItem(getBaseModelObject(user).getId());
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -201,9 +200,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             currentSession().save(newItem);
             currentSession().flush();
             return newItem;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException cve) {
             logConstraintViolationException(cve);
             throw cve;
@@ -214,9 +213,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         try {
             addItemToCollectionInternal(item, collection);
             currentSession().flush();
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -224,9 +223,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         try {
             removeItemFromCollectionInternal(item, collection);
             currentSession().flush();
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -240,9 +239,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                 throw new ItemNotFoundException("item at " + path
                         + " not found");
             removeItem(item);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
 
     }
@@ -257,9 +256,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                 throw new ItemNotFoundException("item with uid " + uid
                         + " not found");
             removeItem(item);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -285,9 +284,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             newItem.setName(copyName);
             currentSession().flush();
 
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException cve) {
             logConstraintViolationException(cve);
             throw cve;
@@ -342,9 +341,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
             currentSession().flush();
 
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException cve) {
             logConstraintViolationException(cve);
             throw cve;
@@ -358,9 +357,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     public void refreshItem(Item item) {
         try {
            currentSession().refresh(item);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -375,9 +374,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             Hibernate.initialize(item.getAttributes());
             Hibernate.initialize(item.getStamps());
             Hibernate.initialize(item.getTombstones());
-         } catch (HibernateException e) {
+         } catch (PersistenceException e) {
              currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
          }
     }
 
@@ -389,9 +388,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     public Set<Item> findItems(ItemFilter filter) {
         try {
             return itemFilterProcessor.processFilter(currentSession(), filter);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -408,9 +407,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                 returnSet.addAll(itemFilterProcessor.processFilter(
                         currentSession(), filter));
             return returnSet;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 

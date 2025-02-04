@@ -15,13 +15,12 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import javax.persistence.PersistenceException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.HibernateException;
 import org.osaf.cosmo.dao.ServerPropertyDao;
 import org.osaf.cosmo.model.ServerProperty;
 import org.osaf.cosmo.model.hibernate.HibServerProperty;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 /**
  * Implementation of ServerPropertyDao using Hibernate persistent objects.
@@ -46,8 +45,8 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
                 return prop.getValue();
             else
                 return null;
-        } catch (HibernateException e) {
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+        } catch (PersistenceException e) {
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -72,8 +71,8 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
 
             currentSession().flush();
 
-        } catch (HibernateException e) {
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+        } catch (PersistenceException e) {
+            throw convertJpaAccessException(e);
         }
     }
 }

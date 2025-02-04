@@ -15,13 +15,13 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.HibernateException;
 import org.osaf.cosmo.calendar.EntityConverter;
 import org.osaf.cosmo.calendar.query.CalendarFilter;
 import org.osaf.cosmo.calendar.query.CalendarFilterEvaluater;
@@ -35,7 +35,6 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.filter.EventStampFilter;
 import org.osaf.cosmo.model.filter.ItemFilter;
 import org.osaf.cosmo.model.filter.NoteItemFilter;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -100,9 +99,9 @@ public class CalendarDaoImpl extends HibernateSessionSupport implements Calendar
             }
 
             return results;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -126,9 +125,9 @@ public class CalendarDaoImpl extends HibernateSessionSupport implements Calendar
         try {
             Set results = itemFilterProcessor.processFilter(currentSession(), itemFilter);
             return results;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -148,9 +147,9 @@ public class CalendarDaoImpl extends HibernateSessionSupport implements Calendar
             hibQuery.setParameter("calendar", calendar);
             hibQuery.setParameter("uid", uid);
             return getUniqueResult(hibQuery);
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 

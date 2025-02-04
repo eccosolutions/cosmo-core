@@ -15,15 +15,14 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.osaf.cosmo.dao.ContentDao;
 import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import javax.validation.ConstraintViolationException;
 import java.util.*;
@@ -69,9 +68,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             currentSession().flush();
 
             return collection;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException cve) {
             logConstraintViolationException(cve);
             throw cve;
@@ -155,9 +154,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             currentSession().load(collection, getBaseModelObject(collection).getId());
 
             return collection;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -178,9 +177,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             createContentInternal(parent, content);
             currentSession().flush();
             return content;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -197,9 +196,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             createContentInternal(parents, content);
             currentSession().flush();
             return content;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -221,9 +220,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             collection.updateTimestamp();
             currentSession().flush();
             return collection;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -240,9 +239,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             currentSession().flush();
 
             return collection;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -259,9 +258,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             updateContentInternal(content);
             currentSession().flush();
             return content;
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         } catch (ConstraintViolationException ise) {
             logConstraintViolationException(ise);
             throw ise;
@@ -282,9 +281,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             currentSession().refresh(collection);
             removeCollectionRecursive(collection);
             currentSession().flush();
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -302,9 +301,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             currentSession().refresh(content);
             removeContentRecursive(content);
             currentSession().flush();
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -321,9 +320,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             for(ContentItem content: results)
                 removeContentRecursive(content);
             currentSession().flush();
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -354,9 +353,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
             return children;
 
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
     }
 
@@ -373,9 +372,9 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                    initializeItem(note.getModifies());
                }
            }
-        } catch (HibernateException e) {
+        } catch (PersistenceException e) {
             currentSession().clear();
-            throw SessionFactoryUtils.convertHibernateAccessException(e);
+            throw convertJpaAccessException(e);
         }
 
     }
