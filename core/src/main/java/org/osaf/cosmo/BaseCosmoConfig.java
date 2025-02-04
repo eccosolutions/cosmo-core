@@ -1,5 +1,6 @@
 package org.osaf.cosmo;
 
+import java.util.function.Consumer;
 import org.hibernate.Interceptor;
 import org.osaf.cosmo.calendar.query.CalendarQueryProcessor;
 import org.osaf.cosmo.calendar.query.impl.StandardCalendarQueryProcessor;
@@ -15,7 +16,6 @@ import org.osaf.cosmo.dao.hibernate.ServerPropertyDaoImpl;
 import org.osaf.cosmo.dao.hibernate.UserDaoImpl;
 import org.osaf.cosmo.dao.hibernate.query.ItemFilterProcessor;
 import org.osaf.cosmo.dao.hibernate.query.StandardItemFilterProcessor;
-import org.osaf.cosmo.hibernate.CompoundInterceptor;
 import org.osaf.cosmo.model.hibernate.AuditableObjectInterceptor;
 import org.osaf.cosmo.model.hibernate.EventStampInterceptor;
 import org.osaf.cosmo.model.hibernate.HibEntityFactory;
@@ -25,22 +25,20 @@ import org.osaf.cosmo.service.impl.StandardUserService;
 import org.osaf.cosmo.service.lock.LockManager;
 import org.osaf.cosmo.service.lock.SingleVMLockManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Note you need @EntityScan to include
  * <code>@EntityScan(basePackages = "org.osaf.cosmo.model")</code>
  */
-@Configuration
-@EnableTransactionManagement
-@EnableAspectJAutoProxy
-public class CosmoConfig {
+public abstract class BaseCosmoConfig {
 
-    public CosmoConfig() {
-        CompoundInterceptor.registerInterceptor(new AuditableObjectInterceptor());
-        CompoundInterceptor.registerInterceptor(new EventStampInterceptor());
+    /**
+     * @param registerInterceptor method reference to method to add interceptors to the static interceptor list
+     *                            of the class provided to Hibernate
+     */
+    protected BaseCosmoConfig(Consumer<Interceptor> registerInterceptor) {
+        registerInterceptor.accept(new AuditableObjectInterceptor());
+        registerInterceptor.accept(new EventStampInterceptor());
     }
 
     @Bean(initMethod="init", destroyMethod="destroy")
@@ -70,7 +68,7 @@ public class CosmoConfig {
     }
 
     @Bean(initMethod="init", destroyMethod="destroy")
-    public ContentDao contentDao(ItemPathTranslator itemPathTranslator,
+    public ContentDaoImpl contentDao(ItemPathTranslator itemPathTranslator,
         ItemFilterProcessor itemFilterProcessor) {
         var dao = new ContentDaoImpl();
         dao.setItemPathTranslator(itemPathTranslator);
@@ -79,7 +77,7 @@ public class CosmoConfig {
     }
 
     @Bean(initMethod="init", destroyMethod="destroy")
-    public UserDao cosmoUserDao() {
+    public UserDaoImpl cosmoUserDao() {
         return new UserDaoImpl();
     }
 
