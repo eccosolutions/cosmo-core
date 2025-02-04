@@ -92,17 +92,14 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
 
     protected Item findItemByPath(Session session, String path) {
 
-        if(path==null || path != null && path.isEmpty())
+        if(path == null || path.isEmpty())
             return null;
 
         if (path.charAt(0) == '/')
-            path = path.substring(1, path.length());
+            path = path.substring(1);
 
         String[] segments = path.split("/");
         String username = segments[0];
-
-        if (segments.length == 0)
-            return null;
 
         String rootName = segments[0];
         Item rootItem = findRootItemByOwnerAndName(session, username,
@@ -114,9 +111,8 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
 
         Item parentItem = rootItem;
         for (int i = 1; i < segments.length; i++) {
-            Item nextItem = findItemByParentAndName(session, parentItem,
+            parentItem = findItemByParentAndName(session, parentItem,
                     segments[i]);
-            parentItem = nextItem;
             // if any parent item doesn't exist then bail now
             if (parentItem == null)
                 return null;
@@ -127,11 +123,11 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
 
     protected Item findItemByPath(Session session, String path, CollectionItem root) {
 
-        if(path==null || path != null && path.isEmpty())
+        if(path == null || path.isEmpty())
             return null;
 
         if (path.charAt(0) == '/')
-            path = path.substring(1, path.length());
+            path = path.substring(1);
 
         String[] segments = path.split("/");
 
@@ -139,10 +135,8 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
             return null;
 
         Item parentItem = root;
-        for (int i = 0; i < segments.length; i++) {
-            Item nextItem = findItemByParentAndName(session, parentItem,
-                    segments[i]);
-            parentItem = nextItem;
+        for (String segment : segments) {
+            parentItem = findItemByParentAndName(session, parentItem, segment);
             // if any parent item doesn't exist then bail now
             if (parentItem == null)
                 return null;
@@ -166,11 +160,8 @@ public class DefaultItemPathTranslator implements ItemPathTranslator {
         var hibQuery = session.createNamedQuery("item.by.parent.name", Item.class)
                 .setParameter("parent", parent).setParameter("name", name);
 
-        List results = hibQuery.getResultList();
-        if (!results.isEmpty())
-            return (Item) results.get(0);
-        else
-            return null;
+        var results = hibQuery.getResultList();
+        return results.isEmpty() ? null : results.get(0);
     }
 
 }

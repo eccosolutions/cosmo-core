@@ -16,11 +16,9 @@
 package org.osaf.cosmo.dao.hibernate;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
@@ -28,8 +26,6 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
-import org.hibernate.ObjectDeletedException;
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.UnresolvableObjectException;
 import org.hibernate.proxy.HibernateProxy;
 import org.osaf.cosmo.dao.ItemDao;
@@ -152,10 +148,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             removeItemInternal(item);
             currentSession().flush();
 
-        } catch(ObjectNotFoundException onfe) {
-            throw new ItemNotFoundException("item not found");
-        } catch(ObjectDeletedException ode) {
-            throw new ItemNotFoundException("item not found");
         } catch(UnresolvableObjectException uoe) {
             throw new ItemNotFoundException("item not found");
         } catch (PersistenceException e) {
@@ -267,7 +259,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         try {
             String copyName = itemPathTranslator.getItemName(destPath);
 
-            if(copyName==null || copyName != null && copyName.isEmpty())
+            if(copyName == null || copyName.isEmpty())
                 throw new IllegalArgumentException("path must include name");
 
             if(item instanceof HomeCollectionItem)
@@ -312,7 +304,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             // Name of moved item
             String moveName = itemPathTranslator.getItemName(toPath);
 
-            if(moveName==null || moveName != null && moveName.isEmpty())
+            if(moveName == null || moveName.isEmpty())
                 throw new IllegalArgumentException("path must include name");
 
             // Parent of moved item
@@ -428,8 +420,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     /**
      * Set the path translator. The path translator is responsible for
      * translating a path to an item in the database.
-     *
-     * @param itemPathTranslator
      */
     public void setItemPathTranslator(ItemPathTranslator itemPathTranslator) {
         this.itemPathTranslator = itemPathTranslator;
@@ -475,8 +465,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         currentSession().flush();
 
         // copy children if collection and deepCopy = true
-        if(deepCopy==true && (item instanceof CollectionItem) ) {
-            CollectionItem collection = (CollectionItem) item;
+        if(deepCopy && (item instanceof CollectionItem collection) ) {
             for(Item child: collection.getChildren())
                 copyItemInternal(child, (CollectionItem) item2,true);
         }
@@ -488,8 +477,6 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      * Checks to see if a parent Item is currently a child of a target item. If
      * so, then this would put the hierarchy into a loop and is not allowed.
      *
-     * @param item
-     * @param newParent
      * @throws ModelValidationException
      *             if newParent is child of item
      */
@@ -501,10 +488,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
                     "Invalid parent - will cause loop");
 
         // If item is not a collection then all is good
-        if(!(item instanceof CollectionItem ))
+        if(!(item instanceof CollectionItem collection))
             return;
 
-        CollectionItem collection = (CollectionItem) item;
         currentSession().refresh(collection);
 
         for (Item nextItem: collection.getChildren())
@@ -547,8 +533,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             item.setUid(UUID.randomUUID().toString());
         if (item.getName() == null)
             item.setName(item.getUid());
-        if (item instanceof ICalendarItem) {
-            ICalendarItem ical = (ICalendarItem) item;
+        if (item instanceof ICalendarItem ical) {
             if (ical.getIcalUid() == null) {
                 ical.setIcalUid(item.getUid());
                 EventStamp es = HibEventStamp.getStamp(ical);
@@ -627,7 +612,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         if(log.isDebugEnabled()) {
             log.debug(ise.getLocalizedMessage());
 
-            for (ConstraintViolation iv : ise.getConstraintViolations())
+            for (ConstraintViolation<?> iv : ise.getConstraintViolations())
                 log.debug("property name: " + iv.getPropertyPath() + " value: "
                         + iv.getInvalidValue());
         }

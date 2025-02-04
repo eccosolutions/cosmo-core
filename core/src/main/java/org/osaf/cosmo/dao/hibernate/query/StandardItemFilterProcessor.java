@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -28,7 +27,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.Session;
 import org.osaf.cosmo.calendar.Instance;
 import org.osaf.cosmo.calendar.InstanceList;
 import org.osaf.cosmo.calendar.RecurrenceExpander;
@@ -104,7 +102,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         selectBuf.append(whereBuf);
 
         for(FilterOrder fo: filter.getOrders()) {
-            if(orderBuf.length()==0)
+            if(orderBuf.isEmpty())
                 orderBuf.append(" order by ");
             else
                 orderBuf.append(", ");
@@ -137,7 +135,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             StringBuilder whereBuf, HashMap<String, Object> params,
             ItemFilter filter) {
 
-        if(selectBuf.toString() != null && selectBuf.toString().isEmpty())
+        if(selectBuf.toString().isEmpty())
             selectBuf.append("select i from HibItem i");
 
         // filter on uid
@@ -230,7 +228,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
 
         // handle recurring event filter
         if(filter.getIsRecurring()!=null) {
-            if(filter.getIsRecurring().booleanValue()==true)
+            if(filter.getIsRecurring())
                 appendWhere(whereBuf, "(es.timeRangeIndex.isRecurring=true or i.modifies is not null)");
             else
                 appendWhere(whereBuf, "(es.timeRangeIndex.isRecurring=false and i.modifies is null)");
@@ -289,14 +287,14 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
 
         // filter modifications
         if(filter.getIsModification()!=null) {
-            if(filter.getIsModification().booleanValue()==true)
+            if(filter.getIsModification())
                 appendWhere(whereBuf,"i.modifies is not null");
             else
                 appendWhere(whereBuf,"i.modifies is null");
         }
 
         if(filter.getHasModifications()!=null) {
-            if(filter.getHasModifications().booleanValue()==true)
+            if(filter.getHasModifications())
                 appendWhere(whereBuf,"size(i.modifications) > 0");
             else
                 appendWhere(whereBuf,"size(i.modifications) = 0");
@@ -307,7 +305,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             StringBuilder whereBuf, StringBuilder orderBuf, HashMap<String, Object> params,
             ContentItemFilter filter) {
 
-        if(selectBuf.toString() != null && selectBuf.toString().isEmpty()) {
+        if(selectBuf.toString().isEmpty()) {
             selectBuf.append("select i from HibContentItem i");
             handleItemFilter(selectBuf, whereBuf, params, filter);
         }
@@ -315,14 +313,14 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
 
 
     private void appendWhere(StringBuilder whereBuf, String toAppend) {
-        if(whereBuf.toString() != null && whereBuf.toString().isEmpty())
+        if(whereBuf.toString().isEmpty())
             whereBuf.append(" where ").append(toAppend);
         else
             whereBuf.append(" and ").append(toAppend);
     }
 
     private void appendOrder(StringBuilder orderBuf, String toAppend) {
-        if(orderBuf.toString() != null && orderBuf.toString().isEmpty())
+        if(orderBuf.toString().isEmpty())
             orderBuf.append(" order by ").append(toAppend);
         else
             orderBuf.append(", ").append(toAppend);
@@ -370,12 +368,10 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
         for(Item item: results) {
 
             // If item is not a note, then nothing to do
-            if(!(item instanceof NoteItem)) {
+            if(!(item instanceof NoteItem note)) {
                 processedResults.add(item);
                 continue;
             }
-
-            NoteItem note = (NoteItem) item;
 
             // If note is a modification then add both the modification and the
             // master.
@@ -422,18 +418,16 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
             results.add(note);
 
         // If were aren't expanding, then return
-        if(filter.isExpandRecurringEvents() == false)
+        if(!filter.isExpandRecurringEvents())
             return results;
 
         // Otherwise, add an occurence item for each occurrence
-        for (Iterator<Entry<String, Instance>> it = instances.entrySet()
-                .iterator(); it.hasNext();) {
-            Entry<String, Instance> entry = it.next();
-
+        for (Entry<String, Instance> entry : instances.entrySet()) {
             // Ignore overrides as they are separate items that should have
             // already been added
-            if (entry.getValue().isOverridden() == false) {
-                results.add(NoteOccurrenceUtil.createNoteOccurrence(entry.getValue().getRid(), note));
+            if (!entry.getValue().isOverridden()) {
+                results.add(
+                    NoteOccurrenceUtil.createNoteOccurrence(entry.getValue().getRid(), note));
             }
         }
 
@@ -454,8 +448,7 @@ public class StandardItemFilterProcessor implements ItemFilterProcessor {
                 expBuf.append(" is not null");
             else
                 expBuf.append(" is null");
-        } else if (exp instanceof BetweenExpression) {
-            BetweenExpression be = (BetweenExpression) exp;
+        } else if (exp instanceof BetweenExpression be) {
             expBuf.append(propName);
             if(exp.isNegated())
                 expBuf.append(" not");

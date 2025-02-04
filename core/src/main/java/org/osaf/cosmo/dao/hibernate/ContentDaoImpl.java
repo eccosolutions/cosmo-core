@@ -96,10 +96,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
                 // Because we batch all the db operations, we must check
                 // for duplicate icalUid within the same request
-                if (item instanceof NoteItem
-                        && ((NoteItem) item).getIcalUid() != null) {
-                    NoteItem note = (NoteItem) item;
-                    if (item.getIsActive() == true) {
+                if (item instanceof NoteItem note && note.getIcalUid() != null) {
+                    if (item.getIsActive()) {
                         NoteItem dup = icalUidMap.get(note.getIcalUid());
                         if (dup != null && !dup.getUid().equals(item.getUid()))
                             throw new IcalUidInUseException("iCal uid"
