@@ -215,7 +215,7 @@ public class HibernateContentDaoStampingTest extends AbstractHibernateDaoTestCas
             contentDao.createContent(root, item);
             clearSession();
             Assert.fail("able to create invalid event!");
-        } catch (ConstraintViolationException ignored) {}
+        }
         catch (IllegalStateException ignored) {}
     }
 
