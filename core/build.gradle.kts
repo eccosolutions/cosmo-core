@@ -1,8 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    java
-    `maven-publish`
+    `java-library`
     id("org.springframework.boot") version "2.7.18"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -86,32 +85,5 @@ tasks.getByName<Jar>("jar") {
 }
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            groupId = "org.eccosolutions.osaf.cosmo"
-            version = project.rootProject.version.toString()
-            from(components["java"])
-            pom {
-                groupId = "com.github.eccosolutions.cosmo-core"
-                name = "Cosmo Core"
-                packaging = "jar"
-                description =
-                    """A derivation of the back-end parts of cosmo from http://chandlerproject.org.
-
-The modules here represent the non-web Java code from the cosmo WAR module in
-the original cosmo code.
-"""
-                licenses {
-                    license {
-                        name = "The Apache License, Version 2.0"
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                    }
-                }
-            }
-        }
-    }
 }
 
