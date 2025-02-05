@@ -1,9 +1,9 @@
 package org.osaf.cosmo.model.hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 /**
  * Contains time-range data for an event that can be

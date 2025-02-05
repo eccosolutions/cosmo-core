@@ -15,8 +15,8 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.model.HomeCollectionItem;

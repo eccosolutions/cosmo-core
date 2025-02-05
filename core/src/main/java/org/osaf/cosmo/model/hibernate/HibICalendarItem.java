@@ -22,9 +22,9 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.QName;
 
 import javax.annotation.Nonnull;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 /**
  * Hibernate persistent ICalendarItem.

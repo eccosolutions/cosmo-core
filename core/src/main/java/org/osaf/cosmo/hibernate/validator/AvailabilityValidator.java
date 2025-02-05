@@ -24,8 +24,8 @@ import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.icalendar.ICalendarConstants;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.io.IOException;
 import java.io.Serializable;
 

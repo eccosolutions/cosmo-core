@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,9 @@ package org.osaf.cosmo.model.hibernate;
 import java.text.ParseException;
 import java.util.Calendar;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
 
 import org.hibernate.annotations.Columns;
-import org.hibernate.annotations.Type;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.CalendarAttribute;
 import org.osaf.cosmo.model.ModelValidationException;
@@ -38,7 +35,7 @@ import org.osaf.cosmo.util.DateUtil;
 public class HibCalendarAttribute extends HibAttribute implements
         java.io.Serializable, CalendarAttribute {
 
-    @Columns(columns = { 
+    @Columns(columns = {
             @Column(name = "datevalue"), @Column(name = "tzvalue", length=32) })
 //   UNUSED we think: @Type(type="composite_calendar")
     private Calendar value;
@@ -55,7 +52,7 @@ public class HibCalendarAttribute extends HibAttribute implements
         setQName(qname);
         this.value = value;
     }
-    
+
     /**
      * @param qname qualified name
      * @param value String representation of Calendar
@@ -66,7 +63,7 @@ public class HibCalendarAttribute extends HibAttribute implements
     }
 
     // Property accessors
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getValue()
      */
@@ -80,7 +77,7 @@ public class HibCalendarAttribute extends HibAttribute implements
     public void setValue(Calendar value) {
         this.value = value;
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#setValue(java.lang.Object)
      */
@@ -89,14 +86,14 @@ public class HibCalendarAttribute extends HibAttribute implements
                 && !(value instanceof String))
             throw new ModelValidationException(
                     "attempted to set non Calendar value on attribute");
-        
+
         if(value instanceof Calendar)
             setValue((Calendar) value);
-        else 
+        else
             setValue((String) value);
     }
-    
-    
+
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.CalendarAttribute#setValue(java.lang.String)
      */
@@ -107,7 +104,7 @@ public class HibCalendarAttribute extends HibAttribute implements
             throw new ModelValidationException("invalid date format: " + value);
         }
     }
-    
+
     public Attribute copy() {
         CalendarAttribute attr = new HibCalendarAttribute();
         attr.setQName(getQName().copy());
@@ -115,7 +112,7 @@ public class HibCalendarAttribute extends HibAttribute implements
             attr.setValue(value.clone());
         return attr;
     }
-    
+
     /**
      * Return Calendar representation in RFC 3339 format.
      */

@@ -15,15 +15,13 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.Item;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 /**
  * Default implementation for ItempPathTranslator. This implementation expects

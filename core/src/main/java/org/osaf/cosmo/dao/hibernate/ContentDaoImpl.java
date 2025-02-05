@@ -15,8 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.Hibernate;
 import org.osaf.cosmo.dao.ContentDao;
 import org.osaf.cosmo.model.*;
@@ -24,7 +24,7 @@ import org.osaf.cosmo.model.hibernate.HibCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import java.util.*;
 
 /**

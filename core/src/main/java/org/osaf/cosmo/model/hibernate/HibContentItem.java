@@ -20,9 +20,9 @@ import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.Item;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 /**
  * Hibernate persistent ContentItem.
