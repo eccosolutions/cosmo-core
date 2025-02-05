@@ -29,7 +29,7 @@ import org.osaf.cosmo.xml.DomWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.math.BigDecimal;
 import java.util.*;

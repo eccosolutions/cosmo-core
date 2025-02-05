@@ -30,7 +30,7 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
-import javax.persistence.OptimisticLockException;
+import jakarta.persistence.OptimisticLockException;
 import java.util.*;
 
 import static org.hamcrest.Matchers.instanceOf;

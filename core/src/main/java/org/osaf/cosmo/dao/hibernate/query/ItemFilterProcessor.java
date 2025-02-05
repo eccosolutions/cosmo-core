@@ -17,7 +17,7 @@ package org.osaf.cosmo.dao.hibernate.query;
 
 import java.util.Set;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.filter.ItemFilter;
 

@@ -1,12 +1,12 @@
 package org.osaf.cosmo.dao.hibernate;
 
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.hibernate.query.Query;
 import org.springframework.dao.DataAccessException;
 import org.springframework.lang.NonNull;
@@ -33,7 +33,7 @@ public class HibernateSessionSupport {
     public static <T> T getUniqueResult(TypedQuery<T> hibQuery) {
         try {
             return hibQuery.getSingleResult();
-        } catch (javax.persistence.NoResultException e) {
+        } catch (jakarta.persistence.NoResultException e) {
             return null;
         }
     }

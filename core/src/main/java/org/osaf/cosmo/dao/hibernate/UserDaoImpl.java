@@ -18,9 +18,9 @@ package org.osaf.cosmo.dao.hibernate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.FlushMode;
@@ -268,7 +268,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
         return (BaseModelObject) obj;
     }
 
-    protected void logInvalidStateException(javax.validation.ConstraintViolationException cve) {
+    protected void logInvalidStateException(jakarta.validation.ConstraintViolationException cve) {
         // log more info about the invalid state
         if(log.isDebugEnabled()) {
             log.debug(cve.getLocalizedMessage());

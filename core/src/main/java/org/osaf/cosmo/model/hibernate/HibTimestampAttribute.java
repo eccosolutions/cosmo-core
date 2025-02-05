@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,9 @@ package org.osaf.cosmo.model.hibernate;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import org.hibernate.annotations.Type;
 import org.osaf.cosmo.model.Attribute;
@@ -37,10 +37,10 @@ public class HibTimestampAttribute extends HibAttribute implements
         java.io.Serializable, TimestampAttribute {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 5263977785074085449L;
-    
+
     @Column(name = "intvalue")
     @Type(type="long_timestamp")
     private Date value;
@@ -55,7 +55,7 @@ public class HibTimestampAttribute extends HibAttribute implements
     }
 
     // Property accessors
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.Attribute#getValue()
      */
@@ -69,14 +69,14 @@ public class HibTimestampAttribute extends HibAttribute implements
     public void setValue(Date value) {
         this.value = value;
     }
-    
+
     public void setValue(Object value) {
         if (value != null && !(value instanceof Date))
             throw new ModelValidationException(
                     "attempted to set non Date value on attribute");
         setValue((Date) value);
     }
-    
+
     /**
      * Convienence method for returning a Date value on a TimestampAttribute
      * with a given QName stored on the given item.
@@ -91,7 +91,7 @@ public class HibTimestampAttribute extends HibAttribute implements
         else
             return ta.getValue();
     }
-    
+
     /**
      * Convienence method for setting a Date value on a TimestampAttribute
      * with a given QName stored on the given item.
@@ -111,7 +111,7 @@ public class HibTimestampAttribute extends HibAttribute implements
         else
             attr.setValue(value);
     }
-    
+
     public Attribute copy() {
         TimestampAttribute attr = new HibTimestampAttribute();
         attr.setQName(getQName().copy());

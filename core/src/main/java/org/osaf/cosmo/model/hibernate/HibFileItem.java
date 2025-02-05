@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,12 @@ package org.osaf.cosmo.model.hibernate;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -40,33 +40,33 @@ import org.osaf.cosmo.model.Item;
 @DiscriminatorValue("file")
 public class HibFileItem extends HibContentItem implements FileItem {
 
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -3829504638044059875L;
 
     @Column(name = "contentType", length=64)
     private String contentType = null;
-    
+
     @Column(name = "contentLanguage", length=32)
     private String contentLanguage = null;
-    
+
     @Column(name = "contentEncoding", length=32)
     private String contentEncoding = null;
-    
+
     @Column(name = "contentLength")
     private Long contentLength = null;
-    
+
     @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="contentdataid")
-    @Cascade( {CascadeType.ALL }) 
+    @Cascade( {CascadeType.ALL })
     private HibContentData contentData = null;
-    
+
     public HibFileItem() {
     }
 
-   
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.FileItem#getContent()
      */
@@ -99,7 +99,7 @@ public class HibFileItem extends HibContentItem implements FileItem {
 
         setContentLength((long) content.length);
     }
-    
+
     /* (non-Javadoc)
      * @see org.osaf.cosmo.model.FileItem#clearContent()
      */
@@ -112,14 +112,14 @@ public class HibFileItem extends HibContentItem implements FileItem {
      */
     public void setContent(InputStream is, final long length) throws IOException {
         if(contentData==null) {
-            contentData = new HibContentData(); 
+            contentData = new HibContentData();
         }
-        
+
         // Verify size is not greater than MAX.
         // TODO: do this checking in ContentData.setContentInputStream()
         if (length > MAX_CONTENT_SIZE)
             throw new DataSizeException("Item content too large");
-        
+
         contentData.setContentInputStream(is, length);
 
         setContentLength(length);
@@ -193,22 +193,22 @@ public class HibFileItem extends HibContentItem implements FileItem {
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
-    
+
     public Item copy() {
         FileItem copy = new HibFileItem();
         copyToItem(copy);
         return copy;
     }
-    
+
     @Override
     protected void copyToItem(Item item) {
         if(!(item instanceof FileItem))
             return;
-        
+
         super.copyToItem(item);
-        
+
         FileItem contentItem = (FileItem) item;
-        
+
         try {
             contentItem.setContent(getContent());
             contentItem.setContentEncoding(getContentEncoding());
