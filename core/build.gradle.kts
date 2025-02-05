@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     `java-library`
-    id("org.springframework.boot") version "2.7.18"
+    id("org.springframework.boot") version "3.0.13"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -37,7 +37,7 @@ dependencies {
     implementation("commons-beanutils:commons-beanutils:1.9.4")
     implementation("commons-lang:commons-lang:2.6")
     implementation("commons-io:commons-io:1.4")
-    compileOnly("javax.servlet:javax.servlet-api:3.0.1")
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
     implementation("org.apache.jackrabbit:jackrabbit-jcr-webdav:1.0-osaf-20061023")
     implementation("org.mnode.ical4j:ical4j:3.0.29")
     implementation("org.springframework.boot:spring-boot-starter-cache")
