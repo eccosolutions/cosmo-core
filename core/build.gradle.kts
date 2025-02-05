@@ -82,6 +82,8 @@ tasks.getByName<BootJar>("bootJar") {
 
 tasks.getByName<Jar>("jar") {
     enabled = true
+    archiveClassifier = "" //use empty string to override Spring Boot adding 'plain'
+
 }
 tasks.withType<Test> {
     useJUnitPlatform()
