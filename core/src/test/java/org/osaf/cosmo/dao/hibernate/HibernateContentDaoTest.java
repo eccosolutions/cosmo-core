@@ -238,7 +238,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertNull(queryItem.getAttribute("intattribute"));
     }
 
-    @Ignore("Timezone seems to be GMT+1 when testing")
+    @Ignore("Timezone seems to be GMT+1 when testing") // And we've removed @Entity mapping for HibCalendarAttribute
     @Test
     public void junit3ignored_testCalendarAttribute() throws Exception {
         User user = getUser(userDao, "testuser");
