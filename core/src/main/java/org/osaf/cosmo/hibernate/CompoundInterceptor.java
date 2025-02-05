@@ -15,11 +15,10 @@
  */
 package org.osaf.cosmo.hibernate;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.EmptyInterceptor;
+import org.hibernate.CallbackException;
 import org.hibernate.Interceptor;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
@@ -28,46 +27,39 @@ import org.slf4j.LoggerFactory;
 /**
  * Hibernate Interceptor supports invoking multiple Interceptors
  */
-public class CompoundInterceptor extends EmptyInterceptor {
-    private static final long serialVersionUID = 1L;
+public class CompoundInterceptor implements Interceptor {
 
     private final static Logger log = LoggerFactory.getLogger(CompoundInterceptor.class);
 
     private final static List<Interceptor> interceptors = new LinkedList<Interceptor>();
 
     @Override
-    public boolean onFlushDirty(Object object, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
+    public boolean onFlushDirty(Object entity, Object id, Object[] currentState,
+        Object[] previousState, String[] propertyNames, Type[] types) throws CallbackException {
         boolean modified = false;
         for(Interceptor i: interceptors) {
-            modified |= i.onFlushDirty(object, id, currentState, previousState, propertyNames, types);
+            modified |= i.onFlushDirty(entity, id, currentState, previousState,
+                propertyNames, types);
         }
         return modified;
     }
 
     @Override
-    public boolean onSave(Object object, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-
+    public boolean onSave(Object entity, Object id, Object[] state, String[] propertyNames,
+        Type[] types) throws CallbackException {
         boolean modified = false;
         for(Interceptor i: interceptors) {
-            modified |= i.onSave(object, id, state, propertyNames, types);
+            modified |= i.onSave(entity, id, state, propertyNames, types);
         }
         return modified;
     }
 
     @Override
-    public void onDelete(Object entity, Serializable id, Object[] state,
-        String[] propertyNames, Type[] types) {
-        for(Interceptor i: interceptors) {
-            i.onDelete(entity, id, state, propertyNames, types);
-        }
-    }
-
-    @Override
-    public String onPrepareStatement(String sql) {
-        for(Interceptor i: interceptors) {
-            sql = i.onPrepareStatement(sql); // allow sql to be modified as it passes through
-        }
-        return sql;
+    public void onDelete(Object entity, Object id, Object[] state, String[] propertyNames,
+        Type[] types) throws CallbackException {
+            for(Interceptor i: interceptors) {
+                i.onDelete(entity, id, state, propertyNames, types);
+            }
     }
 
     public static void registerInterceptor(Interceptor interceptor) {
