@@ -25,7 +25,7 @@ import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.NoteItem;
 import org.osaf.cosmo.model.QName;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.Date;

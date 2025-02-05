@@ -28,7 +28,7 @@ import org.osaf.cosmo.model.*;
 import org.osaf.cosmo.model.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;

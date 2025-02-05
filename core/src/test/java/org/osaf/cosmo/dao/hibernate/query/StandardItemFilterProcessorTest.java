@@ -17,7 +17,7 @@ package org.osaf.cosmo.dao.hibernate.query;
 
 import static org.osaf.cosmo.dao.hibernate.HibernateSessionSupport.getQueryString;
 
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 import org.junit.Assert;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Period;

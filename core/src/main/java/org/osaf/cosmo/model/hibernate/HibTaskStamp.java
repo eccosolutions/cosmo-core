@@ -1,12 +1,12 @@
 /*
  * Copyright 2006 Open Source Applications Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +15,8 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -35,13 +35,13 @@ public class HibTaskStamp extends HibStamp implements
         java.io.Serializable, TaskStamp {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6197756070431706553L;
 
     public static final QName ATTR_ICALENDAR = new HibQName(
             TaskStamp.class, "icalendar");
-    
+
     /** default constructor */
     public HibTaskStamp() {
     }
@@ -52,7 +52,7 @@ public class HibTaskStamp extends HibStamp implements
     public String getType() {
         return "task";
     }
-    
+
     /**
      * Return TaskStamp from Item
      * @param item
@@ -61,10 +61,10 @@ public class HibTaskStamp extends HibStamp implements
     public static TaskStamp getStamp(Item item) {
         return (TaskStamp) item.getStamp(TaskStamp.class);
     }
-    
+
     public Stamp copy() {
         TaskStamp stamp = new HibTaskStamp();
         return stamp;
     }
-    
+
 }
