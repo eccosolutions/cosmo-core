@@ -95,7 +95,9 @@ publishing {
             version = project.rootProject.version.toString()
             from(components["java"])
             pom {
-                name = "Cosmo Core Aggregator"
+                groupId = "com.github.eccosolutions.cosmo-core"
+                name = "Cosmo Core"
+                packaging = "jar"
                 description =
                     """A derivation of the back-end parts of cosmo from http://chandlerproject.org.
 
