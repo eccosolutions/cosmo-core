@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     `java-library`
-    id("org.springframework.boot") version "2.7.18"
+    id("org.springframework.boot") version "3.0.13"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
