@@ -41,11 +41,35 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework:spring-web")
+    runtimeOnly("org.slf4j:slf4j-api")
+    runtimeOnly("org.slf4j:log4j-over-slf4j")
 
     testImplementation("junit:junit")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.apache.derby:derby")
     testRuntimeOnly("org.apache.derby:derbytools")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+}
+
+sourceSets {
+    test {
+        resources {
+            setSrcDirs(listOf(
+                "src/test/resources",
+                "src/test/resources/dav/caldav",
+                "src/test/resources/icalendar",
+                "src/test/resources/testdata"
+            ))
+            include(
+                "applicationContext-test*.xml",
+                "application-test.yml",
+                "**/*.ics",
+                "**/*.txt",
+                "**/*.xml"
+            )
+            exclude("testdata/**", "dav/caldav/**", "icalendar/**")
+        }
+    }
 }
 
 tasks.withType<Test> {
