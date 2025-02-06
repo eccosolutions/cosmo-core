@@ -56,7 +56,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         ContentItem newItem = contentDao.createContent(root, item);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
+        Assert.assertTrue(getHibItem(newItem).getId() != null);
         Assert.assertNotNull(newItem.getUid());
 
         clearSession();
@@ -76,7 +76,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         ContentItem newItem = contentDao.createContent(root, item);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
+        Assert.assertTrue(getHibItem(newItem).getId() != null);
         Assert.assertNotNull(newItem.getUid());
 
         clearSession();
@@ -184,7 +184,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         ContentItem newItem = contentDao.createContent(root, item);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
+        Assert.assertTrue(getHibItem(newItem).getId() != null);
         Assert.assertNotNull(newItem.getUid());
 
         clearSession();
@@ -686,7 +686,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         a = contentDao.createCollection(root, a);
 
-        Assert.assertTrue(getHibItem(a).getId() > -1);
+        Assert.assertTrue(getHibItem(a).getId() != null);
         Assert.assertNotNull(a.getUid());
 
         clearSession();
@@ -709,7 +709,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         clearSession();
 
-        Assert.assertTrue(getHibItem(a).getId() > -1);
+        Assert.assertTrue(getHibItem(a).getId() != null);
         Assert.assertNotNull(a.getUid());
 
         CollectionItem queryItem = (CollectionItem) contentDao.findItemByUid(a.getUid());
@@ -1216,7 +1216,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         newItem = (FreeBusyItem) contentDao.createContent(root, newItem);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
+        Assert.assertTrue(getHibItem(newItem).getId() != null);
         Assert.assertNotNull(newItem.getUid());
 
         clearSession();
@@ -1243,7 +1243,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
 
         newItem = (AvailabilityItem) contentDao.createContent(root, newItem);
 
-        Assert.assertTrue(getHibItem(newItem).getId() > -1);
+        Assert.assertTrue(getHibItem(newItem).getId() != null);
         Assert.assertNotNull(newItem.getUid());
 
         clearSession();

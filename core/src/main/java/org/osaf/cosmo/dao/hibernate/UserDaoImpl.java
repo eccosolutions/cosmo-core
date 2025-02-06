@@ -45,7 +45,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             if(user==null)
                 throw new IllegalArgumentException("user is required");
 
-            if(getBaseModelObject(user).getId()!=-1)
+            if(getBaseModelObject(user).getId() != null)
                 throw new IllegalArgumentException("new user is required");
 
             if (findUserByUsernameIgnoreCase(user.getUsername()) != null)

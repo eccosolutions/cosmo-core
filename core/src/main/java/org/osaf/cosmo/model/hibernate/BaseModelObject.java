@@ -41,7 +41,7 @@ public abstract class BaseModelObject implements Serializable {
         allocationSize = 1,
         table = "hibernate_sequences")
     @Column(name="id", nullable=false) // oracle doesn't like using unique=true
-    private Long id = -1L;
+    private Long id;
 
     /**
      */
