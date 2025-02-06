@@ -53,8 +53,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (collection.getOwner() == null)
             throw new IllegalArgumentException("collection must have owner");
 
-        if (getBaseModelObject(collection).getId()!=-1)
-            throw new IllegalArgumentException("invalid collection id (expected -1)");
+        if (getBaseModelObject(collection).getId() != null)
+            throw new IllegalArgumentException("invalid collection id (expected null)");
 
 
         try {
@@ -111,7 +111,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                 }
 
                 // create item
-                if(getBaseModelObject(item).getId()==-1) {
+                if(getBaseModelObject(item).getId() == null) {
                     createContentInternal(collection, item);
                 }
                 // delete item
@@ -507,8 +507,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (content == null)
             throw new IllegalArgumentException("content cannot be null");
 
-        if (getBaseModelObject(content) .getId()!=-1)
-            throw new IllegalArgumentException("invalid content id (expected -1)");
+        if (getBaseModelObject(content) .getId() != null)
+            throw new IllegalArgumentException("invalid content id (expected null)");
 
         if (content.getOwner() == null)
             throw new IllegalArgumentException("content must have owner");
@@ -565,8 +565,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (content == null)
             throw new IllegalArgumentException("content cannot be null");
 
-        if (getBaseModelObject(content).getId()!=-1)
-            throw new IllegalArgumentException("invalid content id (expected -1)");
+        if (getBaseModelObject(content).getId() != null)
+            throw new IllegalArgumentException("invalid content id (expected null)");
 
         if (content.getOwner() == null)
             throw new IllegalArgumentException("content must have owner");
@@ -724,7 +724,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         // if icaluid is in use throw exception
         if (itemId != null) {
             // If the note is new, then its a duplicate icaluid
-            if (getBaseModelObject(item).getId() == -1) {
+            if (getBaseModelObject(item).getId() == null) {
                 Item dup = currentSession().load(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
                         + " already in use for collection " + parent.getUid(),

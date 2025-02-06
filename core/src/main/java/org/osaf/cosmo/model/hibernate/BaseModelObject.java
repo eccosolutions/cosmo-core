@@ -38,7 +38,7 @@ public abstract class BaseModelObject implements Serializable {
     @GeneratedValue(generator="generatorNameCosmo")
     @GenericGenerator(name="generatorNameCosmo", strategy="org.hibernate.id.enhanced.TableGenerator", parameters={@Parameter(name="increment_size", value="1"), @Parameter(name="optimizer", value="none"), @Parameter(name="initial_value", value="50")})
     @Column(name="id", nullable=false) // oracle doesn't like using unique=true
-    private Long id = -1L;
+    private Long id;
 
     /**
      */
