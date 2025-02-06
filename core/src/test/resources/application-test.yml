@@ -17,7 +17,7 @@ spring:
                 session_factory:
                     interceptor: org.osaf.cosmo.hibernate.CompoundInterceptor
     datasource:
-        url: jdbc:derby:target/test-db;create=true
+        url: jdbc:derby:build/test-db;create=true
         driver-class-name: org.apache.derby.jdbc.EmbeddedDriver
 logging:
     level:
