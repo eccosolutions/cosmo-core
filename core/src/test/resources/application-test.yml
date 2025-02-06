@@ -11,7 +11,7 @@ spring:
                 cache:
                     use_query_cache: false
                     use_second_level_cache: false
-                dialect: org.hibernate.dialect.DerbyTenSevenDialect
+                dialect: org.hibernate.dialect.DerbyDialect
                 generate_statistics: false
                 current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
                 session_factory:
