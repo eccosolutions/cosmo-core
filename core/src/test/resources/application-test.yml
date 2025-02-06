@@ -1,4 +1,5 @@
 debug: true
+#trace: true
 spring:
     main:
         allow-bean-definition-overriding: true # doesn't seem to work
