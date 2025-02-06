@@ -33,7 +33,6 @@ import org.osaf.cosmo.model.Stamp;
  */
 @Entity
 @DiscriminatorValue("message")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibMessageStamp extends HibStamp implements
         java.io.Serializable, MessageStamp {
 
