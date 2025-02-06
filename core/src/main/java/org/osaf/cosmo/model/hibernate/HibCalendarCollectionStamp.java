@@ -39,7 +39,6 @@ import java.util.Set;
  */
 @Entity
 @DiscriminatorValue("calendar")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibCalendarCollectionStamp extends HibStamp implements
         java.io.Serializable, ICalendarConstants, CalendarCollectionStamp {
 
