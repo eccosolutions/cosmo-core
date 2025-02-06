@@ -41,7 +41,6 @@ import org.osaf.cosmo.model.Stamp;
  */
 @Entity
 @DiscriminatorValue("event")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibEventStamp extends HibBaseEventStamp implements
         java.io.Serializable, EventStamp {
 

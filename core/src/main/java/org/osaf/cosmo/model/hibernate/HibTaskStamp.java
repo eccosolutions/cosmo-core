@@ -31,7 +31,6 @@ import org.osaf.cosmo.model.TaskStamp;
  */
 @Entity
 @DiscriminatorValue("task")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HibTaskStamp extends HibStamp implements
         java.io.Serializable, TaskStamp {
 
