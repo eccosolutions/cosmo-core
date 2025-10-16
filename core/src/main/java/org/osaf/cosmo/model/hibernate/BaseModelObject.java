@@ -20,10 +20,8 @@ import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
 import javax.persistence.Column;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+import javax.persistence.TableGenerator;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -36,15 +34,12 @@ public abstract class BaseModelObject implements Serializable {
 
     @Id
     @GeneratedValue(generator="generatorNameCosmo")
-    @GenericGenerator(
-        name="generatorNameCosmo",
-        strategy="org.hibernate.id.enhanced.TableGenerator",
-        parameters={
-            @Parameter(name="increment_size", value="1"),
-            @Parameter(name="optimizer", value="none"),
-            @Parameter(name="initial_value", value="50")
-        }
-    )
+    @TableGenerator(
+        name = "generatorNameCosmo",
+        initialValue = 50,
+        pkColumnValue = "default",
+        allocationSize = 1,
+        table = "hibernate_sequences")
     @Column(name="id", nullable=false) // oracle doesn't like using unique=true
     private Long id;
 
