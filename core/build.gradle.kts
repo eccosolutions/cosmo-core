@@ -8,7 +8,7 @@ ext["hibernate.version"] = "6.4.10.Final"
 
 plugins {
     `java-library`
-    id("org.springframework.boot") version "3.3.13"
+    id("org.springframework.boot") version "3.4.11"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
