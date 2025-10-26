@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // Needed 6.2.5 to work around https://hibernate.atlassian.net/browse/HHH-16398
@@ -6,7 +8,7 @@ ext["hibernate.version"] = "6.4.10.Final"
 
 plugins {
     `java-library`
-    id("org.springframework.boot") version "3.0.13"
+    id("org.springframework.boot") version "3.1.12"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
