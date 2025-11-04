@@ -21,6 +21,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 
@@ -29,6 +30,10 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
  */
 @Entity
 @Table(name="cosmo_event_log")
+@NamedQuery(
+    name = "logEntry.by.collection.date",
+    query = "from HibEventLogEntry e where id1=:parentId and entryDate between :startDate and :endDate"
+)
 public class HibEventLogEntry extends BaseModelObject {
 
     @Column(name = "entrydate")

@@ -16,6 +16,7 @@
 package org.osaf.cosmo.model.hibernate;
 
 import net.fortuna.ical4j.model.Calendar;
+import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.model.ICalendarItem;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.QName;
@@ -30,6 +31,10 @@ import jakarta.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("icalendar")
+@NamedQuery(
+    name = "icalendarItem.by.parent.icaluid",
+    query = "select item.id from HibICalendarItem item join item.parentDetails pd where pd.primaryKey.collection.id=:parentid and item.icalUid=:icaluid"
+)
 public abstract class HibICalendarItem extends HibContentItem implements ICalendarItem {
 
     public static final QName ATTR_ICALENDAR = new HibQName(

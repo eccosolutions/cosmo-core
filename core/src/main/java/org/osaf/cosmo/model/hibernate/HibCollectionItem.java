@@ -26,6 +26,7 @@ import jakarta.persistence.OneToMany;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionItemDetails;
 import org.osaf.cosmo.model.Item;
@@ -37,6 +38,10 @@ import org.osaf.cosmo.model.QName;
  */
 @Entity
 @DiscriminatorValue("collection")
+@NamedQuery(
+    name = "collectionItem.by.uid",
+    query = "from HibCollectionItem i where i.uid=:uid"
+)
 public class HibCollectionItem extends HibItem implements CollectionItem {
 
     /**

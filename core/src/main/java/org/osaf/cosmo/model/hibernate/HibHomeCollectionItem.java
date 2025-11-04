@@ -18,6 +18,7 @@ package org.osaf.cosmo.model.hibernate;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.model.HomeCollectionItem;
 
 
@@ -26,6 +27,10 @@ import org.osaf.cosmo.model.HomeCollectionItem;
  */
 @Entity
 @DiscriminatorValue("homecollection")
+@NamedQuery(
+    name = "homeCollection.by.ownerId",
+    query = "from HibHomeCollectionItem where owner.id=:ownerid"
+)
 public class HibHomeCollectionItem extends HibCollectionItem implements HomeCollectionItem {
 
     /**

@@ -21,6 +21,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.*;
@@ -53,6 +55,18 @@ import java.util.Map.Entry;
         discriminatorType=DiscriminatorType.STRING,
         length=16)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@NamedQueries({
+    @NamedQuery(name = "item.by.ownerId.parentId.name", query = "select item from HibItem item join item.parentDetails pd where item.owner.id=:ownerid and pd.primaryKey.collection.id=:parentid and item.name=:name"),
+    @NamedQuery(name = "item.by.ownerId.nullParent.name", query = "select item from HibItem item where item.owner.id=:ownerid and size(item.parentDetails)=0 and item.name=:name"),
+    @NamedQuery(name = "item.by.ownerId.nullParent.name.minusItem", query = "select item from HibItem item where item.id!=:itemid and item.owner.id=:ownerid and size(item.parentDetails)=0 and item.name=:name"),
+    @NamedQuery(name = "item.by.ownerId.parentId.name.minusItem", query = "select item from HibItem item join item.parentDetails pd where item.id!=:itemid and item.owner.id=:ownerid and pd.primaryKey.collection.id=:parentid and item.name=:name"),
+    @NamedQuery(name = "itemId.by.parentId.name", query = "select item.id from HibItem item join item.parentDetails pd where pd.primaryKey.collection.id=:parentid and item.name=:name"),
+    @NamedQuery(name = "item.by.uid", query = "from HibItem i where i.uid=:uid"),
+    @NamedQuery(name = "itemid.by.uid", query = "select i.id from HibItem i where i.uid=:uid"),
+    @NamedQuery(name = "item.by.parent.name", query = "select item from HibItem item join item.parentDetails pd where pd.primaryKey.collection=:parent and item.name=:name"),
+    @NamedQuery(name = "item.by.ownerName.name.nullParent", query = "select i from HibItem i, HibUser u where i.owner=u and u.username=:username and i.name=:name and size(i.parentDetails)=0"),
+    @NamedQuery(name = "item.by.ownerId.and.nullParent", query = "select i from HibItem i where i.owner.id=:ownerid and size(i.parentDetails)=0")
+})
 public abstract class HibItem extends HibAuditableObject implements Item {
 
 
