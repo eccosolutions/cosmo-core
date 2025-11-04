@@ -22,6 +22,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -52,6 +54,18 @@ indexes = {
         @Index(name="idx_activationid", columnList="activationid")
 })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@NamedQueries({
+    @NamedQuery(name = "user.byUsername", query = "from HibUser where username=:username"),
+    @NamedQuery(name = "user.byUsername.ignorecase", query = "from HibUser where lower(username)=lower(:username)"),
+    @NamedQuery(name = "user.byEmail", query = "from HibUser where email=:email"),
+    @NamedQuery(name = "user.byEmail.ignorecase", query = "from HibUser where lower(email)=lower(:email)"),
+    @NamedQuery(name = "user.byUsernameOrEmail.ignorecase.ingoreId", query = "from HibUser where id!=:userid and (lower(username)=lower(:username) or lower(email)=lower(:email))"),
+    @NamedQuery(name = "user.byId", query = "from HibUser where id=:userId"),
+    @NamedQuery(name = "user.byUid", query = "from HibUser where uid=:uid"),
+    @NamedQuery(name = "user.byActivationId", query = "from HibUser where activationId=:activationId"),
+    @NamedQuery(name = "user.all", query = "from HibUser"),
+    @NamedQuery(name = "user.count", query = "select count(id) from HibUser")
+})
 public class HibUser extends HibAuditableObject implements User {
 
     @Serial

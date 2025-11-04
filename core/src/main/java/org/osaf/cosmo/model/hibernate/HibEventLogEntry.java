@@ -21,6 +21,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 /**
@@ -28,54 +29,58 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name="cosmo_event_log")
+@NamedQuery(
+    name = "logEntry.by.collection.date",
+    query = "from HibEventLogEntry e where id1=:parentId and entryDate between :startDate and :endDate"
+)
 public class HibEventLogEntry extends BaseModelObject {
 
     @Column(name = "entrydate")
     @Type(type="long_timestamp")
     private Date entryDate = new Date();
-    
+
     @Column(name = "eventtype", nullable=false, length=64)
     private String type;
-    
+
     @Column(name = "authtype", nullable=false, length=64)
-    private String authType;    
-    
+    private String authType;
+
     @Column(name = "authid", nullable=false)
     private Long authId;
-    
+
     @Column(name = "id1", nullable=true)
     private Long id1;
-    
+
     @Column(name = "id2", nullable=true)
     private Long id2;
-    
+
     @Column(name = "id3", nullable=true)
     private Long id3;
-    
+
     @Column(name = "id4", nullable=true)
     private Long id4;
-    
+
     @Column(name = "uid1", nullable=true, length=255)
     private String uid1;
-    
+
     @Column(name = "uid2", nullable=true, length=255)
     private String uid2;
-    
+
     @Column(name = "uid3", nullable=true, length=255)
     private String uid3;
-    
+
     @Column(name = "uid4", nullable=true, length=255)
     private String uid4;
-    
+
     @Column(name = "strval1", nullable=true, length=255)
     private String strval1;
-    
+
     @Column(name = "strval2", nullable=true, length=255)
     private String strval2;
-    
+
     @Column(name = "strval3", nullable=true, length=255)
     private String strval3;
-    
+
     @Column(name = "strval4", nullable=true, length=255)
     private String strval4;
 
@@ -206,6 +211,6 @@ public class HibEventLogEntry extends BaseModelObject {
     public void setStrval4(String strval4) {
         this.strval4 = strval4;
     }
-    
-    
+
+
 }

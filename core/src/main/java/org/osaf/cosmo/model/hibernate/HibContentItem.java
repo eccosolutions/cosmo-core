@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.model.ContentItem;
 import org.osaf.cosmo.model.Item;
 
@@ -27,6 +29,12 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("content")
+@NamedQueries({
+    @NamedQuery(name = "contentItem.by.uid", query = "from HibContentItem i where i.uid=:uid"),
+    @NamedQuery(name = "contentItem.by.parent.timestamp", query = "select item from HibContentItem item left join fetch item.stamps left join fetch item.attributes left join fetch item.tombstones join item.parentDetails pd where pd.primaryKey.collection=:parent and item.modifiedDate>:timestamp"),
+    @NamedQuery(name = "contentItem.by.parent", query = "select item from HibContentItem item left join fetch item.stamps left join fetch item.attributes left join fetch item.tombstones join item.parentDetails pd where pd.primaryKey.collection=:parent"),
+    @NamedQuery(name = "contentItem.by.owner", query = "from HibContentItem i where i.owner=:owner")
+})
 public abstract class HibContentItem extends HibItem implements ContentItem {
 
     /**

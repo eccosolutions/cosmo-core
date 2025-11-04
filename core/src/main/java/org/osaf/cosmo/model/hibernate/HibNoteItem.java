@@ -20,6 +20,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.hibernate.validator.Task;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.NoteItem;
@@ -37,6 +39,10 @@ import java.util.Set;
  */
 @Entity
 @DiscriminatorValue("note")
+@NamedQueries({
+    @NamedQuery(name = "noteItemId.by.parent.icaluid", query = "select item.id from HibNoteItem item join item.parentDetails pd where pd.primaryKey.collection.id=:parentid and item.icalUid=:icaluid and item.modifies is null"),
+    @NamedQuery(name = "event.by.calendar.icaluid", query = "select i from HibNoteItem i join i.parentDetails pd join i.stamps stamp where pd.primaryKey.collection=:calendar and type(stamp)=HibEventStamp and i.icalUid=:uid")
+})
 public class HibNoteItem extends HibICalendarItem implements NoteItem {
 
     public static final QName ATTR_NOTE_BODY = new HibQName(
