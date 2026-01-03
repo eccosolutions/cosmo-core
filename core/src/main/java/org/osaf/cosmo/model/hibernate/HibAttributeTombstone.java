@@ -24,7 +24,7 @@ import jakarta.persistence.Entity;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.Target;
+import org.hibernate.annotations.TargetEmbeddable;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.AttributeTombstone;
 import org.osaf.cosmo.model.Item;
@@ -38,24 +38,24 @@ import org.osaf.cosmo.model.QName;
 public class HibAttributeTombstone extends HibTombstone implements AttributeTombstone {
 
     @Embedded
-    @Target(HibQName.class)
+    @TargetEmbeddable(HibQName.class)
     @AttributeOverrides( {
             @AttributeOverride(name="namespace", column = @Column(name="namespace", length=255) ),
             @AttributeOverride(name="localName", column = @Column(name="localname", length=255) )
     } )
-    private QName qname = null;
+    private HibQName qname = null;
 
     public HibAttributeTombstone() {
     }
 
     public HibAttributeTombstone(Item item, Attribute attribute) {
         super(item);
-        qname = attribute.getQName();
+        qname = (HibQName) attribute.getQName();
     }
 
     public HibAttributeTombstone(Item item, QName qname) {
         super(item);
-        this.qname = qname;
+        this.qname = (HibQName) qname;
     }
 
     /* (non-Javadoc)
@@ -69,12 +69,12 @@ public class HibAttributeTombstone extends HibTombstone implements AttributeTomb
      * @see org.osaf.cosmo.model.AttributeTombstone#setQName(org.osaf.cosmo.model.QName)
      */
     public void setQName(QName qname) {
-        this.qname = qname;
+        this.qname = (HibQName) qname;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof AttributeTombstone))
+        if (!(obj instanceof AttributeTombstone))
             return false;
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(
                 qname, ((AttributeTombstone) obj).getQName()).isEquals();

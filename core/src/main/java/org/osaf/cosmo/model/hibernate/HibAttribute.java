@@ -33,7 +33,7 @@ import jakarta.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Target;
+import org.hibernate.annotations.TargetEmbeddable;
 import org.osaf.cosmo.model.Attribute;
 import org.osaf.cosmo.model.Item;
 import org.osaf.cosmo.model.QName;
@@ -58,7 +58,7 @@ public abstract class HibAttribute extends HibAuditableObject implements java.io
 
     // Fields
     @Embedded
-    @Target(HibQName.class)
+    @TargetEmbeddable(HibQName.class)
     @AttributeOverrides( {
 			// MED LENGTH CHANGED TO FIT PRODUCTION DB - from 255 to 128
     		@AttributeOverride(name="namespace", column = @Column(name="namespace", nullable = false, length=128) ),
