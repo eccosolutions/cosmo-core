@@ -17,27 +17,27 @@ package org.osaf.cosmo.model.hibernate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Index;
+import java.io.Serial;
 import org.osaf.cosmo.model.ServerProperty;
 
 /**
  * Hibernate persistent ServerProperty.
  */
 @Entity
-@Table(name="cosmo_server_properties")
+@Table(name="cosmo_server_properties", indexes = {
+    @Index(name="idx_svrpropname", columnList="propertyname")
+})
 public class HibServerProperty extends BaseModelObject implements
         java.io.Serializable, ServerProperty {
 
-    /**
-     *
-     */
+    @Serial
     private static final long serialVersionUID = -4099057363051156531L;
 
     @Column(name = "propertyname", unique=true, length=255)
-    @Index(name="idx_svrpropname")
     @NotNull
     private String name;
 
