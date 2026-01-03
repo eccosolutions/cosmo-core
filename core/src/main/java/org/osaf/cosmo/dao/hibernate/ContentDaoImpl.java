@@ -436,7 +436,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             }
         }
 
-        currentSession().delete(content);
+        currentSession().remove(content);
     }
 
     /**
@@ -467,13 +467,13 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             } else if(item instanceof ContentItem) {
                 ((HibItem) item).removeParent(collection);
                 if(item.getParents().isEmpty())
-                    currentSession().delete(item);
+                    currentSession().remove(item);
             } else {
-                currentSession().delete(item);
+                currentSession().remove(item);
             }
         }
 
-        currentSession().delete(collection);
+        currentSession().remove(collection);
     }
 
 

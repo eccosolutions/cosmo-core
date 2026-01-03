@@ -646,7 +646,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     }
 
     protected void removeItemInternal(Item item) {
-        currentSession().delete(item);
+        currentSession().remove(item);
     }
 
     protected BaseModelObject getBaseModelObject(Object obj) {

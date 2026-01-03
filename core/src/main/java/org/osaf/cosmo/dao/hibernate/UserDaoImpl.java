@@ -152,7 +152,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     public void removeUser(User user) {
         try {
-            currentSession().delete(user);
+            currentSession().remove(user);
             currentSession().flush();
         } catch (PersistenceException e) {
             currentSession().clear();
