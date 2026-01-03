@@ -176,7 +176,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             }
 
             user.updateTimestamp();
-            currentSession().update(user);
+            currentSession().merge(user);
             currentSession().flush();
 
             return user;

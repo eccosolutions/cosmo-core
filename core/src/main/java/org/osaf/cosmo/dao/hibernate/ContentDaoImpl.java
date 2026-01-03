@@ -452,7 +452,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         // when the removal occurred.
         for (CollectionItem parent : content.getParents()) {
             getHibItem(parent).addTombstone(new HibItemTombstone(parent,content));
-            currentSession().update(parent);
+            currentSession().merge(parent);
         }
     }
 
@@ -478,8 +478,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
 
     private void removeNoteItemFromCollectionInternal(NoteItem note, CollectionItem collection) {
-        currentSession().update(collection);
-        currentSession().update(note);
+        currentSession().merge(collection);
+        currentSession().merge(note);
 
         // do nothing if item doesn't belong to collection
         if(!note.getParents().contains(collection))
@@ -541,7 +541,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             // Add modification to all parents of master
             for (CollectionItem col : note.getModifies().getParents()) {
                 if (((HibCollectionItem) col).removeTombstone(content) == true)
-                    currentSession().update(col);
+                    currentSession().merge(col);
                 ((HibItem) note).addParent(col);
             }
         } else {
@@ -550,7 +550,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
             // remove tombstone (if it exists) from parent
             if(((HibCollectionItem)parent).removeTombstone(content)==true)
-                currentSession().update(parent);
+                currentSession().merge(parent);
         }
 
 
@@ -611,7 +611,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         for(CollectionItem parent: parents) {
             ((HibItem) content).addParent(parent);
             if(((HibCollectionItem)parent).removeTombstone(content)==true)
-                currentSession().update(parent);
+                currentSession().merge(parent);
         }
 
 
@@ -626,7 +626,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if(content.getIsActive()==Boolean.FALSE)
             throw new IllegalArgumentException("content must be active");
 
-        currentSession().update(content);
+        currentSession().merge(content);
 
         if (content.getOwner() == null)
             throw new IllegalArgumentException("content must have owner");
@@ -644,7 +644,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (collection == null)
             throw new IllegalArgumentException("collection cannot be null");
 
-        currentSession().update(collection);
+        currentSession().merge(collection);
 
         if (collection.getOwner() == null)
             throw new IllegalArgumentException("collection must have owner");

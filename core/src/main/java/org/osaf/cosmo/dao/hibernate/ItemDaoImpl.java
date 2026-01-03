@@ -620,8 +620,8 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
     protected void removeItemFromCollectionInternal(Item item, CollectionItem collection) {
 
-        currentSession().update(collection);
-        currentSession().update(item);
+        currentSession().merge(collection);
+        currentSession().merge(item);
 
         // do nothing if item doesn't belong to collection
         if(!item.getParents().contains(collection))
@@ -639,8 +639,8 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
     protected void addItemToCollectionInternal(Item item,
             CollectionItem collection) {
         verifyItemNameUnique(item, collection);
-        currentSession().update(item);
-        currentSession().update(collection);
+        currentSession().merge(item);
+        currentSession().merge(collection);
         ((HibCollectionItem)collection).removeTombstone(item);
         ((HibItem) item).addParent(collection);
     }

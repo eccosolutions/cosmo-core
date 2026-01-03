@@ -62,7 +62,7 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
             var prop = getUniqueResult(query);
             if (prop != null) {
                 prop.setValue(value);
-                currentSession().update(prop);
+                currentSession().merge(prop);
             }
             else {
                 prop = new HibServerProperty(property, value);
