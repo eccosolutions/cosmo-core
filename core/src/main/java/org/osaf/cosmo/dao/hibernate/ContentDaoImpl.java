@@ -725,7 +725,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (itemId != null) {
             // If the note is new, then its a duplicate icaluid
             if (getBaseModelObject(item).getId() == null) {
-                Item dup = currentSession().load(HibItem.class, itemId);
+                Item dup = currentSession().find(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
                         + " already in use for collection " + parent.getUid(),
                         item.getUid(), dup.getUid());
@@ -733,7 +733,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             // If the note exists and there is another note with the same
             // icaluid, then its a duplicate icaluid
             if (getBaseModelObject(item).getId().equals(itemId)) {
-                Item dup = currentSession().load(HibItem.class, itemId);
+                Item dup = currentSession().find(HibItem.class, itemId);
                 throw new IcalUidInUseException("iCal uid" + item.getIcalUid()
                         + " already in use for collection " + parent.getUid(),
                         item.getUid(), dup.getUid());
