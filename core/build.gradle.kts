@@ -2,11 +2,11 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // Needed 6.2.5 to work around https://hibernate.atlassian.net/browse/HHH-16398
 // and then broke in 6.2.7 -> 6.2.25 and 6.3.2 broke more. 6.4.10 works
-ext["hibernate.version"] = "6.4.10.Final"
+//ext["hibernate.version"] = "7.2.x.Final"
 
 plugins {
     `java-library`
-    id("org.springframework.boot") version "3.5.9"
+    id("org.springframework.boot") version "4.0.1"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
