@@ -15,11 +15,10 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import java.io.Serial;
 import net.fortuna.ical4j.model.Calendar;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.hibernate.validator.Task;
@@ -51,13 +50,14 @@ public class HibNoteItem extends HibICalendarItem implements NoteItem {
     public static final QName ATTR_REMINDER_TIME = new HibQName(
             NoteItem.class, "reminderTime");
 
+    @Serial
     private static final long serialVersionUID = -6100568628972081120L;
 
     private static final Set<NoteItem> EMPTY_MODS = Collections
             .unmodifiableSet(new HashSet<>(0));
 
-    @OneToMany(targetEntity=HibNoteItem.class, mappedBy = "modifies", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.DELETE} )
+    @OneToMany(targetEntity=HibNoteItem.class, mappedBy = "modifies", fetch=FetchType.LAZY,
+        cascade = CascadeType.REMOVE)
     //@BatchSize(size=50)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<NoteItem> modifications = new HashSet<>(0);

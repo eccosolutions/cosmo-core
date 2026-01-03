@@ -19,24 +19,23 @@ import java.io.Serial;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.ModelValidationException;
 import org.osaf.cosmo.model.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.HashSet;
@@ -150,8 +149,8 @@ public class HibUser extends HibAuditableObject implements User {
     @Column(name = "locked")
     private Boolean locked;
 
-    @OneToMany(targetEntity=HibCollectionSubscription.class, mappedBy = "owner", fetch= FetchType.LAZY)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
+    @OneToMany(targetEntity=HibCollectionSubscription.class, mappedBy = "owner", fetch= FetchType.LAZY,
+    cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private final Set<CollectionSubscription> subscriptions =
         new HashSet<>(0);

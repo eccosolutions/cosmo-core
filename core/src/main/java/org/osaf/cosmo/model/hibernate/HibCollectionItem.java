@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import jakarta.persistence.CascadeType;
+import java.io.Serial;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,8 +26,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.NamedQuery;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionItemDetails;
@@ -44,9 +44,7 @@ import org.osaf.cosmo.model.QName;
 )
 public class HibCollectionItem extends HibItem implements CollectionItem {
 
-    /**
-     *
-     */
+    @Serial
     private static final long serialVersionUID = 2873258323314048223L;
 
     // CollectionItem specific attributes
@@ -56,8 +54,8 @@ public class HibCollectionItem extends HibItem implements CollectionItem {
     public static final QName ATTR_HUE =
         new HibQName(CollectionItem.class, "hue");
 
-    @OneToMany(targetEntity=HibCollectionItemDetails.class, mappedBy="primaryKey.collection", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.DELETE })
+    @OneToMany(targetEntity=HibCollectionItemDetails.class, mappedBy="primaryKey.collection", fetch=FetchType.LAZY,
+        cascade = CascadeType.REMOVE)
     private final Set<CollectionItemDetails> childDetails = new HashSet<>(0);
 
     private transient Set<Item> children = null;

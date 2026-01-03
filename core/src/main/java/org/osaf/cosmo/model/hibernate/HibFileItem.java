@@ -15,6 +15,7 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
+import jakarta.persistence.CascadeType;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,10 +26,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
+import java.io.Serial;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.osaf.cosmo.model.DataSizeException;
 import org.osaf.cosmo.model.FileItem;
 import org.osaf.cosmo.model.Item;
@@ -41,9 +41,7 @@ import org.osaf.cosmo.model.Item;
 public class HibFileItem extends HibContentItem implements FileItem {
 
 
-    /**
-     *
-     */
+    @Serial
     private static final long serialVersionUID = -3829504638044059875L;
 
     @Column(name = "contentType", length=64)
@@ -58,9 +56,8 @@ public class HibFileItem extends HibContentItem implements FileItem {
     @Column(name = "contentLength")
     private Long contentLength = null;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="contentdataid")
-    @Cascade( {CascadeType.ALL })
     private HibContentData contentData = null;
 
     public HibFileItem() {
@@ -202,12 +199,10 @@ public class HibFileItem extends HibContentItem implements FileItem {
 
     @Override
     protected void copyToItem(Item item) {
-        if(!(item instanceof FileItem))
+        if(!(item instanceof FileItem contentItem))
             return;
 
         super.copyToItem(item);
-
-        FileItem contentItem = (FileItem) item;
 
         try {
             contentItem.setContent(getContent());

@@ -19,8 +19,6 @@ import jakarta.persistence.Index;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NaturalId;
@@ -91,28 +89,28 @@ public abstract class HibItem extends HibAuditableObject implements Item {
 
     private transient Boolean isActive = Boolean.TRUE;
 
-    @OneToMany(targetEntity=HibAttribute.class, mappedBy = "item", fetch=FetchType.LAZY)
+    @OneToMany(targetEntity=HibAttribute.class, mappedBy = "item", fetch=FetchType.LAZY,
+        cascade = CascadeType.ALL, orphanRemoval = true)
     // turns out this creates a query that is unoptimized for MySQL
     //@Fetch(FetchMode.SUBSELECT)
     @BatchSize(size=50)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Map<HibQName, Attribute> attributes = new HashMap<>(0);
-    @OneToMany(targetEntity=HibStamp.class, mappedBy = "item", fetch=FetchType.LAZY)
+    @OneToMany(targetEntity=HibStamp.class, mappedBy = "item", fetch=FetchType.LAZY,
+        cascade = CascadeType.ALL, orphanRemoval = true)
     // turns out this creates a query that is unoptimized for MySQL
     //@Fetch(FetchMode.SUBSELECT)
     @BatchSize(size=50)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Stamp> stamps = new HashSet<>(0);
-    @OneToMany(targetEntity=HibTombstone.class, mappedBy="item", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
+    @OneToMany(targetEntity=HibTombstone.class, mappedBy="item", fetch=FetchType.LAZY,
+        cascade = CascadeType.ALL, orphanRemoval = true)
     protected Set<Tombstone> tombstones = new HashSet<>(0);
     private transient Map<String, Stamp> stampMap = null;
 
-    @OneToMany(targetEntity=HibCollectionItemDetails.class, mappedBy="primaryKey.item", fetch=FetchType.LAZY)
-    @Cascade( {CascadeType.ALL, CascadeType.DELETE_ORPHAN })
+    @OneToMany(targetEntity=HibCollectionItemDetails.class, mappedBy="primaryKey.item", fetch=FetchType.LAZY,
+        cascade = CascadeType.ALL, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<CollectionItemDetails> parentDetails = new HashSet<>(0);
     private transient Set<CollectionItem> parents = null;
