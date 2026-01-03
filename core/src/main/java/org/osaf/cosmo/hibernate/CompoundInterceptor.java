@@ -46,10 +46,20 @@ public class CompoundInterceptor implements Interceptor {
 
     @Override
     public boolean onSave(Object entity, Object id, Object[] state, String[] propertyNames,
-        Type[] types) throws CallbackException {
+        Type[] types) {
         boolean modified = false;
         for(Interceptor i: interceptors) {
             modified |= i.onSave(entity, id, state, propertyNames, types);
+        }
+        return modified;
+    }
+
+    @Override
+    public boolean onPersist(Object entity, Object id, Object[] state, String[] propertyNames,
+        Type[] types) {
+        boolean modified = false;
+        for(Interceptor i: interceptors) {
+            modified |= i.onPersist(entity, id, state, propertyNames, types);
         }
         return modified;
     }

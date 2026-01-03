@@ -48,7 +48,7 @@ public class AuditableObjectInterceptor implements Interceptor, Serializable {
     }
 
     @Override
-    public boolean onSave(Object object, Object id, Object[] state, String[] propertyNames, Type[] types) {
+    public boolean onPersist(Object object, Object id, Object[] state, String[] propertyNames, Type[] types) {
 
         if(! (object instanceof HibAuditableObject ao))
             return false;
