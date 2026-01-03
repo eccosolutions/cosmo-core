@@ -64,7 +64,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             setBaseItemProps(collection);
             ((HibItem) collection).addParent(parent);
 
-            currentSession().save(collection);
+            currentSession().persist(collection);
             currentSession().flush();
 
             return collection;
@@ -554,7 +554,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         }
 
 
-        currentSession().save(content);
+        currentSession().persist(content);
     }
 
     protected void createContentInternal(Set<CollectionItem> parents, ContentItem content) {
@@ -615,7 +615,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         }
 
 
-        currentSession().save(content);
+        currentSession().persist(content);
     }
 
     protected void updateContentInternal(ContentItem content) {

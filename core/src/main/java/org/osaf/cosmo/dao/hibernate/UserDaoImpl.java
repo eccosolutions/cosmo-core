@@ -57,7 +57,7 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
             if (user.getUid() == null || user.getUid() != null && user.getUid().isEmpty())
                 user.setUid(UUID.randomUUID().toString());
 
-            currentSession().save(user);
+            currentSession().persist(user);
             currentSession().flush();
             return user;
         } catch (PersistenceException e) {

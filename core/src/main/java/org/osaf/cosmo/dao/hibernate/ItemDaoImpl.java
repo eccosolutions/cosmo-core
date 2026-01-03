@@ -189,7 +189,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             newItem.setName(user.getUsername());
             newItem.setDisplayName(newItem.getName());
             setBaseItemProps(newItem);
-            currentSession().save(newItem);
+            currentSession().persist(newItem);
             currentSession().flush();
             return newItem;
         } catch (PersistenceException e) {
@@ -461,7 +461,7 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
         ((HibItem) item2).addParent(newParent);
 
         // save Item before attempting deep copy
-        currentSession().save(item2);
+        currentSession().persist(item2);
         currentSession().flush();
 
         // copy children if collection and deepCopy = true

@@ -66,7 +66,7 @@ public class ServerPropertyDaoImpl extends HibernateSessionSupport implements
             }
             else {
                 prop = new HibServerProperty(property, value);
-                currentSession().save(prop);
+                currentSession().persist(prop);
             }
 
             currentSession().flush();
