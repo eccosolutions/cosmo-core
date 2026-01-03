@@ -28,7 +28,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionItemDetails;
 import org.osaf.cosmo.model.Item;
@@ -52,7 +53,7 @@ public class HibCollectionItemDetails implements CollectionItemDetails {
     private final CollectionItemPK primaryKey = new CollectionItemPK();
 
     @Column(name = "createdate", nullable=false)
-    @Type(type="long_timestamp")
+    @JdbcType(BigIntJdbcType.class)
     private final Date creationDate = new Date();
 
     public HibCollectionItemDetails() {}
