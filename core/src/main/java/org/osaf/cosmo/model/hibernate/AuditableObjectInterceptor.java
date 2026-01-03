@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import org.hibernate.EmptyInterceptor;
+import org.hibernate.Interceptor;
 import org.hibernate.type.Type;
 
 import java.io.Serializable;
@@ -25,17 +25,16 @@ import java.util.Date;
  * Hibernate Interceptor that updates creationDate, modifiedDate,
  * and etag each time an AuditableObject is saved/updated.
  */
-public class AuditableObjectInterceptor extends EmptyInterceptor {
+public class AuditableObjectInterceptor implements Interceptor, Serializable {
 
 
     @Override
-    public boolean onFlushDirty(Object object, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-        if(! (object instanceof HibAuditableObject))
+    public boolean onFlushDirty(Object object, Object id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
+        if(! (object instanceof HibAuditableObject ao))
             return false;
 
         // Set new modifyDate so that calculateEntityTag()
         // has access to it
-        HibAuditableObject ao = (HibAuditableObject) object;
         Date curDate = new Date(System.currentTimeMillis());
         ao.setModifiedDate(curDate);
 
@@ -49,14 +48,13 @@ public class AuditableObjectInterceptor extends EmptyInterceptor {
     }
 
     @Override
-    public boolean onSave(Object object, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+    public boolean onSave(Object object, Object id, Object[] state, String[] propertyNames, Type[] types) {
 
-        if(! (object instanceof HibAuditableObject))
+        if(! (object instanceof HibAuditableObject ao))
             return false;
 
         // Set new modifyDate so that calculateEntityTag()
         // has access to it
-        HibAuditableObject ao = (HibAuditableObject) object;
         Date curDate = new Date(System.currentTimeMillis());
         ao.setModifiedDate(curDate);
 

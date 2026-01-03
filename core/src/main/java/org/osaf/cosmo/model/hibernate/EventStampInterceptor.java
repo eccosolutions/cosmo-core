@@ -17,27 +17,27 @@ package org.osaf.cosmo.model.hibernate;
 
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
-import org.hibernate.EmptyInterceptor;
+import org.hibernate.Interceptor;
 import org.hibernate.type.Type;
 import org.osaf.cosmo.calendar.RecurrenceExpander;
 import org.osaf.cosmo.calendar.util.Dates;
 import org.osaf.cosmo.model.EventStamp;
 
 import java.io.Serializable;
+import org.osaf.cosmo.model.ModificationUid;
 
 /**
  * Hibernate Interceptor that updates BaseEventStamp timeRangeIndexes.
  */
-public class EventStampInterceptor extends EmptyInterceptor {
+public class EventStampInterceptor implements Interceptor, Serializable {
 
 
     @Override
-    public boolean onFlushDirty(Object object, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-        if(! (object instanceof HibBaseEventStamp))
+    public boolean onFlushDirty(Object object, Object id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
+        if(! (object instanceof HibBaseEventStamp es))
             return false;
 
         // calculate time-range-index
-        HibBaseEventStamp es = (HibBaseEventStamp) object;
         HibEventTimeRangeIndex index = calculateEventStampIndexes(es);
 
         if(index==null)
@@ -55,13 +55,12 @@ public class EventStampInterceptor extends EmptyInterceptor {
     }
 
     @Override
-    public boolean onSave(Object object, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+    public boolean onSave(Object object, Object id, Object[] state, String[] propertyNames, Type[] types) {
 
-        if(! (object instanceof HibBaseEventStamp))
+        if(! (object instanceof HibBaseEventStamp es))
             return false;
 
         // calculate time-range-index
-        HibBaseEventStamp es = (HibBaseEventStamp) object;
         HibEventTimeRangeIndex index = calculateEventStampIndexes(es);
 
         if(index==null)
@@ -88,11 +87,10 @@ public class EventStampInterceptor extends EmptyInterceptor {
         Date endDate = eventStamp.getEndDate();
 
         // Handle "missing" endDate
-        if(endDate==null && (eventStamp instanceof HibEventExceptionStamp) ) {
+        if(endDate==null && (eventStamp instanceof HibEventExceptionStamp exceptionStamp) ) {
             // For "missing" endDate, get the duration of the master event
             // and use with the startDate of the modification to calculate
             // the endDate of the modification
-            HibEventExceptionStamp exceptionStamp = (HibEventExceptionStamp) eventStamp;
             EventStamp masterStamp = exceptionStamp.getMasterStamp();
 
             // Make sure master EventStamp exists
@@ -127,8 +125,7 @@ public class EventStampInterceptor extends EmptyInterceptor {
 
         // A floating date is a DateTime with no timezone, or
         // a Date
-        if(startDate instanceof DateTime) {
-            DateTime dtStart = (DateTime) startDate;
+        if(startDate instanceof DateTime dtStart) {
             if(dtStart.getTimeZone()==null && !dtStart.isUtc())
                 isFloating = true;
         } else {
@@ -139,13 +136,13 @@ public class EventStampInterceptor extends EmptyInterceptor {
         }
 
         HibEventTimeRangeIndex timeRangeIndex = new HibEventTimeRangeIndex();
-        timeRangeIndex.setStartDate(fromDateToStringNoTimezone(startDate));
+        timeRangeIndex.setStartDate(ModificationUid.fromDateToStringNoTimezone(startDate));
 
 
         // A null endDate equates to infinity, which is represented by
         // a String that will always come after any date when compared.
         if(endDate!=null)
-            timeRangeIndex.setEndDate(fromDateToStringNoTimezone(endDate));
+            timeRangeIndex.setEndDate(ModificationUid.fromDateToStringNoTimezone(endDate));
         else
             timeRangeIndex.setEndDate(HibEventStamp.TIME_INFINITY);
 
@@ -154,26 +151,4 @@ public class EventStampInterceptor extends EmptyInterceptor {
 
         return timeRangeIndex;
     }
-
-    private String fromDateToStringNoTimezone(Date date) {
-        if(date==null)
-            return null;
-
-        if(date instanceof DateTime) {
-            DateTime dt = (DateTime) date;
-            // If DateTime has a timezone, then convert to UTC before
-            // serializing as String.
-            if(dt.getTimeZone()!=null) {
-                // clone instance first to prevent changes to original instance
-                DateTime copy = new DateTime(dt);
-                copy.setUtc(true);
-                return copy.toString();
-            } else {
-                return dt.toString();
-            }
-        } else {
-            return date.toString();
-        }
-    }
-
 }
