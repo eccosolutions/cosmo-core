@@ -31,9 +31,6 @@ public abstract class AbstractHibernateDaoTestCase extends AbstractSpringDaoTest
     @PersistenceContext
     protected EntityManager entityManager;
 
-    @Autowired
-    protected SessionFactory sessionFactory;
-
     @Autowired protected DataSource jdbcDataSource;
 
     public AbstractHibernateDaoTestCase() {
