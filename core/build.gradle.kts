@@ -10,6 +10,9 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
+ext {
+    set("hibernate.version", "6.6.36.Final")
+}
 
 java {
     toolchain {
@@ -29,6 +32,13 @@ repositories {
     maven {
         name = "OSAF's repository"
         url = uri("https://eccosolutions.github.io/cosmo/maven")
+    }
+}
+
+dependencyManagement {
+    dependencies {
+        // drop hibernate back to 6.x to avoid pain of save/update etc behaviour differences
+        dependency("org.hibernate:hibernate-core:6.6.36.Final")
     }
 }
 

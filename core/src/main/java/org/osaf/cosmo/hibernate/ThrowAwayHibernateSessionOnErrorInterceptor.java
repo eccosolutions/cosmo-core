@@ -19,9 +19,8 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
-import org.springframework.orm.hibernate5.SessionHolder;
 import org.springframework.orm.jpa.EntityManagerHolder;
+import org.springframework.orm.jpa.hibernate.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import jakarta.persistence.EntityManager;
@@ -67,7 +66,7 @@ public class ThrowAwayHibernateSessionOnErrorInterceptor implements MethodInterc
             SessionHolder sessionHolder =
                 (SessionHolder) TransactionSynchronizationManager.unbindResource(entityManagerFactory);
 
-            SessionFactoryUtils.closeSession(sessionHolder.getSession());
+            sessionHolder.getSession().close();
 
             // Open new session and bind (this session should be closed and
             // unbound elsewhere, for example OpenSessionInViewFilter)
