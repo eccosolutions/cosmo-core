@@ -1,5 +1,6 @@
 package org.osaf.cosmo.hibernate;
 
+import java.sql.NClob;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -81,7 +82,7 @@ public class ElementTypeDescriptor extends AbstractJavaType<Element> {
         // Since NClob extends Clob, we need to check if type is an NClob
         // before checking if type is a Clob. That will ensure that
         // the correct type is returned.
-        } else if ( DataHelper.isNClob( type ) ) {
+        } else if ( NClob.class.isAssignableFrom(type) ) {
             return (X) options.getLobCreator().createNClob(toString(value));
         } else if (Clob.class.isAssignableFrom(type)) {
             return (X) ClobProxy.generateProxy(toString(value));
