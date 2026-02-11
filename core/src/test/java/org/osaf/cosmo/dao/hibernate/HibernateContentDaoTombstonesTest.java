@@ -126,7 +126,8 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         items.add(note2);
 
         contentDao.updateCollection(a, items);
-        contentDao.updateCollection(b, items);
+        // cannot add note2 because it modifies note1
+        contentDao.updateCollection(b, Set.of(note1));
 
         contentDao.removeItemFromCollection(note1, a);
 
