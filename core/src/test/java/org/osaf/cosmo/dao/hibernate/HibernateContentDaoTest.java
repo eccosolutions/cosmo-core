@@ -1332,7 +1332,7 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         Assert.assertEquals(1, note1.getModifications().size());
         note2 = (NoteItem) contentDao.findItemByUid("1:20070101");
         Assert.assertNotNull(note2);
-        Assert.assertNotNull(note2.getModifies());
+        Assert.assertEquals(note1, note2.getModifies());
 
         // now create new collection
         CollectionItem a = new HibCollectionItem();
