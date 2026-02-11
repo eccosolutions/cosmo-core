@@ -129,6 +129,8 @@ public class HibernateContentDaoTombstonesTest extends AbstractHibernateDaoTestC
         // cannot add note2 because it modifies note1
         contentDao.updateCollection(b, Set.of(note1));
 
+        // update collection flushes session, so note1 is now detached
+        note1 = (NoteItem) contentDao.findItemByUid(note1.getUid());
         contentDao.removeItemFromCollection(note1, a);
 
         clearSession();
