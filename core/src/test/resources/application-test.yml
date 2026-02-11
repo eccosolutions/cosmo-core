@@ -11,14 +11,14 @@ spring:
                 cache:
                     use_query_cache: false
                     use_second_level_cache: false
-                dialect: org.hibernate.dialect.DerbyDialect
+                dialect: org.hibernate.dialect.H2Dialect
                 generate_statistics: false
                 current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
                 session_factory:
                     interceptor: org.osaf.cosmo.hibernate.CompoundInterceptor
     datasource:
-        url: jdbc:derby:build/test-db;create=true
-        driver-class-name: org.apache.derby.jdbc.EmbeddedDriver
+        url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        driver-class-name: org.h2.Driver
 logging:
     level:
         org:

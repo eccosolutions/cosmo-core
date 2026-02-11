@@ -53,8 +53,7 @@ dependencies {
 
     testImplementation("junit:junit")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.apache.derby:derby")
-    testRuntimeOnly("org.apache.derby:derbytools")
+    testRuntimeOnly("com.h2database:h2")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 
