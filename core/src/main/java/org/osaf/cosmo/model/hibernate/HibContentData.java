@@ -15,14 +15,10 @@
  */
 package org.osaf.cosmo.model.hibernate;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import java.io.Serial;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -30,9 +26,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-
-import static org.osaf.cosmo.spring.ConfigurableEntitySupport.configureBean;
 
 
 /**
@@ -42,35 +35,14 @@ import static org.osaf.cosmo.spring.ConfigurableEntitySupport.configureBean;
  */
 @Entity
 @Table(name="cosmo_content_data")
-@Configurable
 public class HibContentData extends BaseModelObject {
 
-    /**
-     *
-     */
+    @Serial
     private static final long serialVersionUID = -5014854905531456753L;
 
     @Column(name = "content", length=102400000)
     @Lob
     private Blob content = null;
-
-    @Transient
-    @Autowired
-    SessionFactory sessionFactory;
-
-    { readResolve(); }
-
-    public Object readResolve() {
-        configureBean(this);
-        return this;
-    }
-
-    /**
-     */
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this,
-                ToStringStyle.MULTI_LINE_STYLE);
-    }
 
 
     /**
@@ -95,16 +67,15 @@ public class HibContentData extends BaseModelObject {
      * @param is content data
      */
     public void setContentInputStream(InputStream is, long length) {
-        content = sessionFactory.getCurrentSession().getLobHelper().createBlob(is, length);
+        content = Hibernate.getLobHelper().createBlob(is, length);
     }
 
     /**
      * Set the content using a byte array.
      * @param b content data
-     * @throws IOException
      */
     public void setContentBytes(byte[] b) throws HibernateException {
-        content = sessionFactory.getCurrentSession().getLobHelper().createBlob(b);
+        content = Hibernate.getLobHelper().createBlob(b);
     }
 
     /**
