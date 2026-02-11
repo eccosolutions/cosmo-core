@@ -89,7 +89,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         HashMap<String, NoteItem> icalUidMap = new HashMap<>();
 
         try {
-            updateCollectionInternal(collection);
+            collection = updateCollectionInternal(collection);
 
             // Either create, update, or delete each item
             for (ContentItem item : children) {
@@ -233,7 +233,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
     public CollectionItem updateCollection(CollectionItem collection) {
         try {
 
-            updateCollectionInternal(collection);
+            collection = updateCollectionInternal(collection);
             currentSession().flush();
 
             return collection;
@@ -640,7 +640,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
     }
 
-    protected void updateCollectionInternal(CollectionItem collection) {
+    protected CollectionItem updateCollectionInternal(CollectionItem collection) {
         if (collection == null)
             throw new IllegalArgumentException("collection cannot be null");
 
@@ -650,6 +650,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             throw new IllegalArgumentException("collection must have owner");
 
         collection.updateTimestamp();
+        return collection;
     }
 
     /**
