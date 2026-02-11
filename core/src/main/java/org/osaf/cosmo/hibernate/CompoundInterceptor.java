@@ -66,10 +66,18 @@ public class CompoundInterceptor implements Interceptor {
 
     @Override
     public void onDelete(Object entity, Object id, Object[] state, String[] propertyNames,
-        Type[] types) throws CallbackException {
+        Type[] types) {
             for(Interceptor i: interceptors) {
                 i.onDelete(entity, id, state, propertyNames, types);
             }
+    }
+
+    @Override
+    public void onRemove(Object entity, Object id, Object[] state, String[] propertyNames,
+        Type[] types) {
+        for (Interceptor i : interceptors) {
+            i.onRemove(entity, id, state, propertyNames, types);
+        }
     }
 
     public static void registerInterceptor(Interceptor interceptor) {
