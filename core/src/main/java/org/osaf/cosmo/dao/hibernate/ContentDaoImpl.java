@@ -136,7 +136,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
                         // If ticket doesn't exist, but item uuid is present in
                         // itemPerms map, then add with read-only access.
 
-                        addItemToCollectionInternal(item, collection);
+                        item = (ContentItem) addItemToCollectionInternal(item, collection);
                     }
 
                     updateContentInternal(item);
@@ -478,8 +478,8 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
 
 
     private void removeNoteItemFromCollectionInternal(NoteItem note, CollectionItem collection) {
-        currentSession().merge(collection);
-        currentSession().merge(note);
+        collection = currentSession().merge(collection);
+        note = currentSession().merge(note);
 
         // do nothing if item doesn't belong to collection
         if(!note.getParents().contains(collection))
@@ -626,7 +626,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if(content.getIsActive()==Boolean.FALSE)
             throw new IllegalArgumentException("content must be active");
 
-        currentSession().merge(content);
+        content = currentSession().merge(content);
 
         if (content.getOwner() == null)
             throw new IllegalArgumentException("content must have owner");
@@ -644,7 +644,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
         if (collection == null)
             throw new IllegalArgumentException("collection cannot be null");
 
-        currentSession().merge(collection);
+        collection = currentSession().merge(collection);
 
         if (collection.getOwner() == null)
             throw new IllegalArgumentException("collection must have owner");
@@ -657,7 +657,7 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
      * requires verifying that the icaluid is unique within the collection.
      */
     @Override
-    protected void addItemToCollectionInternal(Item item,
+    protected Item addItemToCollectionInternal(Item item,
             CollectionItem collection) {
 
         // Don't allow note modifications to be added to a collection
@@ -671,14 +671,15 @@ public class ContentDaoImpl extends ItemDaoImpl implements ContentDao {
             // verify icaluid is unique within collection
             checkForDuplicateICalUid((ICalendarItem) item, collection);
 
-
-        super.addItemToCollectionInternal(item, collection);
+        item = super.addItemToCollectionInternal(item, collection);
 
         // Add all modifications
         if(item instanceof NoteItem noteItem) {
             for(NoteItem mod: noteItem.getModifications())
                 super.addItemToCollectionInternal(mod, collection);
         }
+
+        return item;
     }
 
     @Override

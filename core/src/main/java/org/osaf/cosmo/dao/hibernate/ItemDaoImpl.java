@@ -48,6 +48,7 @@ import org.osaf.cosmo.model.hibernate.HibEventStamp;
 import org.osaf.cosmo.model.hibernate.HibHomeCollectionItem;
 import org.osaf.cosmo.model.hibernate.HibItem;
 import org.osaf.cosmo.model.hibernate.HibItemTombstone;
+import org.springframework.util.Assert;
 
 /**
  * Implementation of ItemDao using Hibernate persistent objects.
@@ -620,8 +621,8 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
 
     protected void removeItemFromCollectionInternal(Item item, CollectionItem collection) {
 
-        currentSession().merge(collection);
-        currentSession().merge(item);
+        collection = currentSession().merge(collection);
+        item = currentSession().merge(item);
 
         // do nothing if item doesn't belong to collection
         if(!item.getParents().contains(collection))
@@ -636,13 +637,15 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
             removeItemInternal(item);
     }
 
-    protected void addItemToCollectionInternal(Item item,
+    protected Item addItemToCollectionInternal(Item item,
             CollectionItem collection) {
         verifyItemNameUnique(item, collection);
-        currentSession().merge(item);
-        currentSession().merge(collection);
+        // assert collection is managed because we cannot return it
+        Assert.isTrue(currentSession().contains(collection), "collection should already be managed");
+        item = currentSession().merge(item);
         ((HibCollectionItem)collection).removeTombstone(item);
         ((HibItem) item).addParent(collection);
+        return item;
     }
 
     protected void removeItemInternal(Item item) {
