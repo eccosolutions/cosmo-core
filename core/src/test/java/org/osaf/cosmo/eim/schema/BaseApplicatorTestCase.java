@@ -20,7 +20,7 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.ClobField;

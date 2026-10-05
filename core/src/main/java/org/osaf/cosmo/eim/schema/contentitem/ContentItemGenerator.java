@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.eim.schema.contentitem;
 
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.DecimalField;

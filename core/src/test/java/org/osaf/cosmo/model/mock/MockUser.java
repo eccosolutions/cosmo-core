@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.model.mock;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.osaf.cosmo.model.CollectionItem;
 import org.osaf.cosmo.model.CollectionSubscription;
 import org.osaf.cosmo.model.ModelValidationException;

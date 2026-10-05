@@ -22,7 +22,7 @@ import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.parameter.XParameter;
 import net.fortuna.ical4j.model.property.*;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.osaf.cosmo.CosmoConstants;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
 import org.osaf.cosmo.icalendar.ICalendarConstants;

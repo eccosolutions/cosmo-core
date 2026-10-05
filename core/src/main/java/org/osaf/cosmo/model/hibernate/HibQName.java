@@ -18,8 +18,8 @@ package org.osaf.cosmo.model.hibernate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.osaf.cosmo.model.QName;
 
 /**

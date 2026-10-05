@@ -18,7 +18,7 @@ package org.osaf.cosmo.calendar;
 import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.parameter.TzId;
 import net.fortuna.ical4j.model.parameter.Value;
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.eim.schema.EimConversionException;

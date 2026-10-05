@@ -23,8 +23,8 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Column;
 import jakarta.persistence.TableGenerator;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Base class for model objects.

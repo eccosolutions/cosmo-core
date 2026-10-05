@@ -19,7 +19,7 @@ import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.parameter.Related;
 import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.property.Trigger;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osaf.cosmo.calendar.ICalDate;

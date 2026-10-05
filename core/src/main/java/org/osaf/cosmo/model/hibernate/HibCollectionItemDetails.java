@@ -27,7 +27,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.osaf.cosmo.model.CollectionItem;

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.text.StrTokenizer;
+import org.apache.commons.text.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -54,7 +54,7 @@ public class UriTemplate {
         this.pattern = pattern;
         this.segments = new ArrayList<>();
 
-        StrTokenizer tokenizer = new StrTokenizer(pattern, '/');
+        StringTokenizer tokenizer = new StringTokenizer(pattern, '/');
         while (tokenizer.hasNext())
             segments.add(new Segment(tokenizer.nextToken()));
     }
@@ -221,7 +221,7 @@ public class UriTemplate {
         //if (log.isDebugEnabled())
             //log.debug("matching " + path + " to " + pattern);
 
-        StrTokenizer candidate = new StrTokenizer(path, '/');
+        StringTokenizer candidate = new StringTokenizer(path, '/');
         Iterator<Segment> si = segments.iterator();
 
         Segment segment = null;

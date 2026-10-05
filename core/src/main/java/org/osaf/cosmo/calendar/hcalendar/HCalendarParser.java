@@ -21,7 +21,7 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.property.Version;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.*;

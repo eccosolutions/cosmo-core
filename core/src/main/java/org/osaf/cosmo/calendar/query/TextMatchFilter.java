@@ -15,7 +15,7 @@
  */
 package org.osaf.cosmo.calendar.query;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.osaf.cosmo.calendar.util.CalendarUtils;
