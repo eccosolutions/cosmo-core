@@ -23,7 +23,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.UnresolvableObjectException;
@@ -115,11 +114,9 @@ public abstract class ItemDaoImpl extends HibernateSessionSupport implements Ite
      */
     public Item findItemByUid(String uid) {
         try {
-            // prevent auto flushing when looking up item by uid
-            currentSession().setHibernateFlushMode(FlushMode.MANUAL);
-
-            // take advantage of optimized caching with naturalId
-            Item item = currentSession().bySimpleNaturalId(HibItem.class).load(uid);
+            // prevent auto flushing when looking up item by uid (but not for the rest of the caller's transaction)
+            // and take advantage of optimized caching with naturalId
+            Item item = withManualFlush(() -> currentSession().bySimpleNaturalId(HibItem.class).load(uid));
 
             // Prevent proxied object from being returned
             if (item instanceof HibernateProxy)

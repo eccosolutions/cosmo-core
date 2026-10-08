@@ -15,6 +15,8 @@
  */
 package org.osaf.cosmo.dao.hibernate;
 
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -234,6 +236,32 @@ public class HibernateUserDaoTest extends AbstractHibernateDaoTestCase {
         clearSession();
         queryUser1 = userDao.getUserByUid(user1.getUid());
         Assert.assertEquals(queryUser1.getPassword(), "user2password");
+    }
+
+    /**
+     * Updating a user doesn't auto flush its lookup of existing users, but mustn't leave the (shared) session MANUAL -
+     * else the rest of the caller's transaction isn't flushed at commit, and its changes are silently lost.
+     */
+    @Test
+    public void testUpdateUserKeepsTheFlushMode() {
+        User user1 = new HibUser();
+        user1.setUsername("user1");
+        user1.setFirstName("User");
+        user1.setLastName("1");
+        user1.setEmail("user1@user1.com");
+        user1.setPassword("user1password");
+        user1.setAdmin(Boolean.TRUE);
+        user1 = userDao.createUser(user1);
+        clearSession();
+
+        User queryUser1 = userDao.getUserByUid(user1.getUid());
+        Session session = entityManager.unwrap(Session.class);
+        Assert.assertEquals(FlushMode.AUTO, session.getHibernateFlushMode());
+
+        queryUser1.setPassword("user2password");
+        userDao.updateUser(queryUser1);
+
+        Assert.assertEquals(FlushMode.AUTO, session.getHibernateFlushMode());
     }
 
     @Test

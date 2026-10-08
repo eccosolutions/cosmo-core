@@ -18,6 +18,8 @@ package org.osaf.cosmo.dao.hibernate;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.property.ProdId;
 import org.assertj.core.api.Assertions;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -64,6 +66,27 @@ public class HibernateContentDaoTest extends AbstractHibernateDaoTestCase {
         ContentItem queryItem = (ContentItem) contentDao.findItemByUid(newItem.getUid());
 
         helper.verifyItem(newItem, queryItem);
+    }
+
+    /**
+     * Finding by uid doesn't auto flush, but mustn't leave the (shared) session MANUAL - else the rest of the
+     * caller's transaction isn't flushed at commit, and its changes are silently lost.
+     */
+    @Test
+    public void testFindItemByUidKeepsTheFlushMode() throws Exception {
+        User user = getUser(userDao, "testuser");
+        CollectionItem root = contentDao.getRootItem(user);
+        ContentItem item = generateTestContent();
+        item.setName("test");
+        ContentItem newItem = contentDao.createContent(root, item);
+        clearSession();
+
+        Session session = entityManager.unwrap(Session.class);
+        Assert.assertEquals(FlushMode.AUTO, session.getHibernateFlushMode());
+
+        Assert.assertNotNull(contentDao.findItemByUid(newItem.getUid()));
+
+        Assert.assertEquals(FlushMode.AUTO, session.getHibernateFlushMode());
     }
 
     @Test

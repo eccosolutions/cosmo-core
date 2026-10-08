@@ -12,6 +12,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.lang.NonNull;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 
+import java.util.function.Supplier;
+
 public class HibernateSessionSupport {
 
     @PersistenceContext
@@ -27,6 +29,22 @@ public class HibernateSessionSupport {
 
     public static <T> void setManualFlush(TypedQuery<T> query) {
         ((org.hibernate.query.Query<T>)query).setHibernateFlushMode(FlushMode.MANUAL);
+    }
+
+    /**
+     * Does the work with the session's flush mode MANUAL (eg so a lookup doesn't auto flush), and restores the flush
+     * mode afterwards - as setManualFlush does for a query. The session is shared with the caller's transaction, so
+     * leaving it MANUAL would mean the rest of that transaction isn't flushed at commit, losing its changes.
+     */
+    <T> T withManualFlush(Supplier<T> work) {
+        Session session = currentSession();
+        FlushMode flushMode = session.getHibernateFlushMode();
+        session.setHibernateFlushMode(FlushMode.MANUAL);
+        try {
+            return work.get();
+        } finally {
+            session.setHibernateFlushMode(flushMode);
+        }
     }
 
     @SuppressWarnings("unchecked")

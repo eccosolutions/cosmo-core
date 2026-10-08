@@ -23,7 +23,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.osaf.cosmo.dao.UserDao;
 import org.osaf.cosmo.model.DuplicateEmailException;
@@ -162,11 +161,9 @@ public class UserDaoImpl extends HibernateSessionSupport implements UserDao {
 
     public User updateUser(User user) {
         try {
-            // prevent auto flushing when querying for existing users
-            currentSession().setHibernateFlushMode(FlushMode.MANUAL);
-
-            User findUser = findUserByUsernameOrEmailIgnoreCaseAndId(getBaseModelObject(user)
-                    .getId(), user.getUsername(), user.getEmail());
+            // prevent auto flushing when querying for existing users (but not for the rest of the caller's transaction)
+            User findUser = withManualFlush(() -> findUserByUsernameOrEmailIgnoreCaseAndId(getBaseModelObject(user)
+                    .getId(), user.getUsername(), user.getEmail()));
 
             if (findUser != null) {
                 if (findUser.getEmail().equals(user.getEmail()))
